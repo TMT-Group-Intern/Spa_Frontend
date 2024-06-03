@@ -1,0 +1,16 @@
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+//@import "../node_modules/tds-ui/assets/scss/tds-ui.scss";
+@import "../../../node_modules/tds-ui/assets/scss/component/tds.component.scss";
+//Tùy vào dự án chọn theme blue/green/orange hoặc all
+// TPOSV2
+//@import "../node_modules/tds-ui/assets/scss/theme/theme.blue.scss";
+//TPageV2
+//@import "../node_modules/tds-ui/assets/scss/theme/theme.green.scss";
+//WIPIX
+//@import "../node_modules/tds-ui/assets/scss/theme/theme.orange.scss";
+//mặc định theme blue
+@import "../../../node_modules/tds-ui/assets/scss/theme/theme.all.scss";
+@import "./assets/font-icon/style.css";
