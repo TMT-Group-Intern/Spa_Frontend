@@ -1,0 +1,40 @@
+<div class="size-screen flex justify-center  items-center" style="height: 100vh;background-color: #CBDFC8;">
+    <div class="container w-full flex justify-between column items-center bg-white rounded shadow-lg" style="margin: 16% 20%;">
+      <div class="w-full h-full p-4 rounded grid justify-items-center text-white" style=" background-color: #97C59E;">
+          <img src="../../assets/img/logo.png" alt="" width="100" class="p-auto">
+          <h4 class="text-xl mb-4 mt-2 p-auto" style="font-size: x-large;">Phần mềm quản lý Spa</h4>
+          <div class="flex pt-8">
+            <img src="../../assets/img/imgspa.jpg" alt="Spa Image" class="h-full">
+          </div>
+      </div>
+
+      <!-- Form đăng nhập -->
+
+      <div class="w-full bg-white dark:bg-d-neutral-3-100 p-4 rounded max-w-prose">
+        <div class="text-heading-3 pb-12 text-center font-semibold font-sans " style="font-size: x-large; color: #29982E;">Đăng nhập</div>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <tds-label>Tài khoản</tds-label>
+          <tds-form-field class="w-full mt-2">
+            <input tdsInput autocomplete="off" placeholder="Nhập tài khoản" formControlName="taiKhoan" [required]='true'
+              class="appearance-none" />
+            <tds-error>Vui lòng nhập tài khoản</tds-error>
+          </tds-form-field>
+
+          <tds-label class="pt-4">Mật khẩu</tds-label>
+          <tds-form-field class="w-full mt-2">
+            <input tdsInput placeholder="Nhập mật khẩu" type="password" autocomplete="new-password"
+              formControlName="matKhau" [required]='true' />
+            <tds-error>Vui lòng nhập mật khẩu</tds-error>
+          </tds-form-field>
+
+          <tds-checkbox [checked]="false" class="pt-5">Ghi nhớ mật khẩu</tds-checkbox>
+          <div class="w-full flex flex-col justify-center mt-8">
+            <button class="w-full" size="lg" tds-button type="submit" (click)="onSubmit()" [disabled]="!loginForm.valid"
+              style="background-color:#29982E;">Đăng
+              nhập
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+</div>

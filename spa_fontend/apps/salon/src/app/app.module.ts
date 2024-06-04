@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSButtonMenuModule } from 'tds-ui/button-menu';
 import { HomeComponent } from './home/home/home.component';
+import { LoginComponent } from './login/login.component';
 registerLocaleData(localeVi);
 @NgModule({
   declarations: [AppComponent],
@@ -22,7 +23,8 @@ registerLocaleData(localeVi);
     ScrollingModule,
     TDSButtonModule,
     TDSButtonMenuModule,
-    HomeComponent
+    HomeComponent,
+    LoginComponent,
   ],
   providers: [{ provide: TDS_I18N, useValue: vi_VN }],
   bootstrap: [AppComponent],
