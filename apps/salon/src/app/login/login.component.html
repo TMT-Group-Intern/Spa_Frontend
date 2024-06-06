@@ -13,9 +13,10 @@
       </div> -->
       <div class="text-heading-3 mb-6 text-center font-semibold sign-in-font-login " style="font-size: x-large; color: #1b7c20;">Sign in</div>
         <form [formGroup]="loginForm">
-        <tds-label><span style="color: rgb(53, 53, 53);">Phone number</span></tds-label>
+        <tds-label><span style="color: rgb(53, 53, 53);">Email</span></tds-label>
         <tds-form-field class="w-full mt-2 mb-6">
-          <input tdsInput autocomplete="off" placeholder="0123456789" formControlName="taiKhoan" [required]='true' />
+          <input tdsInput autocomplete="off" type="email" placeholder="abc@example.com"
+          formControlName="taiKhoan" [required]='true' />
           <tds-error>Please enter your phone number</tds-error>
         </tds-form-field>
 
