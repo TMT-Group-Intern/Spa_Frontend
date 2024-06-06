@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
   //       alert(res.message)
   //     },
   //     error:(err)=>
-  //       alert(err?.error.message)     
+  //       alert(err?.error.message)
   //   })
   // }
   onLogin(){
@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
   // onLogin() {
   //   const email = this.loginForm.value.taiKhoan;
   //   const password = this.loginForm.value.matKhau;
-  
+
   //   this.httpService.login2(email, password).subscribe(
   //     (result) => {
   //       console.log(result);

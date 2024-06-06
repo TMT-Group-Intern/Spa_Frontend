@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = "https://localhost:44338/api/Account/"
+  private baseUrl = "https://localhost:7049/api/Account/"
   constructor(private http : HttpClient) { }
 
   signUp(userOjb:any){
