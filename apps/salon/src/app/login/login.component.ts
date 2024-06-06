@@ -7,7 +7,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { AuthService } from '../services/auth.service';
-import { observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { HomeComponent } from '../home/home/home.component';
+
 @Component({
   selector: 'frontend-login',
   standalone: true,
@@ -26,12 +28,36 @@ export class LoginComponent implements OnInit {
   httpService = inject(AuthService);
 
   constructor(
-    private fb: FormBuilder, private auth : AuthService ) { }
+    private fb: FormBuilder, private auth : AuthService, private router:Router ) { }
 
   ngOnInit(){
     this.loginForm = this.fb.group({
       taiKhoan: ['' , Validators.required],
       matKhau: ['' , Validators.required],
+    });
+  }
+
+  // onLogin(){
+  //   const email=this.loginForm.value.taiKhoan;
+  //   const password = this.loginForm.value.matKhau;
+  //   this.auth.login(email,password).subscribe((result) => {
+  //     // if(result.token != null) {
+
+  //     // }
+  //     console.log(result);
+  //   });
+  // }
+
+  onLogin(){
+    const email=this.loginForm.value.taiKhoan;
+    const password = this.loginForm.value.matKhau;
+    this.auth.login(email,password).subscribe((result) => {
+      console.log(result);
+      if(result.token != null)
+        {
+          alert(result.token)
+          this.router.navigate(['/home']);
+        }
     });
   }
 
@@ -46,13 +72,6 @@ export class LoginComponent implements OnInit {
   //       alert(err?.error.message)
   //   })
   // }
-  onLogin(){
-    const email=this.loginForm.value.taiKhoan;
-    const password = this.loginForm.value.matKhau;
-    this.auth.login(email,password).subscribe((result) => {
-      console.log(result);
-    });
-  }
 
   // onLogin() {
   //   const email = this.loginForm.value.taiKhoan;

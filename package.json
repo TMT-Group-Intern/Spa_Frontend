@@ -21,6 +21,7 @@
     "@angular/router": "~15.0.0",
     "@nrwl/angular": "15.2.4",
     "ajv": "^8.14.0",
+    "flowbite": "^2.3.0",
     "rxjs": "~7.5.0",
     "tds-ui": "https://tang-ui.tpos.dev/lib/tds-ui-15.9.0.tgz",
     "tslib": "^2.3.0",
@@ -56,7 +57,7 @@
     "nx": "15.2.4",
     "postcss": "^8.4.38",
     "prettier": "^2.6.2",
-    "tailwindcss": "^3.4.3",
+    "tailwindcss": "^3.4.4",
     "ts-jest": "28.0.5",
     "ts-node": "10.9.1",
     "typescript": "~4.8.2"

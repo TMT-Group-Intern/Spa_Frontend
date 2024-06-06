@@ -16,7 +16,11 @@ const COLOR = {
   ...APP_COLOR,
 };
 module.exports = {
-  content: [...TDS_UI_CONFIG.content, './src/**/*.{html,ts}'],
+  content: [
+    ...TDS_UI_CONFIG.content,
+    './src/**/*.{html,ts}',
+    "./node_modules/flowbite/**/*.js"
+  ],
   // safelist: SAFELISTING,
   darkMode: 'class', // or 'media' or 'class'
   theme: {
@@ -104,5 +108,6 @@ module.exports = {
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
     ...TDS_UI_CONFIG.plugin,
+    require('flowbite/plugin')
   ],
 };
