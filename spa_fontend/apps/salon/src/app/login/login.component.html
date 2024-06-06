@@ -1,40 +1,37 @@
-<div class="size-screen flex justify-center  items-center" style="height: 100vh;background-color: #CBDFC8;">
-    <div class="container w-full flex justify-between column items-center bg-white rounded shadow-lg" style="margin: 16% 20%;">
-      <div class="w-full h-full p-4 rounded grid justify-items-center text-white" style=" background-color: #97C59E;">
-          <img src="../../assets/img/logo.png" alt="" width="100" class="p-auto">
-          <h4 class="text-xl mb-4 mt-2 p-auto" style="font-size: x-large;">Phần mềm quản lý Spa</h4>
-          <div class="flex pt-8">
-            <img src="../../assets/img/imgspa.jpg" alt="Spa Image" class="h-full">
-          </div>
-      </div>
-
-      <!-- Form đăng nhập -->
-
-      <div class="w-full bg-white dark:bg-d-neutral-3-100 p-4 rounded max-w-prose">
-        <div class="text-heading-3 pb-12 text-center font-semibold font-sans " style="font-size: x-large; color: #29982E;">Đăng nhập</div>
-        <form [formGroup]="loginForm">
-          <tds-label>Tài khoản</tds-label>
-          <tds-form-field class="w-full mt-2">
-            <input tdsInput autocomplete="off" placeholder="Nhập tài khoản" formControlName="taiKhoan" [required]='true'
-              class="appearance-none" />
-            <tds-error>Vui lòng nhập tài khoản</tds-error>
-          </tds-form-field>
-
-          <tds-label class="pt-4">Mật khẩu</tds-label>
-          <tds-form-field class="w-full mt-2">
-            <input tdsInput placeholder="Nhập mật khẩu" type="password" autocomplete="new-password"
-              formControlName="matKhau" [required]='true' />
-            <tds-error>Vui lòng nhập mật khẩu</tds-error>
-          </tds-form-field>
-
-          <tds-checkbox [checked]="false" class="pt-5">Ghi nhớ mật khẩu</tds-checkbox>
-          <div class="w-full flex flex-col justify-center mt-8">
-            <button class="w-full" size="lg" tds-button type="submit" (click)="onLogin()" [disabled]="!loginForm.valid"
-              style="background-color:#29982E;">Đăng
-              nhập
-            </button>
-          </div>
-        </form>
-      </div>
+<div class="flex items-center shadow-lg" style="height: 100vh;background-color: #CBDFC8;">
+  <div class="container w-full flex justify-between column items-center bg-white rounded shadow-lg" style="margin: 16% 20%;">
+    <div class="w-full h-full p-4 rounded text-white" style="background-color: #97C59E;">
+      <h4 class="mb-6 mt-6 title-login text-center" style="color: #1b561e;">LOTUS SPA</h4>
+      <img src="../../assets/img/imgspa.jpg" alt="Spa Image" style="width: fit-content;">
     </div>
+
+    <!-- Form đăng nhập -->
+
+    <div class="w-full bg-white p-4 rounded max-w-prose">
+      <!-- <div class="flex justify-center mb-6">
+        <img class="object-center md:object-top" style="width: 25%;" src="../../assets/img/logo2.png" alt="Logo Spa" >
+      </div> -->
+      <div class="text-heading-3 mb-6 text-center font-semibold sign-in-font-login " style="font-size: x-large; color: #1b7c20;">Sign in</div>
+        <form [formGroup]="loginForm">
+        <tds-label><span style="color: rgb(53, 53, 53);">Phone number</span></tds-label>
+        <tds-form-field class="w-full mt-2 mb-6">
+          <input tdsInput autocomplete="off" placeholder="0123456789" formControlName="taiKhoan" [required]='true' />
+          <tds-error>Please enter your phone number</tds-error>
+        </tds-form-field>
+
+        <tds-label><span style="color: rgb(53, 53, 53);">Password</span></tds-label>
+        <tds-form-field class="w-full mt-2">
+          <input tdsInput placeholder="Password" type="password" autocomplete="new-password"
+            formControlName="matKhau" [required]='true' />
+          <tds-error>Please enter your password</tds-error>
+        </tds-form-field>
+
+        <tds-checkbox class="mt-6 mb-6" [checked]="false"><span style="color: rgb(53, 53, 53);">Remmember password</span></tds-checkbox>
+        <div class="w-full flex flex-col justify-center mt-8">
+          <button class="sign-in-font-button-login" size="lg" tds-button type="submit" (click)="onLogin()" [disabled]="!loginForm.valid"
+            style="background-color:#1b7c20;">Sign in</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
