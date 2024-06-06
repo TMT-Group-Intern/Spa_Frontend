@@ -2,7 +2,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {  TDSMenuModule } from 'tds-ui/menu';
 import { TDSSafeAny } from 'tds-ui/shared/utility';
-import { IsActiveMatchOptions, RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from "@angular/router";
+import { IsActiveMatchOptions, RouterModule } from "@angular/router";
 import { TDSTagStatusType } from 'tds-ui/tag';
 import { NgClassType } from 'tds-ui/core/config';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -11,12 +11,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'frontend-menu',
   standalone: true,
-  imports: [CommonModule, TDSMenuModule,RouterLinkActive,RouterLink,RouterModule,ReactiveFormsModule,],
+  imports: [CommonModule, TDSMenuModule,RouterModule,ReactiveFormsModule,],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
   encapsulation: ViewEncapsulation.None,
   // eslint-disable-next-line @angular-eslint/no-host-metadata-property
-  host:{class:"flex w-full"},
+  host:{class:" h-screen"},
 })
 export class MenuComponent   {
 
