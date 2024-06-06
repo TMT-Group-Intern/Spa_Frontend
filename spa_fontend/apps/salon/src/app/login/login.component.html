@@ -12,7 +12,7 @@
 
       <div class="w-full bg-white dark:bg-d-neutral-3-100 p-4 rounded max-w-prose">
         <div class="text-heading-3 pb-12 text-center font-semibold font-sans " style="font-size: x-large; color: #29982E;">Đăng nhập</div>
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="loginForm">
           <tds-label>Tài khoản</tds-label>
           <tds-form-field class="w-full mt-2">
             <input tdsInput autocomplete="off" placeholder="Nhập tài khoản" formControlName="taiKhoan" [required]='true'
@@ -29,7 +29,7 @@
 
           <tds-checkbox [checked]="false" class="pt-5">Ghi nhớ mật khẩu</tds-checkbox>
           <div class="w-full flex flex-col justify-center mt-8">
-            <button class="w-full" size="lg" tds-button type="submit" (click)="onSubmit()" [disabled]="!loginForm.valid"
+            <button class="w-full" size="lg" tds-button type="submit" (click)="onLogin()" [disabled]="!loginForm.valid"
               style="background-color:#29982E;">Đăng
               nhập
             </button>
