@@ -13,7 +13,8 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { TDSButtonMenuModule } from 'tds-ui/button-menu';
 import { HomeComponent } from './home/home/home.component';
 import { LoginComponent } from './login/login.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {  HttpClientModule } from '@angular/common/http';
+
 registerLocaleData(localeVi);
 @NgModule({
   declarations: [AppComponent],
