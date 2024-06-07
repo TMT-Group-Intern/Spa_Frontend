@@ -17,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MenuComponent } from './shared/menu/menu.component';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
+import { RegisterComponent } from './register/register.component';
 
 registerLocaleData(localeVi);
 @NgModule({
@@ -34,6 +35,10 @@ registerLocaleData(localeVi);
     MenuComponent,
     RouterModule,
     AppRoutingModule,
+    MenuComponent,
+    RouterModule,
+    AppRoutingModule,
+    RegisterComponent,
   ],
   providers: [{ provide: TDS_I18N, useValue: vi_VN }],
   bootstrap: [AppComponent],
