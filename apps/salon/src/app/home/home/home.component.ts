@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewEncapsulation } from '@angular/core';
-import { TDSMenuComponent, TDSMenuDTO, TDSMenuModule } from 'tds-ui/menu';
-import { TDSSafeAny } from 'tds-ui/shared/utility';
-import { SidebarComponent } from "../../layout/sidebar/sidebar.component";
+import { TDSMenuModule } from 'tds-ui/menu';
 import { MenuComponent } from '../../shared/menu/menu.component';
 
 
@@ -14,7 +12,7 @@ import { MenuComponent } from '../../shared/menu/menu.component';
     encapsulation: ViewEncapsulation.None,
     // eslint-disable-next-line @angular-eslint/no-host-metadata-property
     host: { class: "flex w-full" },
-    imports: [CommonModule, TDSMenuModule, SidebarComponent, MenuComponent]
+    imports: [CommonModule, TDSMenuModule, MenuComponent]
 })
 export class HomeComponent  {
 

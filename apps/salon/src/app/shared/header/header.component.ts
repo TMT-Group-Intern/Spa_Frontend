@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { TDSHeaderModule } from 'tds-ui/header';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSSelectModule } from 'tds-ui/select';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputModule } from 'tds-ui/tds-input';
 
 @Component({
   selector: 'frontend-header',
   standalone: true,
-  imports: [CommonModule,TDSHeaderModule,TDSFormFieldModule,TDSSelectModule,FormsModule,
+  imports: [CommonModule ,ReactiveFormsModule,TDSHeaderModule,TDSFormFieldModule,TDSSelectModule,FormsModule,
     TDSButtonModule, TDSInputModule,],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],

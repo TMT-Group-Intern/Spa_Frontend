@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { LoginComponent } from './login/login.component';
-import { ProductsComponent } from 'apps/salon/modules/products/products.component';
-import { LayoutComponent } from 'apps/salon/layout/layout.component';
+import { LayoutComponent } from './layout/layout.component';
+import { ProductsComponent } from './modules/products/products.component';
+
 
 const routes: Routes = [
   {path: 'login', component:LoginComponent},

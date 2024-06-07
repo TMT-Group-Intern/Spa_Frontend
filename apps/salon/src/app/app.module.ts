@@ -14,8 +14,6 @@ import { TDSButtonMenuModule } from 'tds-ui/button-menu';
 import { HomeComponent } from './home/home/home.component';
 import { LoginComponent } from './login/login.component';
 import { HttpClientModule } from '@angular/common/http';
-import { SidebarComponent } from './layout/sidebar/sidebar.component';
-import { HeaderComponent } from './layout/header/header.component';
 import { MenuComponent } from './shared/menu/menu.component';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
@@ -33,11 +31,9 @@ registerLocaleData(localeVi);
     HomeComponent,
     LoginComponent,
     HttpClientModule,
-    SidebarComponent,
-    HeaderComponent,
     MenuComponent,
     RouterModule,
-    AppRoutingModule
+    AppRoutingModule,
   ],
   providers: [{ provide: TDS_I18N, useValue: vi_VN }],
   bootstrap: [AppComponent],
