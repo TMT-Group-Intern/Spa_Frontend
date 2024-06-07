@@ -15,8 +15,9 @@ import { ReactiveFormsModule } from '@angular/forms';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  // eslint-disable-next-line @angular-eslint/no-host-metadata-property
-  host:{class:" h-screen"},
+  // host: {
+  //   class: 'w-fit h-screen'
+  // }
 })
 export class MenuComponent   {
 

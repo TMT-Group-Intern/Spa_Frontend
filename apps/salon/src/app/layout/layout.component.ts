@@ -7,6 +7,8 @@ import { TDSHeaderModule } from 'tds-ui/header';
 import { HeaderComponent } from '../shared/header/header.component';
 import { ProductsComponent } from "../modules/products/products.component";
 import { PaginationComponent } from '../shared/pagination/pagination.component';
+import { ServiceListComponent } from '../modules/service-list/service-list.component';
+import { CustomerListComponent } from '../modules/customer-list/customer-list.component';
 
 @Component({
     selector: 'frontend-layout',
@@ -14,6 +16,17 @@ import { PaginationComponent } from '../shared/pagination/pagination.component';
     styleUrls: ['./layout.component.scss'],
     encapsulation: ViewEncapsulation.None,
     standalone: true,
-    imports: [CommonModule, RouterModule, MenuComponent, HeaderComponent, TDSLayoutModule, TDSHeaderModule, ProductsComponent,PaginationComponent]
+    imports: [
+      CommonModule,
+      RouterModule,
+      MenuComponent,
+      HeaderComponent,
+      TDSLayoutModule,
+      TDSHeaderModule,
+      ProductsComponent,
+      PaginationComponent,
+      ServiceListComponent,
+      CustomerListComponent,
+    ]
 })
 export class LayoutComponent {}
