@@ -11,12 +11,11 @@ import { registerLocaleData } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSButtonMenuModule } from 'tds-ui/button-menu';
-import { HomeComponent } from './home/home/home.component';
 import { LoginComponent } from './login/login.component';
 import { HttpClientModule } from '@angular/common/http';
-import { CustomerListComponent } from './customer-list/customer-list.component';
+import { CustomerListComponent } from './modules/customer-list/customer-list.component';
 import { TDSDataTableModule } from 'tds-ui/data-table';
-import { ServiceListComponent } from './service-list/service-list.component';
+import { ServiceListComponent } from './modules/service-list/service-list.component';
 import { MenuComponent } from './shared/menu/menu.component';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
@@ -31,14 +30,11 @@ registerLocaleData(localeVi);
     ScrollingModule,
     TDSButtonModule,
     TDSButtonMenuModule,
-    HomeComponent,
     LoginComponent,
     HttpClientModule,
     MenuComponent,
     RouterModule,
     AppRoutingModule,
-    SidebarComponent,
-    HeaderComponent,
     CustomerListComponent,
     TDSDataTableModule,
     ServiceListComponent,

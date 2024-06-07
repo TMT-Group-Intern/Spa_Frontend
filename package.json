@@ -25,6 +25,7 @@
     "flowbite": "^2.3.0",
     "guid-typescript": "^1.0.9",
     "rxjs": "~7.5.0",
+    "tds-report": "https://tang-ui.tpos.dev/lib/tds-report-15.0.0.tgz",
     "tds-ui": "https://tang-ui.tpos.dev/lib/tds-ui-15.9.0.tgz",
     "tslib": "^2.3.0",
     "uuid": "^9.0.1",
