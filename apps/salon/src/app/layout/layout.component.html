@@ -1,0 +1,18 @@
+<div class="h-screen">
+  <tds-layout>
+      <tds-layout-sider>
+        <frontend-menu></frontend-menu>
+      </tds-layout-sider>
+      <tds-layout>
+        <tds-header class="ml-2 rounded-b-lg">
+          <frontend-header></frontend-header>
+        </tds-header>
+        <tds-layout-content class="bg-white my-1 ml-2 rounded-lg">
+          <router-outlet></router-outlet>
+        </tds-layout-content>
+        <tds-layout-footer class="bg-white ml-2 rounded-t-lg">
+          <frontend-pagination></frontend-pagination>
+        </tds-layout-footer>
+      </tds-layout>
+  </tds-layout>
+</div>

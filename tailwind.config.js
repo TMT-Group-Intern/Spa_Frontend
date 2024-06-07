@@ -8,6 +8,11 @@ const APP_COLOR = {
   //     ... TDS_UI_COLOR.primary,
   //     1:'red'
   // }
+  green: {
+    ...TDS_UI_COLOR,
+    1: '#1b7c20'
+
+  }
 };
 //override màu theo thiết kế
 const COLOR = {
@@ -19,6 +24,7 @@ module.exports = {
   content: [
     ...TDS_UI_CONFIG.content,
     './src/**/*.{html,ts}',
+    'apps/salon/src/**/*.{html,ts}',
     "./node_modules/flowbite/**/*.js"
   ],
   // safelist: SAFELISTING,
