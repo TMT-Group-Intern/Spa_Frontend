@@ -23,9 +23,11 @@
     "ajv": "^8.14.0",
     "echarts": "^5.5.0",
     "flowbite": "^2.3.0",
+    "guid-typescript": "^1.0.9",
     "rxjs": "~7.5.0",
     "tds-ui": "https://tang-ui.tpos.dev/lib/tds-ui-15.9.0.tgz",
     "tslib": "^2.3.0",
+    "uuid": "^9.0.1",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
@@ -45,6 +47,7 @@
     "@nrwl/workspace": "15.2.4",
     "@types/jest": "28.1.1",
     "@types/node": "16.11.7",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
     "autoprefixer": "^10.4.19",

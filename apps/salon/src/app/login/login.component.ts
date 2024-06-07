@@ -8,7 +8,6 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-import { HomeComponent } from '../home/home/home.component';
 
 @Component({
   selector: 'frontend-login',

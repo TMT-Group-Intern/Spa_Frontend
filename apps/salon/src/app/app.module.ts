@@ -19,7 +19,10 @@ import { HeaderComponent } from './layout/header/header.component';
 import { CustomerListComponent } from './customer-list/customer-list.component';
 import { TDSDataTableModule } from 'tds-ui/data-table';
 import { ServiceListComponent } from './service-list/service-list.component';
-
+import { MenuComponent } from './shared/menu/menu.component';
+import { RouterModule } from '@angular/router';
+import { AppRoutingModule } from './app.routing';
+import { RegisterComponent } from './register/register.component';
 registerLocaleData(localeVi);
 @NgModule({
   declarations: [AppComponent],
@@ -38,6 +41,10 @@ registerLocaleData(localeVi);
     CustomerListComponent,
     TDSDataTableModule,
     ServiceListComponent,
+    MenuComponent,
+    RouterModule,
+    AppRoutingModule,
+    RegisterComponent,
   ],
   providers: [{ provide: TDS_I18N, useValue: vi_VN }],
   bootstrap: [AppComponent],
