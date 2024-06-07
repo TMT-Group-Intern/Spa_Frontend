@@ -1,50 +1,37 @@
-
-<div class="w-full h-[300px] ">
-  <tds-data-table [tdsData]="listOfData" [tdsPageSize]="10" [tdsSelectable]="{multiple:true}">
-   <tds-data-table-expand-row [tdsContent]="expandTpl">
-       <ng-template #expandTpl let-dataRow let-expand="expand">
-           <div class="w-full p-4">
-               expand table
-           </div>
-       </ng-template>
-   </tds-data-table-expand-row>
-   <tds-data-table-checkbox-column>
-   </tds-data-table-checkbox-column>
-   <tds-data-table-column [tdsField]="'id'" [tdsTitle]="'ID'" tdsWidth="60px" [tdsDataType]="'numeric'"
-       [tdsLeft]="true">
-   </tds-data-table-column>
-   <tds-data-table-column [tdsField]="'name'" [tdsContent]="nameContentTpl" [tdsTitle]="'Tên'" tdsWidth="200px"
-       [tdsLeft]="true">
-       <ng-template #nameContentTpl let-dataRow>
-           <div class="flex items-center">
-               <tds-avatar size="sm" [tdsSrc]="dataRow.avatar">
-               </tds-avatar>
-               <div class="text-caption-2 ml-2">
-                   {{dataRow.name}}
-               </div>
-           </div>
-       </ng-template>
-   </tds-data-table-column>
-   <tds-data-table-column [tdsField]="'age'" [tdsTitle]="'Tuổi'" tdsWidth="80px" [tdsDataType]="'numeric'">
-   </tds-data-table-column>
-   <tds-data-table-column [tdsField]="'value'" [tdsTitle]="'Số tiền'" tdsWidth="200px" [tdsDataType]="'numeric'"
-       [tdsFormat]="{thousandSeparator: ','}">
-   </tds-data-table-column>
-   <tds-data-table-column [tdsField]="'address'" [tdsTitle]="'Địa chỉ'" [tdsContent]="contentTpl" tdsWidth="900px">
-       <ng-template #contentTpl let-dataRow>
-           <p tds-typography tdsEllipsis class="text-base-red-600"> {{dataRow.address}}</p>
-       </ng-template>
-   </tds-data-table-column>
-   <tds-data-table-column [tdsField]="'createDate'" [tdsTitle]="'Ngày tạo'" tdsWidth="150px" [tdsDataType]="'date'"
-       [tdsFormat]="'dd/MM/yyyy'" [tdsRight]="true">
-   </tds-data-table-column>
-   <tds-data-table-column [tdsTitle]="'Thao tác'" [tdsContent]="commandTpl" tdsWidth="110px"
-       [tdsColumnType]="'command'" [tdsRight]="true">
-       <ng-template #commandTpl let-dataRow>
-           <button tds-button-flat-icon class="mr-2" color="primary"> <i class="tdsi-edit-fill"></i></button>
-           <button tds-button-flat-icon color="secondary"> <i class="tdsi-edit-fill"></i></button>
-       </ng-template>
-   </tds-data-table-column>
-</tds-data-table>
+<div class="w-full h-[500px] flex flex-col p-2">
+  <div class="w-full flex justify-end  pb-2">
+    <tds-column-settings [tdsData]="listColumn" (tdsDataChange)="onDataColumnChange($event)">
+    </tds-column-settings>
+  </div>
+  <div class="flex-auto">
+    <tds-data-table [tdsData]="listOfRandomUser" [tdsFrontPagination]="false"
+    [tdsShowSizeChanger]="true"
+    [tdsLoading]="loading"
+    [tdsTotal]="total"
+    [(tdsPageSize)]="pageSize"
+    [(tdsPageIndex)]="pageIndex"
+    [tdsPageSizeOptions]="tdsPageSizeOptions"
+    (tdsQueryParams)="onQueryParamsChange($event)">
+      <tds-data-table-column [tdsField]="'name.picture.thumbnail'" [tdsTitle]="'Avatar'" [tdsContent]="contentAvatarTpl" [tdsWidth]="'80px'" [tdsHidden]="listColumn | tdsMapper:mapperHiddenColumn:'name.picture.thumbnail'">
+        <ng-template #contentAvatarTpl let-dataRow>
+          <tds-avatar size="sm" [tdsSrc]="dataRow.picture.thumbnail">
+          </tds-avatar>
+        </ng-template>
+      </tds-data-table-column>
+      <tds-data-table-column [tdsField]="'name.first'" [tdsTitle]="'Họ và tên'" [tdsContent]="contentTpl"  [tdsWidth]="'250px'" [tdsHidden]="listColumn | tdsMapper:mapperHiddenColumn:'name.first'">
+        <ng-template #contentTpl let-dataRow>
+          {{ dataRow.name.first }} {{ dataRow.name.last }}
+        </ng-template>
+      </tds-data-table-column>
+      <tds-data-table-column [tdsField]="'gender'" [tdsTitle]="'Giới tính'" [tdsWidth]="'80px'" [tdsHidden]="listColumn | tdsMapper:mapperHiddenColumn:'gender'">
+      </tds-data-table-column>
+      <tds-data-table-column [tdsField]="'registered.age'" [tdsTitle]="'Tuổi'" [tdsDataType]="'numeric'"
+        [tdsWidth]="'100px'" [tdsHidden]="listColumn | tdsMapper:mapperHiddenColumn:'registered.age'">
+      </tds-data-table-column>
+      <tds-data-table-column [tdsField]="'email'" [tdsTitle]="'Email'" [tdsWidth]="'250px'"  [tdsHidden]="listColumn | tdsMapper:mapperHiddenColumn:'email'">
+      </tds-data-table-column>
+      <tds-data-table-column [tdsField]="'phone'" [tdsTitle]="'Số điện thoại'" [tdsWidth]="'150px'" [tdsHidden]="listColumn | tdsMapper:mapperHiddenColumn:'phone'">
+      </tds-data-table-column>
+    </tds-data-table>
+  </div>
 </div>
-

@@ -1,52 +1,119 @@
-import { Component, OnInit } from '@angular/core';
-import { TDSSafeAny } from 'tds-ui/shared/utility';
-import { TDSFilterResultDTO } from 'tds-ui/filter-result';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSDataTableModule } from "tds-ui/data-table";
+import { TDSTableModule, TDSTableQueryParams } from 'tds-ui/table';
+import { TDSAvatarModule } from 'tds-ui/avatar';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { TDSColumnSettingsDTO, TDSColumnSettingsModule } from 'tds-ui/column-settings';
+import { Observable, catchError, of } from 'rxjs';
+import { TDSMapperPipeModule } from 'tds-ui/cdk/pipes/mapper';
 
-interface ItemData {
-  id: number;
-  name: string;
-  age: number;
-  address: string;
-  createDate: Date;
-  value: number;
-  avatar: string;
+interface TDSDemoRandomUser {
+  gender: string;
+  email: string;
+  name: {
+      title: string;
+      first: string;
+      last: string;
+  };
+  phone: string;
+  picture: {
+      large: string;
+      medium: string;
+      thumbnail: string;
+  },
+  registered: {
+      age: number;
+      date: Date
+  }
 }
 
 @Component({
   selector: 'frontend-customer-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TDSTableModule,TDSDataTableModule, TDSAvatarModule, TDSMapperPipeModule, TDSColumnSettingsModule],
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],
 })
-export class CustomerListComponent implements OnInit, TDSDataTableModule, TDSSafeAny {
-  listOfData: ItemData[] = [];
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        constructor() {}
+export class CustomerListComponent  {
+  listColumn: TDSColumnSettingsDTO[] = [
+    {
+        tdsTitle: 'Avatar',
+        tdsField: 'name.picture.thumbnail',
+        tdsChecked: true
+    },
+    {
+        tdsTitle: 'Họ và tên',
+        tdsField: 'name.first',
+        tdsChecked: true
+    },
+    {
+        tdsTitle: 'Giới tính',
+        tdsField: 'gender',
+        tdsChecked: true
+    },
+    {
+        tdsTitle: 'Tuổi',
+        tdsField: 'registered.age',
+        tdsChecked: true
+    }
+        ,
+    {
+        tdsTitle: 'Email',
+        tdsField: 'email',
+        tdsChecked: true
+    }
+        ,
+    {
+        tdsTitle: 'Số điện thoại',
+        tdsField: 'phone',
+        tdsChecked: true
+    }
+  ]
+  total = 1;
+  listOfRandomUser: TDSDemoRandomUser[] = [];
+  loading = true;
+  pageSize = 10;
+  pageIndex = 1;
+  tdsPageSizeOptions = [10,20, 30, 40, 50];
+  randomUserUrl = 'https://api.randomuser.me/';
+  loadDataFromServer(
+      pageIndex: number,
+      pageSize: number,
+  ): void {
+      this.loading = true;
+      this.getUsers(pageIndex, pageSize).subscribe(data => {
+          this.loading = false;
+          this.total = 200; // mock the total data here
+          this.listOfRandomUser = data.results;
+      });
+  }
+  onQueryParamsChange(params: TDSTableQueryParams): void {
+      const { pageSize, pageIndex } = params;
+      this.loadDataFromServer(pageIndex, pageSize);
+  }
 
-        ngOnInit(): void {
-            const data = [];
-            for (let i = 0; i < 50; i++) {
-                data.push({
-                    id: i,
-                    name: `Edward King ${i}`,
-                    age: 32,
-                    address: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut
-                    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-                    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet,
-                    consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                    laboris nisi ut aliquip ex ea commodo consequat. ${i}`,
-                    createDate: new Date(),
-                    value: Math.floor(Math.random() * 200000000),
-                    avatar: `https://randomuser.me/api/portraits/women/${Math.floor(Math.random() * 100)}.jpg`,
-                });
-            }
-            this.listOfData = data;
-        }
+  constructor(private http: HttpClient) { }
+
+
+  resetPage() {
+      this.pageIndex = 1;
+  }
+  onDataColumnChange(e: TDSColumnSettingsDTO[]) {
+      this.listColumn = [...e]
+  }
+  readonly mapperHiddenColumn = (listColumn: TDSColumnSettingsDTO[], field: string) => {
+      return listColumn.find(col => col.tdsField == field && !col.tdsChecked) != undefined
+  }
+  getUsers(
+      pageIndex: number,
+      pageSize: number
+  ): Observable<{ results: TDSDemoRandomUser[] }> {
+      const params = new HttpParams()
+          .append('page', `${pageIndex}`)
+          .append('results', `${pageSize}`);
+      return this.http
+          .get<{ results: TDSDemoRandomUser[] }>(`${this.randomUserUrl}`, { params })
+          .pipe(catchError(() => of({ results: [] })));
+  }
 }
