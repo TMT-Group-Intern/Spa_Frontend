@@ -1,3 +1,7 @@
+//<<<<<<< Updated upstream
+//=======
+//import { MenuComponent } from './../../../../spa_fontend/apps/salon/menu/menu.component';
+//>>>>>>> Stashed changes
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -19,6 +23,7 @@ import { HeaderComponent } from './layout/header/header.component';
 import { MenuComponent } from './shared/menu/menu.component';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
+import { RegisterComponent } from './register/register.component';
 
 registerLocaleData(localeVi);
 @NgModule({
@@ -35,9 +40,14 @@ registerLocaleData(localeVi);
     HttpClientModule,
     SidebarComponent,
     HeaderComponent,
+//<<<<<<< Updated upstream
     MenuComponent,
     RouterModule,
-    AppRoutingModule
+    AppRoutingModule,
+    RegisterComponent,
+//=======
+    //MenuComponent,
+//>>>>>>> Stashed changes
   ],
   providers: [{ provide: TDS_I18N, useValue: vi_VN }],
   bootstrap: [AppComponent],
