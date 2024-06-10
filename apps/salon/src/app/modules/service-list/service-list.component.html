@@ -1,5 +1,5 @@
 
-<div class="w-full h-screen">
+<div [style.width.%]="99" class="flex h-full overflow-x-auto">
   <tds-data-table [tdsData]="listOfData"
    [tdsShowSizeChanger]="true"
   [tdsPageSize]="10"
@@ -29,13 +29,13 @@
                </div>
            </ng-template>
        </tds-data-table-column>
-       <tds-data-table-column [tdsField]="'age'" [tdsTitle]="'Tuổi'" tdsWidth="80px" [tdsDataType]="'numeric'">
+       <tds-data-table-column [tdsField]="'age'" [tdsTitle]="'Tuổi'" tdsWidth="50px" [tdsDataType]="'numeric'">
        </tds-data-table-column>
    </tds-data-table-column-group>
-   <tds-data-table-column [tdsField]="'value'" [tdsTitle]="'Số tiền'" tdsWidth="200px" [tdsDataType]="'numeric'"
+   <tds-data-table-column [tdsField]="'value'" [tdsTitle]="'Số tiền'" tdsWidth="150px" [tdsDataType]="'numeric'"
        [tdsFormat]="{thousandSeparator: ','}">
    </tds-data-table-column>
-   <tds-data-table-column [tdsField]="'address'" [tdsTitle]="'Địa chỉ'" [tdsContent]="contentTpl" tdsWidth="900px">
+   <tds-data-table-column [tdsField]="'address'" [tdsTitle]="'Địa chỉ'" [tdsContent]="contentTpl" tdsWidth="400px">
        <ng-template #contentTpl let-dataRow>
            <p tds-typography tdsEllipsis class="text-base-red-600"> {{dataRow.address}}</p>
        </ng-template>

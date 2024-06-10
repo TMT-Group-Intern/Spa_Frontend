@@ -1,12 +1,14 @@
+import { TDSMapperPipeModule } from 'tds-ui/cdk/pipes/mapper';
+import { TDSDataTableModule } from 'tds-ui/data-table';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TDSDataTableModule } from "tds-ui/data-table";
-import { TDSTableModule, TDSTableQueryParams } from 'tds-ui/table';
-import { TDSAvatarModule } from 'tds-ui/avatar';
+import {  TDSTableQueryParams } from 'tds-ui/table';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { TDSColumnSettingsDTO, TDSColumnSettingsModule } from 'tds-ui/column-settings';
 import { Observable, catchError, of } from 'rxjs';
-import { TDSMapperPipeModule } from 'tds-ui/cdk/pipes/mapper';
+import { TDSListModule } from 'tds-ui/list';
+import { ReactiveFormsModule } from '@angular/forms';
+import { TDSAvatarModule } from 'tds-ui/avatar';
 
 interface TDSDemoRandomUser {
   gender: string;
@@ -31,11 +33,12 @@ interface TDSDemoRandomUser {
 @Component({
   selector: 'frontend-customer-list',
   standalone: true,
-  imports: [CommonModule, TDSTableModule,TDSDataTableModule, TDSAvatarModule, TDSMapperPipeModule, TDSColumnSettingsModule],
+  imports: [CommonModule, ReactiveFormsModule,TDSListModule, TDSDataTableModule,TDSColumnSettingsModule,TDSAvatarModule,TDSMapperPipeModule],
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],
 })
 export class CustomerListComponent  {
+
   listColumn: TDSColumnSettingsDTO[] = [
     {
         tdsTitle: 'Avatar',
@@ -77,6 +80,7 @@ export class CustomerListComponent  {
   pageIndex = 1;
   tdsPageSizeOptions = [10,20, 30, 40, 50];
   randomUserUrl = 'https://api.randomuser.me/';
+
   loadDataFromServer(
       pageIndex: number,
       pageSize: number,

@@ -5,6 +5,7 @@ import { TDSAvatarModule } from 'tds-ui/avatar';
 import { TDSCheckBoxModule } from 'tds-ui/tds-checkbox';
 import { TDSTableModule } from 'tds-ui/table';
 import { TDSColumnSettingsModule } from 'tds-ui/column-settings';
+import { TDSButtonModule } from 'tds-ui/button';
 
 interface ItemData {
   id: number;
@@ -19,7 +20,7 @@ interface ItemData {
 @Component({
   selector: 'frontend-service-list',
   standalone: true,
-  imports: [CommonModule, TDSDataTableModule, TDSAvatarModule, TDSCheckBoxModule, TDSTableModule, TDSColumnSettingsModule],
+  imports: [CommonModule, TDSDataTableModule, TDSAvatarModule, TDSCheckBoxModule, TDSTableModule, TDSColumnSettingsModule,TDSButtonModule],
   templateUrl: './service-list.component.html',
   styleUrls: ['./service-list.component.scss'],
 })

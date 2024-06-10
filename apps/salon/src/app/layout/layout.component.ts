@@ -11,6 +11,7 @@ import { ServiceListComponent } from '../modules/service-list/service-list.compo
 import { CustomerListComponent } from '../modules/customer-list/customer-list.component';
 import { RevenueStatisticsComponent } from '../modules/revenue-statistics/revenue-statistics.component';
 import { RevenueStaticsModule } from '../modules/revenue-statistics/revenue-statistics.module';
+import { TDSMenuModule } from 'tds-ui/menu';
 
 @Component({
     selector: 'frontend-layout',
@@ -30,6 +31,9 @@ import { RevenueStaticsModule } from '../modules/revenue-statistics/revenue-stat
       ServiceListComponent,
       CustomerListComponent,
       RevenueStaticsModule,
+      TDSMenuModule
     ]
 })
-export class LayoutComponent {}
+export class LayoutComponent {
+
+}

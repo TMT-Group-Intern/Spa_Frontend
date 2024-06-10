@@ -1,11 +1,7 @@
-
-<div [style.width.px]="!isCollapsed ? 260 : 64" class="h-screen" >
-    <tds-menu [mode]="'light'" [data]="lstMenu" [inlineCollapsed]="isCollapsed"
-        [showLogo]="true" (onOpenChange)="onOpenChange($event)">
-        <img src="assets/images/tpos-text-02.svg" logo-text class="h-10">
-        <img src="assets/images/tpos-icon.svg" logo class="h-10">
-    </tds-menu>
+<div [style.width.px]="!isCollapsed ? 260 : 50" class="h-full">
+  <tds-menu class="h-full" [mode]="'dark'" [data]="lstMenu" [inlineCollapsed]="isCollapsed" [showLogo]="true"
+    (onOpenChange)="onOpenChange($event)">
+    <img src="assets/images/tpos-text-02.svg" logo-text class="h-10">
+    <img src="assets/images/tpos-icon.svg" logo class="h-10">
+  </tds-menu>
 </div>
-
-
-
