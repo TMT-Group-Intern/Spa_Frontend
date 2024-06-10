@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { initFlowbite } from 'flowbite';
 
+
 @Component({
   selector: 'frontend-root',
   templateUrl: './app.component.html',

@@ -28,6 +28,16 @@
             class="appearance-none" />
           <tds-error>Vui lòng nhập tài khoản</tds-error>
         </tds-form-field>
+
+        <tds-label class="pt-4">Job</tds-label>
+        <tds-form-field>
+          <tds-select valueField="id" textField="name" placeholder='select item'  [allowClear]="true"
+                disabledField="isActive" [formControl]="persondisplayWith" [required]='true'
+                [data]="contactOptions" [allowClear]="true">
+            </tds-select>
+          <tds-error>Validation message text</tds-error>
+        </tds-form-field>
+
         <tds-label class="pt-4">Mật khẩu</tds-label>
         <tds-form-field class="w-full mt-2">
           <input tdsInput autocomplete="off" placeholder="Nhập mật khẩu" formControlName="pass" type="password"
@@ -44,7 +54,8 @@
             [required]='true' />
           <tds-error>
             <span *ngIf="signUpForm.controls['retype'].hasError('required')">Vui lòng nhập lại mật khẩu</span>
-            <span *ngIf="signUpForm.controls['retype'].hasError('pattern')">Mật khẩu không khớp</span>
+            <!-- <span *ngIf="signUpForm.controls['retype'].hasError('pattern')">Mật khẩu không khớp</span> -->
+            <span *ngIf="signUpForm.get('retype')?.errors?.['mustMatch']">Passwords do not match</span>
           </tds-error>
         </tds-form-field>
         <!-- <tds-checkbox [checked]="true" class="pt-5">Ghi nhớ mật khẩu</tds-checkbox> -->
