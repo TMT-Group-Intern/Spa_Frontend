@@ -9,6 +9,8 @@ import { ProductsComponent } from "../modules/products/products.component";
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { ServiceListComponent } from '../modules/service-list/service-list.component';
 import { CustomerListComponent } from '../modules/customer-list/customer-list.component';
+import { RevenueStatisticsComponent } from '../modules/revenue-statistics/revenue-statistics.component';
+import { RevenueStaticsModule } from '../modules/revenue-statistics/revenue-statistics.module';
 import { TDSMenuModule } from 'tds-ui/menu';
 import { RevenueStaticsModule } from '../modules/revenue-statistics/revenue-statics.module';
 
