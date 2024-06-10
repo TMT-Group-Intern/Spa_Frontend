@@ -6,10 +6,12 @@ import { LayoutComponent } from './layout/layout.component';
 import { ProductsComponent } from './modules/products/products.component';
 import { ServiceListComponent } from './modules/service-list/service-list.component';
 import { CustomerListComponent } from './modules/customer-list/customer-list.component';
+import { RevenueStatisticsComponent } from './modules/revenue-statistics/revenue-statistics.component';
 
 
 const routes: Routes = [
   {path: 'login', component:LoginComponent},
+
   {
     path: '', component: LayoutComponent,
     children:[
@@ -17,6 +19,7 @@ const routes: Routes = [
     ],
 
   },
+
   {
     path: '', component: LayoutComponent,
     children:[
@@ -24,10 +27,18 @@ const routes: Routes = [
     ],
 
   },
+
   {
     path: '', component: LayoutComponent,
     children:[
       {path: 'customer-list', loadComponent: ()=> CustomerListComponent},
+    ],
+
+  },
+  {
+    path: '', component: LayoutComponent,
+    children:[
+      {path: 'revenue-statics', loadComponent: ()=> RevenueStatisticsComponent},
     ],
 
   },

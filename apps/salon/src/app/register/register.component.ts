@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSCheckBoxModule } from 'tds-ui/tds-checkbox';
 import { Router, RouterModule } from '@angular/router';
@@ -9,12 +9,13 @@ import { TDSInputModule } from 'tds-ui/tds-input';
 import { AuthService } from '../services/auth.service';
 //import { Guid } from 'guid-typescript';
 import { v4 as uuidv4 } from 'uuid';
+import { TDSSelectModule } from 'tds-ui/select';
 const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/;
 
 @Component({
   selector: 'frontend-register',
   standalone: true,
-  imports: [CommonModule,TDSFormFieldModule,ReactiveFormsModule,TDSCheckBoxModule,RouterModule,TDSButtonModule,TDSInputModule],
+  imports: [CommonModule,TDSFormFieldModule,ReactiveFormsModule,TDSCheckBoxModule,RouterModule,TDSButtonModule,TDSInputModule,TDSSelectModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
@@ -22,11 +23,23 @@ export class RegisterComponent implements OnInit {
     //private guId: Guid;
   signUpForm!: FormGroup;
     constructor(
-        private fb: FormBuilder, private auth : AuthService, private router:Router,
-    ) { 
+        private fb: FormBuilder,
+        private auth : AuthService,
+        private router:Router,
+    ) {
         //this.guId = Guid.create();
-
     }
+
+    public contactOptions = [
+      { id: 1, name: 'Elton John' },
+      { id: 2, name: 'Elvis Presley' },
+      { id: 3, name: 'Paul McCartney' },
+      { id: 4, name: 'Elton John' },
+      { id: 5, name: 'Elvis Presley' },
+      { id: 6, name: 'Paul McCartney' },
+  ]
+
+  persondisplayWith!: FormControl;
 
     ngOnInit(): void {
         this.signUpForm = this.fb.group({
@@ -41,7 +54,11 @@ export class RegisterComponent implements OnInit {
             Validators.email
             ])
         ],
-        taiKhoan:['' , Validators.required],
+
+        taiKhoan:[
+          '' ,
+          Validators.required
+        ],
 
         pass: [
             '',
@@ -56,12 +73,27 @@ export class RegisterComponent implements OnInit {
             Validators.compose([
             Validators.required,
             Validators.minLength(8),
-            Validators.pattern(PASSWORD_PATTERN)
+            this.matchValidator.bind(this)
             ])
         ],
 
         });
     }
+
+    matchValidator(control: AbstractControl): { [key: string]: boolean } | null {
+      if (!this.signUpForm) {
+        return null;
+      }
+
+      const pass = this.signUpForm.value.pass;
+      const retype = control.value;
+
+      if (pass !== retype) {
+        return { mustMatch: true };
+      }
+
+      return null;
+    };
 
     onSignUp(){
         const id = uuidv4();
