@@ -9,6 +9,7 @@ import { ProductsComponent } from "../modules/products/products.component";
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { ServiceListComponent } from '../modules/service-list/service-list.component';
 import { CustomerListComponent } from '../modules/customer-list/customer-list.component';
+import { TDSMenuModule } from 'tds-ui/menu';
 
 @Component({
     selector: 'frontend-layout',
@@ -27,6 +28,9 @@ import { CustomerListComponent } from '../modules/customer-list/customer-list.co
       PaginationComponent,
       ServiceListComponent,
       CustomerListComponent,
+      TDSMenuModule
     ]
 })
-export class LayoutComponent {}
+export class LayoutComponent {
+
+}

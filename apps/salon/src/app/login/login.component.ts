@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
       if(result.token != null)
         {
           alert(result.token)
-          this.router.navigate(['/home']);
+          this.router.navigate(['/products']);
         }
     });
   }

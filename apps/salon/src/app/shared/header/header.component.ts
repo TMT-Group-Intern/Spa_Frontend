@@ -11,7 +11,7 @@ import { TDSInputModule } from 'tds-ui/tds-input';
   selector: 'frontend-header',
   standalone: true,
   imports: [CommonModule ,ReactiveFormsModule,TDSHeaderModule,TDSFormFieldModule,TDSSelectModule,FormsModule,
-    TDSButtonModule, TDSInputModule,],
+    TDSButtonModule, TDSInputModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })

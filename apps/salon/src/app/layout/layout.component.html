@@ -1,14 +1,11 @@
-  <div class="flex h-screen w-screen">
-    <frontend-menu></frontend-menu>
-    <div class="flex-1 w-full">
-      <div class="ml-2 rounded-b-lg">
-        <frontend-header></frontend-header>
-      </div>
-      <tds-layout-content class= "h-full bg-white my-1 ml-2 rounded-lg">
+<div class="h-full w-full flex bg-gray-400">
+  <frontend-menu></frontend-menu>
+  <div class="flex h-full w-full flex-col float-right ">
+    <div class="float-start h-[5%] ml-2 mb-2 rounded-sm">
+      <frontend-header></frontend-header>
+    </div>
+    <div [style.width.%]="99" class="h-[95%] bg-white my-2 ml-2 rounded-lg overflow-auto">
         <router-outlet></router-outlet>
-      </tds-layout-content>
-      <!-- <tds-layout-footer class="bg-white ml-2 rounded-t-lg">
-          <frontend-pagination></frontend-pagination>
-        </tds-layout-footer> -->
     </div>
   </div>
+</div>
