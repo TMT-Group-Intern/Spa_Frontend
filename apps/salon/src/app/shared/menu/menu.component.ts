@@ -21,7 +21,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class MenuComponent   {
 
-  isCollapsed = false;
+  isCollapsed = true;
     activeTab = 1;
     active = 1;
     active1 = 'top';

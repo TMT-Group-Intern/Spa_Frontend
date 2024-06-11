@@ -53,7 +53,6 @@
           <input tdsInput autocomplete="off" placeholder="Xác nhận mật khẩu" formControlName="retype" type="password"
             [required]='true' />
           <tds-error>
-            <span *ngIf="signUpForm.controls['retype'].hasError('required')">Vui lòng nhập lại mật khẩu</span>
             <!-- <span *ngIf="signUpForm.controls['retype'].hasError('pattern')">Mật khẩu không khớp</span> -->
             <span *ngIf="signUpForm.get('retype')?.errors?.['mustMatch']">Passwords do not match</span>
           </tds-error>
