@@ -21,7 +21,7 @@ import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
 import { RegisterComponent } from './register/register.component';
 import { RevenueStatisticsComponent } from './modules/revenue-statistics/revenue-statistics.component';
-
+import { RevenueStaticsModule } from './modules/revenue-statistics/revenue-statistics.module';
 registerLocaleData(localeVi);
 @NgModule({
   declarations: [
@@ -46,6 +46,7 @@ registerLocaleData(localeVi);
     RouterModule,
     AppRoutingModule,
     RegisterComponent,
+    RevenueStaticsModule
   ],
   providers: [{ provide: TDS_I18N, useValue: vi_VN }],
   bootstrap: [AppComponent],

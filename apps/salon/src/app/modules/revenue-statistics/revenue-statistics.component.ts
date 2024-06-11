@@ -9,7 +9,7 @@ import { TDSBarChartComponent, TDSChartOptions } from 'tds-report';
 export class RevenueStatisticsComponent implements OnInit{
   options: any;
 
-  size: any = [1560, 450];
+  size: any = [800, 450];
   //căn chỉnh width,height của chart layout. giá trị có thể là number hoặc 'auto'
 
   chartOptions = TDSChartOptions();
@@ -39,6 +39,6 @@ export class RevenueStatisticsComponent implements OnInit{
   // khởi tạo 1 object TDSBarChartComponent với 2 thành phần cơ bản axis, series
 
   ngOnInit(): void {
-    this.options = (this.chartOptions as any).BarOption(this.chartComponent); //khởi tạo option bar chart cơ bản
+    this.options = (this.chartOptions as any).BarChartOption(this.chartComponent); //khởi tạo option bar chart cơ bản
   }
 }
