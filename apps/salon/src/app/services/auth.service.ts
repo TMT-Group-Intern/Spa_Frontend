@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { names } from 'tds-ui/tinycolor';
 @Injectable({
   providedIn: 'root'
 })
@@ -9,6 +10,20 @@ export class AuthService {
 
   constructor(private http : HttpClient) {
 
+  }
+
+  // Render list of service
+  RenderListService():Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + 'Services');
+  }
+
+  //Create a new service
+  CreateService(_serviceName:string, _price: number, _description:string){
+    return this.http.post<{flag: boolean, message: string}>(this.baseUrl + 'Services',{
+      serviceName: _serviceName,
+      price: _price,
+      description: _description
+    })
   }
 
   // Show list of Customer
