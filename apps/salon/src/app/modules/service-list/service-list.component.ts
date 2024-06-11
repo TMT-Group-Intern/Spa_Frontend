@@ -6,53 +6,56 @@ import { TDSCheckBoxModule } from 'tds-ui/tds-checkbox';
 import { TDSTableModule } from 'tds-ui/table';
 import { TDSColumnSettingsModule } from 'tds-ui/column-settings';
 import { TDSButtonModule } from 'tds-ui/button';
+import { AuthService } from '../../services/auth.service';
+import { TDSToolTipModule } from 'tds-ui/tooltip';
+import { TDSModalService } from 'tds-ui/modal';
+import { ModalAddServiceComponent } from './modal-add-service/modal-add-service.component';
+import { TDSFormFieldModule } from 'tds-ui/form-field';
 
-interface ItemData {
-  id: number;
-  name: string;
-  age: number;
-  address: string;
-  createDate: Date;
-  value: number;
-  avatar: string;
-}
 
 @Component({
   selector: 'frontend-service-list',
   standalone: true,
-  imports: [CommonModule, TDSDataTableModule, TDSAvatarModule, TDSCheckBoxModule, TDSTableModule, TDSColumnSettingsModule,TDSButtonModule],
+  imports: [CommonModule, TDSDataTableModule, TDSAvatarModule,
+    TDSCheckBoxModule, TDSTableModule, TDSColumnSettingsModule,
+    TDSButtonModule, TDSToolTipModule, TDSFormFieldModule
+  ],
   templateUrl: './service-list.component.html',
   styleUrls: ['./service-list.component.scss'],
 })
 export class ServiceListComponent implements OnInit {
+  ServiceList: any[]=[];
 
-  listOfData: ItemData[] = [];
+  constructor(
+    private auth: AuthService,
+    private modalSvc : TDSModalService
+  ) {}
 
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        constructor() {}
-
-        ngOnInit(): void {
-            const data = [];
-            for (let i = 0; i < 50; i++) {
-                data.push({
-                    id: i,
-                    name: `Edward King ${i}`,
-                    age: 32,
-                    address: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut
-                    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-                    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet,
-                    consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                    laboris nisi ut aliquip ex ea commodo consequat. ${i}`,
-                    createDate: new Date(),
-                    value: Math.floor(Math.random() * 200000000),
-                    avatar: `https://randomuser.me/api/portraits/women/${Math.floor(Math.random() * 100)}.jpg`,
-                });
-            }
-            this.listOfData = data;
+  ngOnInit(): void {
+  this.ShowServiceList();
   }
 
+  //Display Service List
+  ShowServiceList(): void{
+    this.auth.RenderListService().subscribe(data =>
+      {
+        this.ServiceList = data
+        console.log('CustomerList:', this.ServiceList)
+
+      }
+    )
+  }
+  // Display modal create new service
+  showModal(): void{
+    const modal = this.modalSvc.create({
+      content: ModalAddServiceComponent,
+      title:'Create new service',
+      footer: null,
+      cancelText: null,
+      size: 'md'
+    })
+    modal.afterClose.asObservable().subscribe(data =>{
+      console.log(data)
+    })
+  }
 }

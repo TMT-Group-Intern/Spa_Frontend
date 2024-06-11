@@ -43,7 +43,7 @@ registerLocaleData(localeVi);
     RouterModule,
     AppRoutingModule,
     RegisterComponent,
-    RevenueStaticsModule
+    RevenueStaticsModule,
   ],
   providers: [{ provide: TDS_I18N, useValue: vi_VN }],
   bootstrap: [AppComponent],
