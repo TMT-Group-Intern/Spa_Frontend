@@ -1,0 +1,140 @@
+<div class="pl-4">
+  <button
+    tds-button
+    (click)="showModal()"
+    class="my-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-300"
+  >
+    <span>Create New Customer</span>
+  </button>
+  <tds-modal
+    [size]="'lg'"
+    [(visible)]="isVisible"
+    title="Create New Customer"
+    (onCancel)="handleCancel()"
+  >
+    <ng-container *tdsModalContent>
+      <form class="py-4" signUp [formGroup]="signUpForm">
+        <tds-label>First Name</tds-label>
+        <tds-form-field class="my-2">
+          <input
+            tdsInput
+            autocomplete="off"
+            placeholder="Christine"
+            formControlName="FirstName"
+            [required]="true"
+            class="appearance-none w-full"
+          />
+
+          <tds-error>
+            <span *ngIf="signUpForm.controls['FirstName'].hasError('required')"
+              >Please enter your first name</span
+            >
+          </tds-error>
+        </tds-form-field>
+
+        <tds-label>Last Name</tds-label>
+        <tds-form-field class="my-2">
+          <input
+            tdsInput
+            autocomplete="off"
+            placeholder="Nguyen"
+            formControlName="LastName"
+            [required]="true"
+            class="appearance-none w-full"
+          />
+
+          <tds-error>
+            <span *ngIf="signUpForm.controls['LastName'].hasError('required')"
+              >Please enter your last name</span
+            >
+          </tds-error>
+        </tds-form-field>
+
+        <tds-label class="pt-4">Email</tds-label>
+        <tds-form-field class="my-2">
+          <input
+            tdsInput
+            autocomplete="off"
+            placeholder="abc@example.com"
+            formControlName="email"
+            type="email"
+            [required]="true"
+            class="appearance-none w-full"
+          />
+
+          <tds-error>
+            <span *ngIf="signUpForm.controls['email'].hasError('required')"
+              >Please enter your email</span
+            >
+            <span *ngIf="signUpForm.controls['email'].hasError('email')"
+              >Your email is invalid</span
+            >
+          </tds-error>
+        </tds-form-field>
+
+        <tds-label>Phone Number</tds-label>
+        <tds-form-field class="my-2">
+          <input
+            tdsInput
+            autocomplete="off"
+            placeholder="0123456789"
+            formControlName="phoneNumber"
+            [required]="true"
+            class="appearance-none w-full"
+          />
+
+          <tds-error>
+            <span
+              *ngIf="signUpForm.controls['phoneNumber'].hasError('required')"
+              >Please enter your phone number</span
+            >
+          </tds-error>
+        </tds-form-field>
+
+        <tds-label [tdsRequired]="true" tdsFor="DateOfBirth">Date of Birth</tds-label
+        >
+        <tds-form-field class="w-full my-2">
+          <input
+            tdsInput
+            autocomplete="off"
+            formControlName="DateOfBirth"
+            type="date"
+            [required]="true"
+            class="appearance-none w-full"
+          />
+          <tds-error>Please choose a date</tds-error>
+        </tds-form-field>
+
+        <tds-label class="pt-4">Gender</tds-label>
+        <tds-radio-group tdsName="radioValue" class="my-2">
+          <label>
+            <input type="radio" name="gender" value="Male" /> Male
+          </label>
+          <label>
+            <input type="radio" name="gender" value="Female" /> Female
+          </label>
+        </tds-radio-group>
+
+        <div class="justify-end flex mt-8">
+          <button
+            tds-button
+            color="success"
+            (click)="handleOk()"
+            class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition-colors duration-300"
+          >
+            Create
+          </button>
+
+          <button
+            tds-button
+            color="secondary"
+            (click)="handleCancel()"
+            class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition-colors duration-300 ml-4"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </ng-container>
+  </tds-modal>
+</div>

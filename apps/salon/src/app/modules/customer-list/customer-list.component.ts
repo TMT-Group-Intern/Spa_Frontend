@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { TDSMapperPipeModule } from 'tds-ui/cdk/pipes/mapper';
 import { TDSDataTableModule } from 'tds-ui/data-table';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSColumnSettingsModule } from 'tds-ui/column-settings';
 import { TDSListModule } from 'tds-ui/list';
@@ -14,6 +14,10 @@ import { Router } from '@angular/router';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSSelectModule } from 'tds-ui/select';
 import { TDSRadioModule } from 'tds-ui/radio';
+import { TDSNotificationService } from 'tds-ui/notification';
+import { TDSInputModule } from 'tds-ui/tds-input';
+import { TDSDatePickerModule } from 'tds-ui/date-picker';
+import { error } from 'console';
 
 @Component({
   selector: 'frontend-customer-list',
@@ -29,7 +33,9 @@ import { TDSRadioModule } from 'tds-ui/radio';
     TDSModalModule,
     TDSFormFieldModule,
     TDSSelectModule,
-    TDSRadioModule
+    TDSRadioModule,
+    TDSInputModule,
+    TDSDatePickerModule,
   ],
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],
@@ -37,21 +43,28 @@ import { TDSRadioModule } from 'tds-ui/radio';
 export class CustomerListComponent implements OnInit {
 
   isVisible = false;
-  radioValue = 'A';
-  signUpForm!: FormGroup;
+  createCustomerForm!: FormGroup;
   CustomerList:any[] = [];
+  form = inject(FormBuilder).nonNullable.group({
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
+    email: ['', Validators.required],
+    phone: ['', Validators.required],
+    dateOfBirth: ['', Validators.required],
+    gender: ['', Validators.required],
+  })
+
 
   constructor(
-    private fb: FormBuilder,
     private auth : AuthService,
     private router:Router,
+    private notification: TDSNotificationService,
   ) {}
 
   // Display modal
   showModal(): void {
     this.isVisible = true;
   }
-
 
   // Save button
   handleOk(): void {
@@ -65,16 +78,6 @@ export class CustomerListComponent implements OnInit {
     this.isVisible = false;
   }
 
-//   persondisplayWith!: FormControl;
-//   public contactOptions = [
-//     { id: 1, name: 'Elton John' },
-//     { id: 2, name: 'Elvis Presley' },
-//     { id: 3, name: 'Paul McCartney' },
-//     { id: 4, name: 'Elton John' },
-//     { id: 5, name: 'Elvis Presley' },
-//     { id: 6, name: 'Paul McCartney' },
-// ``]
-
   // Display Customer List
   showCustomerList() {
     this.auth.CustomerList().subscribe(data => {
@@ -83,46 +86,46 @@ export class CustomerListComponent implements OnInit {
     });
   }
 
+  // Create New Customer
+  CreateNewCustomer() {
+    if(this.form.invalid) return;
+    const val = {
+      ...this.form.value
+    };
+
+    this.auth.CreateNewCustomer(val).subscribe(res => {
+      this.handleCancel();
+      this.createNotificationSuccess();
+    }, () => {
+      console.log(1)
+    });
+  }
+
+  createNotificationSuccess(): void {
+    this.notification.success(
+        'Create Successfully!',
+        'One customer is added in the list.'
+    );
+}
+
   ngOnInit(): void {
 
     this.showCustomerList();
 
-    // this.signUpForm = this.fb.group({
-    //   // phoneNumber: ['', Validators.compose([
-    //   //     Validators.required,
-    //   //     Validators.pattern(/^[0-9]{10}$/i)
-    //   // ])],
-    //   email: [
-    //     '',
-    //     Validators.compose([
-    //     Validators.required,
-    //     Validators.email
-    //     ])
-    //   ],
-
-    //   taiKhoan:[
-    //     '' ,
-    //     Validators.required
-    //   ],
-
-    // });
-
-      // Display Customer List
-      // for (let i = 0; i < 50; i++) {
-      //   this.CustomerList.push({
-      //     Code: this.CustomerList.customerCode,
-      //     FirstName: this.CustomerList.firstName,
-      //     LastName: this.CustomerList.lastName,
-      //     Gender: this.CustomerList.gender,
-      //     PhoneNumber: this.CustomerList.phone,
-      //     Email: this.CustomerList.email,
-      //     DateOfBirth: this.CustomerList.dateOfBirth,
-      //     CustomerTypeID: this.CustomerList.customerTypeID,
-      //   });
   }
 }
 
-// function uuidv4() {
-//   throw new Error('Function not implemented.');
+// interface RootObject {
+//   customerID: number;
+//   firstName: string;
+//   customerCode: string;
+//   lastName: string;
+//   email: string;
+//   phone: string;
+//   dateOfBirth: string;
+//   gender: string;
+//   customerTypeID: number;
+//   appointments: null;
+//   sales: null;
+//   customerType: null;
 // }
-

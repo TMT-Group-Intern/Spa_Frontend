@@ -20,10 +20,13 @@ import { MenuComponent } from './shared/menu/menu.component';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
 import { RegisterComponent } from './register/register.component';
+import { RevenueStatisticsComponent } from './modules/revenue-statistics/revenue-statistics.component';
 import { RevenueStaticsModule } from './modules/revenue-statistics/revenue-statistics.module';
 registerLocaleData(localeVi);
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

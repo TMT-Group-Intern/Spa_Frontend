@@ -6,30 +6,28 @@
   >
     <span>Create New Customer</span>
   </button>
-  <tds-modal
+  <tds-modal [footer] = "null"
     [size]="'lg'"
     [(visible)]="isVisible"
     title="Create New Customer"
     (onCancel)="handleCancel()"
   >
     <ng-container *tdsModalContent>
-      <form class="py-4" signUp [formGroup]="signUpForm">
+      <form class="py-4" signUp [formGroup]="form" autocomplete="off">
         <tds-label>First Name</tds-label>
         <tds-form-field class="mt-2">
+
           <input
             tdsInput
             autocomplete="off"
             placeholder="Christine"
-            formControlName="FirstName"
-            [required]="true"
+            formControlName="firstName"
             class="appearance-none w-full"
           />
-
           <tds-error>
-            <span *ngIf="signUpForm.controls['FirstName'].hasError('required')"
-              >Please enter your first name</span
-            >
+            Please enter your last namex
           </tds-error>
+
         </tds-form-field>
 
         <tds-label>Last Name</tds-label>
@@ -38,15 +36,11 @@
             tdsInput
             autocomplete="off"
             placeholder="Nguyen"
-            formControlName="LastName"
-            [required]="true"
+            formControlName="lastName"
             class="appearance-none w-full"
           />
-
           <tds-error>
-            <span *ngIf="signUpForm.controls['LastName'].hasError('required')"
-              >Please enter your last name</span
-            >
+            Please enter your last namex
           </tds-error>
         </tds-form-field>
 
@@ -58,17 +52,11 @@
             placeholder="abc@example.com"
             formControlName="email"
             type="email"
-            [required]="true"
             class="appearance-none w-full"
           />
 
           <tds-error>
-            <span *ngIf="signUpForm.controls['email'].hasError('required')"
-              >Please enter your email</span
-            >
-            <span *ngIf="signUpForm.controls['email'].hasError('email')"
-              >Your email is invalid</span
-            >
+            Please enter your last namex
           </tds-error>
         </tds-form-field>
 
@@ -78,48 +66,45 @@
             tdsInput
             autocomplete="off"
             placeholder="0123456789"
-            formControlName="phoneNumber"
-            [required]="true"
             class="appearance-none w-full"
+            formControlName="phone"
           />
-
           <tds-error>
-            <span
-              *ngIf="signUpForm.controls['phoneNumber'].hasError('required')"
-              >Please enter your phone number</span
-            >
+            Please enter your last namex
           </tds-error>
         </tds-form-field>
 
-        <tds-label [tdsRequired]="true" tdsFor="DateOfBirth"
-          >Date of Birth</tds-label
+        <tds-label [tdsRequired]="true" tdsFor="DateOfBirth">Date of Birth</tds-label
         >
         <tds-form-field class="w-full">
           <input
             tdsInput
             autocomplete="off"
-            formControlName="DateOfBirth"
             type="date"
-            [required]="true"
             class="appearance-none w-full"
+            formControlName="dateOfBirth"
           />
           <tds-error>Please choose a date</tds-error>
         </tds-form-field>
 
         <tds-label class="pt-4">Gender</tds-label>
         <tds-radio-group tdsName="radioValue">
-          <label tds-radio value="Male">Male</label>
-          <label tds-radio value="Female">Female</label>
+          <label>
+            <input  type="radio" name="gender" value="Male" formControlName="gender"/> Male
+          </label>
+          <label>
+            <input  type="radio" name="gender" value="Female" formControlName="gender"/> Female
+          </label>
         </tds-radio-group>
 
         <div class="justify-end flex mt-8">
           <button
             tds-button
             color="success"
-            (click)="handleOk()"
+            (click)="CreateNewCustomer()"
             class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition-colors duration-300"
           >
-            Lưu
+            Create
           </button>
           <button
             tds-button
@@ -127,7 +112,7 @@
             (click)="handleCancel()"
             class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition-colors duration-300 ml-4"
           >
-            Hủy bỏ
+            Cancel
           </button>
         </div>
       </form>
@@ -141,7 +126,7 @@
     [tdsShowSizeChanger]="true"
     [tdsPageSize]="10"
     [tdsBordered]="true"
-    >
+  >
     <tds-data-table-expand-row [tdsContent]="expandTpl">
       <ng-template #expandTpl let-dataRow let-expand="expand">
         <div class="w-full p-2">
