@@ -1,5 +1,5 @@
-<div class="flex justify-content items-center bg-white bg-opacity-50 bg-blur p-10 rounded-lg shadow-lg" style="height: 100vh;">
-    <div class="w-full bg-white dark:bg-d-neutral-3-100 p-4 rounded max-w-prose shadow-lg border" style="margin-left: 30%;margin-right: 30%;">
+<div class="relative flex justify-content items-center rounded-lg shadow-lg" style="height: 100vh;">
+    <div class=" w-full bg-white dark:bg-d-neutral-3-100 p-4 rounded max-w-prose shadow-lg border" style="margin-left: 30%;margin-right: 30%;">
       <div class="w-full">
         <div class="flex justify-end">
           <i class="tdsi-close-fill"></i>
@@ -59,7 +59,7 @@
         </tds-form-field>
         <!-- <tds-checkbox [checked]="true" class="pt-5">Ghi nhớ mật khẩu</tds-checkbox> -->
         <div class="w-full flex flex-col justify-center mt-8">
-          <button class="w-full mt-4" size="lg" tds-button type="submit" (click)="onSignUp()" [disabled]="!signUpForm.valid"
+          <button class="w-full mt-4" size="lg" tds-button type="submit" (click)="onSignUp()" [disabled]="signUpForm.valid"
             style="background-color: #1b7c20;">Đăng Kí
           </button>
         </div>
