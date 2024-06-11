@@ -1,38 +1,222 @@
-<div  class=" h-full flex flex-col p-2">
-  <div class="w-full flex justify-end  pb-2">
-    <tds-column-settings [tdsData]="listColumn" (tdsDataChange)="onDataColumnChange($event)">
-    </tds-column-settings>
-  </div>
-  <div class="flex-auto">
-    <tds-data-table [tdsData]="listOfRandomUser" [tdsFrontPagination]="false"
-    [tdsShowSizeChanger]="true"
-    [tdsLoading]="loading"
-    [tdsTotal]="total"
-    [(tdsPageSize)]="pageSize"
-    [(tdsPageIndex)]="pageIndex"
-    [tdsPageSizeOptions]="tdsPageSizeOptions"
-    (tdsQueryParams)="onQueryParamsChange($event)">
-      <tds-data-table-column [tdsField]="'name.picture.thumbnail'" [tdsTitle]="'Avatar'" [tdsContent]="contentAvatarTpl" [tdsWidth]="'80px'" [tdsHidden]="listColumn | tdsMapper:mapperHiddenColumn:'name.picture.thumbnail'">
-        <ng-template #contentAvatarTpl let-dataRow>
-          <tds-avatar size="sm" [tdsSrc]="dataRow.picture.thumbnail">
-          </tds-avatar>
-        </ng-template>
-      </tds-data-table-column>
-      <tds-data-table-column [tdsField]="'name.first'" [tdsTitle]="'Họ và tên'" [tdsContent]="contentTpl"  [tdsWidth]="'250px'" [tdsHidden]="listColumn | tdsMapper:mapperHiddenColumn:'name.first'">
-        <ng-template #contentTpl let-dataRow>
-          {{ dataRow.name.first }} {{ dataRow.name.last }}
-        </ng-template>
-      </tds-data-table-column>
-      <tds-data-table-column [tdsField]="'gender'" [tdsTitle]="'Giới tính'" [tdsWidth]="'80px'" [tdsHidden]="listColumn | tdsMapper:mapperHiddenColumn:'gender'">
-      </tds-data-table-column>
-      <tds-data-table-column [tdsField]="'registered.age'" [tdsTitle]="'Tuổi'" [tdsDataType]="'numeric'"
-        [tdsWidth]="'100px'" [tdsHidden]="listColumn | tdsMapper:mapperHiddenColumn:'registered.age'">
-      </tds-data-table-column>
-      <tds-data-table-column [tdsField]="'email'" [tdsTitle]="'Email'" [tdsWidth]="'250px'"  [tdsHidden]="listColumn | tdsMapper:mapperHiddenColumn:'email'">
-      </tds-data-table-column>
-      <tds-data-table-column [tdsField]="'phone'" [tdsTitle]="'Số điện thoại'" [tdsWidth]="'150px'" [tdsHidden]="listColumn | tdsMapper:mapperHiddenColumn:'phone'">
-      </tds-data-table-column>
-    </tds-data-table>
-  </div>
+<div class="pl-4">
+  <button
+    tds-button
+    (click)="showModal()"
+    class="my-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-300"
+  >
+    <span>Create New Customer</span>
+  </button>
+  <tds-modal
+  [size]="'lg'"
+    [(visible)]="isVisible"
+    title="Create New Customer"
+    (onCancel)="handleCancel()"
+  >
+    <ng-container *tdsModalContent>
+      <form class="py-4" signUp [formGroup]="signUpForm">
+        <tds-label>First Name</tds-label>
+        <tds-form-field class="mt-2">
+          <input
+            tdsInput
+            autocomplete="off"
+            placeholder="Christine"
+            formControlName="FirstName"
+            [required]="true"
+            class="appearance-none w-full"
+          />
+
+          <tds-error>
+            <span *ngIf="signUpForm.controls['FirstName'].hasError('required')"
+              >Please enter your first name</span
+            >
+          </tds-error>
+        </tds-form-field>
+
+        <tds-label>Last Name</tds-label>
+        <tds-form-field class="mt-2">
+          <input
+            tdsInput
+            autocomplete="off"
+            placeholder="Nguyen"
+            formControlName="LastName"
+            [required]="true"
+            class="appearance-none w-full"
+          />
+
+          <tds-error>
+            <span *ngIf="signUpForm.controls['LastName'].hasError('required')"
+              >Please enter your last name</span
+            >
+          </tds-error>
+        </tds-form-field>
+
+        <tds-label>Phone Number</tds-label>
+        <tds-form-field class="mt-2">
+          <input
+            tdsInput
+            autocomplete="off"
+            placeholder="0123456789"
+            formControlName="phoneNumber"
+            [required]="true"
+            class="appearance-none w-full"
+          />
+
+          <tds-error>
+            <span
+              *ngIf="signUpForm.controls['phoneNumber'].hasError('required')"
+              >Please enter your phone number</span
+            >
+          </tds-error>
+        </tds-form-field>
+
+        <tds-label class="pt-4">Email</tds-label>
+        <tds-form-field class="mt-2">
+          <input
+            tdsInput
+            autocomplete="off"
+            placeholder="abc@example.com"
+            formControlName="email"
+            type="email"
+            [required]="true"
+            class="appearance-none w-full"
+          />
+
+          <tds-error>
+            <span *ngIf="signUpForm.controls['email'].hasError('required')"
+              >Please enter your email</span
+            >
+            <span *ngIf="signUpForm.controls['email'].hasError('email')"
+              >Your email is invalid</span
+            >
+          </tds-error>
+        </tds-form-field>
+
+        <tds-label [tdsRequired]="true" tdsFor="DateOfBirth">Date of Birth</tds-label>
+        <tds-form-field class="w-full">
+          <input
+            tdsInput
+            autocomplete="off"
+            formControlName="DateOfBirth"
+            type="date"
+            [required]="true"
+            class="appearance-none w-full"
+          />
+          <tds-error>Please choose a date</tds-error>
+        </tds-form-field>
+
+        <div class="justify-end flex mt-8">
+          <button
+            tds-button
+            color="success"
+            (click)="handleOk()"
+            class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition-colors duration-300"
+          >
+            Lưu
+          </button>
+          <button
+            tds-button
+            color="secondary"
+            (click)="handleCancel()"
+            class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition-colors duration-300 ml-4"
+          >
+            Hủy bỏ
+          </button>
+        </div>
+      </form>
+    </ng-container>
+  </tds-modal>
 </div>
 
+<div [style.width.%]="100" class="flex h-full overflow-x-auto">
+  <tds-data-table
+    [tdsData]="listOfData"
+    [tdsShowSizeChanger]="true"
+    [tdsPageSize]="10"
+    [tdsBordered]="true"
+  >
+    <tds-data-table-expand-row [tdsContent]="expandTpl">
+      <ng-template #expandTpl let-dataRow let-expand="expand">
+        <div class="w-full p-2">
+          <tds-data-table-checkbox-column></tds-data-table-checkbox-column>
+        </div>
+      </ng-template>
+    </tds-data-table-expand-row>
+
+    <tds-data-table-checkbox-column></tds-data-table-checkbox-column>
+
+    <tds-data-table-column
+      [tdsField]="'Code'"
+      [tdsTitle]="'Code'"
+      tdsWidth="120px"
+      [tdsDataType]="'numeric'"
+      [tdsLeft]="true"
+    ></tds-data-table-column>
+
+    <tds-data-table-column-group [tdsTitle]="'Full Name'" [tdsLeft]="true">
+      <tds-data-table-column
+        [tdsField]="'FirstName'"
+        [tdsTitle]="'First Name'"
+        tdsWidth="125px"
+        [tdsDataType]="'text'"
+      ></tds-data-table-column>
+
+      <tds-data-table-column
+        [tdsField]="'LastName'"
+        [tdsTitle]="'Last Name'"
+        tdsWidth="125px"
+        [tdsDataType]="'text'"
+      ></tds-data-table-column>
+    </tds-data-table-column-group>
+
+    <tds-data-table-column
+      [tdsField]="'Gender'"
+      [tdsTitle]="'Gender'"
+      tdsWidth="150px"
+      [tdsDataType]="'text'"
+    ></tds-data-table-column>
+
+    <tds-data-table-column
+      [tdsField]="'PhoneNumber'"
+      [tdsTitle]="'Phone Number'"
+      tdsWidth="200px"
+      [tdsDataType]="'text'"
+    ></tds-data-table-column>
+
+    <tds-data-table-column
+      [tdsField]="'Email'"
+      [tdsTitle]="'Email'"
+      tdsWidth="200px"
+      [tdsDataType]="'text'"
+    ></tds-data-table-column>
+
+    <tds-data-table-column
+      [tdsField]="'DateOfBirth'"
+      [tdsTitle]="'Date of Birth'"
+      tdsWidth="150px"
+      [tdsDataType]="'date'"
+      [tdsFormat]="'dd/MM/yyyy'"
+      [tdsRight]="true"
+    ></tds-data-table-column>
+
+    <tds-data-table-column
+      [tdsField]="'CustomerTypeID'"
+      [tdsTitle]="'Customer Type ID'"
+      tdsWidth="150px"
+      [tdsDataType]="'numeric'"
+      [tdsLeft]="true"
+    ></tds-data-table-column>
+
+    <tds-data-table-column
+      [tdsContent]="commandTpl"
+      tdsWidth="110px"
+      [tdsColumnType]="'command'"
+      [tdsRight]="true"
+    >
+      <ng-template #commandTpl let-dataRow>
+        <button tds-button-flat-icon size="sm" class="mr-4" color="primary">
+          <i class="tdsi-edit-fill"></i>
+        </button>
+      </ng-template>
+    </tds-data-table-column>
+  </tds-data-table>
+</div>
