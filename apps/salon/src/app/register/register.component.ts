@@ -15,7 +15,16 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z
 @Component({
   selector: 'frontend-register',
   standalone: true,
-  imports: [CommonModule,TDSFormFieldModule,ReactiveFormsModule,TDSCheckBoxModule,RouterModule,TDSButtonModule,TDSInputModule,TDSSelectModule],
+  imports: [
+    CommonModule,
+    TDSFormFieldModule,
+    ReactiveFormsModule,
+    TDSCheckBoxModule,
+    RouterModule,
+    TDSButtonModule,
+    TDSInputModule,
+    TDSSelectModule,
+  ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
