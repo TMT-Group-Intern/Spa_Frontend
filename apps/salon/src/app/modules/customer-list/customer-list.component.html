@@ -7,7 +7,7 @@
     <span>Create New Customer</span>
   </button>
   <tds-modal
-  [size]="'lg'"
+    [size]="'lg'"
     [(visible)]="isVisible"
     title="Create New Customer"
     (onCancel)="handleCancel()"
@@ -50,25 +50,6 @@
           </tds-error>
         </tds-form-field>
 
-        <tds-label>Phone Number</tds-label>
-        <tds-form-field class="mt-2">
-          <input
-            tdsInput
-            autocomplete="off"
-            placeholder="0123456789"
-            formControlName="phoneNumber"
-            [required]="true"
-            class="appearance-none w-full"
-          />
-
-          <tds-error>
-            <span
-              *ngIf="signUpForm.controls['phoneNumber'].hasError('required')"
-              >Please enter your phone number</span
-            >
-          </tds-error>
-        </tds-form-field>
-
         <tds-label class="pt-4">Email</tds-label>
         <tds-form-field class="mt-2">
           <input
@@ -91,7 +72,28 @@
           </tds-error>
         </tds-form-field>
 
-        <tds-label [tdsRequired]="true" tdsFor="DateOfBirth">Date of Birth</tds-label>
+        <tds-label>Phone Number</tds-label>
+        <tds-form-field class="mt-2">
+          <input
+            tdsInput
+            autocomplete="off"
+            placeholder="0123456789"
+            formControlName="phoneNumber"
+            [required]="true"
+            class="appearance-none w-full"
+          />
+
+          <tds-error>
+            <span
+              *ngIf="signUpForm.controls['phoneNumber'].hasError('required')"
+              >Please enter your phone number</span
+            >
+          </tds-error>
+        </tds-form-field>
+
+        <tds-label [tdsRequired]="true" tdsFor="DateOfBirth"
+          >Date of Birth</tds-label
+        >
         <tds-form-field class="w-full">
           <input
             tdsInput
@@ -103,6 +105,12 @@
           />
           <tds-error>Please choose a date</tds-error>
         </tds-form-field>
+
+        <tds-label class="pt-4">Gender</tds-label>
+        <tds-radio-group tdsName="radioValue">
+          <label tds-radio value="Male">Male</label>
+          <label tds-radio value="Female">Female</label>
+        </tds-radio-group>
 
         <div class="justify-end flex mt-8">
           <button
@@ -129,11 +137,11 @@
 
 <div [style.width.%]="100" class="flex h-full overflow-x-auto">
   <tds-data-table
-    [tdsData]="listOfData"
+    [tdsData]="CustomerList"
     [tdsShowSizeChanger]="true"
     [tdsPageSize]="10"
     [tdsBordered]="true"
-  >
+    >
     <tds-data-table-expand-row [tdsContent]="expandTpl">
       <ng-template #expandTpl let-dataRow let-expand="expand">
         <div class="w-full p-2">
@@ -145,23 +153,23 @@
     <tds-data-table-checkbox-column></tds-data-table-checkbox-column>
 
     <tds-data-table-column
-      [tdsField]="'Code'"
+      [tdsField]="'customerCode'"
       [tdsTitle]="'Code'"
       tdsWidth="120px"
-      [tdsDataType]="'numeric'"
+      [tdsDataType]="'text'"
       [tdsLeft]="true"
     ></tds-data-table-column>
 
     <tds-data-table-column-group [tdsTitle]="'Full Name'" [tdsLeft]="true">
       <tds-data-table-column
-        [tdsField]="'FirstName'"
+        [tdsField]="'firstName'"
         [tdsTitle]="'First Name'"
         tdsWidth="125px"
         [tdsDataType]="'text'"
       ></tds-data-table-column>
 
       <tds-data-table-column
-        [tdsField]="'LastName'"
+        [tdsField]="'lastName'"
         [tdsTitle]="'Last Name'"
         tdsWidth="125px"
         [tdsDataType]="'text'"
@@ -169,28 +177,28 @@
     </tds-data-table-column-group>
 
     <tds-data-table-column
-      [tdsField]="'Gender'"
+      [tdsField]="'gender'"
       [tdsTitle]="'Gender'"
       tdsWidth="150px"
       [tdsDataType]="'text'"
     ></tds-data-table-column>
 
     <tds-data-table-column
-      [tdsField]="'PhoneNumber'"
+      [tdsField]="'phone'"
       [tdsTitle]="'Phone Number'"
       tdsWidth="200px"
       [tdsDataType]="'text'"
     ></tds-data-table-column>
 
     <tds-data-table-column
-      [tdsField]="'Email'"
+      [tdsField]="'email'"
       [tdsTitle]="'Email'"
       tdsWidth="200px"
       [tdsDataType]="'text'"
     ></tds-data-table-column>
 
     <tds-data-table-column
-      [tdsField]="'DateOfBirth'"
+      [tdsField]="'dateOfBirth'"
       [tdsTitle]="'Date of Birth'"
       tdsWidth="150px"
       [tdsDataType]="'date'"
@@ -199,7 +207,7 @@
     ></tds-data-table-column>
 
     <tds-data-table-column
-      [tdsField]="'CustomerTypeID'"
+      [tdsField]="'customerTypeID'"
       [tdsTitle]="'Customer Type ID'"
       tdsWidth="150px"
       [tdsDataType]="'numeric'"
@@ -215,6 +223,9 @@
       <ng-template #commandTpl let-dataRow>
         <button tds-button-flat-icon size="sm" class="mr-4" color="primary">
           <i class="tdsi-edit-fill"></i>
+        </button>
+        <button tds-button-flat-icon size="sm" class="mr-4" color="primary">
+          <i class="tdsi-trash-fill"></i>
         </button>
       </ng-template>
     </tds-data-table-column>

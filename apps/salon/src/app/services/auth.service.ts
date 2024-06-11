@@ -1,30 +1,30 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = "https://localhost:44305/api/Account/"
+  private baseUrl = "https://localhost:44305/api/"
 
   constructor(private http : HttpClient) {
 
   }
 
   // Show list of Customer
-
+  CustomerList(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Customers');
+  }
 
   // Create a new Customer
-  CreateNewCustomer(CustomerID:bigint, FirstName:string, CustomerCode:string, LastName:string, Email:string, Phone:string, DateOfBirth:Date, Gender:string, CustomerTypeID:bigint){
-    return this.http.post<{flag:boolean, message:string}>(this.baseUrl+'register', {
-      CustomerID: CustomerID,
+  CreateNewCustomer(FirstName:string, LastName:string, Email:string, Phone:string, DateOfBirth:Date, Gender:string){
+    return this.http.post<{flag:boolean, message:string}>(this.baseUrl+'Customers', {
       FirstName: FirstName,
-      CustomerCode: CustomerCode,
       LastName: LastName,
       Email: Email,
       Phone: Phone,
       DateOfBirth: DateOfBirth,
       Gender: Gender,
-      CustomerTypeID: CustomerTypeID,
     })
   }
 
