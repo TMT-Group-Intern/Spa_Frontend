@@ -93,12 +93,15 @@ export class CustomerListComponent implements OnInit {
       ...this.form.value
     };
 
-    this.auth.CreateNewCustomer(val).subscribe(res => {
-      this.handleCancel();
-      this.createNotificationSuccess();
-    }, () => {
-      console.log(1)
-    });
+    this.auth.CreateNewCustomer(val).subscribe(
+      () => {
+        this.handleCancel();
+        this.createNotificationSuccess();
+      },
+
+      () => {
+        this.createNotificationError();
+      });
   }
 
   createNotificationSuccess(): void {
@@ -106,7 +109,14 @@ export class CustomerListComponent implements OnInit {
         'Create Successfully!',
         'One customer is added in the list.'
     );
-}
+  }
+
+  createNotificationError(): void {
+    this.notification.error(
+        'Create Fail!',
+        'Add new customer fail.'
+    );
+  }
 
   ngOnInit(): void {
 
