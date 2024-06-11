@@ -100,7 +100,7 @@ export class CustomerListComponent implements OnInit {
       },
 
       () => {
-        console.log(1)
+        this.createNotificationError();
       });
   }
 
