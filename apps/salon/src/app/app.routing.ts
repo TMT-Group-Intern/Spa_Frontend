@@ -6,8 +6,8 @@ import { LayoutComponent } from './layout/layout.component';
 import { ProductsComponent } from './modules/products/products.component';
 import { ServiceListComponent } from './modules/service-list/service-list.component';
 import { CustomerListComponent } from './modules/customer-list/customer-list.component';
-import { RevenueStaticsModule } from './modules/revenue-statistics/revenue-statics.module';
 import { RegisterComponent } from './register/register.component';
+import { RevenueStaticsModule } from './modules/revenue-statistics/revenue-statistics.module';
 
 
 const routes: Routes = [

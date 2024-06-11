@@ -1,0 +1,70 @@
+<form [formGroup]="signUpForm" id="formLogin" autocomplete="off" (ngSubmit)="onSignUp()">
+  <!-- model register -->
+    <div>
+      <tds-label class="pt-4 ">Email</tds-label>
+      <tds-form-field class="w-full mt-2">
+        <input tdsInput autocomplete="off" placeholder="Nhập email" formControlName="email" type="email"
+          [required]='true' class="appearance-none" />
+        <tds-error>
+          <span *ngIf="signUpForm.controls['email'].touched && signUpForm.controls['email'].hasError('required')">Vui
+            lòng nhập email</span>
+          <span *ngIf="signUpForm.controls['email'].touched && signUpForm.controls['email'].hasError('email')">Email
+            không hợp lệ</span>
+        </tds-error>
+      </tds-form-field>
+      <tds-label class="pt-4">Tên</tds-label>
+      <tds-form-field class="w-full mt-2">
+        <input tdsInput autocomplete="off" placeholder="Nhập tài khoản" formControlName="taiKhoan" [required]='true'
+          class="appearance-none" />
+        <tds-error>
+          <span
+            *ngIf="signUpForm.controls['taiKhoan'].touched && signUpForm.controls['taiKhoan'].hasError('required')">Vui
+            lòng nhập tài khoản</span>
+        </tds-error>
+      </tds-form-field>
+      <tds-label class="pt-4">Chức vụ</tds-label>
+      <tds-form-field class="w-full mt-2">
+        <tds-select valueField="id" textField="name" placeholder='Lựa chọn chức vụ' disabledField="isActive"
+          formControlName="chucvu" [required]='true' [data]="contactOptions" [allowClear]="true"
+          class="appearance-none">
+        </tds-select>
+        <tds-error>
+          <span *ngIf="signUpForm.controls['chucvu'].touched && signUpForm.controls['chucvu'].hasError('required')">Vui
+            lòng chọn chức vụ</span>
+        </tds-error>
+      </tds-form-field>
+      <tds-label class="pt-4">Mật khẩu</tds-label>
+      <tds-form-field class="w-full mt-2">
+        <input tdsInput autocomplete="off" placeholder="Nhập mật khẩu" formControlName="pass" type="password"
+          [required]='true' />
+        <tds-error>
+          <span *ngIf="signUpForm.controls['pass'].touched && signUpForm.controls['pass'].hasError('required')">Vui lòng
+            nhập mật khẩu</span>
+          <span *ngIf="signUpForm.controls['pass'].touched && signUpForm.controls['pass'].hasError('pattern')">Mật khẩu
+            ít nhất 8 kí tự, gồm chữ hoa, chữ thường, số và kí tự đặc biệt</span>
+        </tds-error>
+      </tds-form-field>
+      <tds-label class="pt-4">Nhập lại mật khẩu</tds-label>
+      <tds-form-field class="w-full mt-2">
+        <input tdsInput autocomplete="off" placeholder="Xác nhận mật khẩu" formControlName="retype" type="password"
+          [required]='true' />
+        <tds-error>
+          <span *ngIf="signUpForm.controls['retype'].touched && signUpForm.controls['retype'].hasError('required')">Vui
+            lòng nhập lại mật khẩu</span>
+          <span *ngIf="signUpForm.controls['retype'].touched && signUpForm.get('retype')?.hasError('mustMatch')">Mật
+            khẩu không khớp</span>
+        </tds-error>
+      </tds-form-field>
+    </div>
+  <!-- Kết thúc mã modal register -->
+</form>
+
+<ng-container *tdsModalFooter>
+  <div class="p-4">
+    <div class="w-full flex flex-col justify-center mt-8">
+      <button class="w-full mt-4" size="lg" tds-button type="submit" (click)="onSignUp()" form="formLogin"
+        [disabled]="signUpForm.valid" style="background-color: #1b7c20;">Đăng Kí
+      </button>
+    </div>
+  </div>
+</ng-container>
