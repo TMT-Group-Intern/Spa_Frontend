@@ -1,54 +1,97 @@
 <div [style.width.%]="99" class="flex h-full overflow-x-auto">
-  <tds-data-table [tdsData]="listOfData"
-   [tdsShowSizeChanger]="true"
-  [tdsPageSize]="10"
-  [tdsBordered]="true">
-   <tds-data-table-expand-row [tdsContent]="expandTpl">
-       <ng-template #expandTpl let-dataRow let-expand="expand">
-           <div class="w-full p-2">
-              <tds-data-table-checkbox-column></tds-data-table-checkbox-column>
-           </div>
-       </ng-template>
-   </tds-data-table-expand-row>
-   <tds-data-table-checkbox-column>
-   </tds-data-table-checkbox-column>
-   <tds-data-table-column [tdsField]="'id'" [tdsTitle]="'ID'" tdsWidth="60px" [tdsDataType]="'numeric'"
-       [tdsLeft]="true">
-   </tds-data-table-column>
-   <tds-data-table-column-group [tdsTitle]="'Thông tin chung'"  [tdsLeft]="true" >
-       <tds-data-table-column [tdsField]="'name'" [tdsContent]="nameContentTpl" [tdsTitle]="'Tên'" tdsWidth="200px"
-           >
-           <ng-template #nameContentTpl let-dataRow>
-               <div class="flex items-center">
-                   <tds-avatar size="sm" [tdsSrc]="dataRow.avatar">
-                   </tds-avatar>
-                   <div class="text-caption-2 ml-2">
-                       {{dataRow.name}}
-                   </div>
-               </div>
-           </ng-template>
-       </tds-data-table-column>
-       <tds-data-table-column [tdsField]="'age'" [tdsTitle]="'Tuổi'" tdsWidth="50px" [tdsDataType]="'numeric'">
-       </tds-data-table-column>
-   </tds-data-table-column-group>
-   <tds-data-table-column [tdsField]="'value'" [tdsTitle]="'Số tiền'" tdsWidth="150px" [tdsDataType]="'numeric'"
-       [tdsFormat]="{thousandSeparator: ','}">
-   </tds-data-table-column>
-   <tds-data-table-column [tdsField]="'address'" [tdsTitle]="'Địa chỉ'" [tdsContent]="contentTpl" tdsWidth="400px">
-       <ng-template #contentTpl let-dataRow>
-           <p tds-typography tdsEllipsis class="text-base-red-600"> {{dataRow.address}}</p>
-       </ng-template>
-   </tds-data-table-column>
-   <tds-data-table-column [tdsField]="'createDate'" [tdsTitle]="'Ngày tạo'" tdsWidth="150px" [tdsDataType]="'date'"
-       [tdsFormat]="'dd/MM/yyyy'" [tdsRight]="true">
-   </tds-data-table-column>
-   <tds-data-table-column [tdsTitle]="'Thao tác'" [tdsContent]="commandTpl" tdsWidth="110px"
-       [tdsColumnType]="'command'" [tdsRight]="true">
-       <ng-template #commandTpl let-dataRow>
-           <button tds-button-flat-icon size="sm" class="mr-2" color="primary"> <i class="tdsi-edit-fill"></i></button>
-           <button tds-button-flat-icon size="sm" color="secondary"> <i class="tdsi-edit-fill"></i></button>
-       </ng-template>
-   </tds-data-table-column>
-</tds-data-table>
+  <tds-data-table
+    [tdsData]="listOfData"
+    [tdsShowSizeChanger]="true"
+    [tdsPageSize]="10"
+    [tdsBordered]="true"
+  >
+    <tds-data-table-expand-row [tdsContent]="expandTpl">
+      <ng-template #expandTpl let-dataRow let-expand="expand">
+        <div class="w-full p-2">
+          <tds-data-table-checkbox-column></tds-data-table-checkbox-column>
+        </div>
+      </ng-template>
+    </tds-data-table-expand-row>
+    <tds-data-table-checkbox-column> </tds-data-table-checkbox-column>
+    <tds-data-table-column
+      [tdsField]="'id'"
+      [tdsTitle]="'ID'"
+      tdsWidth="60px"
+      [tdsDataType]="'numeric'"
+      [tdsLeft]="true"
+    >
+    </tds-data-table-column>
+    <tds-data-table-column-group
+      [tdsTitle]="'Thông tin chung'"
+      [tdsLeft]="true"
+    >
+      <tds-data-table-column
+        [tdsField]="'name'"
+        [tdsContent]="nameContentTpl"
+        [tdsTitle]="'Tên'"
+        tdsWidth="200px"
+      >
+        <ng-template #nameContentTpl let-dataRow>
+          <div class="flex items-center">
+            <tds-avatar size="sm" [tdsSrc]="dataRow.avatar"> </tds-avatar>
+            <div class="text-caption-2 ml-2">
+              {{ dataRow.name }}
+            </div>
+          </div>
+        </ng-template>
+      </tds-data-table-column>
+      <tds-data-table-column
+        [tdsField]="'age'"
+        [tdsTitle]="'Tuổi'"
+        tdsWidth="50px"
+        [tdsDataType]="'numeric'"
+      >
+      </tds-data-table-column>
+    </tds-data-table-column-group>
+    <tds-data-table-column
+      [tdsField]="'value'"
+      [tdsTitle]="'Số tiền'"
+      tdsWidth="150px"
+      [tdsDataType]="'numeric'"
+      [tdsFormat]="{ thousandSeparator: ',' }"
+    >
+    </tds-data-table-column>
+    <tds-data-table-column
+      [tdsField]="'address'"
+      [tdsTitle]="'Địa chỉ'"
+      [tdsContent]="contentTpl"
+      tdsWidth="400px"
+    >
+      <ng-template #contentTpl let-dataRow>
+        <p tds-typography tdsEllipsis class="text-base-red-600">
+          {{ dataRow.address }}
+        </p>
+      </ng-template>
+    </tds-data-table-column>
+    <tds-data-table-column
+      [tdsField]="'createDate'"
+      [tdsTitle]="'Ngày tạo'"
+      tdsWidth="150px"
+      [tdsDataType]="'date'"
+      [tdsFormat]="'dd/MM/yyyy'"
+      [tdsRight]="true"
+    >
+    </tds-data-table-column>
+    <tds-data-table-column
+      [tdsTitle]="'Thao tác'"
+      [tdsContent]="commandTpl"
+      tdsWidth="110px"
+      [tdsColumnType]="'command'"
+      [tdsRight]="true"
+    >
+      <ng-template #commandTpl let-dataRow>
+        <button tds-button-flat-icon size="sm" class="mr-2" color="primary">
+          <i class="tdsi-edit-fill"></i>
+        </button>
+        <button tds-button-flat-icon size="sm" color="secondary">
+          <i class="tdsi-edit-fill"></i>
+        </button>
+      </ng-template>
+    </tds-data-table-column>
+  </tds-data-table>
 </div>
-
