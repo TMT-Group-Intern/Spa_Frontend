@@ -21,9 +21,12 @@ import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
 import { RegisterComponent } from './register/register.component';
 import { RevenueStatisticsComponent } from './modules/revenue-statistics/revenue-statistics.component';
+
 registerLocaleData(localeVi);
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
