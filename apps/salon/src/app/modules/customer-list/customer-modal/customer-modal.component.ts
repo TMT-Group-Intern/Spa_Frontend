@@ -1,17 +1,17 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TDSModalModule, TDSModalRef } from 'tds-ui/modal';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TDSModalModule, TDSModalRef } from 'tds-ui/modal';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSRadioModule } from 'tds-ui/radio';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSDatePickerModule } from 'tds-ui/date-picker';
-import { AuthService } from '../../../services/auth.service';
-import { TDSNotificationService } from 'tds-ui/notification';
 import { CustomerListComponent } from '../customer-list.component';
+import { AuthService } from '../../../shared.service';
+import { TDSNotificationService } from 'tds-ui/notification';
 
 @Component({
-  selector: 'frontend-create-customer',
+  selector: 'frontend-customer-modal',
   standalone: true,
   imports: [
     CommonModule,
@@ -23,12 +23,14 @@ import { CustomerListComponent } from '../customer-list.component';
     TDSDatePickerModule,
     CustomerListComponent,
   ],
-  templateUrl: './create-customer.component.html',
-  styleUrls: ['./create-customer.component.scss'],
+  templateUrl: './customer-modal.component.html',
+  styleUrls: ['./customer-modal.component.scss'],
 })
-export class CreateCustomerComponent implements OnInit{
+export class CustomerModalComponent implements OnInit {
+
   private readonly modalRef = inject(TDSModalRef)
-  @Input() id?:string;
+
+  @Input() id?: number;
   createCustomerForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
     firstName: ['', Validators.required],
@@ -48,10 +50,13 @@ export class CreateCustomerComponent implements OnInit{
     console.log(this.id);
 
     if(this.id){
-      // this.auth.
+      this.auth.getCustomer(this.id).subscribe(
+        (data: any) => {
+          console.log(data);
+          this.form.patchValue(data.customerDTO)
+        }
+      )
     }
-    // todo get data by id
-    // subscribe => form pathvalue
   }
 
   // Cancel button
@@ -59,7 +64,7 @@ export class CreateCustomerComponent implements OnInit{
    this.modalRef.destroy(null)
   }
 
-  // Create New Customer
+  // Submit button
   submit() {
     if(this.form.invalid) return;
     const val = {
@@ -74,34 +79,45 @@ export class CreateCustomerComponent implements OnInit{
     }
   }
 
+  // Create Customer
   createCustomer(val:any){
     this.auth.CreateNewCustomer(val).subscribe(
       (res) => {
-        this.createNotificationSuccess();
+        this.createNotificationSuccess('Create Successfully!', 'A new customer had added to the list.');
         this.modalRef.destroy(val)
       },
       () => {
-        this.createNotificationError();
+        this.createNotificationError('Create Fail!', '');
       },
     );
   }
 
-  updateCustomer(id:string, val:any){
-    //todo call api update and this.modalRef.destroy(val)
-  }
-
-
-  createNotificationSuccess(): void {
-    this.notification.success(
-        'Create Successfully!',
-        'One customer is added in the list.'
+  // Update Customer
+  updateCustomer(id:number, val:any){
+    this.auth.UpdateCustomer(id, val).subscribe(
+      (res) => {
+        this.createNotificationSuccess('Update Successfully!', 'Customer '+ val.firstName +' had been updated.');
+        this.modalRef.destroy(val)
+      },
+      () => {
+        this.createNotificationError('Update Fail!', '');
+      },
     );
   }
 
-  createNotificationError(): void {
+  // Success Notification
+  createNotificationSuccess(title: string, content: string): void {
+    this.notification.success(
+      title,
+      content
+    );
+  }
+
+  // Error Notification
+  createNotificationError(title: string, content: string): void {
     this.notification.error(
-        'Create Fail!',
-        'Add new customer fail.'
+      title,
+      content
     );
   }
 

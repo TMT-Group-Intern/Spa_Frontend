@@ -6,7 +6,7 @@ import { TDSModalModule, TDSModalRef } from 'tds-ui/modal';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSButtonModule } from 'tds-ui/button';
 import { v4 as uuidv4 } from 'uuid';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../shared.service';
 import { TDSSelectModule } from 'tds-ui/select';
 const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/;
 @Component({

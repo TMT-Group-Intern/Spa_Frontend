@@ -6,7 +6,7 @@ import { TDSCheckBoxModule } from 'tds-ui/tds-checkbox';
 import { TDSTableModule } from 'tds-ui/table';
 import { TDSColumnSettingsModule } from 'tds-ui/column-settings';
 import { TDSButtonModule } from 'tds-ui/button';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../shared.service';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { TDSModalService } from 'tds-ui/modal';
 import { ModalAddServiceComponent } from './modal-add-service/modal-add-service.component';

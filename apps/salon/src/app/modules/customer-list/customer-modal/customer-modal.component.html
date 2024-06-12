@@ -64,13 +64,8 @@
         <tds-label [tdsRequired]="true" tdsFor="DateOfBirth">Date of Birth</tds-label
         >
         <tds-form-field class="w-full">
-          <input
-            tdsInput
-            autocomplete="off"
-            type="date"
-            class="appearance-none w-full"
-            formControlName="dateOfBirth"
-          />
+          <tds-date-picker  formControlName="dateOfBirth">
+          </tds-date-picker>
           <tds-error>Please choose a date</tds-error>
         </tds-form-field>
 
