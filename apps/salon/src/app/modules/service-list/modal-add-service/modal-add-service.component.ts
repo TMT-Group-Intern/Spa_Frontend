@@ -79,33 +79,29 @@ export class ModalAddServiceComponent implements OnInit{
 
    btnCreateService(val: any): void{
     this.auth.createService(val).subscribe(
-      () =>{
+      (data) =>{
         console.log(val);
         this.createNotificationSuccess();
+        this.modalRef.destroy(data)
       },
       () => {
         console.log(val);
         this.createNotificationError();
       },
-      () => {
-        this.handleCancel();
-      }
     );
    }
 
    btnEditService(id: number ,val: any): void{
     this.auth.editService(id,val).subscribe(
-      () =>{
+      (data) =>{
         console.log(id,"-",val);
         this.createNotificationSuccess();
+        this.modalRef.destroy(data);
       },
       () => {
         console.log(id,"-",val);
         this.createNotificationError();
       },
-      () => {
-        this.handleCancel();
-      }
     );
    }
 

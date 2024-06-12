@@ -11,7 +11,7 @@ import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { TDSModalService } from 'tds-ui/modal';
 import { ModalAddServiceComponent } from './modal-add-service/modal-add-service.component';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
-import { ModalDelServiceComponent } from './modal-del-service/modal-del-service.component';
+import { concatMap, filter, tap } from 'rxjs';
 
 
 @Component({
@@ -77,18 +77,20 @@ export class ServiceListComponent implements OnInit {
   }
 
   showDeleteModal(id:number){
-    const modal = this.modalSvc.create({
-      content: ModalDelServiceComponent,
-      title:'Delete service',
-      footer: null,
+    const modal = this.modalSvc.error({
+      title:'Xóa dịch vụ',
+      content: `<div class="text-error-400">Khi xóa thì không thể hoàn tác </div>`,
+      iconType:'tdsi-trash-line',
+      okText:'Xóa',
       size: 'md',
-      componentParams:{ id
-      }
+      cancelText:'Hủy',
+      onOk:()=> true
     });
-    modal.afterClose.asObservable().subscribe(data =>{
-      if(data) {
-        this.initshowServiceList();}
-    })
+    modal.afterClose.asObservable().pipe(
+      filter(condition => condition),
+      concatMap(_=> this.auth.deleteAService(id)),
+      tap(()=>  this.initshowServiceList())
+    ).subscribe()
   }
 
 
