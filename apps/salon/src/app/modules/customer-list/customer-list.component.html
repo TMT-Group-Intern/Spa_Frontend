@@ -1,5 +1,10 @@
-<frontend-create-customer></frontend-create-customer>
-
+<button
+    tds-button
+    (click)="createCustomer()"
+    class="my-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-300"
+  >
+    <span>Create New Customer</span>
+  </button>
 <div [style.width.%]="100" class="flex h-full overflow-x-auto">
   <tds-data-table
     [tdsData]="CustomerList"
@@ -86,7 +91,7 @@
       [tdsRight]="true"
     >
       <ng-template #commandTpl let-dataRow>
-        <button tds-button-flat-icon size="sm" class="mr-4" color="primary">
+        <button tds-button-flat-icon size="sm" class="mr-4" color="primary" (click)="onEditCustomer(dataRow.customerID)">
           <i class="tdsi-edit-fill"></i>
         </button>
         <button tds-button-flat-icon size="sm" class="mr-4" color="primary">
