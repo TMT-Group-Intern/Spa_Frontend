@@ -57,6 +57,14 @@ export class ModalAddServiceComponent implements OnInit{
 
   ngOnInit(): void {
     console.log(this.id)
+    if(this.id){
+      this.auth.getByIdService(this.id).subscribe(
+        (data:any)=>{
+          console.log(data);
+          this.modalServiceForm.patchValue(data.serviceDTO);
+        }
+      )
+    }
   }
 
   handleCancel(): void {

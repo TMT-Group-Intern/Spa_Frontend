@@ -12,6 +12,11 @@ export class AuthService {
 
   }
 
+  // get by id service
+  getByIdService(id:number): Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + 'Services/'+ id);
+  }
+
   // Render list of service
   renderListService():Observable<any[]>{
     return this.http.get<any[]>(this.baseUrl + 'Services');
