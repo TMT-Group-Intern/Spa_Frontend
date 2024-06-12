@@ -13,14 +13,25 @@ export class AuthService {
   }
 
   // Render list of service
-  RenderListService():Observable<any[]>{
+  renderListService():Observable<any[]>{
     return this.http.get<any[]>(this.baseUrl + 'Services');
   }
 
   //Create a new service
-  CreateNewService(val:any){
-    return this.http.post(this.baseUrl + 'Services',val);
+  createService(val:any){
+    return this.http.post(this.baseUrl + 'Services',val,);
   }
+
+  //Edit a service
+  editService(val:any){
+    return this.http.put(this.baseUrl + 'Services',val);
+  }
+
+  //Delete a service
+  deleteAService(id:any){
+    return this.http.delete(this.baseUrl + 'Services',id);
+  }
+
   // Show list of Customer
   CustomerList(): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Customers');

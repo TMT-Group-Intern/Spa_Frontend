@@ -32,12 +32,12 @@ export class ServiceListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-  this.ShowServiceList();
+  this.showServiceList();
   }
 
   //Display Service List
-  ShowServiceList(): void{
-    this.auth.RenderListService().subscribe(data =>
+  showServiceList(): void{
+    this.auth.renderListService().subscribe(data =>
       {
         this.ServiceList = data
         console.log('ServiceList:', this.ServiceList)
@@ -54,7 +54,8 @@ export class ServiceListComponent implements OnInit {
       size: 'md'
     })
     modal.afterClose.asObservable().subscribe(data =>{
-      console.log(data)
+      if(data) {
+        this.showServiceList();}
     })
   }
 }
