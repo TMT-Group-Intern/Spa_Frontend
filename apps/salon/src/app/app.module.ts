@@ -20,8 +20,9 @@ import { MenuComponent } from './shared/menu/menu.component';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
 import { RegisterComponent } from './register/register.component';
-import { RevenueStatisticsComponent } from './modules/revenue-statistics/revenue-statistics.component';
+// import { RevenueStatisticsComponent } from './modules/revenue-statistics/revenue-statistics.component';
 import { RevenueStaticsModule } from './modules/revenue-statistics/revenue-statistics.module';
+import { CreateCustomerComponent } from './modules/customer-list/create-customer/create-customer.component';
 registerLocaleData(localeVi);
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ registerLocaleData(localeVi);
     AppRoutingModule,
     RegisterComponent,
     RevenueStaticsModule,
+    CreateCustomerComponent,
   ],
   providers: [{ provide: TDS_I18N, useValue: vi_VN }],
   bootstrap: [AppComponent],
