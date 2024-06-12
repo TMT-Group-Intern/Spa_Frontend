@@ -40,8 +40,7 @@ export class ServiceListComponent implements OnInit {
     this.auth.RenderListService().subscribe(data =>
       {
         this.ServiceList = data
-        console.log('CustomerList:', this.ServiceList)
-
+        console.log('ServiceList:', this.ServiceList)
       }
     )
   }
