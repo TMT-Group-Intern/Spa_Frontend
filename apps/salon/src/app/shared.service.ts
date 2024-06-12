@@ -6,7 +6,7 @@ import { names } from 'tds-ui/tinycolor';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = "https://localhost:7192/api/"
+  private baseUrl = "https://localhost:44305/api/"
 
   constructor(private http : HttpClient) {
 
@@ -18,14 +18,9 @@ export class AuthService {
   }
 
   //Create a new service
-  CreateService(_serviceName:string, _price: number, _description:string){
-    return this.http.post<{flag: boolean, message: string}>(this.baseUrl + 'Services',{
-      serviceName: _serviceName,
-      price: _price,
-      description: _description
-    })
+  CreateNewService(val:any){
+    return this.http.post(this.baseUrl + 'Services',val);
   }
-
   // Show list of Customer
   CustomerList(): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Customers');
