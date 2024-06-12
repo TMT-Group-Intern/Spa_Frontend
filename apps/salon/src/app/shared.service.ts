@@ -26,13 +26,18 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'Customers');
   }
 
+  // Get Customer by ID
+  getCustomer(id: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Customers/' + id);
+  }
+
   // Create a new Customer
   CreateNewCustomer(val:any) {
     return this.http.post(this.baseUrl + 'Customers', val);
   }
 
-  UpdateCustomer(val:any) {
-    return this.http.put(this.baseUrl + 'Customers', val);
+  UpdateCustomer(id: number, val:any) {
+    return this.http.put(this.baseUrl + 'Customers/' + id, val);
   }
 
   signUp(id:string,name:string,email:string,password:string,re_password:string){

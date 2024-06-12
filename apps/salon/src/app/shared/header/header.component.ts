@@ -10,7 +10,7 @@ import { TDSInputModule } from 'tds-ui/tds-input';
 import {  RouterModule } from '@angular/router';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import {  TDSModalModule, TDSModalService } from 'tds-ui/modal';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../shared.service';
 
 @Component({
   selector: 'frontend-header',
