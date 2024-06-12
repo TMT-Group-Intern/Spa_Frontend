@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TDSModalModule } from 'tds-ui/modal';
+import { TDSModalModule, TDSModalRef } from 'tds-ui/modal';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSRadioModule } from 'tds-ui/radio';
@@ -8,6 +8,7 @@ import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSDatePickerModule } from 'tds-ui/date-picker';
 import { AuthService } from '../../../services/auth.service';
 import { TDSNotificationService } from 'tds-ui/notification';
+import { CustomerListComponent } from '../customer-list.component';
 
 @Component({
   selector: 'frontend-create-customer',
@@ -20,13 +21,14 @@ import { TDSNotificationService } from 'tds-ui/notification';
     TDSRadioModule,
     TDSInputModule,
     TDSDatePickerModule,
+    CustomerListComponent,
   ],
   templateUrl: './create-customer.component.html',
   styleUrls: ['./create-customer.component.scss'],
 })
-export class CreateCustomerComponent {
-
-  isVisible = false;
+export class CreateCustomerComponent implements OnInit{
+  private readonly modalRef = inject(TDSModalRef)
+  @Input() id?:string;
   createCustomerForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
     firstName: ['', Validators.required],
@@ -42,34 +44,52 @@ export class CreateCustomerComponent {
     private notification: TDSNotificationService,
   ) {}
 
-  // Display modal
-  showModal(): void {
-    this.isVisible = true;
+  ngOnInit(): void {
+    console.log(this.id);
+
+    if(this.id){
+      // this.auth.
+    }
+    // todo get data by id
+    // subscribe => form pathvalue
   }
 
   // Cancel button
   handleCancel(): void {
-    console.log("Button cancel clicked!");
-    this.isVisible = false;
+   this.modalRef.destroy(null)
   }
 
   // Create New Customer
-  CreateNewCustomer() {
+  submit() {
     if(this.form.invalid) return;
     const val = {
       ...this.form.value
     };
 
-    this.auth.CreateNewCustomer(val).subscribe(
-      () => {
-        this.handleCancel();
-        this.createNotificationSuccess();
-      },
+    if(this.id){
+      this.updateCustomer(this.id,val)
+    }
+    else{
+      this.createCustomer(val)
+    }
+  }
 
+  createCustomer(val:any){
+    this.auth.CreateNewCustomer(val).subscribe(
+      (res) => {
+        this.createNotificationSuccess();
+        this.modalRef.destroy(val)
+      },
       () => {
         this.createNotificationError();
-      });
+      },
+    );
   }
+
+  updateCustomer(id:string, val:any){
+    //todo call api update and this.modalRef.destroy(val)
+  }
+
 
   createNotificationSuccess(): void {
     this.notification.success(

@@ -38,20 +38,12 @@ export class AuthService {
   }
 
   // Create a new Customer
-  // CreateNewCustomer(FirstName:string, LastName:string, Email:string, Phone:string, DateOfBirth:Date, Gender:string){
-  //   return this.http.post<{flag:boolean, message:string}>(this.baseUrl+'Customers', {
-  //     FirstName: FirstName,
-  //     LastName: LastName,
-  //     Email: Email,
-  //     Phone: Phone,
-  //     DateOfBirth: DateOfBirth,
-  //     Gender: Gender,
-  //   })
-  // }
-
-  // Create a new Customer
   CreateNewCustomer(val:any) {
     return this.http.post(this.baseUrl + 'Customers', val);
+  }
+
+  UpdateCustomer(val:any) {
+    return this.http.put(this.baseUrl + 'Customers', val);
   }
 
   signUp(id:string,name:string,email:string,password:string,re_password:string){

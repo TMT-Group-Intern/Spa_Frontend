@@ -1,19 +1,6 @@
 <div class="pl-4">
-  <button
-    tds-button
-    (click)="showModal()"
-    class="my-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-300"
-  >
-    <span>Create New Customer</span>
-  </button>
-  <tds-modal [footer] = "null"
-    [size]="'lg'"
-    [(visible)]="isVisible"
-    title="Create New Customer"
-    (onCancel)="handleCancel()"
-  >
-    <ng-container *tdsModalContent>
-      <form class="py-4" signUp [formGroup]="form" autocomplete="off">
+  <div>
+      <form class="py-4" [formGroup]="form" autocomplete="off">
         <tds-label>First Name</tds-label>
         <tds-form-field class="mt-2">
 
@@ -97,14 +84,14 @@
           </label>
         </tds-radio-group>
 
-        <div class="justify-end flex mt-8">
+        <div class="justify-end flex mt-8" *tdsModalFooter>
           <button
             tds-button
             color="success"
-            (click)="CreateNewCustomer()"
+            (click)="submit()"
             class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition-colors duration-300"
           >
-            Create
+            submit
           </button>
           <button
             tds-button
@@ -116,6 +103,5 @@
           </button>
         </div>
       </form>
-    </ng-container>
-  </tds-modal>
+  </div>
 </div>

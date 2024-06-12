@@ -8,9 +8,9 @@ import { initFlowbite } from 'flowbite';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  title = 'salon';
 
   ngOnInit(): void {
     initFlowbite();
   }
+
 }
