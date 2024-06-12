@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSDataTableModule } from 'tds-ui/data-table';
 import { TDSAvatarModule } from 'tds-ui/avatar';
@@ -11,6 +11,7 @@ import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { TDSModalService } from 'tds-ui/modal';
 import { ModalAddServiceComponent } from './modal-add-service/modal-add-service.component';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
+import { ModalDelServiceComponent } from './modal-del-service/modal-del-service.component';
 
 
 @Component({
@@ -24,19 +25,18 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
   styleUrls: ['./service-list.component.scss'],
 })
 export class ServiceListComponent implements OnInit {
+
+  private auth = inject( AuthService);
+  private modalSvc = inject(TDSModalService);
   ServiceList: any[]=[];
 
-  constructor(
-    private auth: AuthService,
-    private modalSvc : TDSModalService
-  ) {}
 
   ngOnInit(): void {
-  this.showServiceList();
+    this.initshowServiceList();
   }
 
   //Display Service List
-  showServiceList(): void{
+  initshowServiceList(): void{
     this.auth.renderListService().subscribe(data =>
       {
         this.ServiceList = data
@@ -45,17 +45,51 @@ export class ServiceListComponent implements OnInit {
     )
   }
   // Display modal create new service
-  showModal(): void{
+  showCreateModal(){
     const modal = this.modalSvc.create({
       content: ModalAddServiceComponent,
-      title:'Create new service',
+      title:'Create service',
       footer: null,
       cancelText: null,
       size: 'md'
     })
     modal.afterClose.asObservable().subscribe(data =>{
       if(data) {
-        this.showServiceList();}
+        this.initshowServiceList();
+      }
     })
   }
+
+  showEditModal(id:number){
+    const modal = this.modalSvc.create({
+      content: ModalAddServiceComponent,
+      title:'Edit service',
+      footer: null,
+      cancelText: null,
+      size: 'md',
+      componentParams:{ id
+      }
+    });
+    modal.afterClose.asObservable().subscribe(data =>{
+      if(data) {
+        this.initshowServiceList();}
+    })
+  }
+
+  showDeleteModal(id:number){
+    const modal = this.modalSvc.create({
+      content: ModalDelServiceComponent,
+      title:'Delete service',
+      footer: null,
+      size: 'md',
+      componentParams:{ id
+      }
+    });
+    modal.afterClose.asObservable().subscribe(data =>{
+      if(data) {
+        this.initshowServiceList();}
+    })
+  }
+
+
 }

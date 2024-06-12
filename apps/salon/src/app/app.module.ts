@@ -18,9 +18,7 @@ import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
 registerLocaleData(localeVi);
 @NgModule({
-  declarations: [
-    AppComponent,
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

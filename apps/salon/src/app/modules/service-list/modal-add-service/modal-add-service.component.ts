@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { TDSModalModule, TDSModalRef } from 'tds-ui/modal';
 import { AuthService } from '../../../services/auth.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -9,6 +9,7 @@ import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSInputNumberModule } from 'tds-ui/input-number';
 import { TDSNotificationModule, TDSNotificationService } from 'tds-ui/notification';
 import { ServiceListComponent } from '../service-list.component';
+import { number } from 'echarts';
 const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/;
 
 
@@ -28,14 +29,16 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z
     TDSNotificationModule,
   ]
 })
-export class ModalAddServiceComponent{
+export class ModalAddServiceComponent implements OnInit{
+  @Input() id? : number;
 
   constructor(
     private auth: AuthService,
     private notifications: TDSNotificationService,
     private readonly modalRef: TDSModalRef,
-    private callbackShowService: ServiceListComponent
   ){}
+
+
 
   modalServiceForm = inject(FormBuilder).nonNullable.group({
     serviceName:['',Validators.compose([
@@ -52,14 +55,13 @@ export class ModalAddServiceComponent{
   ]
 })
 
-  handleOk(): void {
-    console.log('Button ok clicked!');
-    this.modalRef.destroy(true)
+  ngOnInit(): void {
+    console.log(this.id)
   }
 
   handleCancel(): void {
     console.log('Button cancel clicked!');
-    this.modalRef.destroy(false)
+    this.modalRef.destroy(null)
   }
 
   btnSubmitService(){
@@ -68,11 +70,18 @@ export class ModalAddServiceComponent{
       ...this.modalServiceForm.value
     };
 
+    if(this.id){
+      this.btnEditService(this.id, val);
+    } else{
+      this.btnCreateService(val);
+    }
+   }
+
+   btnCreateService(val: any): void{
     this.auth.createService(val).subscribe(
       () =>{
         console.log(val);
         this.createNotificationSuccess();
-        this.callbackShowService.showServiceList();
       },
       () => {
         console.log(val);
@@ -82,20 +91,24 @@ export class ModalAddServiceComponent{
         this.handleCancel();
       }
     );
-
    }
 
-   btnCreateService(): void{
-    return
+   btnEditService(id: number ,val: any): void{
+    this.auth.editService(id,val).subscribe(
+      () =>{
+        console.log(id,"-",val);
+        this.createNotificationSuccess();
+      },
+      () => {
+        console.log(id,"-",val);
+        this.createNotificationError();
+      },
+      () => {
+        this.handleCancel();
+      }
+    );
    }
 
-   btnEditService(): void{
-    return
-   }
-
-   btnDeleteService(): void{
-    return
-   }
 
    createNotificationSuccess(): void {
     this.notifications.success(

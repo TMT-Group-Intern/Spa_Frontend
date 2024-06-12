@@ -19,17 +19,17 @@ export class AuthService {
 
   //Create a new service
   createService(val:any){
-    return this.http.post(this.baseUrl + 'Services',val,);
+    return this.http.post(this.baseUrl + 'Services',val);
   }
 
   //Edit a service
-  editService(val:any){
-    return this.http.put(this.baseUrl + 'Services',val);
+  editService(id: number,val:any){
+    return this.http.put(this.baseUrl + 'Services',id,val);
   }
 
   //Delete a service
   deleteAService(id:any){
-    return this.http.delete(this.baseUrl + 'Services',id);
+    return this.http.delete(this.baseUrl + 'Services/'+ id);
   }
 
   // Show list of Customer
