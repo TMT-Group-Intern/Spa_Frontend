@@ -6,7 +6,7 @@ import { names } from 'tds-ui/tinycolor';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = "https://localhost:44305/api/"
+  private baseUrl = "https://localhost:7192/api/"
 
   constructor(private http : HttpClient) {
 
