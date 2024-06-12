@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { TDSModalModule, TDSModalRef } from 'tds-ui/modal';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../shared.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
