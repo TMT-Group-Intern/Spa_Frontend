@@ -48,17 +48,7 @@ export class ModalAddServiceComponent{
       Validators.required,
     ])
   ]
-
-=======
-    TDSModalModule
-  ]
 })
-export class ModalAddServiceComponent {
-
-  private auth = inject(AuthService);
-  private readonly modalRef = inject(TDSModalRef)
-
-    });
 
   handleOk(): void {
     console.log('Button ok clicked!');
@@ -69,7 +59,7 @@ export class ModalAddServiceComponent {
     console.log('Button cancel clicked!');
     this.modalRef.destroy(false)
   }
-  
+
   btnCreate(){
     if(this.modalServiceForm.invalid) return;
     const val = {
