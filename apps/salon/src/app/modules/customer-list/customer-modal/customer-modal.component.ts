@@ -22,7 +22,7 @@ import { catchError } from 'rxjs';
     TDSRadioModule,
     TDSInputModule,
     TDSDatePickerModule,
-    CustomerListComponent,
+    CustomerListComponent
   ],
   templateUrl: './customer-modal.component.html',
   styleUrls: ['./customer-modal.component.scss'],
@@ -30,16 +30,15 @@ import { catchError } from 'rxjs';
 export class CustomerModalComponent implements OnInit {
 
   private readonly modalRef = inject(TDSModalRef)
-
   @Input() id?: number;
   createCustomerForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
-    email: ['', Validators.required],
-    phone: ['', Validators.required],
+    email: ['', Validators.email],
+    phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/i)]],
     dateOfBirth: ['', Validators.required],
-    gender: ['', Validators.required],
+    gender: ['Male'],
   })
 
   constructor(
@@ -87,7 +86,8 @@ export class CustomerModalComponent implements OnInit {
         this.createNotificationSuccess('Create Successfully!', 'A new customer had added to the list.');
         this.modalRef.destroy(val)
       },
-      () => {
+      (res) => {
+        console.log(res)
         this.createNotificationError('Create Fail!', '');
       },
     );
