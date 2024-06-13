@@ -7,7 +7,7 @@
       </span>
     </button>
   </div>
-  <div [style.width.%]="100" class="flex h-full overflow-x-auto items-center">
+  <div [style.width.%]="100" class="flex h-screen overflow-x-auto items-center">
     <tds-data-table [tdsData]="ServiceList" [tdsShowSizeChanger]="true" [tdsPageSize]="10" [tdsBordered]="true">
       <tds-data-table-column [tdsField]="'serviceCode'" [tdsTitle]="'Code'" tdsWidth="10%" [tdsLeft]="true">
       </tds-data-table-column>

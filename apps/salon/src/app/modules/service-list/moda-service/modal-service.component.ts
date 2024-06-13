@@ -32,6 +32,7 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z
 export class ModalServiceComponent implements OnInit{
   @Input() id? : number;
   private readonly modalService = inject(TDSModalService)
+  private maxPrice = 100000000;
   constructor(
     private auth: AuthService,
     private readonly modalRef: TDSModalRef,
@@ -45,11 +46,15 @@ export class ModalServiceComponent implements OnInit{
     ])
     ] ,
     description:['' , Validators.compose([
-      Validators.required
+      Validators.required,
     ])
   ],
-    price:[0 , Validators.compose([
+    price:[number , Validators.compose([
       Validators.required,
+      Validators.nullValidator,
+      Validators.min(0),
+      Validators.maxLength(this.maxPrice),
+      Validators.pattern(/^[0-9]\d*$/)
     ])
   ]
 })

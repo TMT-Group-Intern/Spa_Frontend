@@ -1,43 +1,43 @@
-
-  <form [formGroup]="modalServiceForm" id="formService" autocomplete="off">
-    <!-- model create new service -->
-    <div>
-      <tds-label class="pt-4">Name</tds-label>
-      <tds-form-field class="w-full mt-2">
-        <input tdsInput autocomplete="off" placeholder="Name service" formControlName="serviceName" [required]='true'
-          class="appearance-none" />
-        <tds-error>
-          <span *ngIf="modalServiceForm.controls['serviceName'].hasError('required')">Vui
-            lòng nhập tên dịch vụ</span>
-        </tds-error>
-      </tds-form-field>
-      <tds-label class="pt-4">Description</tds-label>
-      <tds-form-field class="w-full mt-2">
-        <textarea tdsInput autocomplete="off" formControlName="description" placeholder="Description service"
-          [tdsAutosize]="{ minRows: 3,  maxRows: 6}" [required]="true"></textarea>
-        <tds-error>
-          <span *ngIf=" modalServiceForm.controls['description'].hasError('required')">Vui
-            lòng nhập mô tả về dịch vụ</span>
-        </tds-error>
-      </tds-form-field>
-      <tds-label>Price</tds-label>
-      <tds-form-field class="w-full mt-2">
-        <input tdsInput autocomplete="off" placeholder="Price service" formControlName="price" [required]="true"
-          type="number" class="appearance-none">
-        <tds-error>
-          <span *ngIf=" modalServiceForm.controls['price'].hasError('required')">Vui lòng
-            nhập giá dịch vụ</span>
-        </tds-error>
-      </tds-form-field>
+<form [formGroup]="modalServiceForm" id="formService" autocomplete="off">
+  <!-- model create new service -->
+  <div>
+    <tds-label class="pt-4">Name</tds-label>
+    <tds-form-field class="w-full mt-2">
+      <input tdsInput autocomplete="off" placeholder="Name service" formControlName="serviceName" [required]='true'
+        class="appearance-none" />
+      <tds-error>
+        <span *ngIf="modalServiceForm.controls['serviceName'].hasError('required')">Vui
+          lòng nhập tên dịch vụ</span>
+      </tds-error>
+    </tds-form-field>
+    <tds-label class="pt-4">Description</tds-label>
+    <tds-form-field class="w-full mt-2">
+      <textarea tdsInput autocomplete="off" formControlName="description" placeholder="Description service"
+        [tdsAutosize]="{ minRows: 3,  maxRows: 6}" [required]="true"></textarea>
+      <tds-error>
+        <span *ngIf=" modalServiceForm.controls['description'].hasError('required')">Vui
+          lòng nhập mô tả về dịch vụ</span>
+      </tds-error>
+    </tds-form-field>
+    <tds-label>Price</tds-label>
+    <tds-form-field class="w-full mt-2">
+      <input tdsInput autocomplete="off" placeholder="Price service" formControlName="price" [required]="true"
+        type="number" class="appearance-none">
+      <tds-error>
+        <span *ngIf=" modalServiceForm.controls['price'].hasError('required')">Vui lòng
+          nhập giá dịch vụ</span>
+        <span *ngIf="modalServiceForm.controls['price'].hasError('pattern')">Giá dịch vụ của bạn không hợp lệ</span>
+      </tds-error>
+    </tds-form-field>
+  </div>
+</form>
+<ng-container *tdsModalFooter>
+  <div class="p-4">
+    <div class="w-full flex flex-col justify-center">
+      <button class="w-full mt-4" size="lg" tds-button type="submit" form="formService" (click)="  btnSubmitService()"
+        style="background-color: #1b7c20;">Submit
+      </button>
     </div>
-  </form>
-  <ng-container *tdsModalFooter>
-    <div class="p-4">
-      <div class="w-full flex flex-col justify-center">
-        <button class="w-full mt-4" size="lg" tds-button type="submit" form="formService" (click)="  btnSubmitService()"
-          style="background-color: #1b7c20;">Submit
-        </button>
-      </div>
-    </div>
-  </ng-container>
+  </div>
+</ng-container>
 <!-- Kết thúc model create new service -->
