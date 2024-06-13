@@ -6,6 +6,8 @@ import { TDSListModule } from 'tds-ui/list';
 import { AuthService } from '../../shared.service';
 import { TDSModalService } from 'tds-ui/modal';
 import { CustomerModalComponent } from './customer-modal/customer-modal.component';
+import { concatMap, filter, tap } from 'rxjs';
+import { TDSTimelineModule } from 'tds-ui/timeline';
 
 
 @Component({
@@ -17,6 +19,7 @@ import { CustomerModalComponent } from './customer-modal/customer-modal.componen
     TDSDataTableModule,
     TDSColumnSettingsModule,
     CustomerModalComponent,
+    TDSTimelineModule,
   ],
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],
@@ -64,12 +67,29 @@ export class CustomerListComponent implements OnInit {
         id
       }
     });
-
     modal.afterClose.asObservable().subscribe(res=>{
       if(res){
         this.initCustomerList()
       }
     })
   }
+
+  deleteCustomer(id:number){
+    const modal = this.tModalSvc.error({
+      title:'Delete Customer',
+      content: `<h5 class="text-error-500">Your action cannot return after deleted!</h5>`,
+      iconType:'tdsi-trash-line',
+      okText:'Delete',
+      size: 'md',
+      cancelText:'Hủy',
+      onOk:()=> true
+    });
+    modal.afterClose.asObservable().pipe(
+      filter(condition => condition),
+      concatMap(_=> this.auth.deleteCustomer(id)),
+      tap(()=>  this.initCustomerList())
+    ).subscribe()
+  }
+
 }
 

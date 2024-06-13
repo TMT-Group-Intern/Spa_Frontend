@@ -1,9 +1,10 @@
 <div class="pl-4">
   <div>
-      <form class="py-4" [formGroup]="form" autocomplete="off">
-        <tds-label>First Name</tds-label>
-        <tds-form-field class="mt-2">
+      <form class="py-2" [formGroup]="form" autocomplete="off">
 
+        <tds-label>First Name</tds-label>
+
+        <tds-form-field class="my-2">
           <input
             tdsInput
             autocomplete="off"
@@ -12,13 +13,13 @@
             class="appearance-none w-full"
           />
           <tds-error>
-            Please enter your last namex
+            Please enter your last name
           </tds-error>
-
         </tds-form-field>
 
         <tds-label>Last Name</tds-label>
-        <tds-form-field class="mt-2">
+
+        <tds-form-field class="my-2">
           <input
             tdsInput
             autocomplete="off"
@@ -31,8 +32,9 @@
           </tds-error>
         </tds-form-field>
 
-        <tds-label class="pt-4">Email</tds-label>
-        <tds-form-field class="mt-2">
+        <tds-label>Email</tds-label>
+
+        <tds-form-field class="my-2">
           <input
             tdsInput
             autocomplete="off"
@@ -41,14 +43,14 @@
             type="email"
             class="appearance-none w-full"
           />
-
           <tds-error>
             Please enter your last namex
           </tds-error>
         </tds-form-field>
 
         <tds-label>Phone Number</tds-label>
-        <tds-form-field class="mt-2">
+
+        <tds-form-field class="my-2">
           <input
             tdsInput
             autocomplete="off"
@@ -61,41 +63,40 @@
           </tds-error>
         </tds-form-field>
 
-        <tds-label [tdsRequired]="true" tdsFor="DateOfBirth">Date of Birth</tds-label
-        >
-        <tds-form-field class="w-full">
-          <tds-date-picker  formControlName="dateOfBirth">
-          </tds-date-picker>
+        <tds-label>Date of Birth</tds-label>
+
+        <tds-form-field class="w-full my-2">
+          <tds-date-picker  formControlName="dateOfBirth"></tds-date-picker>
           <tds-error>Please choose a date</tds-error>
         </tds-form-field>
 
-        <tds-label class="pt-4">Gender</tds-label>
-        <tds-radio-group tdsName="radioValue">
+        <tds-label>Gender</tds-label>
+
+        <tds-radio-group class="my-2" tdsName="radioValue">
           <label>
-            <input  type="radio" name="gender" value="Male" formControlName="gender"/> Male
+            <input  type="radio" value="Male" formControlName="gender"/> Male
           </label>
           <label>
-            <input  type="radio" name="gender" value="Female" formControlName="gender"/> Female
+            <input  type="radio" value="Female" formControlName="gender"/> Female
           </label>
+          <tds-error>
+            Please enter your last namex
+          </tds-error>
         </tds-radio-group>
 
-        <div class="justify-end flex mt-8" *tdsModalFooter>
+        <div class="justify-end flex p-4 " *tdsModalFooter>
           <button
             tds-button
             color="success"
             (click)="submit()"
-            class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition-colors duration-300"
-          >
-            submit
-          </button>
+            class="bg-green-500 px-4 py-2 text-white rounded hover:bg-green-600 transition-colors duration-300"
+          >Submit</button>
           <button
             tds-button
             color="secondary"
             (click)="handleCancel()"
-            class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition-colors duration-300 ml-4"
-          >
-            Cancel
-          </button>
+            class="bg-gray-500 px-4 py-2 text-white rounded hover:bg-gray-600 transition-colors duration-300 ml-4"
+          >Cancel</button>
         </div>
       </form>
   </div>
