@@ -47,8 +47,15 @@ export class AuthService {
     return this.http.post(this.baseUrl + 'Customers', val);
   }
 
+  // Update Customer
   UpdateCustomer(id: number, val:any) {
     return this.http.put(this.baseUrl + 'Customers/' + id, val);
+  }
+
+  //
+  //Delete a customer
+  deleteCustomer(id:any){
+    return this.http.delete(this.baseUrl + 'Customers/'+ id);
   }
 
   signUp(id:string,name:string,email:string,password:string,re_password:string){
