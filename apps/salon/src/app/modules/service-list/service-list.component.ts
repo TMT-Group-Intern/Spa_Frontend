@@ -38,9 +38,9 @@ export class ServiceListComponent implements OnInit {
 
   //Display Service List
   initshowServiceList(): void{
-    this.auth.renderListService().subscribe(data =>
+    this.auth.renderListService().subscribe((data:any) =>
       {
-        this.ServiceList = data
+        this.ServiceList = data.serviceDTO;
       }
     )
   }
