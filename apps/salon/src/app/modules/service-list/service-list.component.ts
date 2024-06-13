@@ -38,9 +38,9 @@ export class ServiceListComponent implements OnInit {
 
   //Display Service List
   initshowServiceList(): void{
-    this.auth.renderListService().subscribe(data =>
+    this.auth.renderListService().subscribe((data:any) =>
       {
-        this.ServiceList = data
+        this.ServiceList = data.serviceDTO;
       }
     )
   }
@@ -95,10 +95,10 @@ export class ServiceListComponent implements OnInit {
             title:'Successfully!'
           });
         }),
-        catchError((error) => {
+        catchError((ex) => {
           this.modalSvc.error({
             title: 'Error',
-            content:error.error.message,
+            content:ex.error.message,
           });
           return of(null);
         }),

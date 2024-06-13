@@ -7,9 +7,7 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSInputNumberModule } from 'tds-ui/input-number';
-import { TDSNotificationModule, TDSNotificationService } from 'tds-ui/notification';
 import { number } from 'echarts';
-import { title } from 'process';
 const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/;
 
 
@@ -26,12 +24,12 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z
     TDSInputModule,
     TDSInputNumberModule,
     TDSModalModule,
-    TDSNotificationModule,
   ]
 })
 export class ModalServiceComponent implements OnInit{
   @Input() id? : number;
   private readonly modalService = inject(TDSModalService)
+  private maxPrice = 100000000;
   constructor(
     private auth: AuthService,
     private readonly modalRef: TDSModalRef,
@@ -44,12 +42,16 @@ export class ModalServiceComponent implements OnInit{
       Validators.required
     ])
     ] ,
-    description:['' , Validators.compose([
-      Validators.required
-    ])
-  ],
-    price:[0 , Validators.compose([
+  //   description:['' , Validators.compose([
+  //     Validators.required,
+  //   ])
+  // ],
+    price:[number , Validators.compose([
       Validators.required,
+      Validators.nullValidator,
+      Validators.min(0),
+      Validators.maxLength(this.maxPrice),
+      Validators.pattern(/^[0-9]\d*$/)
     ])
   ]
 })
