@@ -9,6 +9,7 @@ import { TDSDatePickerModule } from 'tds-ui/date-picker';
 import { CustomerListComponent } from '../customer-list.component';
 import { AuthService } from '../../../shared.service';
 import { TDSNotificationService } from 'tds-ui/notification';
+import { catchError } from 'rxjs';
 
 @Component({
   selector: 'frontend-customer-modal',
@@ -99,8 +100,9 @@ export class CustomerModalComponent implements OnInit {
         this.createNotificationSuccess('Update Successfully!', 'Customer '+ val.firstName +' had been updated.');
         this.modalRef.destroy(val)
       },
-      () => {
-        this.createNotificationError('Update Fail!', '');
+      (res) => {
+        this.createNotificationError('Update Fail!',res.error.message);
+        console.log(res.error.message)
       },
     );
   }
