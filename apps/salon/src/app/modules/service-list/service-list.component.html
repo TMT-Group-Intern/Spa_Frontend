@@ -7,16 +7,8 @@
       </span>
     </button>
   </div>
-  <div [style.width.%]="99" class="flex h-full overflow-x-auto items-center">
+  <div [style.width.%]="100" class="flex h-full overflow-x-auto items-center">
     <tds-data-table [tdsData]="ServiceList" [tdsShowSizeChanger]="true" [tdsPageSize]="10" [tdsBordered]="true">
-      <tds-data-table-expand-row [tdsContent]="expandTpl">
-        <ng-template #expandTpl let-dataRow let-expand="expand">
-          <div class="w-full p-2">
-            <tds-data-table-checkbox-column></tds-data-table-checkbox-column>
-          </div>
-        </ng-template>
-      </tds-data-table-expand-row>
-      <tds-data-table-checkbox-column> </tds-data-table-checkbox-column>
       <tds-data-table-column [tdsField]="'serviceCode'" [tdsTitle]="'Code'" tdsWidth="10%" [tdsLeft]="true">
       </tds-data-table-column>
 
@@ -33,7 +25,8 @@
       <tds-data-table-column [tdsTitle]="'Thao tác'" [tdsContent]="commandTpl" tdsWidth="10%"
         [tdsColumnType]="'command'" [tdsRight]="true">
         <ng-template #commandTpl let-dataRow>
-          <button tds-button-flat-icon size="sm" class="mr-2" color="primary" (click)="showEditModal(dataRow.serviceID)">
+          <button tds-button-flat-icon size="sm" class="mr-2" color="primary"
+            (click)="showEditModal(dataRow.serviceID)">
             <i class="tdsi-edit-fill"></i>
           </button>
           <button tds-button-flat-icon size="sm" color="secondary" (click)="showDeleteModal(dataRow.serviceID)">

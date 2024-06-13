@@ -9,9 +9,9 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { AuthService } from '../../shared.service';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { TDSModalService } from 'tds-ui/modal';
-import { ModalAddServiceComponent } from './modal-add-service/modal-add-service.component';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
-import { concatMap, filter, tap } from 'rxjs';
+import { catchError, concatMap, filter, of, tap } from 'rxjs';
+import { ModalServiceComponent } from './moda-service/modal-service.component';
 
 
 @Component({
@@ -28,6 +28,7 @@ export class ServiceListComponent implements OnInit {
 
   private auth = inject( AuthService);
   private modalSvc = inject(TDSModalService);
+
   ServiceList: any[]=[];
 
 
@@ -40,14 +41,13 @@ export class ServiceListComponent implements OnInit {
     this.auth.renderListService().subscribe(data =>
       {
         this.ServiceList = data
-        console.log('ServiceList:', this.ServiceList)
       }
     )
   }
-  // Display modal create new service
+  // Call display modal create a service
   showCreateModal(){
     const modal = this.modalSvc.create({
-      content: ModalAddServiceComponent,
+      content: ModalServiceComponent,
       title:'Create service',
       footer: null,
       cancelText: null,
@@ -59,10 +59,10 @@ export class ServiceListComponent implements OnInit {
       }
     })
   }
-
+  // Call display modal edit service
   showEditModal(id:number){
     const modal = this.modalSvc.create({
-      content: ModalAddServiceComponent,
+      content: ModalServiceComponent,
       title:'Edit service',
       footer: null,
       cancelText: null,
@@ -76,6 +76,7 @@ export class ServiceListComponent implements OnInit {
     })
   }
 
+  // Call display modal delete a service
   showDeleteModal(id:number){
     const modal = this.modalSvc.error({
       title:'Xóa dịch vụ',
@@ -88,10 +89,23 @@ export class ServiceListComponent implements OnInit {
     });
     modal.afterClose.asObservable().pipe(
       filter(condition => condition),
-      concatMap(_=> this.auth.deleteAService(id)),
-      tap(()=>  this.initshowServiceList())
+      concatMap(_=> this.auth.deleteAService(id).pipe(
+        tap(()=>{
+          this.modalSvc.success({
+            title:'Successfully!'
+          });
+        }),
+        catchError((error) => {
+          this.modalSvc.error({
+            title: 'Error',
+            content:error.error.message,
+          });
+          return of(null);
+        }),
+      )
+    ),
+      tap(()=>  this.initshowServiceList()),
     ).subscribe()
   }
-
 
 }

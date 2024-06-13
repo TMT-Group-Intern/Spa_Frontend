@@ -29,7 +29,7 @@ export class AuthService {
 
   //Edit a service
   editService(id: number,val:any){
-    return this.http.put(this.baseUrl + 'Services',id,val);
+    return this.http.put(this.baseUrl + 'Services/'+ id,val);
   }
 
   //Delete a service
