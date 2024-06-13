@@ -42,10 +42,8 @@ export class ModalServiceComponent implements OnInit{
       Validators.required
     ])
     ] ,
-  //   description:['' , Validators.compose([
-  //     Validators.required,
-  //   ])
-  // ],
+    description:[''
+  ],
     price:[number , Validators.compose([
       Validators.required,
       Validators.nullValidator,
