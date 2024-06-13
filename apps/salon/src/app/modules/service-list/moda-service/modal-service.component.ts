@@ -7,9 +7,7 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSInputNumberModule } from 'tds-ui/input-number';
-import { TDSNotificationModule, TDSNotificationService } from 'tds-ui/notification';
 import { number } from 'echarts';
-import { title } from 'process';
 const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/;
 
 
@@ -26,7 +24,6 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z
     TDSInputModule,
     TDSInputNumberModule,
     TDSModalModule,
-    TDSNotificationModule,
   ]
 })
 export class ModalServiceComponent implements OnInit{
@@ -45,10 +42,10 @@ export class ModalServiceComponent implements OnInit{
       Validators.required
     ])
     ] ,
-    description:['' , Validators.compose([
-      Validators.required,
-    ])
-  ],
+  //   description:['' , Validators.compose([
+  //     Validators.required,
+  //   ])
+  // ],
     price:[number , Validators.compose([
       Validators.required,
       Validators.nullValidator,

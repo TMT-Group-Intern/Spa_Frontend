@@ -1,7 +1,7 @@
 <form [formGroup]="modalServiceForm" id="formService" autocomplete="off">
   <!-- model create new service -->
   <div>
-    <tds-label class="pt-4">Name</tds-label>
+    <tds-label tdsRequired="true" class="pt-4">Name</tds-label>
     <tds-form-field class="w-full mt-2">
       <input tdsInput autocomplete="off" placeholder="Name service" formControlName="serviceName" [required]='true'
         class="appearance-none" />
@@ -14,12 +14,12 @@
     <tds-form-field class="w-full mt-2">
       <textarea tdsInput autocomplete="off" formControlName="description" placeholder="Description service"
         [tdsAutosize]="{ minRows: 3,  maxRows: 6}" [required]="true"></textarea>
-      <tds-error>
+      <!-- <tds-error>
         <span *ngIf=" modalServiceForm.controls['description'].hasError('required')">Vui
           lòng nhập mô tả về dịch vụ</span>
-      </tds-error>
+      </tds-error> -->
     </tds-form-field>
-    <tds-label>Price</tds-label>
+    <tds-label tdsRequired="true" class="pt-4">Price</tds-label>
     <tds-form-field class="w-full mt-2">
       <input tdsInput autocomplete="off" placeholder="Price service" formControlName="price" [required]="true"
         type="number" class="appearance-none">
