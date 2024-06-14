@@ -46,12 +46,9 @@ export class ModalServiceComponent implements OnInit{
   //     Validators.required,
   //   ])
   // ],
-    price:[number , Validators.compose([
+    price:[0 , Validators.compose([
       Validators.required,
-      Validators.nullValidator,
-      Validators.min(0),
-      Validators.maxLength(this.maxPrice),
-      Validators.pattern(/^[0-9]\d*$/)
+      Validators.min(0)
     ])
   ]
 })

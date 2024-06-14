@@ -41,6 +41,7 @@ export class CustomerListComponent implements OnInit {
 
   ngOnInit(): void {
     this.initCustomerList();
+    // console.log('API URL:', BASE_URI);
   }
 
   createCustomer(){

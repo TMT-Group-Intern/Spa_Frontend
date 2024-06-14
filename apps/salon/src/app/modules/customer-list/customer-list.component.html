@@ -1,8 +1,7 @@
 <button
   tds-button
   (click)="createCustomer()"
-  class="m-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-300"
->
+  class="m-4 bg-green-primary-2 px-4 py-2 text-white rounded hover:bg-green-1 transition-colors duration-300">
   <span>Create Customer</span>
 </button>
 
@@ -64,13 +63,13 @@
       tdsClass="text-center"
     ></tds-data-table-column>
 
-    <tds-data-table-column
+    <!-- <tds-data-table-column
       [tdsField]="'customerTypeID'"
       [tdsTitle]="'Customer Type ID'"
       tdsWidth="10%"
       [tdsDataType]="'numeric'"
       tdsClass="text-center"
-    ></tds-data-table-column>
+    ></tds-data-table-column> -->
 
     <tds-data-table-column
       [tdsContent]="commandTpl"

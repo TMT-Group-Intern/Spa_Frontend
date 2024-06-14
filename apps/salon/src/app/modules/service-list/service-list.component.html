@@ -22,7 +22,7 @@
         tdsWidth="50%">
       </tds-data-table-column>
 
-      <tds-data-table-column [tdsTitle]="'Thao tác'" [tdsContent]="commandTpl" tdsWidth="10%"
+      <tds-data-table-column [tdsContent]="commandTpl" tdsWidth="10%"
         [tdsColumnType]="'command'" [tdsRight]="true">
         <ng-template #commandTpl let-dataRow>
           <button tds-button-flat-icon size="sm" class="mr-2" color="primary"
