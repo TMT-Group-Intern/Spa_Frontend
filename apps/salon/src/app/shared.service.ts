@@ -1,14 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { names } from 'tds-ui/tinycolor';
+import { environment } from '../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = "https://localhost:44305/api/"
+
+  private baseUrl: string| undefined;
 
   constructor(private http : HttpClient) {
+     this.baseUrl = environment.BASE_URI
 
   }
 
