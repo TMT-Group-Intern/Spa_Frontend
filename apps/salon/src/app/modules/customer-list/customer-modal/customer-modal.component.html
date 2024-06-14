@@ -1,5 +1,5 @@
 <form class="py-2" id="idform" [formGroup]="form" autocomplete="off">
-  <tds-label>First Name</tds-label>
+  <tds-label [tdsRequired]="true">First Name</tds-label>
   <tds-form-field class="my-2">
     <input tdsInput autocomplete="off" placeholder="Christine" formControlName="firstName"
       class="appearance-none w-full" type="text" />
@@ -8,7 +8,7 @@
     </tds-error>
   </tds-form-field>
 
-  <tds-label>Last Name</tds-label>
+  <tds-label [tdsRequired]="true">Last Name</tds-label>
   <tds-form-field class="my-2">
     <input tdsInput autocomplete="off" placeholder="Nguyen" formControlName="lastName" class="appearance-none w-full"
       type="text" />
@@ -27,7 +27,7 @@
     </tds-error>
   </tds-form-field>
 
-  <tds-label>Phone Number</tds-label>
+  <tds-label [tdsRequired]="true">Phone Number</tds-label>
   <tds-form-field class="my-2">
     <input tdsInput autocomplete="off" placeholder="0123456789" class="appearance-none w-full" formControlName="phone"
       type="tel" />
@@ -38,7 +38,7 @@
     </tds-error>
   </tds-form-field>
 
-  <tds-label>Date of Birth</tds-label>
+  <tds-label [tdsRequired]="true">Date of Birth</tds-label>
   <tds-form-field class="w-full my-2">
     <tds-date-picker formControlName="dateOfBirth"></tds-date-picker>
     <tds-error>
@@ -46,7 +46,7 @@
     </tds-error>
   </tds-form-field>
 
-  <tds-label>Gender</tds-label>
+  <tds-label [tdsRequired]="true">Gender</tds-label>
   <tds-radio-group class="my-2" formControlName="gender">
     <div>
       <label tds-radio value="Male">Male</label>
