@@ -6,6 +6,8 @@ import { TDSSelectModule } from 'tds-ui/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputModule } from 'tds-ui/tds-input';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'frontend-header',
@@ -24,6 +26,11 @@ export class HeaderComponent  {
  { id: 5, name: 'Elvis Presley' },
  { id: 6, name: 'Paul McCartney' }]
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-constructor() { }
-
+constructor(private router:Router, private auth: AuthService) { }
+navigateToRegister() {
+  this.router.navigate(['register']);
+}
+navigateToLogout() {
+  this.auth.logout();
+}
 }

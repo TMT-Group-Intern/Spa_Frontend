@@ -32,8 +32,8 @@
         <tds-label class="pt-4">Job</tds-label>
         <tds-form-field>
           <tds-select valueField="id" textField="name" placeholder='select item'  [allowClear]="true"
-                disabledField="isActive" [formControl]="persondisplayWith" [required]='true'
-                [data]="contactOptions" [allowClear]="true">
+                disabledField="isActive" [formControl]="job" [required]='true'
+                [data]="contactOptions" [allowClear]="false">
             </tds-select>
           <tds-error>Validation message text</tds-error>
         </tds-form-field>
@@ -60,7 +60,7 @@
         </tds-form-field>
         <!-- <tds-checkbox [checked]="true" class="pt-5">Ghi nhớ mật khẩu</tds-checkbox> -->
         <div class="w-full flex flex-col justify-center mt-8">
-          <button class="w-full mt-4" size="lg" tds-button type="submit" (click)="onSignUp()" [disabled]="!signUpForm.valid"
+          <button class="w-full mt-4" size="lg" tds-button type="submit" (click)="onSignUp()" 
             style="background-color: #1b7c20;">Đăng Kí
           </button>
         </div>

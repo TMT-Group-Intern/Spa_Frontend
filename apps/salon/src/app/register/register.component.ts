@@ -8,7 +8,7 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { AuthService } from '../services/auth.service';
 //import { Guid } from 'guid-typescript';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4, validate } from 'uuid';
 import { TDSSelectModule } from 'tds-ui/select';
 const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/;
 
@@ -31,15 +31,13 @@ export class RegisterComponent implements OnInit {
     }
 
     public contactOptions = [
-      { id: 1, name: 'Elton John' },
-      { id: 2, name: 'Elvis Presley' },
-      { id: 3, name: 'Paul McCartney' },
-      { id: 4, name: 'Elton John' },
-      { id: 5, name: 'Elvis Presley' },
-      { id: 6, name: 'Paul McCartney' },
+      { id: 'Admin', name: 'Admin' },
+      { id: 'Receptionist', name: 'Receptionist' },
+      { id: 'Staff', name: 'Staff' },
   ]
 
-  persondisplayWith!: FormControl;
+  //job!: FormControl;
+  job = new FormControl();
 
     ngOnInit(): void {
         this.signUpForm = this.fb.group({
@@ -59,6 +57,11 @@ export class RegisterComponent implements OnInit {
           '' ,
           Validators.required
         ],
+        job:[
+          '',
+           Validators.required
+        ]
+        ,
 
         pass: [
             '',
@@ -94,16 +97,18 @@ export class RegisterComponent implements OnInit {
 
       return null;
     };
+    
 
     onSignUp(){
         const id = uuidv4();
         const name = this.signUpForm.value.taiKhoan;
         const email = this.signUpForm.value.email;
+        const role = this.job.value;
         const password = this.signUpForm.value.pass;
         const re_password = this.signUpForm.value.retype;
-        this.auth.signUp(id,name,email,password,re_password).subscribe((result) =>{
+        this.auth.signUp(id,name,email,password,re_password,role).subscribe((result) =>{
             console.log(result);
-            console.log(id,name,email,password,re_password);
+            console.log(id,name,email,password,re_password,role);
             if(result.message != null){
                 alert(result.message)
                 if(result.flag == true){
