@@ -46,10 +46,7 @@ export class ModalServiceComponent implements OnInit{
   ],
     price:[number , Validators.compose([
       Validators.required,
-      Validators.nullValidator,
-      Validators.min(0),
-      Validators.maxLength(this.maxPrice),
-      Validators.pattern(/^[0-9]\d*$/)
+      Validators.min(0)
     ])
   ]
 })
@@ -89,14 +86,16 @@ export class ModalServiceComponent implements OnInit{
     this.auth.createService(val).subscribe(
       (data) =>{
         this.modalService.success({
-          title: 'Successfully!'
+          title: 'Successfully!',
+          okText: 'OK'
         })
         this.modalRef.destroy(data)
       },
       (ex) => {
         this.modalService.error({
             title: 'Error!',
-            content: ex.error.message
+            content: ex.error.message,
+            okText: 'OK'
           });
       },
     );
@@ -107,14 +106,16 @@ export class ModalServiceComponent implements OnInit{
     this.auth.editService(id,val).subscribe(
       (data) =>{
         this.modalService.success({
-          title: 'Successfully!'
+          title: 'Successfully!',
+          okText: 'OK'
         })
         this.modalRef.destroy(data);
       },
       (ex) => {
         this.modalService.error({
           title: 'Error!',
-          content: ex.error.message
+          content: ex.error.message,
+          okText: 'OK'
         });
       },
     );

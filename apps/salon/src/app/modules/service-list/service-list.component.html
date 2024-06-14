@@ -1,12 +1,14 @@
 <div class="flex flex-col h-full">
   <div class="p-2">
-    <button tds-button-icon color="primary" routerLinkActive="router-link-active" tds-tooltip
-      tooltipTitle="Thêm dịch vụ" (click)="showCreateModal()" class="rounded-full mr-2 bg-green-1">
+    <button tds-button-icon routerLinkActive="router-link-active" tds-tooltip
+      tooltipTitle="New Service" (click)="showCreateModal()"
+      class="rounded-full mr-2 bg-green-1 text-white hover:bg-green-primary-2 transition-colors duration-300">
       <span class="flex items-center">
-        <i class="tdsi-plus-fill text-white"></i>
+        <i class="tdsi-plus-fill"></i>
       </span>
     </button>
   </div>
+
   <div [style.width.%]="100" class="flex h-screen overflow-x-auto items-center">
     <tds-data-table [tdsData]="ServiceList" [tdsShowSizeChanger]="true" [tdsPageSize]="10" [tdsBordered]="true">
       <tds-data-table-column [tdsField]="'serviceCode'" [tdsTitle]="'Code'" tdsWidth="10%" [tdsLeft]="true">
@@ -22,7 +24,7 @@
         tdsWidth="50%">
       </tds-data-table-column>
 
-      <tds-data-table-column [tdsTitle]="'Thao tác'" [tdsContent]="commandTpl" tdsWidth="10%"
+      <tds-data-table-column [tdsContent]="commandTpl" tdsWidth="10%"
         [tdsColumnType]="'command'" [tdsRight]="true">
         <ng-template #commandTpl let-dataRow>
           <button tds-button-flat-icon size="sm" class="mr-2" color="primary"

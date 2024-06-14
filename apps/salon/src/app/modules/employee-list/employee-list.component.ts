@@ -1,18 +1,17 @@
-import { TDSDataTableModule } from 'tds-ui/data-table';
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TDSColumnSettingsModule } from 'tds-ui/column-settings';
 import { TDSListModule } from 'tds-ui/list';
-import { AuthService } from '../../shared.service';
-import { TDSModalService } from 'tds-ui/modal';
-import { CustomerModalComponent } from './customer-modal/customer-modal.component';
-import { concatMap, filter, tap } from 'rxjs';
+import { TDSDataTableModule } from 'tds-ui/data-table';
+import { TDSColumnSettingsModule } from 'tds-ui/column-settings';
+import { CustomerModalComponent } from '../customer-list/customer-modal/customer-modal.component';
 import { TDSTimelineModule } from 'tds-ui/timeline';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
-
+import { TDSModalService } from 'tds-ui/modal';
+import { AuthService } from '../../shared.service';
+import { concatMap, filter, tap } from 'rxjs';
 
 @Component({
-  selector: 'frontend-customer-list',
+  selector: 'frontend-employee-list',
   standalone: true,
   imports: [
     CommonModule,
@@ -23,10 +22,11 @@ import { TDSToolTipModule } from 'tds-ui/tooltip';
     TDSTimelineModule,
     TDSToolTipModule
   ],
-  templateUrl: './customer-list.component.html',
-  styleUrls: ['./customer-list.component.scss'],
+  templateUrl: './employee-list.component.html',
+  styleUrls: ['./employee-list.component.scss'],
 })
-export class CustomerListComponent implements OnInit {
+export class EmployeeListComponent implements OnInit{
+
   private readonly tModalSvc =inject(TDSModalService)
   CustomerList:any[] = [];
 
@@ -36,8 +36,8 @@ export class CustomerListComponent implements OnInit {
 
   // Display Customer List
   private initCustomerList() {
-    this.auth.CustomerList().subscribe((data:any) => {
-      this.CustomerList = data.item;
+    this.auth.CustomerList().subscribe(data => {
+      this.CustomerList = data;
     });
   }
 
@@ -95,4 +95,3 @@ export class CustomerListComponent implements OnInit {
   }
 
 }
-

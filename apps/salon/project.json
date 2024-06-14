@@ -57,6 +57,9 @@
           "browserTarget": "salon:build:development"
         }
       },
+      "options": {
+        "BASE_URI":"https://localhost:7192/api/"
+      },
       "defaultConfiguration": "development"
     },
     "extract-i18n": {

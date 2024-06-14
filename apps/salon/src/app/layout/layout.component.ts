@@ -29,6 +29,8 @@ import { TDSMenuModule } from 'tds-ui/menu';
       CustomerListComponent,
       TDSMenuModule,
       RevenueStaticsModule,
+      TDSMenuModule,
+      ProductsComponent
     ]
 })
 export class LayoutComponent {
