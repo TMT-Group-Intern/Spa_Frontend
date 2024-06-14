@@ -6,7 +6,7 @@ import { TDSCheckBoxModule } from 'tds-ui/tds-checkbox';
 import { Router, RouterModule } from '@angular/router';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputModule } from 'tds-ui/tds-input';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../shared.service';
 //import { Guid } from 'guid-typescript';
 import { v4 as uuidv4, validate } from 'uuid';
 import { TDSSelectModule } from 'tds-ui/select';
@@ -15,7 +15,16 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z
 @Component({
   selector: 'frontend-register',
   standalone: true,
-  imports: [CommonModule,TDSFormFieldModule,ReactiveFormsModule,TDSCheckBoxModule,RouterModule,TDSButtonModule,TDSInputModule,TDSSelectModule],
+  imports: [
+    CommonModule,
+    TDSFormFieldModule,
+    ReactiveFormsModule,
+    TDSCheckBoxModule,
+    RouterModule,
+    TDSButtonModule,
+    TDSInputModule,
+    TDSSelectModule,
+  ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })

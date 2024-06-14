@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSDataTableModule } from 'tds-ui/data-table';
 import { TDSAvatarModule } from 'tds-ui/avatar';
@@ -6,53 +6,106 @@ import { TDSCheckBoxModule } from 'tds-ui/tds-checkbox';
 import { TDSTableModule } from 'tds-ui/table';
 import { TDSColumnSettingsModule } from 'tds-ui/column-settings';
 import { TDSButtonModule } from 'tds-ui/button';
+import { AuthService } from '../../shared.service';
+import { TDSToolTipModule } from 'tds-ui/tooltip';
+import { TDSModalService } from 'tds-ui/modal';
+import { TDSFormFieldModule } from 'tds-ui/form-field';
+import { catchError, concatMap, filter, of, tap } from 'rxjs';
+import { ModalServiceComponent } from './moda-service/modal-service.component';
 
-interface ItemData {
-  id: number;
-  name: string;
-  age: number;
-  address: string;
-  createDate: Date;
-  value: number;
-  avatar: string;
-}
 
 @Component({
   selector: 'frontend-service-list',
   standalone: true,
-  imports: [CommonModule, TDSDataTableModule, TDSAvatarModule, TDSCheckBoxModule, TDSTableModule, TDSColumnSettingsModule,TDSButtonModule],
+  imports: [CommonModule, TDSDataTableModule, TDSAvatarModule,
+    TDSCheckBoxModule, TDSTableModule, TDSColumnSettingsModule,
+    TDSButtonModule, TDSToolTipModule, TDSFormFieldModule
+  ],
   templateUrl: './service-list.component.html',
   styleUrls: ['./service-list.component.scss'],
 })
 export class ServiceListComponent implements OnInit {
 
-  listOfData: ItemData[] = [];
+  private auth = inject( AuthService);
+  private modalSvc = inject(TDSModalService);
 
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        constructor() {}
+  ServiceList: any[]=[];
 
-        ngOnInit(): void {
-            const data = [];
-            for (let i = 0; i < 50; i++) {
-                data.push({
-                    id: i,
-                    name: `Edward King ${i}`,
-                    age: 32,
-                    address: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut
-                    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-                    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet,
-                    consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                    laboris nisi ut aliquip ex ea commodo consequat. ${i}`,
-                    createDate: new Date(),
-                    value: Math.floor(Math.random() * 200000000),
-                    avatar: `https://randomuser.me/api/portraits/women/${Math.floor(Math.random() * 100)}.jpg`,
-                });
-            }
-            this.listOfData = data;
+
+  ngOnInit(): void {
+    this.initshowServiceList();
+  }
+
+  //Display Service List
+  initshowServiceList(): void{
+    this.auth.renderListService().subscribe((data:any) =>
+      {
+        this.ServiceList = data.serviceDTO;
+      }
+    )
+  }
+  // Call display modal create a service
+  showCreateModal(){
+    const modal = this.modalSvc.create({
+      content: ModalServiceComponent,
+      title:'Create service',
+      footer: null,
+      cancelText: null,
+      size: 'md'
+    })
+    modal.afterClose.asObservable().subscribe(data =>{
+      if(data) {
+        this.initshowServiceList();
+      }
+    })
+  }
+  // Call display modal edit service
+  showEditModal(id:number){
+    const modal = this.modalSvc.create({
+      content: ModalServiceComponent,
+      title:'Edit service',
+      footer: null,
+      cancelText: null,
+      size: 'md',
+      componentParams:{ id
+      }
+    });
+    modal.afterClose.asObservable().subscribe(data =>{
+      if(data) {
+        this.initshowServiceList();}
+    })
+  }
+
+  // Call display modal delete a service
+  showDeleteModal(id:number){
+    const modal = this.modalSvc.error({
+      title:'Xóa dịch vụ',
+      content: `<div class="text-error-400">Khi xóa thì không thể hoàn tác </div>`,
+      iconType:'tdsi-trash-line',
+      okText:'Xóa',
+      size: 'md',
+      cancelText:'Hủy',
+      onOk:()=> true
+    });
+    modal.afterClose.asObservable().pipe(
+      filter(condition => condition),
+      concatMap(_=> this.auth.deleteAService(id).pipe(
+        tap(()=>{
+          this.modalSvc.success({
+            title:'Successfully!'
+          });
+        }),
+        catchError((ex) => {
+          this.modalSvc.error({
+            title: 'Error',
+            content:ex.error.message,
+          });
+          return of(null);
+        }),
+      )
+    ),
+      tap(()=>  this.initshowServiceList()),
+    ).subscribe()
   }
 
 }

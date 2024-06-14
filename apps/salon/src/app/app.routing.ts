@@ -4,9 +4,9 @@ import { ServiceListComponent } from './modules/service-list/service-list.compon
 import { LoginComponent } from './login/login.component';
 import { ProductsComponent } from './modules/products/products.component';
 import { LayoutComponent } from './layout/layout.component'; 
-import { RegisterComponent } from './register/register.component';
 import { CustomerListComponent } from './modules/customer-list/customer-list.component';
-import { RevenueStatisticsComponent } from './modules/revenue-statistics/revenue-statistics.component';
+import { RegisterComponent } from './register/register.component';
+import { RevenueStaticsModule } from './modules/revenue-statistics/revenue-statistics.module';
 
 const routes: Routes = [
   {path: 'login', component:LoginComponent},
@@ -20,28 +20,13 @@ const routes: Routes = [
     path: '', component: LayoutComponent,
     children:[
       {path: 'service-list', loadComponent: ()=> ServiceListComponent},
-    ],
-
-  },
-
-  {
-    path: '', component: LayoutComponent,
-    children:[
       {path: 'customer-list', loadComponent: ()=> CustomerListComponent},
+      {path: 'revenue-statistics', loadChildren: ()=> RevenueStaticsModule},
     ],
-
   },
-  {
-    path: '', component: LayoutComponent,
-    children:[
-      {path: 'revenue-statics', loadComponent: ()=> RevenueStatisticsComponent},
-    ]
-
-  },
-
    {path:'register', component:RegisterComponent},
-  // { path: '**', component: ErrorComponent }
 ]
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

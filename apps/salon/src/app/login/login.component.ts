@@ -6,7 +6,7 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputModule } from 'tds-ui/tds-input';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../shared.service';
 import { Router } from '@angular/router';
 
 @Component({

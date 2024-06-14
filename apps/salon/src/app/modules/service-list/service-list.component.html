@@ -1,55 +1,41 @@
+<div class="flex flex-col h-full">
+  <div class="p-2">
+    <button tds-button-icon routerLinkActive="router-link-active" tds-tooltip
+      tooltipTitle="New Service" (click)="showCreateModal()"
+      class="rounded-full mr-2 bg-green-1 text-white hover:bg-green-primary-2 transition-colors duration-300">
+      <span class="flex items-center">
+        <i class="tdsi-plus-fill"></i>
+      </span>
+    </button>
+  </div>
 
-<div [style.width.%]="99" class="flex h-full overflow-x-auto">
-  <tds-data-table [tdsData]="listOfData"
-   [tdsShowSizeChanger]="true"
-  [tdsPageSize]="10"
-  [tdsBordered]="true">
-   <tds-data-table-expand-row [tdsContent]="expandTpl">
-       <ng-template #expandTpl let-dataRow let-expand="expand">
-           <div class="w-full p-2">
-              <tds-data-table-checkbox-column></tds-data-table-checkbox-column>
-           </div>
-       </ng-template>
-   </tds-data-table-expand-row>
-   <tds-data-table-checkbox-column>
-   </tds-data-table-checkbox-column>
-   <tds-data-table-column [tdsField]="'id'" [tdsTitle]="'ID'" tdsWidth="60px" [tdsDataType]="'numeric'"
-       [tdsLeft]="true">
-   </tds-data-table-column>
-   <tds-data-table-column-group [tdsTitle]="'Thông tin chung'"  [tdsLeft]="true" >
-       <tds-data-table-column [tdsField]="'name'" [tdsContent]="nameContentTpl" [tdsTitle]="'Tên'" tdsWidth="200px"
-           >
-           <ng-template #nameContentTpl let-dataRow>
-               <div class="flex items-center">
-                   <tds-avatar size="sm" [tdsSrc]="dataRow.avatar">
-                   </tds-avatar>
-                   <div class="text-caption-2 ml-2">
-                       {{dataRow.name}}
-                   </div>
-               </div>
-           </ng-template>
-       </tds-data-table-column>
-       <tds-data-table-column [tdsField]="'age'" [tdsTitle]="'Tuổi'" tdsWidth="50px" [tdsDataType]="'numeric'">
-       </tds-data-table-column>
-   </tds-data-table-column-group>
-   <tds-data-table-column [tdsField]="'value'" [tdsTitle]="'Số tiền'" tdsWidth="150px" [tdsDataType]="'numeric'"
-       [tdsFormat]="{thousandSeparator: ','}">
-   </tds-data-table-column>
-   <tds-data-table-column [tdsField]="'address'" [tdsTitle]="'Địa chỉ'" [tdsContent]="contentTpl" tdsWidth="400px">
-       <ng-template #contentTpl let-dataRow>
-           <p tds-typography tdsEllipsis class="text-base-red-600"> {{dataRow.address}}</p>
-       </ng-template>
-   </tds-data-table-column>
-   <tds-data-table-column [tdsField]="'createDate'" [tdsTitle]="'Ngày tạo'" tdsWidth="150px" [tdsDataType]="'date'"
-       [tdsFormat]="'dd/MM/yyyy'" [tdsRight]="true">
-   </tds-data-table-column>
-   <tds-data-table-column [tdsTitle]="'Thao tác'" [tdsContent]="commandTpl" tdsWidth="110px"
-       [tdsColumnType]="'command'" [tdsRight]="true">
-       <ng-template #commandTpl let-dataRow>
-           <button tds-button-flat-icon size="sm" class="mr-2" color="primary"> <i class="tdsi-edit-fill"></i></button>
-           <button tds-button-flat-icon size="sm" color="secondary"> <i class="tdsi-edit-fill"></i></button>
-       </ng-template>
-   </tds-data-table-column>
-</tds-data-table>
+  <div [style.width.%]="100" class="flex h-screen overflow-x-auto items-center">
+    <tds-data-table [tdsData]="ServiceList" [tdsShowSizeChanger]="true" [tdsPageSize]="10" [tdsBordered]="true">
+      <tds-data-table-column [tdsField]="'serviceCode'" [tdsTitle]="'Code'" tdsWidth="10%" [tdsLeft]="true">
+      </tds-data-table-column>
+
+      <tds-data-table-column [tdsField]="'serviceName'" [tdsTitle]="'Name'" [tdsDataType]="'text'" tdsWidth="10%">
+      </tds-data-table-column>
+
+      <tds-data-table-column [tdsField]="'price'" [tdsTitle]="'Price'" tdsWidth="20%" [tdsDataType]="'numeric'"
+        [tdsFormat]="{ thousandSeparator: ',' }">
+      </tds-data-table-column>
+      <tds-data-table-column [tdsField]="'description'" [tdsTitle]="'Description'" [tdsDataType]="'text'"
+        tdsWidth="50%">
+      </tds-data-table-column>
+
+      <tds-data-table-column [tdsContent]="commandTpl" tdsWidth="10%"
+        [tdsColumnType]="'command'" [tdsRight]="true">
+        <ng-template #commandTpl let-dataRow>
+          <button tds-button-flat-icon size="sm" class="mr-2" color="primary"
+            (click)="showEditModal(dataRow.serviceID)">
+            <i class="tdsi-edit-fill"></i>
+          </button>
+          <button tds-button-flat-icon size="sm" color="secondary" (click)="showDeleteModal(dataRow.serviceID)">
+            <i class="tdsi-trash-fill"></i>
+          </button>
+        </ng-template>
+      </tds-data-table-column>
+    </tds-data-table>
+  </div>
 </div>
-

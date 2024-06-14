@@ -13,14 +13,9 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { TDSButtonMenuModule } from 'tds-ui/button-menu';
 import { LoginComponent } from './login/login.component';
 import { HttpClientModule } from '@angular/common/http';
-import { CustomerListComponent } from './modules/customer-list/customer-list.component';
 import { TDSDataTableModule } from 'tds-ui/data-table';
-import { ServiceListComponent } from './modules/service-list/service-list.component';
-import { MenuComponent } from './shared/menu/menu.component';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
-import { RegisterComponent } from './register/register.component';
-import { RevenueStatisticsComponent } from './modules/revenue-statistics/revenue-statistics.component';
 registerLocaleData(localeVi);
 @NgModule({
   declarations: [AppComponent],
@@ -33,16 +28,11 @@ registerLocaleData(localeVi);
     TDSButtonMenuModule,
     LoginComponent,
     HttpClientModule,
-    MenuComponent,
     RouterModule,
     AppRoutingModule,
-    CustomerListComponent,
     TDSDataTableModule,
-    ServiceListComponent,
-    MenuComponent,
     RouterModule,
     AppRoutingModule,
-    RegisterComponent,
   ],
   providers: [{ provide: TDS_I18N, useValue: vi_VN }],
   bootstrap: [AppComponent],
