@@ -1,22 +1,16 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TDSModalModule, TDSModalRef, TDSModalService } from 'tds-ui/modal';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSRadioModule } from 'tds-ui/radio';
-import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSDatePickerModule } from 'tds-ui/date-picker';
-import { CustomerListComponent } from '../customer-list.component';
+import { TDSInputModule } from 'tds-ui/tds-input';
+import { CustomerListComponent } from '../../customer-list/customer-list.component';
 import { AuthService } from '../../../shared.service';
-import { catchError, of } from 'rxjs';
 
 @Component({
-  selector: 'frontend-customer-modal',
+  selector: 'frontend-employee-modal',
   standalone: true,
   imports: [
     CommonModule,
@@ -28,10 +22,10 @@ import { catchError, of } from 'rxjs';
     TDSDatePickerModule,
     CustomerListComponent,
   ],
-  templateUrl: './customer-modal.component.html',
-  styleUrls: ['./customer-modal.component.scss'],
+  templateUrl: './employee-modal.component.html',
+  styleUrls: ['./employee-modal.component.scss'],
 })
-export class CustomerModalComponent implements OnInit {
+export class EmployeeModalComponent implements OnInit {
 
   private readonly modalRef = inject(TDSModalRef);
   private readonly modalService = inject(TDSModalService);
@@ -120,4 +114,5 @@ export class CustomerModalComponent implements OnInit {
       }
     );
   }
+
 }
