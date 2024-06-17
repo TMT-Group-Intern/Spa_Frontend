@@ -88,14 +88,14 @@ export class ModalServiceComponent implements OnInit{
     this.auth.createService(val).subscribe(
       (data) =>{
         this.modalService.success({
-          title: 'Successfully!',
+          title: 'Successfully',
           okText: 'OK'
         })
         this.modalRef.destroy(data)
       },
       (ex) => {
         this.modalService.error({
-            title: 'Error!',
+            title: 'Error',
             content: ex.error.message,
             okText: 'OK'
           });
@@ -108,14 +108,14 @@ export class ModalServiceComponent implements OnInit{
     this.auth.editService(id,val).subscribe(
       (data) =>{
         this.modalService.success({
-          title: 'Successfully!',
+          title: 'Successfully',
           okText: 'OK'
         })
         this.modalRef.destroy(data);
       },
       (ex) => {
         this.modalService.error({
-          title: 'Error!',
+          title: 'Error',
           content: ex.error.message,
           okText: 'OK'
         });

@@ -36,8 +36,8 @@ export class CustomerListComponent implements OnInit {
 
   // Display Customer List
   private initCustomerList() {
-    this.auth.CustomerList().subscribe(data => {
-      this.CustomerList = data;
+    this.auth.CustomerList().subscribe((data:any) => {
+      this.CustomerList = data.item;
     });
   }
 
