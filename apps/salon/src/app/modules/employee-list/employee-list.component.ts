@@ -9,6 +9,7 @@ import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { TDSModalService } from 'tds-ui/modal';
 import { AuthService } from '../../shared.service';
 import { concatMap, filter, tap } from 'rxjs';
+import { TDSButtonModule } from 'tds-ui/button';
 
 @Component({
   selector: 'frontend-employee-list',
@@ -20,7 +21,8 @@ import { concatMap, filter, tap } from 'rxjs';
     TDSColumnSettingsModule,
     CustomerModalComponent,
     TDSTimelineModule,
-    TDSToolTipModule
+    TDSToolTipModule,
+    TDSButtonModule,
   ],
   templateUrl: './employee-list.component.html',
   styleUrls: ['./employee-list.component.scss'],

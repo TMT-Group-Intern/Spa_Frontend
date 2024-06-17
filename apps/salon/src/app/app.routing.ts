@@ -9,12 +9,14 @@ import { CustomerListComponent } from './modules/customer-list/customer-list.com
 import { RegisterComponent } from './register/register.component';
 import { RevenueStaticsModule } from './modules/revenue-statistics/revenue-statistics.module';
 import { EmployeeListComponent } from './modules/employee-list/employee-list.component';
+import { HomeComponent } from './modules/home/home.component';
 
 const routes: Routes = [
   {path: 'login', component:LoginComponent},
   {
     path: '', component: LayoutComponent,
     children:[
+      {path: 'home', loadComponent: ()=> HomeComponent},
       {path: 'products', loadComponent: ()=> ProductsComponent},
       {path: 'service-list', loadComponent: ()=> ServiceListComponent},
       {path: 'customer-list', loadComponent: ()=> CustomerListComponent},
