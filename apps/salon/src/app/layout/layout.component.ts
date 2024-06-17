@@ -11,6 +11,7 @@ import { CustomerListComponent } from '../modules/customer-list/customer-list.co
 import { RevenueStaticsModule } from '../modules/revenue-statistics/revenue-statistics.module';
 import { TDSMenuModule } from 'tds-ui/menu';
 import { EmployeeListComponent } from '../modules/employee-list/employee-list.component';
+import { HomeComponent } from '../modules/home/home.component';
 
 @Component({
     selector: 'frontend-layout',
@@ -20,15 +21,16 @@ import { EmployeeListComponent } from '../modules/employee-list/employee-list.co
     standalone: true,
     imports: [
       CommonModule,
+      TDSLayoutModule,
+      TDSHeaderModule,
+      TDSMenuModule,
       RouterModule,
       MenuComponent,
       HeaderComponent,
-      TDSLayoutModule,
-      TDSHeaderModule,
+      HomeComponent,
       ProductsComponent,
       ServiceListComponent,
       CustomerListComponent,
-      TDSMenuModule,
       RevenueStaticsModule,
       EmployeeListComponent,
     ]

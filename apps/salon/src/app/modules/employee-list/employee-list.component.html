@@ -1,13 +1,16 @@
-<button tds-button-icon (click)="createCustomer()"
-  class="m-4 bg-green-primary-2 p-2 text-white rounded-full hover:bg-green-1 transition-colors duration-300" tds-tooltip
-  tooltipTitle="New Customer">
-  <span class="flex items-center">
-    <i class="tdsi-plus-fill"></i>
-  </span>
-</button>
+<div class=" flex flex-col h-full">
 
-<div [style.width.%]="100" class="flex h-full overflow-x-auto">
-  <tds-data-table [tdsData]="CustomerList" [tdsShowSizeChanger]="true" [tdsPageSize]="20" [tdsBordered]="true">
+  <div>
+    <button tds-button-icon (click)="createCustomer()" class="m-4 p-2 text-white rounded-full" color="success" tds-tooltip
+      tooltipTitle="New Customer">
+      <span class="flex items-center">
+        <i class="tdsi-plus-fill"></i>
+      </span>
+    </button>
+  </div>
+
+  <tds-data-table class="p-2" [tdsData]="CustomerList" [tdsShowSizeChanger]="true" [tdsPageSize]="20"
+    [tdsBordered]="true">
     <tds-data-table-expand-row [tdsContent]="expandTpl" tdsWidth="2%">
       <ng-template #expandTpl let-dataRow let-expand="expand">
         <tds-timeline>
@@ -19,8 +22,8 @@
       </ng-template>
     </tds-data-table-expand-row>
 
-    <tds-data-table-column [tdsField]="'customerCode'" [tdsTitle]="'ID'" tdsWidth="8%" [tdsDataType]="'text'"
-      [tdsRight]="true" tdsClass="text-center"></tds-data-table-column>
+    <tds-data-table-column [tdsField]="'customerCode'" [tdsTitle]="'ID'" tdsWidth="8%"
+      [tdsDataType]="'text'"></tds-data-table-column>
 
     <tds-data-table-column [tdsField]="'firstName'" [tdsTitle]="'First Name'" tdsWidth="20%"
       [tdsDataType]="'text'"></tds-data-table-column>
@@ -28,11 +31,11 @@
     <tds-data-table-column [tdsField]="'lastName'" [tdsTitle]="'Last Name'" tdsWidth="20%"
       [tdsDataType]="'text'"></tds-data-table-column>
 
-    <tds-data-table-column [tdsField]="'gender'" [tdsTitle]="'Gender'" tdsWidth="10%" [tdsDataType]="'text'"
-      tdsClass="text-center"></tds-data-table-column>
+    <tds-data-table-column [tdsField]="'gender'" [tdsTitle]="'Gender'" tdsWidth="10%"
+      [tdsDataType]="'text'"></tds-data-table-column>
 
     <tds-data-table-column [tdsField]="'dateOfBirth'" [tdsTitle]="'Date of Birth'" tdsWidth="9%" [tdsDataType]="'date'"
-      [tdsFormat]="'dd/mm/yyyy'" tdsClass="text-center"></tds-data-table-column>
+      [tdsFormat]="'dd/mm/yyyy'"></tds-data-table-column>
 
     <!-- <tds-data-table-column
       [tdsField]="'customerTypeID'"
@@ -45,13 +48,15 @@
     <tds-data-table-column [tdsContent]="commandTpl" tdsWidth="7%" [tdsColumnType]="'command'"
       tdsClass="flex justify-around">
       <ng-template #commandTpl let-dataRow>
-        <button tds-button-flat-icon size="sm" (click)="onEditCustomer(dataRow.customerID)">
+        <button tds-button-flat-icon color="primary" (click)="onEditCustomer(dataRow.customerID)">
           <i class="tdsi-edit-fill"></i>
         </button>
-        <button tds-button-flat-icon size="sm" (click)="deleteCustomer(dataRow.customerID)">
+        <button tds-button-flat-icon color="secondary" (click)="deleteCustomer(dataRow.customerID)">
           <i class="tdsi-trash-fill"></i>
         </button>
       </ng-template>
     </tds-data-table-column>
+
   </tds-data-table>
+
 </div>
