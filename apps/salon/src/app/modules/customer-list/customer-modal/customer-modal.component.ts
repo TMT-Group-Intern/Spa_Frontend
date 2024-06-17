@@ -13,7 +13,6 @@ import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSDatePickerModule } from 'tds-ui/date-picker';
 import { CustomerListComponent } from '../customer-list.component';
 import { AuthService } from '../../../shared.service';
-import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'frontend-customer-modal',
@@ -83,16 +82,16 @@ export class CustomerModalComponent implements OnInit {
   createCustomer(val: any) {
     this.auth.CreateNewCustomer(val).subscribe(
         {
-          next: (v) => {
+          next: () => {
             this.modalService.success({
-              title: 'Successfully!',
+              title: 'Successfully',
               okText: 'OK',
             });
             this.modalRef.destroy(val);
           },
           error: (res) => {
             this.modalService.error({
-              title: 'Fail!',
+              title: 'Error',
               content: res.error.message,
               okText: 'OK'
             });
@@ -104,16 +103,16 @@ export class CustomerModalComponent implements OnInit {
   // Update Customer
   updateCustomer(id: number, val: any) {
     this.auth.UpdateCustomer(id, val).subscribe(
-      (res) => {
+      () => {
         this.modalService.success({
-          title: 'Successfully!',
+          title: 'Successfully',
           okText: 'OK',
         });
         this.modalRef.destroy(val);
       },
       (res) => {
         this.modalService.error({
-          title: 'Fail!',
+          title: 'Error',
           content: res.error.message,
           okText: 'OK',
         });
