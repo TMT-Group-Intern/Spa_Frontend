@@ -32,8 +32,8 @@
         <tds-label class="pt-4">Job</tds-label>
         <tds-form-field>
           <tds-select valueField="id" textField="name" placeholder='select item'  [allowClear]="true"
-                disabledField="isActive" [formControl]="persondisplayWith" [required]='true'
-                [data]="contactOptions" [allowClear]="true">
+                disabledField="isActive" [formControl]="job" [required]='true'
+                [data]="contactOptions" [allowClear]="false">
             </tds-select>
           <tds-error>Validation message text</tds-error>
         </tds-form-field>
