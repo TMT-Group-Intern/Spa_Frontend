@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = "https://localhost:7192/api/"
+  private baseUrl = "https://localhost:5253/api/"
 
   constructor(private http : HttpClient) {
 
@@ -60,6 +60,11 @@ export class AuthService {
   //Delete a customer
   deleteCustomer(id:any){
     return this.http.delete(this.baseUrl + 'Customers/'+ id);
+  }
+
+  // Show list of Appointment
+  appointmentList(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Appointment');
   }
 
   signUp(id:string,name:string,email:string,password:string,re_password:string){
