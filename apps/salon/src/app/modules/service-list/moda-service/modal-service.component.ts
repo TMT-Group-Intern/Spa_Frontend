@@ -8,15 +8,15 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSInputNumberModule } from 'tds-ui/input-number';
 import { number } from 'echarts';
-const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/;
-
+const PASSWORD_PATTERN =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/;
 
 @Component({
   selector: 'frontend-modal-service',
   templateUrl: './modal-service.component.html',
   styleUrls: ['./modal-service.component.scss'],
-  standalone:true,
-  imports:[
+  standalone: true,
+  imports: [
     CommonModule,
     ReactiveFormsModule,
     TDSFormFieldModule,
@@ -24,101 +24,89 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z
     TDSInputModule,
     TDSInputNumberModule,
     TDSModalModule,
-  ]
+  ],
 })
-export class ModalServiceComponent implements OnInit{
-  @Input() id? : number;
-  private readonly modalService = inject(TDSModalService)
+export class ModalServiceComponent implements OnInit {
+  @Input() id?: number;
+  private readonly modalService = inject(TDSModalService);
   private maxPrice = 100000000;
   constructor(
     private auth: AuthService,
-    private readonly modalRef: TDSModalRef,
-  ){}
-
+    private readonly modalRef: TDSModalRef
+  ) { }
 
   // Kiểm tra dữ liệu input và báo lỗi rỗng
   modalServiceForm = inject(FormBuilder).nonNullable.group({
-    serviceName:['',Validators.compose([
-      Validators.required
-    ])
-    ] ,
-    description:[''
-  ],
-    price:[number , Validators.compose([
-      Validators.required,
-      Validators.min(0)
-    ])
-  ]
-})
+    serviceName: ['', Validators.compose([Validators.required])],
+    description: [''],
+    price: [0, Validators.compose([Validators.required, Validators.min(0)])],
+  });
 
   ngOnInit(): void {
-    console.log(this.id)
-    if(this.id){
-      this.auth.getByIdService(this.id).subscribe(
-        (data:any)=>{
-          this.modalServiceForm.patchValue(data.serviceDTO);
-        }
-      )
+    console.log(this.id);
+    if (this.id) {
+      this.auth.getByIdService(this.id).subscribe((data: any) => {
+        this.modalServiceForm.patchValue(data.serviceDTO);
+      });
     }
   }
 
   // Nhấn x thoát modal
   handleCancel(): void {
-    this.modalRef.destroy(null)
+    this.modalRef.destroy(null);
   }
 
   // Button Submit lựa chọn thực thi hàm với điều kiện id
-  btnSubmitService(){
-    if(this.modalServiceForm.invalid) return;
+  btnSubmitService() {
+    if (this.modalServiceForm.invalid) return;
     const val = {
-      ...this.modalServiceForm.value
+      ...this.modalServiceForm.value,
     };
 
-    if(this.id){
+    if (this.id) {
       this.btnEditService(this.id, val);
-    } else{
+    } else {
       this.btnCreateService(val);
     }
-   }
+  }
 
-   // Tạo Service
-   btnCreateService(val: any): void{
+  // Tạo Service
+  btnCreateService(val: any): void {
     this.auth.createService(val).subscribe(
-      (data) =>{
+      (data) => {
         this.modalService.success({
-          title: 'Successfully!',
-          okText: 'OK'
-        })
-        this.modalRef.destroy(data)
-      },
-      (ex) => {
-        this.modalService.error({
-            title: 'Error!',
-            content: ex.error.message,
-            okText: 'OK'
-          });
-      },
-    );
-   }
-
-   // Sửa service
-   btnEditService(id: number ,val: any): void{
-    this.auth.editService(id,val).subscribe(
-      (data) =>{
-        this.modalService.success({
-          title: 'Successfully!',
-          okText: 'OK'
-        })
+          title: 'Successfully',
+          okText: 'OK',
+        });
         this.modalRef.destroy(data);
       },
       (ex) => {
         this.modalService.error({
-          title: 'Error!',
+          title: 'Error',
           content: ex.error.message,
-          okText: 'OK'
+          okText: 'OK',
         });
-      },
+      }
     );
-   }
+  }
 
+  // Sửa service
+  btnEditService(id: number, val: any): void {
+    this.auth.editService(id, val).subscribe(
+      (data) => {
+        this.modalService.success({
+          title: 'Successfully',
+          okText: 'OK',
+        });
+        this.modalRef.destroy(data);
+      },
+      (ex) => {
+        this.modalService.error({
+          title: 'Error',
+          content: ex.error.message,
+          okText: 'OK',
+        });
+      }
+    );
+  }
 }

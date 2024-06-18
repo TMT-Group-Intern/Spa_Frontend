@@ -89,16 +89,16 @@ export class CustomerModalComponent implements OnInit {
       })
     ).subscribe(
         {
-          next: (v) => {
+          next: () => {
             this.modalService.success({
-              title: 'Successfully!',
+              title: 'Successfully',
               okText: 'OK',
             });
             this.modalRef.destroy(val);
           },
           error: (res) => {
             this.modalService.error({
-              title: 'Fail!',
+              title: 'Error',
               content: res.error.message,
               okText: 'OK'
             });

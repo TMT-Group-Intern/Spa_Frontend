@@ -65,6 +65,11 @@ export class AuthService {
     return this.http.delete(this.baseUrl + 'Customers/'+ id);
   }
 
+  // Show list of Appointment
+  appointmentList(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Appointment');
+  }
+
   signUp(id:string,name:string,email:string,password:string,re_password:string){
     return this.http.post<{flag:boolean, message:string}>(this.baseUrl+'register', {
       id: id,

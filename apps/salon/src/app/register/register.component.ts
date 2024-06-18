@@ -105,25 +105,25 @@ export class RegisterComponent implements OnInit {
       }
 
       return null;
-    };
+    }
 
 
-    // onSignUp(){
-    //     const id = uuidv4();
-    //     const name = this.signUpForm.value.taiKhoan;
-    //     const email = this.signUpForm.value.email;
-    //     const role = this.job.value;
-    //     const password = this.signUpForm.value.pass;
-    //     const re_password = this.signUpForm.value.retype;
-    //     this.auth.signUp(id,name,email,password,re_password,role).subscribe((result) =>{
-    //         console.log(result);
-    //         console.log(id,name,email,password,re_password,role);
-    //         if(result.message != null){
-    //             alert(result.message)
-    //             if(result.flag == true){
-    //                 this.signUpForm.reset();
-    //             }
-    //         }
-    //     });
-    // }
+    onSignUp(){
+        const id = uuidv4();
+        const name = this.signUpForm.value.taiKhoan;
+        const email = this.signUpForm.value.email;
+        const role = this.job.value;
+        const password = this.signUpForm.value.pass;
+        const re_password = this.signUpForm.value.retype;
+        this.auth.signUp(id,name,email,password,re_password).subscribe((result) =>{
+            console.log(result);
+            console.log(id,name,email,password,re_password,role);
+            if(result.message != null){
+                alert(result.message)
+                if(result.flag == true){
+                    this.signUpForm.reset();
+                }
+            }
+        });
+    }
 }
