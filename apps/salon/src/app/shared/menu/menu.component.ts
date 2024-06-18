@@ -11,7 +11,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'frontend-menu',
   standalone: true,
-  imports: [CommonModule, TDSMenuModule, RouterModule, ReactiveFormsModule,],
+  imports: [
+    CommonModule,
+    TDSMenuModule,
+    RouterModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -190,6 +195,7 @@ export class MenuComponent {
     //   ]
     // },
   ]
+
   setActiveTab(event: TDSSafeAny) {
     this.activeTab = event;
   }

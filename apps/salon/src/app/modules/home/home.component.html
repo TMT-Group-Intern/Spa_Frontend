@@ -1,1 +1,31 @@
-<p>home works!</p>
+<div class="w-full gap-x-2 grid grid-cols-3 mt-2 px-2 flex-wrap">
+  <div class="col-span-2">
+
+  </div>
+
+  <div class="col-span-1">
+    <div class="flex justify-between">
+      <tds-header>Today Booking</tds-header>
+      <button tds-button-icon class="text-white rounded-full" color="success" tds-tooltip
+        tooltipTitle="New Customer">
+        <span class="flex items-center">
+          <i class="tdsi-plus-fill"></i>
+        </span>
+      </button>
+    </div>
+
+    <tds-card *ngFor="let appoint of appointmentList" class="border rounded m-2">
+      <tds-card-header>Appointment ID: {{appoint.AppointmentID}}</tds-card-header>
+      <hr>
+      <tds-card-content>
+        The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+      </tds-card-content>
+
+      <tds-card-actions class="justify-end flex">
+        <button tds-button color="secondary">Cancel</button>
+        <button tds-button color="success" class="ml-3">Apply</button>
+      </tds-card-actions>
+    </tds-card>
+  </div>
+
+</div>
