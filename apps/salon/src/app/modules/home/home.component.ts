@@ -1,9 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSButtonModule } from 'tds-ui/button';
 import { AuthService } from '../../shared.service';
 import { TDSCardModule } from 'tds-ui/card';
 import { TDSHeaderModule } from 'tds-ui/header';
+import * as moment from 'moment';
+import { TDSTagModule } from 'tds-ui/tag';
+import { TDSModalService } from 'tds-ui/modal';
+import { AppointmentModalComponent } from './appointment-modal/appointment-modal.component';
+import { TDSToolTipModule } from 'tds-ui/tooltip';
 
 @Component({
   selector: 'frontend-home',
@@ -13,13 +18,18 @@ import { TDSHeaderModule } from 'tds-ui/header';
     TDSButtonModule,
     TDSCardModule,
     TDSHeaderModule,
+    TDSTagModule,
+    TDSToolTipModule,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
+
 export class HomeComponent implements OnInit {
 
+  private readonly tModalSvc =inject(TDSModalService)
   appointmentList: any[] = [];
+  time: any;
 
   constructor(
     private sharedService : AuthService,
@@ -28,13 +38,33 @@ export class HomeComponent implements OnInit {
 
   // Display Appointment List
   private initAppointmentList() {
-    this.sharedService.CustomerList().subscribe((data:any) => {
+    this.sharedService.appointmentList().subscribe((data:any) => {
       this.appointmentList = data;
+      this.time = moment(data.AppointmentDate).format('HH:mm');
     });
+  }
+
+  // Format Date & Time type
+  formatDate(date: string, format: string): string {
+    return moment(date).format(format);
   }
 
   ngOnInit(): void {
     this.initAppointmentList();
+  }
+
+  createAppointment(){
+    const modal = this.tModalSvc.create({
+      title:'Create Appointment',
+      content: AppointmentModalComponent,
+      footer:null,
+      size:'lg'
+    });
+    modal.afterClose.asObservable().subscribe(res=>{
+      if(res){
+        this.initAppointmentList()
+      }
+    })
   }
 
 }

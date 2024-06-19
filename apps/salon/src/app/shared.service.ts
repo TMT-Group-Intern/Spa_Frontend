@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = "https://localhost:5253/api/"
+  private baseUrl = "https://localhost:7192/api/"
 
   constructor(private http : HttpClient) {
 
@@ -23,12 +23,12 @@ export class AuthService {
 
   //Create a new service
   createService(val:any){
-    return this.http.post(this.baseUrl + 'Services',val);
+    return this.http.post(this.baseUrl + 'Services', val);
   }
 
   //Edit a service
   editService(id: number,val:any){
-    return this.http.put(this.baseUrl + 'Services/'+ id,val);
+    return this.http.put(this.baseUrl + 'Services/'+ id, val);
   }
 
   //Delete a service
@@ -46,6 +46,11 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'Customers/' + id);
   }
 
+  // Search Customer
+  searchCustomer(val: any): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Customers/search?searchTerm=' + val);
+  }
+
   // Create a new Customer
   CreateNewCustomer(val:any) {
     return this.http.post(this.baseUrl + 'Customers', val);
@@ -56,7 +61,6 @@ export class AuthService {
     return this.http.put(this.baseUrl + 'Customers/' + id, val);
   }
 
-  //
   //Delete a customer
   deleteCustomer(id:any){
     return this.http.delete(this.baseUrl + 'Customers/'+ id);
@@ -65,6 +69,11 @@ export class AuthService {
   // Show list of Appointment
   appointmentList(): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Appointment');
+  }
+
+  // Create a new Appointment
+  createAppointment(val:any) {
+    return this.http.post(this.baseUrl + 'Appointment', val);
   }
 
   signUp(id:string,name:string,email:string,password:string,re_password:string){

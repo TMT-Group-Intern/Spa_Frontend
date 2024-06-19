@@ -7,9 +7,6 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSInputNumberModule } from 'tds-ui/input-number';
-import { number } from 'echarts';
-const PASSWORD_PATTERN =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/;
 
 @Component({
   selector: 'frontend-modal-service',
