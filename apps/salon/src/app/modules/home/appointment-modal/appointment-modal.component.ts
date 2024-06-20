@@ -49,8 +49,7 @@ export class AppointmentModalComponent implements OnInit {
   ]
 
   @Input() id?: number;
-  @Input() phoneNum?: any;
-  public statusOptions = [
+  public contactOptions = [
     'Comming',
     'Comming2',
   ]

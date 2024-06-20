@@ -37,6 +37,7 @@ export class CustomerModalComponent implements OnInit {
   private readonly modalRef = inject(TDSModalRef);
   private readonly modalService = inject(TDSModalService);
   @Input() id?: number;
+  @Input() phoneNum?: string;
   createCustomerForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
     firstName: ['', Validators.required],
