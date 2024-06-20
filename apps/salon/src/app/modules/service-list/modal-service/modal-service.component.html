@@ -4,7 +4,7 @@
   <tds-form-field class="w-full mt-2">
     <input tdsInput autocomplete="off" placeholder="Name service" formControlName="serviceName" class="appearance-none" />
     <tds-error>
-      <span *ngIf="modalServiceForm.controls['serviceName'].hasError('required')">Your <strong>service name</strong> cannot be empty!</span>
+      <span>Your <strong>service name</strong> cannot be empty!</span>
     </tds-error>
   </tds-form-field>
 
@@ -13,10 +13,6 @@
   <tds-form-field class="w-full mt-2">
     <textarea tdsInput autocomplete="off" formControlName="description" placeholder="Description service"
       [tdsAutosize]="{ minRows: 3,  maxRows: 6}"></textarea>
-    <!-- <tds-error>
-        <span *ngIf=" modalServiceForm.controls['description'].hasError('required')">Vui
-          lòng nhập mô tả về dịch vụ</span>
-      </tds-error> -->
   </tds-form-field>
 
 

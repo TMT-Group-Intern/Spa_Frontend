@@ -11,7 +11,10 @@ import { AuthService } from '../../../shared.service';
 import { TDSCalendarModule } from 'tds-ui/calendar';
 import { TDSButtonModule } from 'tds-ui/button';
 import { CustomerModalComponent } from '../../customer-list/customer-modal/customer-modal.component';
-import { DomSanitizer } from '@angular/platform-browser';
+import { TDSSelectModule } from 'tds-ui/select';
+import { TDSNotificationService } from 'tds-ui/notification';
+import { startOfToday, isBefore, isWeekend } from 'date-fns';
+import { TDSTimePickerModule } from 'tds-ui/time-picker';
 
 @Component({
   selector: 'frontend-appointment-modal',
@@ -27,36 +30,48 @@ import { DomSanitizer } from '@angular/platform-browser';
     CustomerListComponent,
     TDSCalendarModule,
     TDSButtonModule,
+    TDSSelectModule,
+    TDSTimePickerModule,
   ],
   templateUrl: './appointment-modal.component.html',
   styleUrls: ['./appointment-modal.component.scss'],
 })
 export class AppointmentModalComponent implements OnInit {
 
-  private readonly tModalSvc =inject(TDSModalService)
+  public contactOptions = [
+    { id: 11, name: 'Elton John' },
+    { id: 12, name: 'Elvis Presley' },
+    { id: 9, name: 'Paul McCartney' },
+    { id: 14, name: 'Elton John' },
+    { id: 13, name: 'Elvis Presley' },
+  ]
+
+  private readonly tModalSvc = inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
-  private readonly modalService = inject(TDSModalService);
   @Input() id?: number;
   createAppointmentForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
+    customerID: [],
+    name: [''],
     branch: ['ABC'],
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
-    dateOfBirth: ['', Validators.required],
-    gender: ['Male'],
+    EmployeeID: [[0]],
+    doctor: [0],
+    appointmentDate: ['', Validators.required],
   });
-  noCustomer: any;
+  isExist = false;
+  today = startOfToday();
+  currentDate: Date = new Date();
+  empID: any[] = []
 
   constructor(
     private shared: AuthService,
-    private sanitizer: DomSanitizer
-  ) {}
+    private notification: TDSNotificationService,
+  ) { }
 
   ngOnInit(): void {
 
-    this.form.get('firstName')?.disable()
-    this.form.get('lastName')?.disable()
+    this.form.get('name')?.disable()
     this.form.get('branch')?.disable()
 
     if (this.id) {
@@ -65,7 +80,13 @@ export class AppointmentModalComponent implements OnInit {
         this.form.patchValue(data.customerDTO);
       });
     }
+
   }
+
+  disabledDate = (d: Date): boolean => {
+    // Disable all days before today
+    return isBefore(d, this.today);
+  };
 
   // Cancel button
   handleCancel(): void {
@@ -74,10 +95,20 @@ export class AppointmentModalComponent implements OnInit {
 
   // Submit button
   submit() {
+
+    console.log(this.form.value.appointmentDate)
+
     if (this.form.invalid) return;
+    this.empID.push(this.form.value.doctor)
+
+    this.form.patchValue({
+      EmployeeID: this.empID
+    });
 
     const val = {
-      ...this.form.value,
+      customerID: this.form.value.customerID,
+      EmployeeID: this.form.value.EmployeeID,
+      appointmentDate: this.form.value.appointmentDate,
     };
 
     if (this.id) {
@@ -88,79 +119,69 @@ export class AppointmentModalComponent implements OnInit {
   }
 
   // Search Customer
-  searchCustomer () {
-    const elements = document.querySelectorAll('span.no-customer')
+  searchCustomer() {
+
+    const controls = this.form.controls;
+    if (controls['phone'].invalid) return;
+
     this.shared.searchCustomer(this.form.value.phone).subscribe(
       (res: any) => {
+
         if (res.customers.length == 0) {
-          elements.forEach((element) => {
-            (element as HTMLElement).style.display = 'block';
-          });
-        } else {
           this.form.patchValue({
-            firstName: res.customers[0].firstName,
-            lastName: res.customers[0].lastName,
+            name: '',
+            customerID: undefined,
           });
-          elements.forEach((element) => {
-            (element as HTMLElement).style.display = 'none';
+          this.isExist = true
+        }
+
+        else {
+          this.form.patchValue({
+            name: res.customers[0].firstName + ' ' + res.customers[0].lastName,
+            customerID: res.customers[0].customerID,
           });
+          this.isExist = false
         }
       },
     )
   }
 
-  // searchCustomer () {
-  //   // const elements = document.querySelectorAll('span.no-customer')
-  //   this.shared.searchCustomer(this.form.value.phone).subscribe(
-  //     (res: any) => {
-  //       if (res.customers.length == 0) {
-  //         this.noCustomer = this.sanitizer.bypassSecurityTrustHtml( '<a (click)="createCustomer()">Create</a>')
-  //       } else {
-  //         this.form.patchValue({
-  //           firstName: res.customers[0].firstName,
-  //           lastName: res.customers[0].lastName,
-  //         });
-  //         // elements.forEach((element) => {
-  //         //   (element as HTMLElement).style.display = 'none';
-  //         // });
-  //       }
-  //     },
-  //   )
-  // }
-
-  // Create Customer
-  createAppointment (val: any) {
+  // Create Appointment
+  createAppointment(val: any) {
     this.shared.createAppointment(val).subscribe(
-        {
-          next: () => {
-            this.modalService.success({
-              title: 'Successfully',
-              okText: 'OK',
-            });
-            this.modalRef.destroy(val);
-          },
-          error: (res) => {
-            this.modalService.error({
-              title: 'Error',
-              content: res.error.message,
-              okText: 'OK'
-            });
-          },
-        }
-      );
+      {
+        next: () => {
+          this.createNotificationSuccess('');
+          this.modalRef.destroy(val);
+        },
+        error: (res) => {
+          this.createNotificationError(res.error.message);
+        },
+      }
+    );
   }
 
   // Create Customer
-  createCustomer(){
+  createCustomer(phoneNum: any) {
+
     const modal = this.tModalSvc.create({
-      title:'Create Customer',
+      title: 'Create Customer',
       content: CustomerModalComponent,
-      footer:null,
-      size:'lg'
+      footer: null,
+      size: 'lg',
+      componentParams: {
+        phoneNum
+      }
     });
-    modal.afterClose.asObservable().subscribe(res=>{
-      if(res){
-        //
+
+    modal.afterClose.asObservable().subscribe(res => {
+      if (res) {
+        console.log(res)
+        this.form.patchValue({
+          name: res.firstName + ' ' + res.lastName,
+          customerID: res.customerID,
+        });
+        this.isExist = false
       }
     })
   }
@@ -169,19 +190,26 @@ export class AppointmentModalComponent implements OnInit {
   updateCustomer(id: number, val: any) {
     this.shared.UpdateCustomer(id, val).subscribe(
       () => {
-        this.modalService.success({
-          title: 'Successfully',
-          okText: 'OK',
-        });
+        this.createNotificationSuccess('');
         this.modalRef.destroy(val);
       },
       (res) => {
-        this.modalService.error({
-          title: 'Error',
-          content: res.error.message,
-          okText: 'OK',
-        });
+        this.createNotificationError(res.error.message);
       }
+    );
+  }
+
+  // Success Notification
+  createNotificationSuccess(content: any): void {
+    this.notification.success(
+      'Succesfully', content
+    );
+  }
+
+  // Error Notification
+  createNotificationError(content: any): void {
+    this.notification.error(
+      'Error', content
     );
   }
 

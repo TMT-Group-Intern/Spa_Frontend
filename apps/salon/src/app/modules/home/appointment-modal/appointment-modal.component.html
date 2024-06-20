@@ -1,14 +1,23 @@
 <form class="py-2" id="idform" [formGroup]="form" autocomplete="off">
+
+  <!-- Phone -->
   <tds-label [tdsRequired]="true">Phone Number</tds-label>
   <tds-form-field class="my-2">
     <div class="flex">
       <input tdsInput autocomplete="off" placeholder="0123456789" class="appearance-none w-full" formControlName="phone"
         type="tel" />
-      <button tds-button-icon color="secondary" (click)="searchCustomer()">
+      <button tds-button-icon color="white" class="border-none" (click)="searchCustomer()">
         <i class="tdsi-search-fill"></i>
       </button>
     </div>
 
+    <!-- Display notification if customer does not exist -->
+    <tds-warning *ngIf="isExist">
+      <span class="text-sm">No customer found! <a class="text-green-primary-1"
+          (click)="createCustomer(form.value.phone)">Create now</a>.</span>
+    </tds-warning>
+
+    <!-- Display error -->
     <tds-error>
       <span *ngIf="form.controls['phone'].hasError('required')">Your <strong>phone number</strong> cannot be
         empty!</span>
@@ -17,67 +26,35 @@
         digits!</span>
     </tds-error>
   </tds-form-field>
-  <span class="no-customer hidden">No customer found with this phone number! <a class="text-green-700" (click)="createCustomer()">Create now.</a></span>
-  <!-- <span [innerHTML]="noCustomer"></span> -->
 
-  <tds-label>First Name</tds-label>
+  <!-- Full name -->
+  <tds-label>Full Name</tds-label>
   <tds-form-field class="my-2">
-    <input tdsInput autocomplete="off" formControlName="firstName" class="appearance-none w-full" type="text"/>
+    <input tdsInput autocomplete="off" formControlName="name" class="appearance-none w-full" type="text" />
   </tds-form-field>
 
-  <tds-label>Last Name</tds-label>
-  <tds-form-field class="my-2">
-    <input tdsInput autocomplete="off" formControlName="lastName" class="appearance-none w-full" type="text"/>
-  </tds-form-field>
-
+  <!-- Branch -->
   <tds-label>Branch</tds-label>
   <tds-form-field class="my-2">
-    <input tdsInput autocomplete="off" formControlName="branch" class="appearance-none w-full" type="text"/>
+    <input tdsInput autocomplete="off" formControlName="branch" class="appearance-none w-full" type="text" />
   </tds-form-field>
 
-  <!-- <tds-label [tdsRequired]="true">First Name</tds-label> -->
-  <!-- <tds-form-field class="my-2">
-    <input tdsInput autocomplete="off" placeholder="Christine" formControlName="firstName"
-      class="appearance-none w-full" type="text" />
-    <tds-error>
-      <span *ngIf="form.controls['firstName'].hasError('required')">Your <strong>first name</strong> cannot be empty!</span>
-    </tds-error>
-  </tds-form-field>
-
-  <tds-label [tdsRequired]="true">Last Name</tds-label>
+  <!-- Doctor -->
+  <tds-label>Doctor</tds-label>
   <tds-form-field class="my-2">
-    <input tdsInput autocomplete="off" placeholder="Nguyen" formControlName="lastName" class="appearance-none w-full"
-      type="text" />
-    <tds-error>
-      <span *ngIf="form.controls['lastName'].hasError('required')">Your <strong>last name</strong> cannot be empty!</span>
-    </tds-error>
+    <tds-select valueField="id" textField="name" placeholder='---' [data]="contactOptions" formControlName="doctor">
+    </tds-select>
   </tds-form-field>
 
-  <tds-label>Email</tds-label>
+  <!-- Date & Time -->
+  <tds-label [tdsRequired]="true">Choose date & time</tds-label>
   <tds-form-field class="my-2">
-    <input tdsInput autocomplete="off" placeholder="abc@example.com" formControlName="email" type="email"
-      class="appearance-none w-full" />
+    <tds-date-picker showTime [disabledDate]="disabledDate" formControlName="appointmentDate"></tds-date-picker>
     <tds-error>
-      <span *ngIf="form.controls['email'].hasError('email')">Your <strong>email</strong> is not in the correct
-        format!</span>
-    </tds-error>
-  </tds-form-field> -->
-
-  <!-- <tds-label [tdsRequired]="true">Date of Birth</tds-label>
-  <tds-form-field class="w-full my-2">
-    <tds-date-picker formControlName="dateOfBirth"></tds-date-picker>
-    <tds-error>
-      <span *ngIf="form.controls['dateOfBirth'].hasError('required')">Your <strong>date of birth</strong> cannot be empty!</span>
+      <span>Your <strong>date & time</strong> cannot be empty!</span>
     </tds-error>
   </tds-form-field>
 
-  <tds-label [tdsRequired]="true">Gender</tds-label>
-  <tds-radio-group class="my-2" formControlName="gender">
-    <div>
-      <label tds-radio value="Male">Male</label>
-      <label tds-radio value="Female">Female</label>
-    </div>
-  </tds-radio-group> -->
 </form>
 
 <ng-container *tdsModalFooter>
