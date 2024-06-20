@@ -13,8 +13,10 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { CustomerModalComponent } from '../../customer-list/customer-modal/customer-modal.component';
 import { TDSSelectModule } from 'tds-ui/select';
 import { TDSNotificationService } from 'tds-ui/notification';
-import { startOfToday, isBefore, isWeekend } from 'date-fns';
+import { startOfToday, isBefore } from 'date-fns';
 import { TDSTimePickerModule } from 'tds-ui/time-picker';
+// npm install moment --f
+import * as moment from 'moment';
 
 @Component({
   selector: 'frontend-appointment-modal',
@@ -38,12 +40,17 @@ import { TDSTimePickerModule } from 'tds-ui/time-picker';
 })
 export class AppointmentModalComponent implements OnInit {
 
-  public contactOptions = [
+  public doctorOptions = [
     { id: 11, name: 'Elton John' },
     { id: 12, name: 'Elvis Presley' },
     { id: 9, name: 'Paul McCartney' },
     { id: 14, name: 'Elton John' },
     { id: 13, name: 'Elvis Presley' },
+  ]
+
+  public statusOptions = [
+    'Comming',
+    'Comming2',
   ]
 
   private readonly tModalSvc = inject(TDSModalService)
@@ -58,10 +65,11 @@ export class AppointmentModalComponent implements OnInit {
     EmployeeID: [[0]],
     doctor: [0],
     appointmentDate: ['', Validators.required],
+    status: [''],
   });
   isExist = false;
+  isHide = false;
   today = startOfToday();
-  currentDate: Date = new Date();
   empID: any[] = []
 
   constructor(
@@ -74,15 +82,27 @@ export class AppointmentModalComponent implements OnInit {
     this.form.get('name')?.disable()
     this.form.get('branch')?.disable()
 
+    this.isHide = false;
+
     if (this.id) {
-      this.shared.getCustomer(this.id).subscribe((data: any) => {
+      this.form.get('phone')?.disable()
+      this.isHide = true;
+      this.shared.getAppointment(this.id).subscribe((data: any) => {
         console.log(data);
-        this.form.patchValue(data.customerDTO);
+        this.form.patchValue({
+          phone: data.Customer.Phone,
+          name: data.Customer.FirstName + ' ' + data.Customer.LastName,
+          appointmentDate: data.AppointmentDate,
+          customerID: data.Customer.CustomerID
+        });
       });
     }
 
   }
 
+
+
+  // Disabled Date in the past
   disabledDate = (d: Date): boolean => {
     // Disable all days before today
     return isBefore(d, this.today);
@@ -96,46 +116,50 @@ export class AppointmentModalComponent implements OnInit {
   // Submit button
   submit() {
 
-    console.log(this.form.value.appointmentDate)
-
     if (this.form.invalid) return;
-    this.empID.push(this.form.value.doctor)
 
+    // Add employee to the array
+    this.empID.push(this.form.value.doctor)
     this.form.patchValue({
       EmployeeID: this.empID
     });
 
-    const val = {
+    const val1 = {
       customerID: this.form.value.customerID,
+      employeeID: this.form.value.EmployeeID,
+      appointmentDate: moment(this.form.value.appointmentDate).format("YYYY-MM-DDTHH:mm:ss"),
+    };
+
+    const val2 = {
+      CustomerID: this.form.value.customerID,
       EmployeeID: this.form.value.EmployeeID,
-      appointmentDate: this.form.value.appointmentDate,
+      AppointmentDate: moment(this.form.value.appointmentDate).format("YYYY-MM-DDTHH:mm:ss"),
+      Status: this.form.value.status,
     };
 
     if (this.id) {
-      this.updateCustomer(this.id, val);
+      this.updateAppointment(this.id, val2);
     } else {
-      this.createAppointment(val);
+      this.createAppointment(val1);
     }
   }
 
   // Search Customer
   searchCustomer() {
 
+    // Check (only) phone valid or not
     const controls = this.form.controls;
     if (controls['phone'].invalid) return;
 
     this.shared.searchCustomer(this.form.value.phone).subscribe(
       (res: any) => {
-
-        if (res.customers.length == 0) {
+        if (res.customers.length == 0) { // If phone does not exist
           this.form.patchValue({
             name: '',
             customerID: undefined,
           });
           this.isExist = true
-        }
-
-        else {
+        } else { // If phone exists
           this.form.patchValue({
             name: res.customers[0].firstName + ' ' + res.customers[0].lastName,
             customerID: res.customers[0].customerID,
@@ -161,7 +185,7 @@ export class AppointmentModalComponent implements OnInit {
     );
   }
 
-  // Create Customer
+  // Open Create Customer Modal
   createCustomer(phoneNum: any) {
 
     const modal = this.tModalSvc.create({
@@ -174,21 +198,24 @@ export class AppointmentModalComponent implements OnInit {
       }
     });
 
-    modal.afterClose.asObservable().subscribe(res => {
-      if (res) {
-        console.log(res)
-        this.form.patchValue({
-          name: res.firstName + ' ' + res.lastName,
-          customerID: res.customerID,
-        });
+    modal.afterClose.asObservable().subscribe(res1 => {
+      if (res1) {
+        this.shared.searchCustomer(res1.phone).subscribe(
+          (res2: any) => {
+            this.form.patchValue({
+              name: res1.firstName + ' ' + res1.lastName,
+              customerID: res2.customers[0].customerID,
+            });
+          }
+        )
         this.isExist = false
       }
     })
   }
 
-  // Update Customer
-  updateCustomer(id: number, val: any) {
-    this.shared.UpdateCustomer(id, val).subscribe(
+  // Update Appointment
+  updateAppointment(id: number, val: any) {
+    this.shared.UpdateAppointment(id, val).subscribe(
       () => {
         this.createNotificationSuccess('');
         this.modalRef.destroy(val);

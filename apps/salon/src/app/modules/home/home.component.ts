@@ -33,18 +33,16 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private sharedService : AuthService,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   ) {}
 
   // Display Appointment List
-  private initAppointmentList() {
+  initAppointmentList() {
     this.sharedService.appointmentList().subscribe((data:any) => {
       this.appointmentList = data;
-      this.time = moment(data.AppointmentDate).format('HH:mm');
     });
   }
 
-  // Format Date & Time type
+  // Format Date & Time
   formatDate(date: string, format: string): string {
     return moment(date).format(format);
   }
@@ -59,6 +57,23 @@ export class HomeComponent implements OnInit {
       content: AppointmentModalComponent,
       footer:null,
       size:'lg'
+    });
+    modal.afterClose.asObservable().subscribe(res=>{
+      if(res){
+        this.initAppointmentList()
+      }
+    })
+  }
+
+  onEditAppointment(id:number){
+    const modal = this.tModalSvc.create({
+      title:'Edit Appointment',
+      content: AppointmentModalComponent,
+      footer:null,
+      size:'lg',
+      componentParams:{
+        id
+      }
     });
     modal.afterClose.asObservable().subscribe(res=>{
       if(res){

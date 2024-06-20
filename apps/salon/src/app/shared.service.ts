@@ -76,6 +76,16 @@ export class AuthService {
     return this.http.post(this.baseUrl + 'Appointment', val);
   }
 
+  // Update Appointment
+  UpdateAppointment(id: number, val:any) {
+    return this.http.put(this.baseUrl + 'Appointment/' + id, val);
+  }
+
+  // Get Appointment by ID
+  getAppointment(id: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Appointment/' + id);
+  }
+
   signUp(id:string,name:string,email:string,password:string,re_password:string){
     return this.http.post<{flag:boolean, message:string}>(this.baseUrl+'register', {
       id: id,
