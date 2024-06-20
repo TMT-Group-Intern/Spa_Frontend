@@ -7,7 +7,7 @@ import { AuthService } from '../../shared.service';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { TDSModalService } from 'tds-ui/modal';
 import { catchError, concatMap, filter, of, tap } from 'rxjs';
-import { ModalServiceComponent } from './moda-service/modal-service.component';
+import { ModalServiceComponent } from './modal-service/modal-service.component';
 
 
 @Component({

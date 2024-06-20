@@ -7,6 +7,7 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSInputNumberModule } from 'tds-ui/input-number';
+import { TDSNotificationService } from 'tds-ui/notification';
 
 @Component({
   selector: 'frontend-modal-service',
@@ -24,12 +25,13 @@ import { TDSInputNumberModule } from 'tds-ui/input-number';
   ],
 })
 export class ModalServiceComponent implements OnInit {
+
   @Input() id?: number;
-  private readonly modalService = inject(TDSModalService);
-  private maxPrice = 100000000;
+
   constructor(
     private auth: AuthService,
-    private readonly modalRef: TDSModalRef
+    private readonly modalRef: TDSModalRef,
+    private notification: TDSNotificationService
   ) { }
 
   // Kiểm tra dữ liệu input và báo lỗi rỗng
@@ -71,18 +73,11 @@ export class ModalServiceComponent implements OnInit {
   btnCreateService(val: any): void {
     this.auth.createService(val).subscribe(
       (data) => {
-        this.modalService.success({
-          title: 'Successfully',
-          okText: 'OK',
-        });
+        this.createNotificationSuccess('');
         this.modalRef.destroy(data);
       },
       (ex) => {
-        this.modalService.error({
-          title: 'Error',
-          content: ex.error.message,
-          okText: 'OK',
-        });
+        this.createNotificationError(ex.error.message);
       }
     );
   }
@@ -91,19 +86,27 @@ export class ModalServiceComponent implements OnInit {
   btnEditService(id: number, val: any): void {
     this.auth.editService(id, val).subscribe(
       (data) => {
-        this.modalService.success({
-          title: 'Successfully',
-          okText: 'OK',
-        });
+        this.createNotificationSuccess('');
         this.modalRef.destroy(data);
       },
       (ex) => {
-        this.modalService.error({
-          title: 'Error',
-          content: ex.error.message,
-          okText: 'OK',
-        });
+        this.createNotificationError(ex.error.message);
       }
     );
   }
+
+  // Success Notification
+  createNotificationSuccess(content: any): void {
+    this.notification.success(
+      'Succesfully', content
+    );
+  }
+
+  // Error Notification
+  createNotificationError(content: any): void {
+    this.notification.error(
+      'Error', content
+    );
+  }
+
 }
