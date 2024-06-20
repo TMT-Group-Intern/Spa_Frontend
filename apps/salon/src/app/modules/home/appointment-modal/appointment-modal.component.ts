@@ -94,7 +94,8 @@ export class AppointmentModalComponent implements OnInit {
           phone: data.Customer.Phone,
           name: data.Customer.FirstName + ' ' + data.Customer.LastName,
           appointmentDate: data.AppointmentDate,
-          customerID: data.Customer.CustomerID
+          customerID: data.Customer.CustomerID,
+          status: data.Status,
         });
       });
     }
@@ -132,6 +133,7 @@ export class AppointmentModalComponent implements OnInit {
       // status: this.form.value.status,
       ...this.form.value
     };
+    console.log(val)
 
     if (this.id) {
       this.updateAppointment(this.id, val);
