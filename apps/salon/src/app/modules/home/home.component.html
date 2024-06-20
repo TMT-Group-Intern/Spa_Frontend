@@ -1,22 +1,22 @@
-<div class="w-full gap-x-2 grid grid-cols-3 mt-2 px-2 flex-wrap">
-  <div class="col-span-2 grid grid-rows-2-3 flex-wrap">
+<div class="w-full gap-x-2 grid grid-cols-3 p-1 flex-wrap h-full bg-gray-400">
+  <div class="col-span-2 gap-y-2 grid grid-rows-2 flex-wrap">
     <!-- Tiep nhan () -->
-    <div class="row-span-1">
+    <div class="row-span-1 border p-4 rounded-10 bg-white">
       <p>abc</p>
     </div>
 
     <!--  -->
-    <div class="row-span-1">
+    <div class="row-span-1 border p-4 rounded-10 bg-white">
       <p>abc</p>
     </div>
   </div>
 
   <!-- Appointment List -->
-  <div class="col-span-1 border p-4">
+  <div class="col-span-1 border p-4 rounded-10 bg-white">
     <!-- Header -->
     <div class="flex justify-between">
       <span class="text-heading-4">Today Booking</span>
-      <button tds-button-icon color="custom" class="text-white rounded-full bg-green-600" (click)="createAppointment()"
+      <button tds-button-icon color="success" class="rounded-full" (click)="createAppointment()"
         tds-tooltip tooltipTitle="New Appointment">
         <span class="flex items-center">
           <i class="tdsi-plus-fill"></i>

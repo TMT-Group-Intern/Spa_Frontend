@@ -9,6 +9,7 @@ import { TDSInputModule } from 'tds-ui/tds-input';
 import { CustomerListComponent } from '../../customer-list/customer-list.component';
 import { AuthService } from '../../../shared.service';
 import { TDSNotificationService } from 'tds-ui/notification';
+import { TDSButtonModule } from 'tds-ui/button';
 
 @Component({
   selector: 'frontend-employee-modal',
@@ -22,6 +23,7 @@ import { TDSNotificationService } from 'tds-ui/notification';
     TDSInputModule,
     TDSDatePickerModule,
     CustomerListComponent,
+    TDSButtonModule,
   ],
   templateUrl: './employee-modal.component.html',
   styleUrls: ['./employee-modal.component.scss'],

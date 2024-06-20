@@ -4,6 +4,7 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { AuthService } from '../../shared.service';
 import { TDSCardModule } from 'tds-ui/card';
 import { TDSHeaderModule } from 'tds-ui/header';
+// npm install moment --f
 import * as moment from 'moment';
 import { TDSTagModule } from 'tds-ui/tag';
 import { TDSModalService } from 'tds-ui/modal';

@@ -1,7 +1,7 @@
 <div class=" flex flex-col h-full">
 
-  <div>
-    <button tds-button-icon (click)="createCustomer()" class="m-4 p-2 text-white rounded-full" color="success" tds-tooltip
+  <div class="flex justify-end">
+    <button tds-button-icon (click)="createCustomer()" class="m-4 p-2 rounded-full" color="success" tds-tooltip
       tooltipTitle="New Customer">
       <span class="flex items-center">
         <i class="tdsi-plus-fill"></i>
@@ -48,10 +48,10 @@
     <tds-data-table-column [tdsContent]="commandTpl" tdsWidth="7%" [tdsColumnType]="'command'"
       tdsClass="flex justify-around">
       <ng-template #commandTpl let-dataRow>
-        <button tds-button-flat-icon color="primary" (click)="onEditCustomer(dataRow.customerID)">
+        <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-secondary-1" (click)="onEditCustomer(dataRow.customerID)">
           <i class="tdsi-edit-fill"></i>
         </button>
-        <button tds-button-flat-icon color="secondary" (click)="deleteCustomer(dataRow.customerID)">
+        <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-red-500" (click)="deleteCustomer(dataRow.customerID)">
           <i class="tdsi-trash-fill"></i>
         </button>
       </ng-template>
