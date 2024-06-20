@@ -62,7 +62,8 @@ export class AppointmentModalComponent implements OnInit {
     name: [''],
     branch: ['ABC'],
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
-    EmployeeID: [[0]],
+    employeeID: [[0]],
+    assignments: [[]],
     doctor: [0],
     appointmentDate: ['', Validators.required],
     status: [''],
@@ -121,26 +122,21 @@ export class AppointmentModalComponent implements OnInit {
     // Add employee to the array
     this.empID.push(this.form.value.doctor)
     this.form.patchValue({
-      EmployeeID: this.empID
+      employeeID: this.empID
     });
 
-    const val1 = {
-      customerID: this.form.value.customerID,
-      employeeID: this.form.value.EmployeeID,
-      appointmentDate: moment(this.form.value.appointmentDate).format("YYYY-MM-DDTHH:mm:ss"),
-    };
-
-    const val2 = {
-      CustomerID: this.form.value.customerID,
-      EmployeeID: this.form.value.EmployeeID,
-      AppointmentDate: moment(this.form.value.appointmentDate).format("YYYY-MM-DDTHH:mm:ss"),
-      Status: this.form.value.status,
+    const val = {
+      // customerID: this.form.value.customerID,
+      // employeeID: this.form.value.employeeID,
+      // appointmentDate: moment(this.form.value.appointmentDate).format("YYYY-MM-DDTHH:mm:ss"),
+      // status: this.form.value.status,
+      ...this.form.value
     };
 
     if (this.id) {
-      this.updateAppointment(this.id, val2);
+      this.updateAppointment(this.id, val);
     } else {
-      this.createAppointment(val1);
+      this.createAppointment(val);
     }
   }
 
