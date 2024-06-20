@@ -42,7 +42,6 @@ export class ModalServiceComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log(this.id);
     if (this.id) {
       this.auth.getByIdService(this.id).subscribe((data: any) => {
         this.modalServiceForm.patchValue(data.serviceDTO);

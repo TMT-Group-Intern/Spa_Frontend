@@ -1,3 +1,4 @@
+import { ServiceAppointmentModalComponent } from './service-appointment-modal/service-appointment-modal.component';
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSButtonModule } from 'tds-ui/button';
@@ -9,6 +10,7 @@ import { TDSTagModule } from 'tds-ui/tag';
 import { TDSModalService } from 'tds-ui/modal';
 import { AppointmentModalComponent } from './appointment-modal/appointment-modal.component';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
+import { TDSFormFieldModule } from 'tds-ui/form-field';
 
 @Component({
   selector: 'frontend-home',
@@ -20,6 +22,7 @@ import { TDSToolTipModule } from 'tds-ui/tooltip';
     TDSHeaderModule,
     TDSTagModule,
     TDSToolTipModule,
+    TDSFormFieldModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -65,6 +68,23 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  callmodalServiceAppointment(id:number){
+    const modal = this.tModalSvc.create({
+      title:'Create service appointment',
+      content: ServiceAppointmentModalComponent,
+      footer:null,
+      size:'lg',
+      componentParams:{
+        id
+      }
+    });
+    modal.afterClose.asObservable().subscribe(res=>{
+      if(res){
+        this.initAppointmentList()
+      }
+    })
+  }
+
   onEditAppointment(id:number){
     const modal = this.tModalSvc.create({
       title:'Edit Appointment',
@@ -81,5 +101,6 @@ export class HomeComponent implements OnInit {
       }
     })
   }
+
 
 }

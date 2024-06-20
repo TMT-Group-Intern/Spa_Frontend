@@ -1,0 +1,66 @@
+<form class="py-2" id="idform" [formGroup]="form" autocomplete="off">
+
+  <div class="flex flex-row">
+    <div class="w-[50%]">
+      <!-- Phone -->
+      <tds-label>Phone Number</tds-label>
+      <tds-form-field class="my-2">
+        <div class="flex">
+          <input tdsInput autocomplete="off" placeholder="0123456789" class="appearance-none w-full"
+            formControlName="phone" type="tel" />
+        </div>
+      </tds-form-field>
+
+      <!-- Full name -->
+      <tds-label>Full Name</tds-label>
+      <tds-form-field class="my-2">
+        <input tdsInput autocomplete="off" formControlName="name" class="appearance-none w-full" type="text" />
+      </tds-form-field>
+
+      <!-- Branch -->
+      <tds-label>Branch</tds-label>
+      <tds-form-field class="my-2">
+        <input tdsInput autocomplete="off" formControlName="branch" class="appearance-none w-full" type="text" />
+      </tds-form-field>
+
+      <!-- Doctor -->
+      <tds-label>Doctor</tds-label>
+      <tds-form-field class="my-2">
+        <tds-select valueField="id" textField="name" placeholder='---' [data]="doctorOptions" formControlName="doctor">
+        </tds-select>
+      </tds-form-field>
+
+      <!-- Date & Time -->
+      <tds-label>Choose date & time</tds-label>
+      <tds-form-field class="my-2">
+        <tds-date-picker showTime [disabledDate]="disabledDate" formControlName="appointmentDate"></tds-date-picker>
+      </tds-form-field>
+
+      <!-- Status -->
+      <tds-label>Status</tds-label>
+      <tds-form-field class="my-2">
+        <tds-select placeholder='---' [data]="statusOptions" formControlName="status">
+        </tds-select>
+      </tds-form-field>
+    </div>
+    <div class="pl-4 w-[50%]">
+      <tds-label>Lựa chọn dịch vụ</tds-label>
+      <tds-form-field class="pt-2">
+        <tds-select valueField="serviceID" formControlName="service" textField="serviceName" placeholder='select item' disabledField="isActive"
+           [allowClear]="true" [data]="dataSvc.serviceDTO" mode="multiple">
+        </tds-select>
+        <tds-error>Validation message text</tds-error>
+      </tds-form-field>
+    </div>
+  </div>
+
+</form>
+
+<ng-container *tdsModalFooter>
+  <div class="p-4">
+    <button tds-button (click)="submitUpdateServiceAppointment()" form="idform" color="custom"
+      class="w-full bg-green-primary-2 px-4 py-2 text-white rounded hover:bg-green-1 transition-colors duration-300">
+      Submit
+    </button>
+  </div>
+</ng-container>
