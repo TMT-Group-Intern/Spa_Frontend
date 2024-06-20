@@ -66,9 +66,9 @@ export class AuthService {
     return this.http.delete(this.baseUrl + 'Customers/'+ id);
   }
 
-  // Show list of Appointment
-  appointmentList(): Observable<any[]> {
-    return this.http.get<any>(this.baseUrl + 'Appointment');
+  // Show list of Appointment through Branch ID
+  appointmentList(id: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Appointment?idBrand=' + id);
   }
 
   // Create a new Appointment

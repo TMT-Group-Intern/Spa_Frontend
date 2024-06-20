@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
 
   // Display Appointment List
   initAppointmentList() {
-    this.sharedService.appointmentList().subscribe((data:any) => {
+    this.sharedService.appointmentList(1).subscribe((data:any) => {
       this.appointmentList = data;
     });
   }
