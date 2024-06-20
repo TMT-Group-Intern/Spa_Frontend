@@ -6,7 +6,7 @@
     <div class="flex">
       <input tdsInput autocomplete="off" placeholder="0123456789" class="appearance-none w-full" formControlName="phone"
         type="tel" />
-      <button tds-button-icon color="white" class="border-none" (click)="searchCustomer()">
+      <button *ngIf="!isHide" tds-button-icon color="white" class="border-none" (click)="searchCustomer()">
         <i class="tdsi-search-fill"></i>
       </button>
     </div>
@@ -42,7 +42,7 @@
   <!-- Doctor -->
   <tds-label>Doctor</tds-label>
   <tds-form-field class="my-2">
-    <tds-select valueField="id" textField="name" placeholder='---' [data]="contactOptions" formControlName="doctor">
+    <tds-select valueField="id" textField="name" placeholder='---' [data]="doctorOptions" formControlName="doctor">
     </tds-select>
   </tds-form-field>
 
@@ -53,6 +53,13 @@
     <tds-error>
       <span>Your <strong>date & time</strong> cannot be empty!</span>
     </tds-error>
+  </tds-form-field>
+
+  <!-- Status -->
+  <tds-label>Status</tds-label>
+  <tds-form-field class="my-2">
+    <tds-select placeholder='---' [data]="statusOptions" formControlName="status">
+    </tds-select>
   </tds-form-field>
 
 </form>
