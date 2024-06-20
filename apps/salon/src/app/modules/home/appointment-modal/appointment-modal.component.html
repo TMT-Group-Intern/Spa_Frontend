@@ -55,6 +55,13 @@
     </tds-error>
   </tds-form-field>
 
+  <!-- Status -->
+  <tds-label>Status</tds-label>
+  <tds-form-field class="my-2">
+    <tds-select placeholder='---' [data]="statusOptions" formControlName="status">
+    </tds-select>
+  </tds-form-field>
+
 </form>
 
 <ng-container *tdsModalFooter>

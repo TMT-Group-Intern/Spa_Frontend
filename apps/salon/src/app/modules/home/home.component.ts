@@ -4,13 +4,11 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { AuthService } from '../../shared.service';
 import { TDSCardModule } from 'tds-ui/card';
 import { TDSHeaderModule } from 'tds-ui/header';
-// npm install moment --f
-import * as  moment from 'moment';
+import * as moment from 'moment';
 import { TDSTagModule } from 'tds-ui/tag';
 import { TDSModalService } from 'tds-ui/modal';
 import { AppointmentModalComponent } from './appointment-modal/appointment-modal.component';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
-import { TDSDatePickerModule } from 'tds-ui/date-picker';
 
 @Component({
   selector: 'frontend-home',
@@ -22,7 +20,6 @@ import { TDSDatePickerModule } from 'tds-ui/date-picker';
     TDSHeaderModule,
     TDSTagModule,
     TDSToolTipModule,
-    TDSDatePickerModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],

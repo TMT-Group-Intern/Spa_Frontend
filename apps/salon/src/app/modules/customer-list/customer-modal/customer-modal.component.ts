@@ -53,6 +53,12 @@ export class CustomerModalComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.id);
 
+    if (this.phoneNum) {
+      this.form.patchValue({
+        phone: this.phoneNum
+      })
+    }
+
     if (this.id) {
       this.auth.getCustomer(this.id).subscribe((data: any) => {
         this.form.patchValue(data.customerDTO);
