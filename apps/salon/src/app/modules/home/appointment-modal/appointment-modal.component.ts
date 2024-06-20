@@ -46,9 +46,11 @@ export class AppointmentModalComponent implements OnInit {
     { id: 13, name: 'Elvis Presley' },
   ]
 
+  @Input() id?: number;
+  @Input() phoneNum?: any;
+
   private readonly tModalSvc = inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
-  @Input() id?: number;
   createAppointmentForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
