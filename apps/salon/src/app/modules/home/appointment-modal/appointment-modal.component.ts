@@ -15,8 +15,8 @@ import { TDSSelectModule } from 'tds-ui/select';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { startOfToday, isBefore } from 'date-fns';
 import { TDSTimePickerModule } from 'tds-ui/time-picker';
-// npm install moment --f
-import * as moment from 'moment';
+import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'frontend-appointment-modal',
@@ -119,19 +119,17 @@ export class AppointmentModalComponent implements OnInit {
   submit() {
 
     if (this.form.invalid) return;
-
+    const {doctor, appointmentDate, ...req} =this.form.value
     // Add employee to the array
-    this.empID.push(this.form.value.doctor)
+    this.empID.push(doctor)
     this.form.patchValue({
       employeeID: this.empID
     });
 
     const val = {
-      // customerID: this.form.value.customerID,
-      // employeeID: this.form.value.employeeID,
-      // appointmentDate: moment(this.form.value.appointmentDate).format("YYYY-MM-DDTHH:mm:ss"),
-      // status: this.form.value.status,
-      ...this.form.value
+      doctor,
+      ...req,
+      appointmentDate: format(new Date(appointmentDate as string), DATE_CONFIG.DATE_BASE)
     };
     console.log(val)
 
