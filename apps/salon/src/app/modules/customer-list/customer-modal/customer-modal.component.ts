@@ -54,7 +54,6 @@ export class CustomerModalComponent implements OnInit {
 
     if (this.id) {
       this.auth.getCustomer(this.id).subscribe((data: any) => {
-        console.log(data);
         this.form.patchValue(data.customerDTO);
       });
     }
