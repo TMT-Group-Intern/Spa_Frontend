@@ -4,7 +4,7 @@
     <input tdsInput autocomplete="off" placeholder="Christine" formControlName="firstName"
       class="appearance-none w-full" type="text" />
     <tds-error>
-      <span *ngIf="form.controls['firstName'].hasError('required')">Your <strong>first name</strong> cannot be empty!</span>
+      <span>Your <strong>first name</strong> cannot be empty!</span>
     </tds-error>
   </tds-form-field>
 
@@ -13,7 +13,7 @@
     <input tdsInput autocomplete="off" placeholder="Nguyen" formControlName="lastName" class="appearance-none w-full"
       type="text" />
     <tds-error>
-      <span *ngIf="form.controls['lastName'].hasError('required')">Your <strong>last name</strong> cannot be empty!</span>
+      <span>Your <strong>last name</strong> cannot be empty!</span>
     </tds-error>
   </tds-form-field>
 
@@ -22,7 +22,7 @@
     <input tdsInput autocomplete="off" placeholder="abc@example.com" formControlName="email" type="email"
       class="appearance-none w-full" />
     <tds-error>
-      <span *ngIf="form.controls['email'].hasError('email')">Your <strong>email</strong> is not in the correct
+      <span>Your <strong>email</strong> is not in the correct
         format!</span>
     </tds-error>
   </tds-form-field>
@@ -41,7 +41,7 @@
   <tds-form-field class="w-full my-2">
     <tds-date-picker formControlName="dateOfBirth"></tds-date-picker>
     <tds-error>
-      <span *ngIf="form.controls['dateOfBirth'].hasError('required')">Your <strong>date of birth</strong> cannot be empty!</span>
+      <span>Your <strong>date of birth</strong> cannot be empty!</span>
     </tds-error>
   </tds-form-field>
 
@@ -56,8 +56,7 @@
 
 <ng-container *tdsModalFooter>
   <div class="p-4">
-    <button tds-button form="idform" (click)="submit()"
-      class="w-full bg-green-primary-2 px-4 py-2 text-white rounded hover:bg-green-1 transition-colors duration-300">
+    <button tds-button form="idform" (click)="submit()" color="success" class="w-full rounded">
       Submit
     </button>
   </div>

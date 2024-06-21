@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { names } from 'tds-ui/tinycolor';
 @Injectable({
   providedIn: 'root'
 })
@@ -24,12 +23,12 @@ export class AuthService {
 
   //Create a new service
   createService(val:any){
-    return this.http.post(this.baseUrl + 'Services',val);
+    return this.http.post(this.baseUrl + 'Services', val);
   }
 
   //Edit a service
   editService(id: number,val:any){
-    return this.http.put(this.baseUrl + 'Services/'+ id,val);
+    return this.http.put(this.baseUrl + 'Services/'+ id, val);
   }
 
   //Delete a service
@@ -47,6 +46,11 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'Customers/' + id);
   }
 
+  // Search Customer
+  searchCustomer(val: any): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Customers/search?searchTerm=' + val);
+  }
+
   // Create a new Customer
   CreateNewCustomer(val:any) {
     return this.http.post(this.baseUrl + 'Customers', val);
@@ -57,10 +61,29 @@ export class AuthService {
     return this.http.put(this.baseUrl + 'Customers/' + id, val);
   }
 
-  //
   //Delete a customer
   deleteCustomer(id:any){
     return this.http.delete(this.baseUrl + 'Customers/'+ id);
+  }
+
+  // Show list of Appointment through Branch ID
+  appointmentList(id: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Appointment?idBrand=' + id);
+  }
+
+  // Create a new Appointment
+  createAppointment(val:any) {
+    return this.http.post(this.baseUrl + 'Appointment', val);
+  }
+
+  // Update Appointment
+  UpdateAppointment(id: number, val:any) {
+    return this.http.put(this.baseUrl + 'Appointment/' + id, val);
+  }
+
+  // Get Appointment by ID
+  getAppointment(id: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Appointment/' + id);
   }
 
   signUp(id:string,name:string,email:string,password:string,re_password:string){

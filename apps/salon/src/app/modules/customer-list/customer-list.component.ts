@@ -9,6 +9,7 @@ import { CustomerModalComponent } from './customer-modal/customer-modal.componen
 import { concatMap, filter, tap } from 'rxjs';
 import { TDSTimelineModule } from 'tds-ui/timeline';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
+import { TDSButtonModule } from 'tds-ui/button';
 
 
 @Component({
@@ -21,7 +22,8 @@ import { TDSToolTipModule } from 'tds-ui/tooltip';
     TDSColumnSettingsModule,
     CustomerModalComponent,
     TDSTimelineModule,
-    TDSToolTipModule
+    TDSToolTipModule,
+    TDSButtonModule,
   ],
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],
@@ -36,8 +38,8 @@ export class CustomerListComponent implements OnInit {
 
   // Display Customer List
   private initCustomerList() {
-    this.auth.CustomerList().subscribe(data => {
-      this.CustomerList = data;
+    this.auth.CustomerList().subscribe((data:any) => {
+      this.CustomerList = data.item;
     });
   }
 

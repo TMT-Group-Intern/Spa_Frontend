@@ -8,6 +8,8 @@ import { TDSDatePickerModule } from 'tds-ui/date-picker';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { CustomerListComponent } from '../../customer-list/customer-list.component';
 import { AuthService } from '../../../shared.service';
+import { TDSNotificationService } from 'tds-ui/notification';
+import { TDSButtonModule } from 'tds-ui/button';
 
 @Component({
   selector: 'frontend-employee-modal',
@@ -21,6 +23,7 @@ import { AuthService } from '../../../shared.service';
     TDSInputModule,
     TDSDatePickerModule,
     CustomerListComponent,
+    TDSButtonModule,
   ],
   templateUrl: './employee-modal.component.html',
   styleUrls: ['./employee-modal.component.scss'],
@@ -28,8 +31,8 @@ import { AuthService } from '../../../shared.service';
 export class EmployeeModalComponent implements OnInit {
 
   private readonly modalRef = inject(TDSModalRef);
-  private readonly modalService = inject(TDSModalService);
   @Input() id?: number;
+  @Input() phoneNum?: string;
   createCustomerForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
     firstName: ['', Validators.required],
@@ -40,10 +43,19 @@ export class EmployeeModalComponent implements OnInit {
     gender: ['Male'],
   });
 
-  constructor(private auth: AuthService) { }
+  constructor(
+    private auth: AuthService,
+    private notification: TDSNotificationService
+  ) { }
 
   ngOnInit(): void {
     console.log(this.id);
+
+    if (this.phoneNum) {
+      this.form.patchValue({
+        phone: this.phoneNum
+      })
+    }
 
     if (this.id) {
       this.auth.getCustomer(this.id).subscribe((data: any) => {
@@ -76,42 +88,42 @@ export class EmployeeModalComponent implements OnInit {
   // Create Customer
   createCustomer(val: any) {
     this.auth.CreateNewCustomer(val).subscribe(
-        {
-          next: (v) => {
-            this.modalService.success({
-              title: 'Successfully!',
-              okText: 'OK',
-            });
-            this.modalRef.destroy(val);
-          },
-          error: (res) => {
-            this.modalService.error({
-              title: 'Fail!',
-              content: res.error.message,
-              okText: 'OK'
-            });
-          },
-        }
-      );
+      {
+        next: () => {
+          this.createNotificationSuccess('');
+          this.modalRef.destroy(val);
+        },
+        error: (res) => {
+          this.createNotificationError(res.error.message);
+        },
+      }
+    );
   }
 
   // Update Customer
   updateCustomer(id: number, val: any) {
     this.auth.UpdateCustomer(id, val).subscribe(
-      (res) => {
-        this.modalService.success({
-          title: 'Successfully!',
-          okText: 'OK',
-        });
+      () => {
+        this.createNotificationSuccess('');
         this.modalRef.destroy(val);
       },
       (res) => {
-        this.modalService.error({
-          title: 'Fail!',
-          content: res.error.message,
-          okText: 'OK',
-        });
+        this.createNotificationError(res.error.message);
       }
+    );
+  }
+
+  // Success Notification
+  createNotificationSuccess(content: any): void {
+    this.notification.success(
+      'Succesfully', content
+    );
+  }
+
+  // Error Notification
+  createNotificationError(content: any): void {
+    this.notification.error(
+      'Error', content
     );
   }
 

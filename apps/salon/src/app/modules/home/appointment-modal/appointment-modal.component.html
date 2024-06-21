@@ -1,0 +1,73 @@
+<form class="py-2" id="idform" [formGroup]="form" autocomplete="off">
+
+  <!-- Phone -->
+  <tds-label [tdsRequired]="true">Phone Number</tds-label>
+  <tds-form-field class="my-2">
+    <div class="flex">
+      <input tdsInput autocomplete="off" placeholder="0123456789" class="appearance-none w-full" formControlName="phone"
+        type="tel" />
+      <button *ngIf="!isHide" tds-button-icon color="white" class="border-none" (click)="searchCustomer()">
+        <i class="tdsi-search-fill"></i>
+      </button>
+    </div>
+
+    <!-- Display notification if customer does not exist -->
+    <tds-warning *ngIf="isExist">
+      <span class="text-sm">No customer found! <a class="text-green-primary-1"
+          (click)="createCustomer(form.value.phone)">Create now</a>.</span>
+    </tds-warning>
+
+    <!-- Display error -->
+    <tds-error>
+      <span *ngIf="form.controls['phone'].hasError('required')">Your <strong>phone number</strong> cannot be
+        empty!</span>
+      <span *ngIf="form.controls['phone'].hasError('pattern')">Your <strong>phone number</strong> must start with 0 and
+        have 10
+        digits!</span>
+    </tds-error>
+  </tds-form-field>
+
+  <!-- Full name -->
+  <tds-label>Full Name</tds-label>
+  <tds-form-field class="my-2">
+    <input tdsInput autocomplete="off" formControlName="name" class="appearance-none w-full" type="text" />
+  </tds-form-field>
+
+  <!-- Branch -->
+  <tds-label>Branch</tds-label>
+  <tds-form-field class="my-2">
+    <input tdsInput autocomplete="off" formControlName="branch" class="appearance-none w-full" type="text" />
+  </tds-form-field>
+
+  <!-- Doctor -->
+  <tds-label>Doctor</tds-label>
+  <tds-form-field class="my-2">
+    <tds-select valueField="id" textField="name" placeholder='---' [data]="doctorOptions" formControlName="doctor">
+    </tds-select>
+  </tds-form-field>
+
+  <!-- Date & Time -->
+  <tds-label [tdsRequired]="true">Choose date & time</tds-label>
+  <tds-form-field class="my-2">
+    <tds-date-picker showTime [disabledDate]="disabledDate" formControlName="appointmentDate"></tds-date-picker>
+    <tds-error>
+      <span>Your <strong>date & time</strong> cannot be empty!</span>
+    </tds-error>
+  </tds-form-field>
+
+  <!-- Status -->
+  <tds-label>Status</tds-label>
+  <tds-form-field class="my-2">
+    <tds-select placeholder='---' [data]="statusOptions" formControlName="status">
+    </tds-select>
+  </tds-form-field>
+
+</form>
+
+<ng-container *tdsModalFooter>
+  <div class="p-4">
+    <button tds-button form="idform" (click)="submit()" color="success" class="w-full rounded">
+      Submit
+    </button>
+  </div>
+</ng-container>
