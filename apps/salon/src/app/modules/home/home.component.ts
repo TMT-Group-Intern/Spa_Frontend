@@ -5,8 +5,7 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { AuthService } from '../../shared.service';
 import { TDSCardModule } from 'tds-ui/card';
 import { TDSHeaderModule } from 'tds-ui/header';
-// npm install moment --f
-import * as moment from 'moment';
+import * as moment from 'moment'; // npm install moment --f
 import { TDSTagModule } from 'tds-ui/tag';
 import { TDSModalService } from 'tds-ui/modal';
 import { AppointmentModalComponent } from './appointment-modal/appointment-modal.component';
@@ -34,15 +33,37 @@ export class HomeComponent implements OnInit {
   private readonly tModalSvc =inject(TDSModalService)
   appointmentList: any[] = [];
   time: any;
+  todayBooking: any[] = [];
+  reception: any[] = [];
+  inSession: any[] = [];
 
   constructor(
     private sharedService : AuthService,
   ) {}
 
+  ngOnInit(): void {
+    this.initAppointmentList();
+  }
+
   // Display Appointment List
   initAppointmentList() {
     this.sharedService.appointmentList(1).subscribe((data:any) => {
       this.appointmentList = data;
+      this.todayBooking = this.appointmentList.filter((appointment: any) =>
+        appointment.Status === "Scheduled" ||
+        appointment.Status === "Confirmed" ||
+        appointment.Status === "Cancelled"
+      );
+
+      this.reception = this.appointmentList.filter((appointment: any) =>
+        appointment.Status === "Waiting" ||
+        appointment.Status === "Examining"
+      );
+
+      this.inSession = this.appointmentList.filter((appointment: any) =>
+        appointment.Status === "Preparation" ||
+        appointment.Status === "Treatment in Progress"
+      );
     });
   }
 
@@ -51,10 +72,7 @@ export class HomeComponent implements OnInit {
     return moment(date).format(format);
   }
 
-  ngOnInit(): void {
-    this.initAppointmentList();
-  }
-
+  // Open Create Appointment Modal
   createAppointment(){
     const modal = this.tModalSvc.create({
       title:'Create Appointment',
@@ -69,6 +87,7 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  //
   callmodalServiceAppointment(id:number){
     const modal = this.tModalSvc.create({
       title:'Create service appointment',
@@ -85,7 +104,8 @@ export class HomeComponent implements OnInit {
       }
     })
   }
-
+  
+  // Open Edit Appointment Modal
   onEditAppointment(id:number){
     const modal = this.tModalSvc.create({
       title:'Edit Appointment',
