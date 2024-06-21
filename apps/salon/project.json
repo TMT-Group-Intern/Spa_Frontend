@@ -57,7 +57,7 @@
         }
       },
       "options": {
-        "BASE_URI":"https://localhost:7192/api/"
+        
       },
       "defaultConfiguration": "development"
     },
