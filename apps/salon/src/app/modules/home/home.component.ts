@@ -30,6 +30,7 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
 
 export class HomeComponent implements OnInit {
 
+
   private readonly tModalSvc =inject(TDSModalService)
   appointmentList: any[] = [];
   time: any;
@@ -43,8 +44,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.initAppointmentList();
+    // console.log(this.statusOptions)
   }
-
   // Display Appointment List
   initAppointmentList() {
     this.sharedService.appointmentList(1).subscribe((data:any) => {
@@ -104,7 +105,7 @@ export class HomeComponent implements OnInit {
       }
     })
   }
-  
+
   // Open Edit Appointment Modal
   onEditAppointment(id:number){
     const modal = this.tModalSvc.create({

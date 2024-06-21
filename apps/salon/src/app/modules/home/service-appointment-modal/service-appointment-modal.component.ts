@@ -12,6 +12,8 @@ import { TDSTimePickerModule } from 'tds-ui/time-picker';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { startOfToday, isBefore } from 'date-fns';
 import { AuthService } from '../../../shared.service';
+import { AppointmentModalComponent } from '../appointment-modal/appointment-modal.component';
+import { HomeComponent } from '../home.component';
 
 @Component({
   selector: 'frontend-service-appointment-modal',
@@ -42,9 +44,13 @@ export class ServiceAppointmentModalComponent implements OnInit {
   ]
 
   public statusOptions = [
-    'Comming',
-    'Comming2',
-    'Complete'
+    'Scheduled',
+    'Confirmed',
+    'Cancelled',
+    'Waiting',
+    'Examining',
+    'Preparation',
+    'Treatment in Progress',
   ]
 
   private readonly modalRef = inject(TDSModalRef);
@@ -60,12 +66,13 @@ export class ServiceAppointmentModalComponent implements OnInit {
     doctor: [0],
     appointmentDate: ['', Validators.required],
     status: [''],
-    service:[]
+    service:['',Validators.required]
   });
   today = startOfToday();
   empID: any[] = []
   dataSvc: any = []
   valSvc:any
+
 
   constructor(
     private shared: AuthService,
@@ -90,12 +97,10 @@ export class ServiceAppointmentModalComponent implements OnInit {
           status: data.Status,
         });
       });
-
     }
     // call function initService
     this.initService();
   }
-
   initService(): void {
     //Display Service List
     this.shared.renderListService().subscribe((data:any) =>
