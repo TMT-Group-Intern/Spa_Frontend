@@ -5,14 +5,13 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { TDSCalendarModule } from 'tds-ui/calendar';
 import { TDSDatePickerModule } from 'tds-ui/date-picker';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
-import { TDSModalModule, TDSModalRef, TDSModalService } from 'tds-ui/modal';
+import { TDSModalModule, TDSModalRef} from 'tds-ui/modal';
 import { TDSSelectModule } from 'tds-ui/select';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSTimePickerModule } from 'tds-ui/time-picker';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { startOfToday, isBefore } from 'date-fns';
 import { AuthService } from '../../../shared.service';
-import { number } from 'echarts';
 
 @Component({
   selector: 'frontend-service-appointment-modal',
@@ -47,7 +46,6 @@ export class ServiceAppointmentModalComponent implements OnInit {
     'Comming2',
   ]
 
-  private readonly tModalSvc = inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
   @Input() id?: number;
   createAppointmentForm!: FormGroup;
@@ -61,14 +59,12 @@ export class ServiceAppointmentModalComponent implements OnInit {
     doctor: [0],
     appointmentDate: ['', Validators.required],
     status: [''],
-    service:['']
+    service:[]
   });
-  isExist = false;
-  isHide = false;
   today = startOfToday();
   empID: any[] = []
   dataSvc: any = []
-  valSvc:any[number] = [number]
+  valSvc:any
 
   constructor(
     private shared: AuthService,
@@ -93,18 +89,19 @@ export class ServiceAppointmentModalComponent implements OnInit {
           status: data.Status,
         });
       });
-      //Display Service List
-        this.shared.renderListService().subscribe((data:any) =>
-        {
-          this.shared = data.serviceDTO;
-          this.dataSvc = data
-        }
-      )
-    console.log(this.dataSvc)
+
     }
+    // call function initService
+    this.initService();
+  }
 
-
-
+  initService(): void {
+    //Display Service List
+    this.shared.renderListService().subscribe((data:any) =>
+      {
+        this.dataSvc = data.serviceDTO;
+      }
+    )
   }
 
 
@@ -115,10 +112,6 @@ export class ServiceAppointmentModalComponent implements OnInit {
     return isBefore(d, this.today);
   };
 
-  // Cancel button
-  handleCancel(): void {
-    this.modalRef.destroy(null);
-  }
 
   // Submit button
   submitUpdateServiceAppointment() {
@@ -128,33 +121,25 @@ export class ServiceAppointmentModalComponent implements OnInit {
     const val = {
       ...this.form.value
     };
-    this.valSvc = [ val.service
-    ];
-    console.log(val.service)
-    // Add employee to the array
-    this.empID.push(this.form.value.doctor)
-    this.form.patchValue({
-      employeeID: this.empID
-    });
 
     if (this.id) {
-      this.updateServiceAppointment(this.id, this.valSvc);
-    }
+    this.updateServiceAppointment(this.id, val.service);
   }
-
+  }
 
   // Update service Appointment
   updateServiceAppointment(id: number, val: any) {
     console.log(id,",",val)
-    this.shared.UpdateAppointmentWithService(id, val).subscribe(
-      (data) => {
+    this.shared.updateAppointmentWithService(id, val).subscribe({
+      next:(data) => {
         console.log(data)
         this.createNotificationSuccess('');
         this.modalRef.destroy(val);
       },
-      (res) => {
+      error:(res) => {
         this.createNotificationError(res.error.message);
       }
+    }
     );
   }
 

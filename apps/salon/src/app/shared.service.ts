@@ -85,7 +85,7 @@ export class AuthService {
     return this.http.put(this.baseUrl + 'Appointment/' + id, val);
   }
 
-  UpdateAppointmentWithService(id: number, val:any) {
+  updateAppointmentWithService(id: number, val:any) {
     return this.http.put(this.baseUrl + 'Appointment/api/UpdateAppointmentWithService/' + id, val);
   }
 

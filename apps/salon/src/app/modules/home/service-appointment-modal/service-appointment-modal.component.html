@@ -47,7 +47,7 @@
       <tds-label>Lựa chọn dịch vụ</tds-label>
       <tds-form-field class="pt-2">
         <tds-select valueField="serviceID" formControlName="service" textField="serviceName" placeholder='select item' disabledField="isActive"
-           [allowClear]="true" [data]="dataSvc.serviceDTO" mode="multiple">
+           [allowClear]="true" [data]="dataSvc" mode="multiple">
         </tds-select>
         <tds-error>Validation message text</tds-error>
       </tds-form-field>
