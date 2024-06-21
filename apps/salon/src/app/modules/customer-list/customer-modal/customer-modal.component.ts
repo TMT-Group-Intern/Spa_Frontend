@@ -15,6 +15,8 @@ import { CustomerListComponent } from '../customer-list.component';
 import { AuthService } from '../../../shared.service';
 import { catchError, of } from 'rxjs';
 import { error } from 'console';
+import { TDSNotificationService } from 'tds-ui/notification';
+import { TDSButtonModule } from 'tds-ui/button';
 
 @Component({
   selector: 'frontend-customer-modal',
@@ -28,6 +30,7 @@ import { error } from 'console';
     TDSInputModule,
     TDSDatePickerModule,
     CustomerListComponent,
+    TDSButtonModule,
   ],
   templateUrl: './customer-modal.component.html',
   styleUrls: ['./customer-modal.component.scss'],
