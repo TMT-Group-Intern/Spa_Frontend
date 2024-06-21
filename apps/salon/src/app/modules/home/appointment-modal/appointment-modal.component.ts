@@ -49,9 +49,13 @@ export class AppointmentModalComponent implements OnInit {
   ]
 
   public statusOptions = [
-    'Comming',
-    'Comming2',
-    'Complete'
+    'Scheduled',
+    'Confirmed',
+    'Cancelled',
+    'Waiting',
+    'Examining',
+    'Preparation',
+    'Treatment in Progress',
   ]
 
   private readonly tModalSvc = inject(TDSModalService)
@@ -67,7 +71,7 @@ export class AppointmentModalComponent implements OnInit {
     assignments: [[]],
     doctor: [0],
     appointmentDate: ['', Validators.required],
-    status: [''],
+    status: ['Scheduled'],
   });
   isExist = false;
   isHide = false;
