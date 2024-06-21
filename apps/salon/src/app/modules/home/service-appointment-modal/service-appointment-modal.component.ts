@@ -44,6 +44,7 @@ export class ServiceAppointmentModalComponent implements OnInit {
   public statusOptions = [
     'Comming',
     'Comming2',
+    'Complete'
   ]
 
   private readonly modalRef = inject(TDSModalRef);

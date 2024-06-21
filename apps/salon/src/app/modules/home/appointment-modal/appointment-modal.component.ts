@@ -51,6 +51,7 @@ export class AppointmentModalComponent implements OnInit {
   public statusOptions = [
     'Comming',
     'Comming2',
+    'Complete'
   ]
 
   private readonly tModalSvc = inject(TDSModalService)
