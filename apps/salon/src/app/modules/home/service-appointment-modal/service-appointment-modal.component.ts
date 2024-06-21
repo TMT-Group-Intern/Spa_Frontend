@@ -124,14 +124,14 @@ export class ServiceAppointmentModalComponent implements OnInit {
     };
 
     if (this.id) {
-    this.updateServiceAppointment(this.id, val.service);
+    this.updateServiceAppointment(this.id, val.service, val.status);
   }
   }
 
   // Update service Appointment
-  updateServiceAppointment(id: number, val: any) {
+  updateServiceAppointment(id: number, val: any, status: any) {
     console.log(id,",",val)
-    this.shared.updateAppointmentWithService(id, val).subscribe({
+    this.shared.updateAppointmentWithService(id, val, status).subscribe({
       next:(data) => {
         console.log(data)
         this.createNotificationSuccess('');
