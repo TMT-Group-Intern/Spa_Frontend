@@ -50,12 +50,11 @@ export class LoginComponent implements OnInit {
   onLogin(){
     const email=this.loginForm.value.taiKhoan;
     const password = this.loginForm.value.matKhau;
-    this.auth.login(email,password).subscribe((result) => {
-      console.log(result);
-      if(result.token != null)
+    this.auth.login(email,password).subscribe((result:any) => {
+      console.log(result.token, result.user);
+      if(result.token!= null && result.user!=null)
         {
-          //alert(result.token)
-          this.router.navigate(['products']);
+          this.router.navigate(['home']);
         }
     });
   }
