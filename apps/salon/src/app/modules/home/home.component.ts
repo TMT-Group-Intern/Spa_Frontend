@@ -9,6 +9,7 @@ import { TDSTagModule } from 'tds-ui/tag';
 import { TDSModalService } from 'tds-ui/modal';
 import { AppointmentModalComponent } from './appointment-modal/appointment-modal.component';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
+import { TDSTypographyModule } from 'tds-ui/typography';
 
 @Component({
   selector: 'frontend-home',
@@ -20,6 +21,7 @@ import { TDSToolTipModule } from 'tds-ui/tooltip';
     TDSHeaderModule,
     TDSTagModule,
     TDSToolTipModule,
+    TDSTypographyModule,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -33,6 +35,7 @@ export class HomeComponent implements OnInit {
   todayBooking: any[] = [];
   reception: any[] = [];
   inSession: any[] = [];
+  status: any
 
   constructor(
     private sharedService : AuthService,
@@ -59,7 +62,7 @@ export class HomeComponent implements OnInit {
 
       this.inSession = this.appointmentList.filter((appointment: any) =>
         appointment.Status === "Preparation" ||
-        appointment.Status === "Treatment in Progress"
+        appointment.Status === "Treating"
       );
     });
   }
@@ -102,4 +105,9 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  // Update Status
+  // updateStatus(id: number) {
+
+  //   this.sharedService.UpdateAppointment(id, val).subscribe();
+  // }
 }

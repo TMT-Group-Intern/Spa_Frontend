@@ -55,7 +55,7 @@ export class AppointmentModalComponent implements OnInit {
     'Waiting',
     'Examining',
     'Preparation',
-    'Treatment in Progress',
+    'Treating',
   ]
 
   private readonly tModalSvc = inject(TDSModalService)
@@ -107,8 +107,6 @@ export class AppointmentModalComponent implements OnInit {
 
   }
 
-
-
   // Disabled Date in the past
   disabledDate = (d: Date): boolean => {
     // Disable all days before today
@@ -132,11 +130,9 @@ export class AppointmentModalComponent implements OnInit {
     });
 
     const val = {
-      doctor,
       ...req,
       appointmentDate: format(new Date(appointmentDate as string), DATE_CONFIG.DATE_BASE)
     };
-    console.log(val)
 
     if (this.id) {
       this.updateAppointment(this.id, val);
