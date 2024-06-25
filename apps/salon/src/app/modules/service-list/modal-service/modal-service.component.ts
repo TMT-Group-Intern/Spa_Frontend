@@ -8,6 +8,7 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSInputNumberModule } from 'tds-ui/input-number';
 import { TDSNotificationService } from 'tds-ui/notification';
+import { error } from 'console';
 
 @Component({
   selector: 'frontend-modal-service',
@@ -42,7 +43,6 @@ export class ModalServiceComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log(this.id);
     if (this.id) {
       this.auth.getByIdService(this.id).subscribe((data: any) => {
         this.modalServiceForm.patchValue(data.serviceDTO);
@@ -71,27 +71,30 @@ export class ModalServiceComponent implements OnInit {
 
   // Tạo Service
   btnCreateService(val: any): void {
-    this.auth.createService(val).subscribe(
-      (data) => {
+    this.auth.createService(val).subscribe({
+      next:(data) => {
         this.createNotificationSuccess('');
         this.modalRef.destroy(data);
       },
-      (ex) => {
+      error:(ex) => {
         this.createNotificationError(ex.error.message);
       }
+    }
+
     );
   }
 
   // Sửa service
   btnEditService(id: number, val: any): void {
-    this.auth.editService(id, val).subscribe(
-      (data) => {
+    this.auth.editService(id, val).subscribe({
+      next: (data) => {
         this.createNotificationSuccess('');
         this.modalRef.destroy(data);
       },
-      (ex) => {
+      error:(ex) => {
         this.createNotificationError(ex.error.message);
       }
+    }
     );
   }
 

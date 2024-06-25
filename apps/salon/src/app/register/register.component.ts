@@ -105,7 +105,7 @@ export class RegisterComponent implements OnInit {
       }
 
       return null;
-    };
+    }
 
 
     onSignUp(){

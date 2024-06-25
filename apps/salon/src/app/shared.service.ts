@@ -1,13 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = "https://localhost:7192/api/"
+
+  private baseUrl: string| undefined;
+  // private baseUrl = "https://localhost:7192/api/";
 
   constructor(private http : HttpClient) {
+     this.baseUrl = environment.BASE_URI
 
   }
 
@@ -79,6 +83,10 @@ export class AuthService {
   // Update Appointment
   UpdateAppointment(id: number, val:any) {
     return this.http.put(this.baseUrl + 'Appointment/' + id, val);
+  }
+
+  updateAppointmentWithService(id: number, val:any) {
+    return this.http.put(this.baseUrl + 'Appointment/api/UpdateAppointmentWithService/' + id, val);
   }
 
   // Get Appointment by ID
