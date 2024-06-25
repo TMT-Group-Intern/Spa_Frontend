@@ -11,23 +11,18 @@ import { EmployeeListComponent } from './modules/employee-list/employee-list.com
 import { HomeComponent } from './modules/home/home.component';
 
 const routes: Routes = [
-  {path: 'login', component:LoginComponent},
+  {path: '', component:LoginComponent},
   {
     path: '', component: LayoutComponent,
     children:[
       {path: 'home', loadComponent: ()=> HomeComponent},
       {path: 'products', loadComponent: ()=> ProductsComponent},
-    ]
-   },
-   {
-    path: '', component: LayoutComponent,
-    children:[
       {path: 'service-list', loadComponent: ()=> ServiceListComponent},
       {path: 'customer-list', loadComponent: ()=> CustomerListComponent},
       {path: 'revenue-statistics', loadChildren: ()=> RevenueStaticsModule},
       {path: 'employee-list', loadComponent: ()=> EmployeeListComponent}
-    ],
-  },
+    ]
+   },
   {path: 'register', component:RegisterComponent},
 ]
 

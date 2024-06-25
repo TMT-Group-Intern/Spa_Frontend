@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
+import { HttpHeaders } from '@angular/common/http'; 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
   private baseUrl: string| undefined;
-  // private baseUrl = "https://localhost:7192/api/";
+   //private baseUrl = "https://localhost:5253/api/";
 
   constructor(private http : HttpClient) {
      this.baseUrl = environment.BASE_URI
@@ -108,11 +109,18 @@ export class AuthService {
       confirmPassword: re_password
     })
   }
-
+  
   login(email:string,password:string){
-    return this.http.post<{token:string}>(this.baseUrl+'login', {
+    return this.http.post<{user:object,token:object}>(this.baseUrl+'Authentication/login', {
       email: email,
       password: password
     })
   }
+  // login(email:string,password:string): Observable<any[]> {
+  //   return this.http.post<any>(this.baseUrl+'Authentication/login', {
+  //     email: email,
+  //     password: password
+  //   })
+  // }
+  
 }
