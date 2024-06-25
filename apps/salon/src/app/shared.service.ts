@@ -70,6 +70,11 @@ export class AuthService {
     return this.http.delete(this.baseUrl + 'Customers/'+ id);
   }
 
+  //get history of customers
+  getHistoryCustomer(id: number){
+    return this.http.get('https://localhost:7192/GetHistory?cutomerId='+ id);
+  }
+
   // Show list of Appointment through Branch ID
   appointmentList(id: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Appointment?idBrand=' + id);
@@ -85,8 +90,8 @@ export class AuthService {
     return this.http.put(this.baseUrl + 'Appointment/' + id, val);
   }
 
-  updateAppointmentWithService(id: number, val:any, status: any) {
-    return this.http.put(this.baseUrl + 'Appointment/api/UpdateAppointmentWithService/' + id, val, status);
+  updateAppointmentWithService(id: number, status: any, val:any) {
+    return this.http.put(this.baseUrl + 'Appointment/api/UpdateAppointmentWithService/' + id + '/' + status, val);
   }
 
   // Get Appointment by ID

@@ -5,7 +5,7 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { TDSCalendarModule } from 'tds-ui/calendar';
 import { TDSDatePickerModule } from 'tds-ui/date-picker';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
-import { TDSModalModule, TDSModalRef} from 'tds-ui/modal';
+import { TDSModalModule, TDSModalRef, TDSModalService} from 'tds-ui/modal';
 import { TDSSelectModule } from 'tds-ui/select';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSTimePickerModule } from 'tds-ui/time-picker';
@@ -14,6 +14,8 @@ import { startOfToday, isBefore } from 'date-fns';
 import { AuthService } from '../../../shared.service';
 import { AppointmentModalComponent } from '../appointment-modal/appointment-modal.component';
 import { HomeComponent } from '../home.component';
+import { TDSToolTipModule } from 'tds-ui/tooltip';
+import { UserProfileComponent } from '../../user-profile/user-profile.component';
 
 @Component({
   selector: 'frontend-service-appointment-modal',
@@ -30,7 +32,8 @@ import { HomeComponent } from '../home.component';
     TDSTimePickerModule,
     TDSCalendarModule,
     TDSFormFieldModule,
-    TDSSelectModule
+    TDSSelectModule,
+    TDSToolTipModule
   ]
 })
 export class ServiceAppointmentModalComponent implements OnInit {
@@ -54,6 +57,7 @@ export class ServiceAppointmentModalComponent implements OnInit {
   ]
 
   private readonly modalRef = inject(TDSModalRef);
+private readonly modalSvc = inject(TDSModalService);
   @Input() id?: number;
   createAppointmentForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
@@ -66,17 +70,18 @@ export class ServiceAppointmentModalComponent implements OnInit {
     doctor: [0],
     appointmentDate: ['', Validators.required],
     status: [''],
-    service:['',Validators.required]
+    service:[[],Validators.required]
   });
   today = startOfToday();
   empID: any[] = []
   dataSvc: any = []
   valSvc:any
-
+  CustomerID: number | undefined;
 
   constructor(
     private shared: AuthService,
     private notification: TDSNotificationService,
+
   ) { }
 
   ngOnInit(): void {
@@ -89,6 +94,7 @@ export class ServiceAppointmentModalComponent implements OnInit {
       this.form.get('phone')?.disable()
       this.shared.getAppointment(this.id).subscribe((data: any) => {
         console.log(data);
+        this.CustomerID = data.CustomerID
         this.form.patchValue({
           phone: data.Customer.Phone,
           name: data.Customer.FirstName + ' ' + data.Customer.LastName,
@@ -129,14 +135,14 @@ export class ServiceAppointmentModalComponent implements OnInit {
     };
 
     if (this.id) {
-    this.updateServiceAppointment(this.id, val.service, val.status);
+    this.updateServiceAppointment(this.id, val.status, val.service);
   }
   }
 
   // Update service Appointment
-  updateServiceAppointment(id: number, val: any, status: any) {
+  updateServiceAppointment(id: number, status: any, val: any) {
     console.log(id,",",val)
-    this.shared.updateAppointmentWithService(id, val, status).subscribe({
+    this.shared.updateAppointmentWithService(id, status, val).subscribe({
       next:(data) => {
         console.log(data)
         this.createNotificationSuccess('');
@@ -147,6 +153,19 @@ export class ServiceAppointmentModalComponent implements OnInit {
       }
     }
     );
+  }
+
+  // call modal user profile
+  callModalUserProfile(){
+    this.modalSvc.create({
+      title:"User profile",
+      content: UserProfileComponent,
+      footer:null,
+      size: "lg",
+      componentParams:{
+        customerId: this.CustomerID
+      }
+    })
   }
 
   // Success Notification
