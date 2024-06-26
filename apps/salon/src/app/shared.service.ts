@@ -90,7 +90,10 @@ export class AuthService {
   UpdateAppointment(id: number, val:any) {
     return this.http.put(this.baseUrl + 'Appointment/' + id, val);
   }
-
+  // Update Status
+  UpdateStatus(id: number, status: string) {
+    return this.http.put(this.baseUrl + 'Appointment/updatestatus/' + id + '?status=' + status, status);
+  }
   updateAppointmentWithService(id: number, status: any, val:any) {
     return this.http.put(this.baseUrl + 'Appointment/api/UpdateAppointmentWithService/' + id + '/' + status, val);
   }

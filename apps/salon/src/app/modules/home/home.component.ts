@@ -10,6 +10,7 @@ import { TDSTagModule } from 'tds-ui/tag';
 import { TDSModalService } from 'tds-ui/modal';
 import { AppointmentModalComponent } from './appointment-modal/appointment-modal.component';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
+import { TDSTypographyModule } from 'tds-ui/typography';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 
 @Component({
@@ -22,6 +23,7 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
     TDSHeaderModule,
     TDSTagModule,
     TDSToolTipModule,
+    TDSTypographyModule,
     TDSFormFieldModule
   ],
   templateUrl: './home.component.html',
@@ -37,6 +39,7 @@ export class HomeComponent implements OnInit {
   todayBooking: any[] = [];
   reception: any[] = [];
   inSession: any[] = [];
+  status: any
 
   constructor(
     private sharedService : AuthService,
@@ -63,7 +66,7 @@ export class HomeComponent implements OnInit {
 
       this.inSession = this.appointmentList.filter((appointment: any) =>
         appointment.Status === "Preparation" ||
-        appointment.Status === "Treatment in Progress"
+        appointment.Status === "Treating"
       );
     });
   }
@@ -83,12 +86,13 @@ export class HomeComponent implements OnInit {
     });
     modal.afterClose.asObservable().subscribe(res=>{
       if(res){
+        console.log(res)
         this.initAppointmentList()
       }
     })
   }
 
-  //
+  // Open Service Appointment Modal
   callmodalServiceAppointment(id:number){
     const modal = this.tModalSvc.create({
       title:'Create service appointment',
@@ -124,5 +128,18 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  // Update Status
+  updateStatus(id: number, status: string) {
+    this.sharedService.UpdateStatus(id, status).subscribe(
+      () => {
+        this.sharedService.getAppointment(id).subscribe(
+          (res: any) => {
+            console.log(res)
+          }
+        )
+        this.initAppointmentList()
+      }
+    );
+  }
 
 }
