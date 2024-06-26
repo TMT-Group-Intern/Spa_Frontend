@@ -10,6 +10,7 @@ import { concatMap, filter, tap } from 'rxjs';
 import { TDSTimelineModule } from 'tds-ui/timeline';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { TDSButtonModule } from 'tds-ui/button';
+import { TDSPaginationModule } from 'tds-ui/pagination';
 
 
 @Component({
@@ -24,13 +25,19 @@ import { TDSButtonModule } from 'tds-ui/button';
     TDSTimelineModule,
     TDSToolTipModule,
     TDSButtonModule,
+    TDSPaginationModule
   ],
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],
 })
 export class CustomerListComponent implements OnInit {
+
   private readonly tModalSvc =inject(TDSModalService)
   CustomerList:any[] = [];
+  customerOfPage: any
+  pageNumber: any = 1
+  pageSize: any = 10
+  totalItemsCustomers: any
 
   constructor(
     private auth : AuthService,
@@ -44,8 +51,30 @@ export class CustomerListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initCustomerList();
-    // console.log('API URL:', BASE_URI);
+    this.renderPageCustomers();
+  }
+  /* get the list of customers by pageNumber and pageSize */
+  renderPageCustomers(): void {
+    this.auth.pageCustomers(this.pageNumber, this.pageSize).subscribe((data:any) => {
+      this.customerOfPage = data.item;
+      this.totalItemsCustomers = data.totalItems;
+    })
+  }
+  /*get back pageNumber*/
+  changeNumberPage(event: number): void {
+    this.pageNumber = event;
+    this.renderPageCustomers();
+  }
+  // get back changeSizePage
+  changeSizePage(event: number): void {
+    this.pageSize = event;
+    this.renderPageCustomers();
+  }
+
+  onRefresh(event: MouseEvent): void {
+    console.log(event);
+    this.pageNumber = 1;
+    this.renderPageCustomers();
   }
 
   createCustomer(){
@@ -57,7 +86,7 @@ export class CustomerListComponent implements OnInit {
     });
     modal.afterClose.asObservable().subscribe(res=>{
       if(res){
-        this.initCustomerList()
+        this.renderPageCustomers();
       }
     })
   }
@@ -74,7 +103,7 @@ export class CustomerListComponent implements OnInit {
     });
     modal.afterClose.asObservable().subscribe(res=>{
       if(res){
-        this.initCustomerList()
+        this.renderPageCustomers();
       }
     })
   }
@@ -92,7 +121,7 @@ export class CustomerListComponent implements OnInit {
     modal.afterClose.asObservable().pipe(
       filter(condition => condition),
       concatMap(_=> this.auth.deleteCustomer(id)),
-      tap(()=>  this.initCustomerList())
+      tap(()=> { this.renderPageCustomers()})
     ).subscribe()
   }
 

@@ -41,7 +41,7 @@ export class ServiceAppointmentModalComponent implements OnInit {
   public doctorOptions = [
     { id: 11, name: 'Elton John' },
     { id: 12, name: 'Elvis Presley' },
-    { id: 9, name: 'Paul McCartney' },
+    { id: 5, name: 'Paul McCartney' },
     { id: 14, name: 'Elton John' },
     { id: 13, name: 'Elvis Presley' },
   ]
@@ -75,7 +75,6 @@ private readonly modalSvc = inject(TDSModalService);
   today = startOfToday();
   empID: any[] = []
   dataSvc: any = []
-  valSvc:any
   CustomerID: number | undefined;
 
   constructor(
