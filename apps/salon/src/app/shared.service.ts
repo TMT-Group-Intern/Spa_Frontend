@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
+import { HttpHeaders } from '@angular/common/http'; 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
   private baseUrl: string| undefined;
-  // private baseUrl = "https://localhost:7192/api/";
+   //private baseUrl = "https://localhost:5253/api/";
 
   constructor(private http : HttpClient) {
      this.baseUrl = environment.BASE_URI
@@ -70,6 +71,11 @@ export class AuthService {
     return this.http.delete(this.baseUrl + 'Customers/'+ id);
   }
 
+  //get history of customers
+  getHistoryCustomer(id: number){
+    return this.http.get('https://localhost:7192/GetHistory?cutomerId='+ id);
+  }
+
   // Show list of Appointment through Branch ID
   appointmentList(id: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Appointment?idBrand=' + id);
@@ -84,14 +90,12 @@ export class AuthService {
   UpdateAppointment(id: number, val:any) {
     return this.http.put(this.baseUrl + 'Appointment/' + id, val);
   }
-
   // Update Status
   UpdateStatus(id: number, status: string) {
     return this.http.put(this.baseUrl + 'Appointment/updatestatus/' + id + '?status=' + status, status);
   }
-
-  updateAppointmentWithService(id: number, val:any) {
-    return this.http.put(this.baseUrl + 'Appointment/api/UpdateAppointmentWithService/' + id, val);
+  updateAppointmentWithService(id: number, status: any, val:any) {
+    return this.http.put(this.baseUrl + 'Appointment/api/UpdateAppointmentWithService/' + id + '/' + status, val);
   }
 
   // Get Appointment by ID
@@ -108,11 +112,18 @@ export class AuthService {
       confirmPassword: re_password
     })
   }
-
+  
   login(email:string,password:string){
-    return this.http.post<{token:string}>(this.baseUrl+'login', {
+    return this.http.post<{user:object,token:object}>(this.baseUrl+'Authentication/login', {
       email: email,
       password: password
     })
   }
+  // login(email:string,password:string): Observable<any[]> {
+  //   return this.http.post<any>(this.baseUrl+'Authentication/login', {
+  //     email: email,
+  //     password: password
+  //   })
+  // }
+  
 }

@@ -1,4 +1,4 @@
-<div class="w-full gap-x-2 grid grid-cols-3 p-1 flex-wrap h-full bg-gray-200">
+<div class="w-full gap-x-2 grid grid-cols-3 flex-wrap h-full bg-gray-200">
   <div class="col-span-2 gap-y-2 grid grid-rows-2 flex-wrap">
 
     <!-- Reception -->
@@ -65,11 +65,11 @@
   </div>
 
   <!-- Appointment List -->
-  <div class="col-span-1 border p-4 rounded-10 bg-white">
+  <div class="col-span-1 border p-1 rounded-10 bg-white">
     <!-- Header -->
     <div class="flex justify-between">
       <span class="text-heading-4">Today Booking</span>
-      <button tds-button-icon color="success" class="rounded-full" (click)="createAppointment()" tds-tooltip
+      <button tds-button-icon color="success" class="rounded-full p-2" (click)="createAppointment()" tds-tooltip
         tooltipTitle="New Appointment">
         <span class="flex items-center">
           <i class="tdsi-plus-fill"></i>
@@ -115,18 +115,18 @@
       </tds-card>
     </div>
   </div>
-
 </div>
-<!-- UI của bác sĩ -->
-<div>
-  <tds-label>Tiếp nhận tư vấn</tds-label>
-  <div class="overflow-y-auto mt-3 " style="max-height: 330px;">
-    <tds-card *ngFor="let appoint of appointmentList" class="border rounded-10 m-4">
+
+<!-- display of doctor -->
+<div class="w-full h-full m-2 rounded-10 bg-white">
+  <span class="p-4 text-heading-2">Tiếp nhận tư vấn</span>
+  <div class="overflow-y-auto mt-3 flex flex-row flex-wrap justify-between">
+    <tds-card *ngFor="let appoint of reception" class="w-[310px] flex border rounded-10 m-4">
       <!-- Card Header -->
       <tds-card-header class="bg-green-300 text-white">
         <div class="flex justify-between">
           <p class="text-">{{appoint.Customer.FirstName}} {{appoint.Customer.LastName}}</p>
-          <tds-tag status='custom' class="!bg-green-secondary-1">Comming</tds-tag>
+          <tds-tag status='custom' class=" flex !bg-warning-400 p-1">{{appoint.Status}}</tds-tag>
         </div>
       </tds-card-header>
       <!-- Card content -->

@@ -1,0 +1,14 @@
+<ng-container>
+  <div id="id" *ngFor="let history of serviceHistory" class="border rounded-10 m-2 flex">
+    <div class="m-4 rounded-10">
+      <img tds-image width="200px" height="200px" [fallback]="fallback"
+        tdsSrc='https://localhost:7192/photos/{{history.photoCustomer}}' alt="" />
+    </div>
+    <div class="m-4">
+      <tds-label>Date:</tds-label>
+      <tds-success> {{ history.date | date:'medium' }}</tds-success>
+      <tds-label>Services Used:</tds-label>
+      <tds-label>{{ history.serviceUsed }}</tds-label>
+    </div>
+  </div>
+</ng-container>

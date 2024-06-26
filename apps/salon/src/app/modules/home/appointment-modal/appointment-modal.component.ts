@@ -17,6 +17,7 @@ import { startOfToday, isBefore } from 'date-fns';
 import { TDSTimePickerModule } from 'tds-ui/time-picker';
 import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
 import { format } from 'date-fns';
+import { HomeComponent } from '../home.component';
 
 @Component({
   selector: 'frontend-appointment-modal',
@@ -78,12 +79,16 @@ export class AppointmentModalComponent implements OnInit {
   today = startOfToday();
   empID: any[] = []
 
+
   constructor(
     private shared: AuthService,
     private notification: TDSNotificationService,
+
   ) { }
 
   ngOnInit(): void {
+
+    console.log(this.statusOptions);
 
     this.form.get('name')?.disable()
     this.form.get('branch')?.disable()
