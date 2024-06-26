@@ -106,7 +106,8 @@
               (click)="onEditAppointment(appoint.AppointmentID)">
               <i class="tdsi-edit-fill"></i>
             </button>
-            <button tds-button-icon color="secondary" tds-tooltip tooltipTitle="Switch To Reception" class="ml-3" >
+            <button tds-button-icon color="secondary" tds-tooltip tooltipTitle="Switch To Reception"
+              (click)="updateStatus(appoint.AppointmentID, 'Waiting')" class="ml-3">
               <i class="tdsi-receive-fill"></i>
             </button>
           </div>
@@ -140,7 +141,8 @@
       <!-- Card button -->
       <tds-card-actions>
         <div class="flex justify-end">
-          <button tds-button-icon color="secondary" tds-tooltip tooltipTitle="Edit Appointment" (click)="callmodalServiceAppointment(appoint.AppointmentID)">
+          <button tds-button-icon color="secondary" tds-tooltip tooltipTitle="Edit Appointment"
+            (click)="callmodalServiceAppointment(appoint.AppointmentID)">
             <i class="tdsi-edit-fill"></i>
           </button>
         </div>

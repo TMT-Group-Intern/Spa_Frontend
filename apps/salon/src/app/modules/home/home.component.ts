@@ -85,12 +85,13 @@ export class HomeComponent implements OnInit {
     });
     modal.afterClose.asObservable().subscribe(res=>{
       if(res){
+        console.log(res)
         this.initAppointmentList()
       }
     })
   }
 
-  //
+  // Open Service Appointment Modal
   callmodalServiceAppointment(id:number){
     const modal = this.tModalSvc.create({
       title:'Create service appointment',
@@ -127,9 +128,17 @@ export class HomeComponent implements OnInit {
   }
 
   // Update Status
-  // updateStatus(id: number) {
-
-  //   this.sharedService.UpdateAppointment(id, val).subscribe();
-  // }
+  updateStatus(id: number, status: string) {
+    this.sharedService.UpdateStatus(id, status).subscribe(
+      () => {
+        this.sharedService.getAppointment(id).subscribe(
+          (res: any) => {
+            console.log(res)
+          }
+        )
+        this.initAppointmentList()
+      }
+    );
+  }
 
 }
