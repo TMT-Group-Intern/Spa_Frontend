@@ -18,7 +18,7 @@
 
               <p tds-typography tdsEllipsis>{{appoint.Customer.FirstName}} {{appoint.Customer.LastName}}</p>
               <div>
-                <tds-tag *ngIf="appoint.Status === 'Waiting'" status='custom' class="bg-secondary-1">Waiting</tds-tag>
+                <tds-tag *ngIf="appoint.Status === 'Waiting'" status='custom' class="bg-info-400">Waiting</tds-tag>
                 <tds-tag *ngIf="appoint.Status === 'Examining'" status='custom'
                   class="bg-success-400">Examining</tds-tag>
               </div>
@@ -50,7 +50,7 @@
               <p tds-typography tdsEllipsis>{{appoint.Customer.FirstName}} {{appoint.Customer.LastName}}</p>
               <div>
                 <tds-tag *ngIf="appoint.Status === 'Preparation'" status='custom'
-                  class="bg-secondary-1">Preparation</tds-tag>
+                  class="bg-info-400">Preparation</tds-tag>
                 <tds-tag *ngIf="appoint.Status === 'Treating'" status='custom' class="bg-success-400">Treating</tds-tag>
               </div>
             </div>
@@ -66,12 +66,20 @@
             <tds-card-actions class="col-span-1">
               <div class="flex justify-end">
                 <button tds-button-icon color="secondary" tds-tooltip tooltipTitle="Edit Appointment"
-                  (click)="onEditAppointment(appoint.AppointmentID)">
+                  (click)="onEditInSession(appoint.AppointmentID)">
                   <i class="tdsi-edit-fill"></i>
                 </button>
               </div>
             </tds-card-actions>
           </div>
+          <hr>
+          <tds-card-actions class="col-span-1">
+            <div class="flex justify-center">
+              <button tds-button color="success" (click)="onEditPayment(appoint.AppointmentID)">
+                Check Out
+              </button>
+            </div>
+          </tds-card-actions>
         </tds-card>
       </div>
     </div>
@@ -100,7 +108,7 @@
           <div class="flex justify-between">
             <p tds-typography tdsEllipsis>{{appoint.Customer.FirstName}} {{appoint.Customer.LastName}}</p>
             <div>
-              <tds-tag *ngIf="appoint.Status === 'Scheduled'" status='custom' class="bg-secondary-1">Scheduled</tds-tag>
+              <tds-tag *ngIf="appoint.Status === 'Scheduled'" status='custom' class="bg-info-400">Scheduled</tds-tag>
               <tds-tag *ngIf="appoint.Status === 'Confirmed'" status='custom' class="bg-success-400">Confirmed</tds-tag>
               <tds-tag *ngIf="appoint.Status === 'Cancelled'" status='custom' class="bg-red-500">Cancelled</tds-tag>
             </div>
@@ -128,7 +136,7 @@
               <i class="tdsi-edit-fill"></i>
             </button>
             <button tds-button-icon color="secondary" tds-tooltip tooltipTitle="Switch To Reception"
-              (click)="updateStatus(appoint.AppointmentID, 'Waiting')" class="ml-3">
+              (click)="chooseDoctor(appoint.AppointmentID, 'Waiting')" class="ml-3">
               <i class="tdsi-receive-fill"></i>
             </button>
           </div>

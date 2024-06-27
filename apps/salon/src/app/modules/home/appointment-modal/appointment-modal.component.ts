@@ -17,7 +17,6 @@ import { startOfToday, isBefore } from 'date-fns';
 import { TDSTimePickerModule } from 'tds-ui/time-picker';
 import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
 import { format } from 'date-fns';
-import { HomeComponent } from '../home.component';
 
 @Component({
   selector: 'frontend-appointment-modal',
@@ -39,14 +38,14 @@ import { HomeComponent } from '../home.component';
   templateUrl: './appointment-modal.component.html',
   styleUrls: ['./appointment-modal.component.scss'],
 })
+
 export class AppointmentModalComponent implements OnInit {
 
+  // public doctorOptions: DoctorOption[] = [];
   public doctorOptions = [
-    { id: 11, name: 'Elton John' },
-    { id: 12, name: 'Elvis Presley' },
-    { id: 5, name: 'Paul McCartney' },
-    { id: 14, name: 'Elton John' },
-    { id: 13, name: 'Elvis Presley' },
+    { id: 6, name: 'A' },
+    { id: 7, name: 'B' },
+    { id: 8, name: 'C' },
   ]
 
   public statusOptions = [
@@ -68,9 +67,8 @@ export class AppointmentModalComponent implements OnInit {
     name: [''],
     branch: ['ABC'],
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
-    employeeID: [],
-    assignments: [[]],
-    doctor: [0],
+    assignments: [],
+    doctor: [],
     appointmentDate: [new Date()],
     status: ['Scheduled'],
   });
@@ -83,12 +81,9 @@ export class AppointmentModalComponent implements OnInit {
   constructor(
     private shared: AuthService,
     private notification: TDSNotificationService,
-
   ) { }
 
   ngOnInit(): void {
-
-    console.log(this.statusOptions);
 
     this.form.get('name')?.disable()
     this.form.get('branch')?.disable()
@@ -107,8 +102,13 @@ export class AppointmentModalComponent implements OnInit {
           customerID: data.Customer.CustomerID,
           status: data.Status,
           assignments: data.Assignments,
-          doctor: data.Assignments[0].EmployerID
         });
+        if (this.form.value.assignments) {
+          this.form.patchValue({
+            doctor: data.Assignments[0].EmployerID,
+          });
+        }
+        console.log(this.form.value)
       });
 
     }
@@ -131,19 +131,26 @@ export class AppointmentModalComponent implements OnInit {
 
     if (this.form.invalid) return;
 
-    const {doctor, appointmentDate, ...req} =this.form.value
+    const { doctor, appointmentDate, ...req } = this.form.value
 
-    // Add employee to the array
-    this.empID.push(doctor)
+    if (doctor != null) {
+      // Add employee to the array
+      this.empID.push(doctor)
+    }
 
-    const val = {
+    const val:any = {
       ...req,
       appointmentDate: format(new Date(appointmentDate as Date), DATE_CONFIG.DATE_BASE),
-      employeeID: this.empID
+
+      employeeID: this.empID,
     };
 
-    console.log(val)
+    if(doctor != null){
+      val.assignments = [{ employerID: doctor }];
+    }
 
+
+    console.log(val.employeeID)
     if (this.id) {
       this.updateAppointment(this.id, val);
     } else {
@@ -247,4 +254,9 @@ export class AppointmentModalComponent implements OnInit {
     );
   }
 
+}
+
+interface DoctorOption {
+  id: number;
+  name: string;
 }

@@ -107,6 +107,17 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'Appointment/' + id);
   }
 
+  //
+  employeeList(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'User/allEmployee');
+  }
+
+  // Get Employee by Branch ID & Job Type
+  getEmployee(branch: number, job: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'User/EmployeeByBranchAndJob?branchID=' + branch + '&jobTypeID=' + job);
+  }
+
+  //
   signUp(id:string,name:string,email:string,password:string,re_password:string){
     return this.http.post<{flag:boolean, message:string}>(this.baseUrl+'register', {
       id: id,
@@ -117,6 +128,7 @@ export class AuthService {
     })
   }
 
+  //
   login(email:string,password:string){
     return this.http.post<{user:object,token:object}>(this.baseUrl+'Authentication/login', {
       email: email,
@@ -128,5 +140,6 @@ export class AuthService {
   //     email: email,
   //     password: password
   //   })
-  // }
+  // } 
+
 }
