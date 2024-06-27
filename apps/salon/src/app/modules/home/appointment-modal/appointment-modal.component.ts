@@ -17,6 +17,7 @@ import { startOfToday, isBefore } from 'date-fns';
 import { TDSTimePickerModule } from 'tds-ui/time-picker';
 import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
 import { format } from 'date-fns';
+import { HomeComponent } from '../home.component';
 
 @Component({
   selector: 'frontend-appointment-modal',
@@ -43,7 +44,7 @@ export class AppointmentModalComponent implements OnInit {
   public doctorOptions = [
     { id: 11, name: 'Elton John' },
     { id: 12, name: 'Elvis Presley' },
-    { id: 9, name: 'Paul McCartney' },
+    { id: 5, name: 'Paul McCartney' },
     { id: 14, name: 'Elton John' },
     { id: 13, name: 'Elvis Presley' },
   ]
@@ -55,7 +56,7 @@ export class AppointmentModalComponent implements OnInit {
     'Waiting',
     'Examining',
     'Preparation',
-    'Treatment in Progress',
+    'Treating',
   ]
 
   private readonly tModalSvc = inject(TDSModalService)
@@ -67,10 +68,10 @@ export class AppointmentModalComponent implements OnInit {
     name: [''],
     branch: ['ABC'],
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
-    employeeID: [[0]],
+    employeeID: [],
     assignments: [[]],
     doctor: [0],
-    appointmentDate: ['', Validators.required],
+    appointmentDate: [new Date()],
     status: ['Scheduled'],
   });
   isExist = false;
@@ -78,12 +79,16 @@ export class AppointmentModalComponent implements OnInit {
   today = startOfToday();
   empID: any[] = []
 
+
   constructor(
     private shared: AuthService,
     private notification: TDSNotificationService,
+
   ) { }
 
   ngOnInit(): void {
+
+    console.log(this.statusOptions);
 
     this.form.get('name')?.disable()
     this.form.get('branch')?.disable()
@@ -101,13 +106,14 @@ export class AppointmentModalComponent implements OnInit {
           appointmentDate: data.AppointmentDate,
           customerID: data.Customer.CustomerID,
           status: data.Status,
+          assignments: data.Assignments,
+          doctor: data.Assignments[0].EmployerID
         });
       });
+
     }
 
   }
-
-
 
   // Disabled Date in the past
   disabledDate = (d: Date): boolean => {
@@ -124,18 +130,18 @@ export class AppointmentModalComponent implements OnInit {
   submit() {
 
     if (this.form.invalid) return;
+
     const {doctor, appointmentDate, ...req} =this.form.value
+
     // Add employee to the array
     this.empID.push(doctor)
-    this.form.patchValue({
-      employeeID: this.empID
-    });
 
     const val = {
-      doctor,
       ...req,
-      appointmentDate: format(new Date(appointmentDate as string), DATE_CONFIG.DATE_BASE)
+      appointmentDate: format(new Date(appointmentDate as Date), DATE_CONFIG.DATE_BASE),
+      employeeID: this.empID
     };
+
     console.log(val)
 
     if (this.id) {
