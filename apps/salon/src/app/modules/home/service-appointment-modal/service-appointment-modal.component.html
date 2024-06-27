@@ -18,15 +18,12 @@
 
       <!-- Full name -->
       <tds-label>Full Name</tds-label>
-      <tds-form-field class="my-2">
-        <input
-          tdsInput
-          autocomplete="off"
-          formControlName="name"
-          class="appearance-none w-full"
-          type="text"
-        />
-      </tds-form-field>
+      <div class="flex items-center">
+        <tds-form-field class="w-full my-2">
+          <input tdsInput autocomplete="off" formControlName="name" class="appearance-none w-full" type="text" />
+        </tds-form-field>
+        <button tds-button-icon tds-tooltip tooltipTitle="Hồ sơ" (click)="callModalUserProfile()" class="tdsi-user-fill tds-icon-size-xl bg-primary-1"></button>
+      </div>
 
       <!-- Branch -->
       <tds-label>Branch</tds-label>
@@ -77,18 +74,10 @@
     <div class="pl-4 w-[50%]">
       <tds-label>Lựa chọn dịch vụ</tds-label>
       <tds-form-field class="pt-2">
-        <tds-select
-          valueField="serviceID"
-          formControlName="service"
-          textField="serviceName"
-          placeholder="select item"
-          disabledField="isActive"
-          [allowClear]="true"
-          [data]="dataSvc"
-          mode="multiple"
-        >
+        <tds-select valueField="serviceID" formControlName="service" textField="serviceName" placeholder='select item'
+          disabledField="isActive" [allowClear]="true" [required]="true" [data]="dataSvc" mode="multiple">
         </tds-select>
-        <tds-error>Validation message text</tds-error>
+        <tds-error class="text-tds-color-red-500-light">Please choose a service! </tds-error>
       </tds-form-field>
     </div>
   </div>

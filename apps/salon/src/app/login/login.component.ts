@@ -34,57 +34,21 @@ export class LoginComponent implements OnInit {
       taiKhoan: ['' , Validators.required],
       matKhau: ['' , Validators.required],
     });
+    const token = localStorage.getItem('userToken');
+    if (token) {
+          this.router.navigate(['home']);
+        }
   }
-
-  // onLogin(){
-  //   const email=this.loginForm.value.taiKhoan;
-  //   const password = this.loginForm.value.matKhau;
-  //   this.auth.login(email,password).subscribe((result) => {
-  //     // if(result.token != null) {
-
-  //     // }
-  //     console.log(result);
-  //   });
-  // }
-
   onLogin(){
     const email=this.loginForm.value.taiKhoan;
     const password = this.loginForm.value.matKhau;
-    this.auth.login(email,password).subscribe((result) => {
-      console.log(result);
-      if(result.token != null)
+    this.auth.login(email,password).subscribe((result:any) => {
+      console.log(result.token, result.user);
+      localStorage.setItem('userToken', result.token);
+      if(result.token!= null && result.user!=null)
         {
-          //alert(result.token)
-          this.router.navigate(['products']);
+          this.router.navigate(['home']);
         }
     });
   }
-
-  // onLogin(): void {
-  //   console.log(this.loginForm);
-  //   this.auth.login(this.loginForm.value)
-  //   .subscribe({
-  //     next:(res)=>{
-  //       alert(res.message)
-  //     },
-  //     error:(err)=>
-  //       alert(err?.error.message)
-  //   })
-  // }
-
-  // onLogin() {
-  //   const email = this.loginForm.value.taiKhoan;
-  //   const password = this.loginForm.value.matKhau;
-
-  //   this.httpService.login2(email, password).subscribe(
-  //     (result) => {
-  //       console.log(result);
-  //       // Handle successful login, e.g. save the token and navigate to dashboard
-  //     },
-  //     (error) => {
-  //       console.error(error);
-  //       // Handle login error, e.g. display error message
-  //     }
-  //   );
-  // }
 }
