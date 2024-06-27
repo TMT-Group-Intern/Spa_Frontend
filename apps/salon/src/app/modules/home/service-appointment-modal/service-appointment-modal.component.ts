@@ -53,15 +53,16 @@ export class ServiceAppointmentModalComponent implements OnInit {
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
     name: [''],
-    branch: ['ABC'],
+    branch: [''],
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
     employeeID: [[0]],
     assignments: [[]],
     doctor: [0],
     appointmentDate: ['', Validators.required],
-    status: [''],
-    service:[]
+    status: ['', Validators.required],
+    service:[[]]
   });
+
   today = startOfToday();
   empID: any[] = []
   dataSvc: any = []
@@ -82,12 +83,14 @@ export class ServiceAppointmentModalComponent implements OnInit {
       this.form.get('phone')?.disable()
       this.shared.getAppointment(this.id).subscribe((data: any) => {
         console.log(data);
+        // const { Customer, AppointmentDate, Status, ChooseServices } = data;
         this.form.patchValue({
           phone: data.Customer.Phone,
           name: data.Customer.FirstName + ' ' + data.Customer.LastName,
           appointmentDate: data.AppointmentDate,
           customerID: data.Customer.CustomerID,
           status: data.Status,
+          //service: data.service.map((service: any) => service.serviceID) 
         });
       });
 
@@ -106,7 +109,6 @@ export class ServiceAppointmentModalComponent implements OnInit {
   }
 
 
-
   // Disabled Date in the past
   disabledDate = (d: Date): boolean => {
     // Disable all days before today
@@ -122,16 +124,18 @@ export class ServiceAppointmentModalComponent implements OnInit {
     const val = {
       ...this.form.value
     };
-
-    if (this.id) {
-    this.updateServiceAppointment(this.id, val.service);
+    const status:string = val.status || 'waiting';
+    console.log(val)
+    console.log(val.service);
+    if (this.id) {   
+    this.updateServiceAppointment(this.id, status,val.service);
   }
   }
 
   // Update service Appointment
-  updateServiceAppointment(id: number, val: any) {
+  updateServiceAppointment(id: number, sta:string,val: any) {
     console.log(id,",",val)
-    this.shared.updateAppointmentWithService(id, val).subscribe({
+    this.shared.updateAppointmentWithService(id, sta, val).subscribe({
       next:(data) => {
         console.log(data)
         this.createNotificationSuccess('');
