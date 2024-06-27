@@ -63,7 +63,7 @@ private readonly modalSvc = inject(TDSModalService);
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
     name: [''],
-    branch: ['ABC'],
+    branch: [''],
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
     employeeID: [[0]],
     assignments: [[]],
@@ -72,6 +72,7 @@ private readonly modalSvc = inject(TDSModalService);
     status: [''],
     service:[[],Validators.required]
   });
+
   today = startOfToday();
   empID: any[] = []
   dataSvc: any = []
@@ -117,7 +118,6 @@ private readonly modalSvc = inject(TDSModalService);
       }
     )
   }
-
 
 
   // Disabled Date in the past
