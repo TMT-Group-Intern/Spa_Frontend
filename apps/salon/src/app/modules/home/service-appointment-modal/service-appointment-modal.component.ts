@@ -84,6 +84,10 @@ private readonly modalSvc = inject(TDSModalService);
   ) { }
 
   ngOnInit(): void {
+
+    // call function initService
+    this.initService();
+
     this.form.get('name')?.disable()
     this.form.get('branch')?.disable()
     this.form.get('doctor')?.disable()
@@ -92,7 +96,7 @@ private readonly modalSvc = inject(TDSModalService);
     if (this.id) {
       this.form.get('phone')?.disable()
       this.shared.getAppointment(this.id).subscribe((data: any) => {
-        console.log(data);
+      console.log(data.ChooseServices)
         this.CustomerID = data.CustomerID
         this.form.patchValue({
           phone: data.Customer.Phone,
@@ -100,11 +104,10 @@ private readonly modalSvc = inject(TDSModalService);
           appointmentDate: data.AppointmentDate,
           customerID: data.Customer.CustomerID,
           status: data.Status,
+          service: data.ChooseServices.map((item:any)=> item.ServiceID),
         });
       });
     }
-    // call function initService
-    this.initService();
   }
   initService(): void {
     //Display Service List
