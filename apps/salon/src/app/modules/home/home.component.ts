@@ -95,7 +95,7 @@ export class HomeComponent implements OnInit {
   // Open Service Appointment Modal
   callmodalServiceAppointment(id:number){
     const modal = this.tModalSvc.create({
-      title:'Create service appointment',
+      title:'Tạo dịch vụ lịch hẹn',
       content: ServiceAppointmentModalComponent,
       footer:null,
       size:'lg',
