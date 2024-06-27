@@ -9,7 +9,6 @@ import { HttpHeaders } from '@angular/common/http';
 export class AuthService {
 
   private baseUrl: string| undefined;
-   //private baseUrl = "https://localhost:5253/api/";
 
   constructor(private http : HttpClient) {
      this.baseUrl = environment.BASE_URI
@@ -130,5 +129,4 @@ export class AuthService {
   //     password: password
   //   })
   // }
-
 }
