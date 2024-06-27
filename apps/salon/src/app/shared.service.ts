@@ -9,7 +9,6 @@ import { HttpHeaders } from '@angular/common/http';
 export class AuthService {
 
   private baseUrl: string| undefined;
-   //private baseUrl = "https://localhost:5253/api/";
 
   constructor(private http : HttpClient) {
      this.baseUrl = environment.BASE_URI
@@ -66,6 +65,11 @@ export class AuthService {
     return this.http.put(this.baseUrl + 'Customers/' + id, val);
   }
 
+  //page of customers
+  pageCustomers(pageNumber: number, pageSize: number) {
+    return this.http.get(this.baseUrl + 'Customers/Page?pageNumber='+pageNumber+'&pageSize='+pageSize);
+  }
+
   //Delete a customer
   deleteCustomer(id:any){
     return this.http.delete(this.baseUrl + 'Customers/'+ id);
@@ -73,7 +77,7 @@ export class AuthService {
 
   //get history of customers
   getHistoryCustomer(id: number){
-    return this.http.get('https://localhost:7192/GetHistory?cutomerId='+ id);
+    return this.http.get('https://localhost:44305/GetHistory?cutomerId='+ id);
   }
 
   // Show list of Appointment through Branch ID
@@ -136,6 +140,6 @@ export class AuthService {
   //     email: email,
   //     password: password
   //   })
-  // }
+  // } 
 
 }

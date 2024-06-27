@@ -4,11 +4,18 @@
     <!-- Reception -->
     <div class="row-span-1 p-4 border rounded-10 bg-white">
       <span class="text-heading-4">Reception</span>
-      <div class="gap-x-2 grid grid-cols-3 flex-wrap overflow-y-auto mt-3" style="max-height: 225px;">
-        <tds-card *ngFor="let appoint of reception" class="border rounded-10 col-span-1 mb-2">
+      <div
+        class="gap-x-2 grid grid-cols-3 flex-wrap overflow-y-auto mt-3"
+        style="max-height: 225px"
+      >
+        <tds-card
+          *ngFor="let appoint of reception"
+          class="border rounded-10 col-span-1 mb-2"
+        >
           <!-- Card Header -->
           <tds-card-header class="bg-green-success-200 text-white">
             <div class="flex justify-between">
+
               <p tds-typography tdsEllipsis>{{appoint.Customer.FirstName}} {{appoint.Customer.LastName}}</p>
               <div>
                 <tds-tag *ngIf="appoint.Status === 'Waiting'" status='custom' class="bg-info-400">Waiting</tds-tag>
@@ -29,8 +36,14 @@
     <!-- In ssesion -->
     <div class="row-span-1 border p-4 rounded-10 bg-white">
       <span class="text-heading-4">In Session</span>
-      <div class="gap-x-2 grid grid-cols-3 flex-wrap overflow-y-auto mt-3" style="max-height: 225px;">
-        <tds-card *ngFor="let appoint of inSession" class="border rounded-10 col-span-1 mb-2">
+      <div
+        class="gap-x-2 grid grid-cols-3 flex-wrap overflow-y-auto mt-3"
+        style="max-height: 225px"
+      >
+        <tds-card
+          *ngFor="let appoint of inSession"
+          class="border rounded-10 col-span-1 mb-2"
+        >
           <!-- Card Header -->
           <tds-card-header class="bg-green-success-200 text-white ">
             <div class="flex justify-between">
@@ -85,8 +98,11 @@
       </button>
     </div>
     <!-- List -->
-    <div class="overflow-y-auto mt-3" style="max-height: 550px;">
-      <tds-card *ngFor="let appoint of todayBooking" class="border rounded-10 m-4">
+    <div class="overflow-y-auto mt-3" style="max-height: 550px">
+      <tds-card
+        *ngFor="let appoint of todayBooking"
+        class="border rounded-10 m-4"
+      >
         <!-- Card Header -->
         <tds-card-header class="bg-green-success-200 text-white">
           <div class="flex justify-between">
@@ -106,12 +122,17 @@
             <p><i class="tdsi-call-fill text-green-success-300"></i> {{appoint.Customer.Phone}}</p>
           </div>
         </tds-card-content>
-        <hr>
+        <hr />
         <!-- Card button -->
         <tds-card-actions>
           <div class="flex justify-end">
-            <button tds-button-icon color="secondary" tds-tooltip tooltipTitle="Edit Appointment"
-              (click)="onEditAppointment(appoint.AppointmentID)">
+            <button
+              tds-button-icon
+              color="secondary"
+              tds-tooltip
+              tooltipTitle="Edit Appointment"
+              (click)="onEditAppointment(appoint.AppointmentID)"
+            >
               <i class="tdsi-edit-fill"></i>
             </button>
             <button tds-button-icon color="secondary" tds-tooltip tooltipTitle="Switch To Reception"
@@ -139,13 +160,19 @@
       </tds-card-header>
       <!-- Card content -->
       <tds-card-content class="px-3">
-        <p><i class="tdsi-earpiece-fill text-green-500"></i> ABC 123456789 </p>
+        <p><i class="tdsi-earpiece-fill text-green-500"></i> ABC 123456789</p>
         <div class="flex justify-between">
-          <p><i class="tdsi-time-fill text-green-500"></i> {{formatDate(appoint.AppointmentDate,'HH:mm')}}</p>
-          <p><i class="tdsi-call-fill text-green-500"></i> {{appoint.Customer.Phone}}</p>
+          <p>
+            <i class="tdsi-time-fill text-green-500"></i>
+            {{ formatDate(appoint.AppointmentDate, 'HH:mm') }}
+          </p>
+          <p>
+            <i class="tdsi-call-fill text-green-500"></i>
+            {{ appoint.Customer.Phone }}
+          </p>
         </div>
       </tds-card-content>
-      <hr>
+      <hr />
       <!-- Card button -->
       <tds-card-actions>
         <div class="flex justify-end">

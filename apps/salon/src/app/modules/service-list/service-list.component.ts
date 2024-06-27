@@ -8,6 +8,7 @@ import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { TDSModalService } from 'tds-ui/modal';
 import { catchError, concatMap, filter, of, tap } from 'rxjs';
 import { ModalServiceComponent } from './modal-service/modal-service.component';
+import { TDSPaginationModule } from 'tds-ui/pagination';
 
 
 @Component({
@@ -19,6 +20,7 @@ import { ModalServiceComponent } from './modal-service/modal-service.component';
     TDSColumnSettingsModule,
     TDSButtonModule,
     TDSToolTipModule,
+    TDSPaginationModule
   ],
   templateUrl: './service-list.component.html',
   styleUrls: ['./service-list.component.scss'],
@@ -106,5 +108,4 @@ export class ServiceListComponent implements OnInit {
       tap(()=>  this.initshowServiceList()),
     ).subscribe()
   }
-
 }
