@@ -9,7 +9,6 @@ import { HttpHeaders } from '@angular/common/http';
 export class AuthService {
 
   private baseUrl: string| undefined;
-   //private baseUrl = "https://localhost:5253/api/";
 
   constructor(private http : HttpClient) {
      this.baseUrl = environment.BASE_URI
@@ -110,12 +109,5 @@ export class AuthService {
       email: email,
       password: password
     })
-  }
-  // login(email:string,password:string): Observable<any[]> {
-  //   return this.http.post<any>(this.baseUrl+'Authentication/login', {
-  //     email: email,
-  //     password: password
-  //   })
-  // }
-  
+  } 
 }

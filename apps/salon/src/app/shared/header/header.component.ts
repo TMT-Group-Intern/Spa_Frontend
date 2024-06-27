@@ -7,7 +7,7 @@ import { TDSSelectModule } from 'tds-ui/select';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputModule } from 'tds-ui/tds-input';
-import {  RouterModule } from '@angular/router';
+import {  Router, RouterModule } from '@angular/router';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import {  TDSModalModule, TDSModalService } from 'tds-ui/modal';
 import { AuthService } from '../../shared.service';
@@ -26,7 +26,6 @@ import { AuthService } from '../../shared.service';
     RouterModule,
     TDSToolTipModule,
     TDSModalModule,
-
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
@@ -63,7 +62,8 @@ showModal(): void {
 
     constructor(
         private fb: FormBuilder,
-        private modalSvc:TDSModalService
+        private modalSvc:TDSModalService,
+        private router:Router 
     ) {
     }
 
@@ -84,6 +84,11 @@ showModal(): void {
       return null;
     };
 
+    onLogOut(){
+      const token = localStorage.getItem('userToken')
+      localStorage.removeItem('userToken');
+      this.router.navigate(['']);
+    };
 }
 
 
