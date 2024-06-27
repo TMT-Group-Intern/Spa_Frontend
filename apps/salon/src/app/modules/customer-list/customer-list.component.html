@@ -12,17 +12,6 @@
   <tds-data-table class="p-2" [tdsData]="CustomerList" [tdsShowSizeChanger]="true" [tdsPageSize]="20"
     [tdsBordered]="true">
 
-    <tds-data-table-expand-row [tdsContent]="expandTpl" tdsWidth="2%">
-      <ng-template #expandTpl let-dataRow let-expand="expand">
-        <tds-timeline>
-          <tds-timeline-item>Create a services site 2015-09-01</tds-timeline-item>
-          <tds-timeline-item>Solve initial network problems 2015-09-01</tds-timeline-item>
-          <tds-timeline-item>Technical testing 2015-09-01</tds-timeline-item>
-          <tds-timeline-item>Network problems being solved 2015-09-01</tds-timeline-item>
-        </tds-timeline>
-      </ng-template>
-    </tds-data-table-expand-row>
-
     <tds-data-table-column [tdsField]="'customerCode'" [tdsTitle]="'ID'" tdsWidth="8%"
       [tdsDataType]="'text'"></tds-data-table-column>
 
@@ -37,14 +26,6 @@
 
     <tds-data-table-column [tdsField]="'dateOfBirth'" [tdsTitle]="'Date of Birth'" tdsWidth="9%" [tdsDataType]="'date'"
       [tdsFormat]="'dd/mm/yyyy'"></tds-data-table-column>
-
-    <!-- <tds-data-table-column
-      [tdsField]="'customerTypeID'"
-      [tdsTitle]="'Customer Type ID'"
-      tdsWidth="10%"
-      [tdsDataType]="'numeric'"
-      tdsClass="text-center"
-    ></tds-data-table-column> -->
 
     <tds-data-table-column [tdsContent]="commandTpl" tdsWidth="7%" [tdsColumnType]="'command'"
       tdsClass="flex justify-around">

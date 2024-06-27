@@ -39,7 +39,7 @@
 
   <tds-label [tdsRequired]="true">Date of Birth</tds-label>
   <tds-form-field class="w-full my-2">
-    <tds-date-picker formControlName="dateOfBirth"></tds-date-picker>
+    <tds-date-picker [disabledDate]="disabledDate" formControlName="dateOfBirth"></tds-date-picker>
     <tds-error>
       <span>Your <strong>date of birth</strong> cannot be empty!</span>
     </tds-error>

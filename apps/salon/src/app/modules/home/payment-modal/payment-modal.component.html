@@ -1,0 +1,27 @@
+<div class="my-2">
+  <p><strong>Phone Number:</strong> {{inforCus.Customer.Phone}}</p>
+  <p><strong>Customer:</strong> {{inforCus.Customer.FirstName}} {{inforCus.Customer.LastName}}</p>
+  <p><strong>Date:</strong> {{formatDate(inforCus.AppointmentDate,'DD/MM/YYYY HH:mm')}}</p>
+  <br>
+  <tds-table #basicTable [listData]="service" [showPagination]="false">
+    <thead>
+      <tr>
+        <th width="20%">ID</th>
+        <th width="65%">Name</th>
+        <th width="15%">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-template ngFor let-data [ngForOf]="basicTable.data">
+        <tr>
+          <td>{{ data.service.ServiceCode }}</td>
+          <td>{{ data.service.ServiceName }}</td>
+          <td class="flex justify-end">{{ data.service.Price }}</td>
+        </tr>
+      </ng-template>
+    </tbody>
+  </tds-table>
+  <div class="flex justify-end">
+    <p class="pr-2"><strong>Total:</strong> {{inforCus.Total}}</p>
+  </div>
+</div>
