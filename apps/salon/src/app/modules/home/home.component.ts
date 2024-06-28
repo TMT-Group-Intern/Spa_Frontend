@@ -112,7 +112,7 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  // Open Edit Appointment Modal
+  // Open Edit In Session Modal
   onEditInSession(id:number){
     const modal = this.tModalSvc.create({
       title:'Edit Information',
@@ -130,7 +130,7 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  // Open Edit Appointment Modal
+  // Open Edit Payment Modal
   onEditPayment(id:number){
     const modal = this.tModalSvc.create({
       title:'Edit Information',

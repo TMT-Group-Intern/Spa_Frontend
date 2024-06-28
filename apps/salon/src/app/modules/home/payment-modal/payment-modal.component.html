@@ -21,7 +21,27 @@
       </ng-template>
     </tbody>
   </tds-table>
-  <div class="flex justify-end">
-    <p class="pr-2"><strong>Total:</strong> {{inforCus.Total}}</p>
-  </div>
+
+  <p class="pr-2 pt-2"><strong>Total:</strong> {{inforCus.Total}}</p>
+  <form class="py-2" id="idform" [formGroup]="form" autocomplete="off">
+    <div class="flex">
+      <p class="pr-2 pt-2"><strong>Discount %:</strong> </p>
+      <tds-form-field class="w-20 mr-2">
+        <tds-input-number [min]="0" [max]="100" [step]="1" formControlName="diDiscountPercentage">
+        </tds-input-number>
+      </tds-form-field>
+      <button tds-button-icon color="success" size="sm" (click)="updateDiscount()">
+        <i class="tdsi-check-fill"></i>
+      </button>
+    </div>
+  </form>
+  <p class="pr-2 pt-2"><strong>Total Amount:</strong> {{totalAmount}}</p>
 </div>
+
+<ng-container *tdsModalFooter>
+  <div class="p-4">
+    <button tds-button form="idform" (click)="submit()" color="success" class="w-full rounded">
+      Submit
+    </button>
+  </div>
+</ng-container>
