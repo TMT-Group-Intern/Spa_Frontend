@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TDSModalModule, TDSModalRef, TDSModalService } from 'tds-ui/modal';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
-import { TDSRadioModule } from 'tds-ui/radio';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSDatePickerModule } from 'tds-ui/date-picker';
 import { CustomerListComponent } from '../../customer-list/customer-list.component';
@@ -26,7 +25,6 @@ import { format } from 'date-fns';
     ReactiveFormsModule,
     TDSModalModule,
     TDSFormFieldModule,
-    TDSRadioModule,
     TDSInputModule,
     TDSDatePickerModule,
     CustomerListComponent,

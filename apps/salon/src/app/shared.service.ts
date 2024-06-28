@@ -94,10 +94,13 @@ export class AuthService {
   UpdateAppointment(id: number, val:any) {
     return this.http.put(this.baseUrl + 'Appointment/' + id, val);
   }
+
   // Update Status
   UpdateStatus(id: number, status: string) {
     return this.http.put(this.baseUrl + 'Appointment/updatestatus/' + id + '?status=' + status, status);
   }
+
+  //
   updateAppointmentWithService(id: number, status: any, val:any) {
     return this.http.put(this.baseUrl + 'Appointment/api/UpdateAppointmentWithService/' + id + '/' + status, val);
   }
@@ -106,6 +109,17 @@ export class AuthService {
   getAppointment(id: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Appointment/' + id);
   }
+
+  // Update Discount
+  updateDiscount(id: any, discount: any, val:any) {
+    return this.http.put(this.baseUrl + 'Appointment/UpdateDiscount?id=' + id + '&perDiscount=' + discount, val);
+  }
+
+  // Create a Payment
+  createPayment(id: any, val: any) {
+    return this.http.post(this.baseUrl + 'Payment?Id=' + id, val);
+  }
+
 
   //
   employeeList(): Observable<any[]> {
@@ -140,6 +154,6 @@ export class AuthService {
   //     email: email,
   //     password: password
   //   })
-  // } 
+  // }
 
 }
