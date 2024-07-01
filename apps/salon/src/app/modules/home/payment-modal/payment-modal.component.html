@@ -1,0 +1,47 @@
+<div class="my-2">
+  <p><strong>Phone Number:</strong> {{inforCus.Customer.Phone}}</p>
+  <p><strong>Customer:</strong> {{inforCus.Customer.FirstName}} {{inforCus.Customer.LastName}}</p>
+  <p><strong>Date:</strong> {{formatDate(inforCus.AppointmentDate,'DD/MM/YYYY HH:mm')}}</p>
+  <br>
+  <tds-table #basicTable [listData]="service" [showPagination]="false">
+    <thead>
+      <tr>
+        <th width="20%">ID</th>
+        <th width="65%">Name</th>
+        <th width="15%">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-template ngFor let-data [ngForOf]="basicTable.data">
+        <tr>
+          <td>{{ data.service.ServiceCode }}</td>
+          <td>{{ data.service.ServiceName }}</td>
+          <td class="flex justify-end">{{ data.service.Price }}</td>
+        </tr>
+      </ng-template>
+    </tbody>
+  </tds-table>
+
+  <p class="pr-2 pt-2"><strong>Total:</strong> {{inforCus.Total}}</p>
+  <form class="py-2" id="idform" [formGroup]="form" autocomplete="off">
+    <div class="flex">
+      <p class="pr-2 pt-2"><strong>Discount %:</strong> </p>
+      <tds-form-field class="w-20 mr-2">
+        <tds-input-number [min]="0" [max]="100" [step]="1" formControlName="diDiscountPercentage">
+        </tds-input-number>
+      </tds-form-field>
+      <button tds-button-icon color="success" size="sm" (click)="updateDiscount()">
+        <i class="tdsi-check-fill"></i>
+      </button>
+    </div>
+  </form>
+  <p class="pr-2 pt-2"><strong>Total Amount:</strong> {{totalAmount}}</p>
+</div>
+
+<ng-container *tdsModalFooter>
+  <div class="p-4">
+    <button tds-button form="idform" (click)="submit()" color="success" class="w-full rounded">
+      Submit
+    </button>
+  </div>
+</ng-container>

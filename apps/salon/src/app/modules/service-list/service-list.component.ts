@@ -49,7 +49,7 @@ export class ServiceListComponent implements OnInit {
   showCreateModal(){
     const modal = this.modalSvc.create({
       content: ModalServiceComponent,
-      title:'Create service',
+      title:'Tạo dịch vụ',
       footer: null,
       cancelText: null,
       size: 'md'
@@ -64,7 +64,7 @@ export class ServiceListComponent implements OnInit {
   showEditModal(id:number){
     const modal = this.modalSvc.create({
       content: ModalServiceComponent,
-      title:'Edit service',
+      title:'Cập nhật dịch vụ',
       footer: null,
       cancelText: null,
       size: 'md',
@@ -93,12 +93,12 @@ export class ServiceListComponent implements OnInit {
       concatMap(_=> this.auth.deleteAService(id).pipe(
         tap(()=>{
           this.modalSvc.success({
-            title:'Successfully!'
+            title:'Thành công'
           });
         }),
         catchError((ex) => {
           this.modalSvc.error({
-            title: 'Error',
+            title: 'Lỗi!',
             content:ex.error.message,
           });
           return of(null);

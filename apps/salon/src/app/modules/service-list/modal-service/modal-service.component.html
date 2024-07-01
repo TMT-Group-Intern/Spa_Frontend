@@ -1,22 +1,22 @@
 <!-- Modal create new service -->
 <form [formGroup]="modalServiceForm" id="formService" autocomplete="off">
-  <tds-label [tdsRequired]="true" class="pt-4">Name</tds-label>
+  <tds-label [tdsRequired]="true" class="pt-4">Tên dịch vụ</tds-label>
   <tds-form-field class="w-full mt-2">
-    <input tdsInput autocomplete="off" placeholder="Name service" formControlName="serviceName" class="appearance-none" />
+    <input tdsInput autocomplete="off" placeholder="Nhập tên dịch vụ" formControlName="serviceName" class="appearance-none" />
     <tds-error>
       <span>Your <strong>service name</strong> cannot be empty!</span>
     </tds-error>
   </tds-form-field>
 
 
-  <tds-label class="pt-4">Description</tds-label>
+  <tds-label class="pt-4">Mô tả</tds-label>
   <tds-form-field class="w-full mt-2">
-    <textarea tdsInput autocomplete="off" formControlName="description" placeholder="Description service"
+    <textarea tdsInput autocomplete="off" formControlName="description" placeholder="Mô tả dịch vụ"
       [tdsAutosize]="{ minRows: 3,  maxRows: 6}"></textarea>
   </tds-form-field>
 
 
-  <tds-label tdsRequired="true" class="pt-4">Price</tds-label>
+  <tds-label tdsRequired="true" class="pt-4">Giá</tds-label>
   <tds-form-field class="w-full mt-2">
     <input tdsInput autocomplete="off" placeholder="0" formControlName="price"
       type="number" class="appearance-none" min="0">
@@ -27,10 +27,10 @@
   </tds-form-field>
 </form>
 <ng-container *tdsModalFooter>
-  <div class="p-4">
-    <div class="w-full flex flex-col justify-center">
+  <div class="flex flex-row-reverse p-4">
+    <div class="w-[100px] flex flex-col justify-center">
       <button tds-button form="idform" (click)="btnSubmitService()" color="success" class="w-full rounded">
-        Submit
+        Lưu
       </button>
     </div>
   </div>

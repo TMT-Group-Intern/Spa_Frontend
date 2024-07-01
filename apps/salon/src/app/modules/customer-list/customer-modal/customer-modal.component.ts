@@ -14,9 +14,10 @@ import { TDSDatePickerModule } from 'tds-ui/date-picker';
 import { CustomerListComponent } from '../customer-list.component';
 import { AuthService } from '../../../shared.service';
 import { catchError, of } from 'rxjs';
-import { error } from 'console';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { TDSButtonModule } from 'tds-ui/button';
+import { TDSSelectModule } from 'tds-ui/select';
+import { startOfToday, isAfter } from 'date-fns';
 
 @Component({
   selector: 'frontend-customer-modal',
@@ -31,6 +32,7 @@ import { TDSButtonModule } from 'tds-ui/button';
     TDSDatePickerModule,
     CustomerListComponent,
     TDSButtonModule,
+    TDSSelectModule
   ],
   templateUrl: './customer-modal.component.html',
   styleUrls: ['./customer-modal.component.scss'],
@@ -50,8 +52,12 @@ export class CustomerModalComponent implements OnInit {
     dateOfBirth: ['', Validators.required],
     gender: ['Male'],
   });
+  today = startOfToday();
 
-  constructor(private auth: AuthService) { }
+  constructor(
+    private auth: AuthService,
+    private notification: TDSNotificationService
+  ) { }
 
   ngOnInit(): void {
     console.log(this.id);
@@ -68,6 +74,12 @@ export class CustomerModalComponent implements OnInit {
       });
     }
   }
+
+  // Disabled Date in the future
+  disabledDate = (d: Date): boolean => {
+    // Disable all days after today
+    return isAfter(d, this.today);
+  };
 
   // Cancel button
   handleCancel(): void {
@@ -99,18 +111,11 @@ export class CustomerModalComponent implements OnInit {
     ).subscribe(
         {
           next: () => {
-            this.modalService.success({
-              title: 'Successfully',
-              okText: 'OK',
-            });
+            this.createNotificationSuccess('');
             this.modalRef.destroy(val);
           },
           error: (res) => {
-            this.modalService.error({
-              title: 'Error',
-              content: res.error.message,
-              okText: 'OK'
-            });
+            this.createNotificationError(res.error.message);
           },
         }
       );
@@ -120,21 +125,29 @@ export class CustomerModalComponent implements OnInit {
   updateCustomer(id: number, val: any) {
     this.auth.UpdateCustomer(id, val).subscribe(
       {
-        next: (res) => {
-          this.modalService.success({
-            title: 'Successfully!',
-            okText: 'OK',
-          });
+        next: () => {
+          this.createNotificationSuccess('');
           this.modalRef.destroy(val);
         },
         error: (res) => {
-          this.modalService.error({
-            title: 'Fail!',
-            content: res.error.message,
-            okText: 'OK',
-          });
-        }
+          this.createNotificationError(res.error.message);
+        },
       }
     );
   }
+
+  // Success Notification
+  createNotificationSuccess(content: any): void {
+    this.notification.success(
+      'Succesfully', content
+    );
+  }
+
+  // Error Notification
+  createNotificationError(content: any): void {
+    this.notification.error(
+      'Error', content
+    );
+  }
+
 }
