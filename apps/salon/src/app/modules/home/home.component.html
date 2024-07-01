@@ -15,7 +15,6 @@
 
               <p tds-typography tdsEllipsis>{{appoint.Customer.FirstName}} {{appoint.Customer.LastName}}</p>
               <div>
-                <tds-tag *ngIf="appoint.Status === 'Waiting'" status='custom' class="bg-info-400">Waiting</tds-tag>
                 <tds-tag *ngIf="appoint.Status === 'Examining'" status='custom'
                   class="bg-success-400">Examining</tds-tag>
               </div>
@@ -36,7 +35,8 @@
       <div *ngIf="inSession.length === 0" class="h-60 flex justify-center items-center">
         <tds-empty></tds-empty>
       </div>
-      <div *ngIf="inSession.length !== 0" class="gap-x-2 grid grid-cols-3 flex-wrap overflow-y-auto mt-3" style="max-height: 225px">
+      <div *ngIf="inSession.length !== 0" class="gap-x-2 grid grid-cols-3 flex-wrap overflow-y-auto mt-3"
+        style="max-height: 225px">
         <tds-card *ngFor="let appoint of inSession" class="border rounded-10 col-span-1 mb-2">
           <!-- Card Header -->
           <tds-card-header class="bg-green-success-200 text-white ">
@@ -125,7 +125,7 @@
               <i class="tdsi-edit-fill"></i>
             </button>
             <button tds-button-icon color="secondary" tds-tooltip tooltipTitle="Switch To Reception"
-              (click)="chooseDoctor(appoint.AppointmentID, 'Waiting')" class="ml-3">
+              (click)="chooseDoctor(appoint.AppointmentID, 'Examining')" class="ml-3">
               <i class="tdsi-receive-fill"></i>
             </button>
           </div>

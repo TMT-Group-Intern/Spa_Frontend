@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit {
   }
   // Display Appointment List
   initAppointmentList() {
-    this.sharedService.appointmentList(1).subscribe((data:any) => {
+    this.sharedService.appointmentList(2).subscribe((data:any) => {
       this.appointmentList = data;
       this.todayBooking = this.appointmentList.filter((appointment: any) =>
         appointment.Status === "Scheduled" ||
@@ -100,7 +100,7 @@ export class HomeComponent implements OnInit {
   onEditAppointment(id:number){
     const modal = this.tModalSvc.create({
       title:'Tạo dịch vụ lịch hẹn',
-      content: ServiceAppointmentModalComponent,
+      content: AppointmentModalComponent,
       footer:null,
       size:'lg',
       componentParams:{
