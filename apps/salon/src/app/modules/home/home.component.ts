@@ -81,7 +81,7 @@ export class HomeComponent implements OnInit {
   // Open Create Appointment Modal
   createAppointment(){
     const modal = this.tModalSvc.create({
-      title:'Create Appointment',
+      title:'Tạo lịch hẹn',
       content: AppointmentModalComponent,
       footer:null,
       size:'lg'
@@ -97,8 +97,8 @@ export class HomeComponent implements OnInit {
   // Open Edit Appointment Modal
   onEditAppointment(id:number){
     const modal = this.tModalSvc.create({
-      title:'Edit Appointment',
-      content: AppointmentModalComponent,
+      title:'Tạo dịch vụ lịch hẹn',
+      content: ServiceAppointmentModalComponent,
       footer:null,
       size:'lg',
       componentParams:{

@@ -12,16 +12,16 @@
   <div [style.width.%]="100" class="flex h-screen overflow-x-auto items-center">
     <tds-data-table class="p-2" [tdsData]="ServiceList" [tdsShowSizeChanger]="true"
       [tdsPageSize]="10" [tdsBordered]="true">
-      <tds-data-table-column [tdsField]="'serviceCode'" [tdsTitle]="'Code'" tdsWidth="10%" [tdsLeft]="true">
+      <tds-data-table-column [tdsField]="'serviceCode'" [tdsTitle]="'Mã số'" tdsWidth="10%" [tdsLeft]="true">
       </tds-data-table-column>
 
-      <tds-data-table-column [tdsField]="'serviceName'" [tdsTitle]="'Name'" [tdsDataType]="'text'" tdsWidth="20%">
+      <tds-data-table-column [tdsField]="'serviceName'" [tdsTitle]="'Tên'" [tdsDataType]="'text'" tdsWidth="20%">
       </tds-data-table-column>
 
-      <tds-data-table-column [tdsField]="'price'" [tdsTitle]="'Price'" tdsWidth="20%" [tdsDataType]="'numeric'"
+      <tds-data-table-column [tdsField]="'price'" [tdsTitle]="'Giá'" tdsWidth="20%" [tdsDataType]="'numeric'"
         [tdsFormat]="{ thousandSeparator: ',' }">
       </tds-data-table-column>
-      <tds-data-table-column [tdsField]="'description'" [tdsTitle]="'Description'" [tdsDataType]="'text'"
+      <tds-data-table-column [tdsField]="'description'" [tdsTitle]="'Mô tả'" [tdsDataType]="'text'"
         tdsWidth="40%">
       </tds-data-table-column>
 

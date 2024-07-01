@@ -11,6 +11,7 @@ import { TDSTimelineModule } from 'tds-ui/timeline';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSPaginationModule } from 'tds-ui/pagination';
+import { TDSSelectModule } from 'tds-ui/select';
 
 
 @Component({
@@ -25,7 +26,8 @@ import { TDSPaginationModule } from 'tds-ui/pagination';
     TDSTimelineModule,
     TDSToolTipModule,
     TDSButtonModule,
-    TDSPaginationModule
+    TDSPaginationModule,
+    TDSSelectModule
   ],
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],
@@ -79,7 +81,7 @@ export class CustomerListComponent implements OnInit {
 
   createCustomer(){
     const modal = this.tModalSvc.create({
-      title:'Create Customer',
+      title:'Thêm khách hàng',
       content: CustomerModalComponent,
       footer:null,
       size:'lg'
