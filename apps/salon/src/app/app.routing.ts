@@ -9,6 +9,7 @@ import { RegisterComponent } from './register/register.component';
 import { RevenueStaticsModule } from './modules/revenue-statistics/revenue-statistics.module';
 import { EmployeeListComponent } from './modules/employee-list/employee-list.component';
 import { HomeComponent } from './modules/home/home.component';
+import { CustomerDetailComponent } from './modules/customer-list/customer-detail/customer-detail.component';
 
 const routes: Routes = [
   {path: '', component:LoginComponent},
@@ -18,9 +19,16 @@ const routes: Routes = [
       {path: 'home', loadComponent: ()=> HomeComponent},
       {path: 'products', loadComponent: ()=> ProductsComponent},
       {path: 'service-list', loadComponent: ()=> ServiceListComponent},
-      {path: 'customer-list', loadComponent: ()=> CustomerListComponent},
+      {path: 'customer-list', loadComponent: ()=> CustomerListComponent,
+        children:[
+          {
+            path: 'customer-detail' , component: CustomerDetailComponent
+          }
+        ]
+      },
       {path: 'revenue-statistics', loadChildren: ()=> RevenueStaticsModule},
-      {path: 'employee-list', loadComponent: ()=> EmployeeListComponent}
+      {path: 'employee-list', loadComponent: ()=> EmployeeListComponent},
+     // {path: 'customer-detail/:id', loadComponent: ()=> CustomerDetailComponent}
     ]
    },
   {path: 'register', component:RegisterComponent},
