@@ -10,8 +10,8 @@
   </div>
 
   <div [style.width.%]="100" class="flex h-screen overflow-x-auto items-center">
-    <tds-data-table class="p-2" [tdsData]="ServiceList" [tdsShowSizeChanger]="true"
-      [tdsPageSize]="10" [tdsBordered]="true">
+    <tds-data-table class="p-2" [tdsData]="ServiceList" [tdsShowSizeChanger]="true" [tdsPageSize]="10"
+      [tdsBordered]="true">
       <tds-data-table-column [tdsField]="'serviceCode'" [tdsTitle]="'Code'" tdsWidth="10%" [tdsLeft]="true">
       </tds-data-table-column>
 
@@ -27,14 +27,16 @@
 
       <tds-data-table-column [tdsContent]="commandTpl" tdsWidth="10%" [tdsColumnType]="'command'">
         <ng-template #commandTpl let-dataRow>
-          <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-secondary-1"
-            (click)="showEditModal(dataRow.serviceID)">
-            <i class="tdsi-edit-fill"></i>
-          </button>
-          <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-red-500"
-            (click)="showDeleteModal(dataRow.serviceID)">
-            <i class="tdsi-trash-fill"></i>
-          </button>
+          <div class="flex justify-around">
+            <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-secondary-1"
+              (click)="showEditModal(dataRow.serviceID)">
+              <i class="tdsi-edit-fill"></i>
+            </button>
+            <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-red-500"
+              (click)="showDeleteModal(dataRow.serviceID)">
+              <i class="tdsi-trash-fill"></i>
+            </button>
+          </div>
         </ng-template>
       </tds-data-table-column>
     </tds-data-table>

@@ -41,9 +41,9 @@ export class AppointmentModalComponent implements OnInit {
 
   // public doctorOptions: DoctorOption[] = [];
   public doctorOptions = [
-    { id: 6, name: 'A' },
-    { id: 7, name: 'B' },
-    { id: 8, name: 'C' },
+    { id: 6, name: 'ABC' },
+    { id: 7, name: 'BAC' },
+    { id: 8, name: 'CBA' },
   ]
 
   public statusOptions = [
