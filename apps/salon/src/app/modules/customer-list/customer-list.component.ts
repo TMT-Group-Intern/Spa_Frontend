@@ -11,6 +11,9 @@ import { TDSTimelineModule } from 'tds-ui/timeline';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSPaginationModule } from 'tds-ui/pagination';
+import { TDSBreadCrumbModule } from 'tds-ui/breadcrumb';
+import { CustomerDetailComponent } from './customer-detail/customer-detail.component';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
@@ -25,7 +28,10 @@ import { TDSPaginationModule } from 'tds-ui/pagination';
     TDSTimelineModule,
     TDSToolTipModule,
     TDSButtonModule,
-    TDSPaginationModule
+    TDSPaginationModule,
+    TDSBreadCrumbModule,
+    CustomerDetailComponent,
+    RouterLink
   ],
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],
