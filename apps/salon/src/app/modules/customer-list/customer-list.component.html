@@ -12,19 +12,30 @@
   <tds-data-table class="p-2" [tdsRounded]="true" [tdsShowPagination]="false" [tdsFrontPagination]="false" [tdsData]="customerOfPage" [tdsShowSizeChanger]="true"
     [tdsPageSize]="20" [tdsBordered]="true">
 
-    <tds-data-table-column [tdsField]="'customerCode'" [tdsTitle]="'ID'" tdsWidth="8%"
+    <tds-data-table-expand-row [tdsContent]="expandTpl" tdsWidth="2%">
+      <ng-template #expandTpl let-dataRow let-expand="expand">
+        <tds-timeline>
+          <tds-timeline-item>Create a services site 2015-09-01</tds-timeline-item>
+          <tds-timeline-item>Solve initial network problems 2015-09-01</tds-timeline-item>
+          <tds-timeline-item>Technical testing 2015-09-01</tds-timeline-item>
+          <tds-timeline-item>Network problems being solved 2015-09-01</tds-timeline-item>
+        </tds-timeline>
+      </ng-template>
+    </tds-data-table-expand-row>
+
+    <tds-data-table-column [tdsField]="'customerCode'" [tdsTitle]="'Mã số'" tdsWidth="8%"
       [tdsDataType]="'text'"></tds-data-table-column>
 
-    <tds-data-table-column [tdsField]="'firstName'" [tdsTitle]="'First Name'" tdsWidth="20%"
+    <tds-data-table-column [tdsField]="'firstName'" [tdsTitle]="'Họ'" tdsWidth="20%"
       [tdsDataType]="'text'"></tds-data-table-column>
 
-    <tds-data-table-column [tdsField]="'lastName'" [tdsTitle]="'Last Name'" tdsWidth="20%"
+    <tds-data-table-column [tdsField]="'lastName'" [tdsTitle]="'Tên'" tdsWidth="20%"
       [tdsDataType]="'text'"></tds-data-table-column>
 
-    <tds-data-table-column [tdsField]="'gender'" [tdsTitle]="'Gender'" tdsWidth="10%"
+    <tds-data-table-column [tdsField]="'gender'" [tdsTitle]="'Giới tính'" tdsWidth="10%"
       [tdsDataType]="'text'"></tds-data-table-column>
 
-    <tds-data-table-column [tdsField]="'dateOfBirth'" [tdsTitle]="'Date of Birth'" tdsWidth="9%" [tdsDataType]="'date'"
+    <tds-data-table-column [tdsField]="'dateOfBirth'" [tdsTitle]="'Ngày sinh'" tdsWidth="9%" [tdsDataType]="'date'"
       [tdsFormat]="'dd/mm/yyyy'"></tds-data-table-column>
 
     <tds-data-table-column [tdsContent]="commandTpl" tdsWidth="7%" [tdsColumnType]="'command'"

@@ -51,7 +51,7 @@ export class AuthService {
   }
 
   // Search Customer
-  searchCustomer(val: any): Observable<any[]> {
+  searchCustomer(val: any): Observable<{customers: any[]}> {
     return this.http.get<any>(this.baseUrl + 'Customers/search?searchTerm=' + val);
   }
 

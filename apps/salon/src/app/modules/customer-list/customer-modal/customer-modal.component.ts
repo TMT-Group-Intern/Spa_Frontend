@@ -16,6 +16,7 @@ import { AuthService } from '../../../shared.service';
 import { catchError, of } from 'rxjs';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { TDSButtonModule } from 'tds-ui/button';
+import { TDSSelectModule } from 'tds-ui/select';
 import { startOfToday, isAfter } from 'date-fns';
 
 @Component({
@@ -31,6 +32,7 @@ import { startOfToday, isAfter } from 'date-fns';
     TDSDatePickerModule,
     CustomerListComponent,
     TDSButtonModule,
+    TDSSelectModule
   ],
   templateUrl: './customer-modal.component.html',
   styleUrls: ['./customer-modal.component.scss'],
