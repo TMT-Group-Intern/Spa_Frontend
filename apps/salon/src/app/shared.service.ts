@@ -9,7 +9,6 @@ import { HttpHeaders } from '@angular/common/http';
 export class AuthService {
 
   private baseUrl: string| undefined;
-   //private baseUrl = "https://localhost:5253/api/";
 
   constructor(private http : HttpClient) {
      this.baseUrl = environment.BASE_URI
@@ -95,10 +94,13 @@ export class AuthService {
   UpdateAppointment(id: number, val:any) {
     return this.http.put(this.baseUrl + 'Appointment/' + id, val);
   }
+
   // Update Status
   UpdateStatus(id: number, status: string) {
     return this.http.put(this.baseUrl + 'Appointment/updatestatus/' + id + '?status=' + status, status);
   }
+
+  //
   updateAppointmentWithService(id: number, status: any, val:any) {
     return this.http.put(this.baseUrl + 'Appointment/api/UpdateAppointmentWithService/' + id + '/' + status, val);
   }
@@ -108,6 +110,28 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'Appointment/' + id);
   }
 
+  // Update Discount
+  updateDiscount(id: any, discount: any, val:any) {
+    return this.http.put(this.baseUrl + 'Appointment/UpdateDiscount?id=' + id + '&perDiscount=' + discount, val);
+  }
+
+  // Create a Payment
+  createPayment(id: any, val: any) {
+    return this.http.post(this.baseUrl + 'Payment?Id=' + id, val);
+  }
+
+
+  //
+  employeeList(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'User/allEmployee');
+  }
+
+  // Get Employee by Branch ID & Job Type
+  getEmployee(branch: number, job: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'User/EmployeeByBranchAndJob?branchID=' + branch + '&jobTypeID=' + job);
+  }
+
+  //
   signUp(id:string,name:string,email:string,password:string,re_password:string){
     return this.http.post<{flag:boolean, message:string}>(this.baseUrl+'register', {
       id: id,
@@ -118,6 +142,7 @@ export class AuthService {
     })
   }
 
+  //
   login(email:string,password:string){
     return this.http.post<{user:object,token:object}>(this.baseUrl+'Authentication/login', {
       email: email,

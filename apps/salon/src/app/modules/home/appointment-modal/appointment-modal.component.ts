@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TDSModalModule, TDSModalRef, TDSModalService } from 'tds-ui/modal';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
-import { TDSRadioModule } from 'tds-ui/radio';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSDatePickerModule } from 'tds-ui/date-picker';
 import { CustomerListComponent } from '../../customer-list/customer-list.component';
@@ -29,7 +28,6 @@ import { BehaviorSubject, debounceTime, of, switchMap } from 'rxjs';
     ReactiveFormsModule,
     TDSModalModule,
     TDSFormFieldModule,
-    TDSRadioModule,
     TDSInputModule,
     TDSDatePickerModule,
     CustomerListComponent,
@@ -42,14 +40,15 @@ import { BehaviorSubject, debounceTime, of, switchMap } from 'rxjs';
   templateUrl: './appointment-modal.component.html',
   styleUrls: ['./appointment-modal.component.scss'],
 })
+
 export class AppointmentModalComponent implements OnInit {
   searchPhone$ = new BehaviorSubject<string>('')
+
+  // public doctorOptions: DoctorOption[] = [];
   public doctorOptions = [
-    { id: 11, name: 'Elton John' },
-    { id: 12, name: 'Elvis Presley' },
-    { id: 5, name: 'Paul McCartney' },
-    { id: 14, name: 'Elton John' },
-    { id: 13, name: 'Elvis Presley' },
+    { id: 6, name: 'A' },
+    { id: 7, name: 'B' },
+    { id: 8, name: 'C' },
   ]
 
   public statusOptions = [
@@ -71,9 +70,8 @@ export class AppointmentModalComponent implements OnInit {
     name: [''],
     branch: ['ABC'],
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
-    employeeID: [],
-    assignments: [[]],
-    doctor: [0],
+    assignments: [],
+    doctor: [],
     appointmentDate: [new Date()],
     status: ['Scheduled'],
     customer:[null]
@@ -87,7 +85,6 @@ export class AppointmentModalComponent implements OnInit {
   constructor(
     private shared: AuthService,
     private notification: TDSNotificationService,
-
   ) { }
 
   ngOnInit(): void {
@@ -109,8 +106,13 @@ export class AppointmentModalComponent implements OnInit {
           customerID: data.Customer.CustomerID,
           status: data.Status,
           assignments: data.Assignments,
-          doctor: data.Assignments[0].EmployerID
         });
+        if (this.form.value.assignments) {
+          this.form.patchValue({
+            doctor: data.Assignments[0].EmployerID,
+          });
+        }
+        console.log(this.form.value)
       });
 
     }
@@ -133,17 +135,25 @@ export class AppointmentModalComponent implements OnInit {
 
     if (this.form.invalid) return;
 
-    const {doctor, appointmentDate, ...req} =this.form.value
+    const { doctor, appointmentDate, ...req } = this.form.value
 
-    // Add employee to the array
-    this.empID.push(doctor)
+    if (doctor != null) {
+      // Add employee to the array
+      this.empID.push(doctor)
+    }
 
-    const val = {
+    const val:any = {
       ...req,
       appointmentDate: format(new Date(appointmentDate as Date), DATE_CONFIG.DATE_BASE),
-      employeeID: this.empID
-    };
 
+      employeeID: this.empID,
+    };
+    if(doctor != null){
+      val.assignments = [{ employerID: doctor }];
+    }
+
+
+    console.log(val.employeeID)
     if (this.id) {
       this.updateAppointment(this.id, val);
     } else {
@@ -243,4 +253,9 @@ export class AppointmentModalComponent implements OnInit {
     );
   }
 
+}
+
+interface DoctorOption {
+  id: number;
+  name: string;
 }
