@@ -43,9 +43,9 @@ export class LoginComponent implements OnInit {
     const email=this.loginForm.value.taiKhoan;
     const password = this.loginForm.value.matKhau;
     this.auth.login(email,password).subscribe((result:any) => {
-      console.log(result.token, result.user);
+      console.log(result.token,result.flag,result.mess);
       localStorage.setItem('userToken', result.token);
-      if(result.token!= null && result.user!=null)
+      if(result.token!= null&&result.flag != false)
         {
           this.router.navigate(['home']);
         }

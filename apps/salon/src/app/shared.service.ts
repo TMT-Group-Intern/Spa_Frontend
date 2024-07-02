@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http'; 
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -39,7 +41,29 @@ export class AuthService {
   deleteAService(id:any){
     return this.http.delete(this.baseUrl + 'Services/'+ id);
   }
-
+  UserList():Observable<any[]>{
+    return this.http.get<any>(this.baseUrl+ 'User/allUser2')
+  }
+  AdminList():Observable<any[]>{
+    return this.http.get<any>(this.baseUrl+ 'User/allAdmin')
+  }
+  EmpList():Observable<any[]>{
+    return this.http.get<any>(this.baseUrl+ 'User/allEmployee')
+  }
+  deleteUser(Email:string){
+    return this.http.delete(this.baseUrl + 'User/deleteUser?email='+ Email);
+  }
+  createUser(val:any){
+    return this.http.post(this.baseUrl + 'Authentication/register', val);
+  }
+  createAccountForEmployee(Email:string){
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const body = { email: Email };
+    return this.http.post(this.baseUrl + 'Authentication/CreateUserForEmployee', body, { headers });
+  }
+  editUser(email: string,val:any){
+    return this.http.put(this.baseUrl + 'User/updateUser'+ email, val);
+  }
   // Show list of Customer
   CustomerList(): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Customers');
@@ -109,7 +133,20 @@ export class AuthService {
   getAppointment(id: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Appointment/' + id);
   }
-
+  signUp(lastName:string,firstName:string,gender:string,phone:string,email:string,password:string,confirmPassword:string,dateOfBirth:string,hireDate:string,jobTypeID:string,branchID:string,role:string){
+    return this.http.post<{status:object}>(this.baseUrl+'Authentication/register', {
+      lastName : lastName,
+      firstName : firstName,
+      phone : phone,
+      email : email,
+      password : password,
+      confirmPassword : confirmPassword,
+      dateOfBirth : dateOfBirth,
+      hireDate : hireDate,
+      gender : gender,
+      jobTypeID:jobTypeID,
+      branchID:branchID,
+      role : role
   // Update Discount
   updateDiscount(id: any, discount: any, val:any) {
     return this.http.put(this.baseUrl + 'Appointment/UpdateDiscount?id=' + id + '&perDiscount=' + discount, val);
@@ -149,7 +186,7 @@ export class AuthService {
 
   //
   login(email:string,password:string){
-    return this.http.post<{user:object,token:object}>(this.baseUrl+'Authentication/login', {
+    return this.http.post<{flag:boolean,mess:string,token:string}>(this.baseUrl+'Authentication/login', {
       email: email,
       password: password
     })
