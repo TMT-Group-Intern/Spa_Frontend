@@ -26,7 +26,6 @@ const routes: Routes = [
       },
       {path: 'revenue-statistics', loadChildren: ()=> RevenueStaticsModule},
       {path: 'users', loadComponent: ()=> UsersComponent}
-      {path: 'employee-list', loadComponent: ()=> EmployeeListComponent},
      // {path: 'customer-detail/:id', loadComponent: ()=> CustomerDetailComponent}
     ]
    },
@@ -36,7 +35,7 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  
+
 })
 
 export class AppRoutingModule{}
