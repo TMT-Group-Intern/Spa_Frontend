@@ -44,13 +44,10 @@ export class AppointmentModalComponent implements OnInit {
 
   searchPhone$ = new BehaviorSubject<string>('')
   public doctorOptions: any[] = [];
-
   public statusOptions = [
     'Scheduled',
-    'Confirmed',
     'Cancelled',
   ]
-
   private readonly tModalSvc = inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
   @Input() id?: number;
@@ -66,8 +63,11 @@ export class AppointmentModalComponent implements OnInit {
     status: ['Scheduled'],
     customer: [null]
   });
-  isExist = false;
-  isHide = false;
+  // isExist = false;
+  // Hide search Phone Number
+  isHide1 = false;
+  // Hide Display Phone Number
+  isHide2 = true;
   today = startOfToday();
   empID: any[] = []
   dataCustomer: any[] = []
@@ -83,27 +83,29 @@ export class AppointmentModalComponent implements OnInit {
     this.form.get('name')?.disable()
     this.form.get('branch')?.disable()
 
-    this.isHide = false;
+    this.isHide1 = false;
+    this.isHide2 = true;
 
     if (this.id) {
       this.form.get('phone')?.disable()
-      this.isHide = true;
-      this.shared.getAppointment(this.id).subscribe((data: any) => {
-        this.form.patchValue({
-          phone: data.Customer.Phone,
-          name: data.Customer.FirstName + ' ' + data.Customer.LastName,
-          appointmentDate: data.AppointmentDate,
-          customerID: data.Customer.CustomerID,
-          status: data.Status,
-          assignments: data.Assignments,
-        });
-        if (this.form.value.assignments) {
+      this.isHide1 = true;
+      this.isHide2 = false;
+      this.shared.getAppointment(this.id).subscribe(
+        (data: any) => {
           this.form.patchValue({
-            doctor: data.Assignments[0].EmployerID,
+            phone: data.Customer.Phone,
+            name: data.Customer.FirstName + ' ' + data.Customer.LastName,
+            appointmentDate: data.AppointmentDate,
+            customerID: data.Customer.CustomerID,
+            status: data.Status,
           });
-        }
-        console.log(this.form.value)
-      });
+          if (data.Assignments[0].EmployerID) {
+            this.form.patchValue({
+              doctor: data.Assignments[0].EmployerID,
+            });
+          }
+          console.log(this.form.value)
+        });
 
     }
 
@@ -218,7 +220,7 @@ export class AppointmentModalComponent implements OnInit {
             });
           }
         )
-        this.isExist = false
+        // this.isExist = false
       }
     })
   }

@@ -110,7 +110,7 @@
         </tds-card-header>
         <!-- Card content -->
         <tds-card-content class="">
-          <p><i class="tdsi-earpiece-fill text-green-success-300"></i> ABC 123456789 </p>
+          <p><i class="tdsi-earpiece-fill text-green-success-300"></i> {{returnDoctor(appoint.AppointmentID)}}</p>
           <div class="flex justify-between">
             <p><i class="tdsi-time-fill text-green-success-300"></i> {{formatDate(appoint.AppointmentDate,'HH:mm')}}</p>
             <p><i class="tdsi-call-fill text-green-success-300"></i> {{appoint.Customer.Phone}}</p>
