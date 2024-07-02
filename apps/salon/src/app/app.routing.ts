@@ -5,10 +5,9 @@ import { LoginComponent } from './login/login.component';
 import { ProductsComponent } from './modules/products/products.component';
 import { LayoutComponent } from './layout/layout.component'; 
 import { CustomerListComponent } from './modules/customer-list/customer-list.component';
-import { RegisterComponent } from './register/register.component';
 import { RevenueStaticsModule } from './modules/revenue-statistics/revenue-statistics.module';
-import { EmployeeListComponent } from './modules/employee-list/employee-list.component';
 import { HomeComponent } from './modules/home/home.component';
+import { UsersComponent } from './modules/users/users.component';
 
 const routes: Routes = [
   {path: '', component:LoginComponent},
@@ -20,16 +19,16 @@ const routes: Routes = [
       {path: 'service-list', loadComponent: ()=> ServiceListComponent},
       {path: 'customer-list', loadComponent: ()=> CustomerListComponent},
       {path: 'revenue-statistics', loadChildren: ()=> RevenueStaticsModule},
-      {path: 'employee-list', loadComponent: ()=> EmployeeListComponent}
+      {path: 'users', loadComponent: ()=> UsersComponent}
     ]
    },
-  {path: 'register', component:RegisterComponent},
 ]
 
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  
 })
 
 export class AppRoutingModule{}

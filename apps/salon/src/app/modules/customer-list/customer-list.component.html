@@ -38,14 +38,6 @@
     <tds-data-table-column [tdsField]="'dateOfBirth'" [tdsTitle]="'Date of Birth'" tdsWidth="9%" [tdsDataType]="'date'"
       [tdsFormat]="'dd/mm/yyyy'"></tds-data-table-column>
 
-    <!-- <tds-data-table-column
-      [tdsField]="'customerTypeID'"
-      [tdsTitle]="'Customer Type ID'"
-      tdsWidth="10%"
-      [tdsDataType]="'numeric'"
-      tdsClass="text-center"
-    ></tds-data-table-column> -->
-
     <tds-data-table-column [tdsContent]="commandTpl" tdsWidth="7%" [tdsColumnType]="'command'"
       tdsClass="flex justify-around">
       <ng-template #commandTpl let-dataRow>

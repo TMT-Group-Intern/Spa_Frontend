@@ -58,13 +58,13 @@ export class MenuComponent {
       "link": '/customer-list'
     },
     {
-      "name": 'Employee',
+      "name": 'Users',
       "icon": "tdsi-contact-fill",
       // "htmlIcon": `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="tdsi-contact-fill">
 
       //   </svg>
       //   `,
-      "link": '/employee-list'
+      "link": '/users'
     },
     {
       "name": "Service",
