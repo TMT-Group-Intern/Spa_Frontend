@@ -12,6 +12,10 @@ import { AppointmentModalComponent } from './appointment-modal/appointment-modal
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { TDSTypographyModule } from 'tds-ui/typography';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
+import { ChooseDoctorModalComponent } from './choose-doctor-modal/choose-doctor-modal.component';
+import { InSessionModalComponent } from './in-session-modal/in-session-modal.component';
+import { PaymentModalComponent } from './payment-modal/payment-modal.component';
+import { TDSEmptyModule } from 'tds-ui/empty';
 
 @Component({
   selector: 'frontend-home',
@@ -24,7 +28,8 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
     TDSTagModule,
     TDSToolTipModule,
     TDSTypographyModule,
-    TDSFormFieldModule
+    TDSFormFieldModule,
+    TDSEmptyModule,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -32,18 +37,18 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
 
 export class HomeComponent implements OnInit {
 
-
-  private readonly tModalSvc =inject(TDSModalService)
+  private readonly tModalSvc = inject(TDSModalService)
   appointmentList: any[] = [];
   time: any;
   todayBooking: any[] = [];
   reception: any[] = [];
   inSession: any[] = [];
   status: any
+  doctor = '---'
 
   constructor(
-    private sharedService : AuthService,
-  ) {}
+    private sharedService: AuthService,
+  ) { }
 
   ngOnInit(): void {
     this.initAppointmentList();
@@ -51,24 +56,42 @@ export class HomeComponent implements OnInit {
   }
   // Display Appointment List
   initAppointmentList() {
-    this.sharedService.appointmentList(1).subscribe((data:any) => {
-      this.appointmentList = data;
-      this.todayBooking = this.appointmentList.filter((appointment: any) =>
-        appointment.Status === "Scheduled" ||
-        appointment.Status === "Confirmed" ||
-        appointment.Status === "Cancelled"
-      );
+    this.sharedService.appointmentList(2).subscribe(
+      (data: any) => {
+        this.appointmentList = data;
+        // this.sharedService.getAppointment(data.AppointmentID).subscribe(
+        //   (data: any) => {
+        //     if(data.Assignments[0].EmployerID)
+        //     this.doctor = data.Assignments[0].EmployerID
+        //   }
+        // )
+        this.todayBooking = this.appointmentList.filter((appointment: any) =>
+          appointment.Status === "Scheduled" ||
+          appointment.Status === "Confirmed" ||
+          appointment.Status === "Cancelled"
+        );
 
-      this.reception = this.appointmentList.filter((appointment: any) =>
-        appointment.Status === "Waiting" ||
-        appointment.Status === "Examining"
-      );
+        this.reception = this.appointmentList.filter((appointment: any) =>
+          appointment.Status === "Waiting" ||
+          appointment.Status === "Examining"
+        );
 
-      this.inSession = this.appointmentList.filter((appointment: any) =>
-        appointment.Status === "Preparation" ||
-        appointment.Status === "Treating"
-      );
-    });
+        this.inSession = this.appointmentList.filter((appointment: any) =>
+          appointment.Status === "Preparation" ||
+          appointment.Status === "Treating"
+        );
+      });
+  }
+
+  // Return Doctor
+  returnDoctor(id: any): string {
+    this.sharedService.getAppointment(id).subscribe(
+        (data: any) => {
+          if(data.Assignments[0].EmployerID)
+          this.doctor = `${data.Assignments[0].Employees.FirstName} ${data.Assignments[0].Employees.LastName}`
+        }
+      )
+    return this.doctor;
   }
 
   // Format Date & Time
@@ -77,56 +100,75 @@ export class HomeComponent implements OnInit {
   }
 
   // Open Create Appointment Modal
-  createAppointment(){
+  createAppointment() {
     const modal = this.tModalSvc.create({
-      title:'Create Appointment',
+      title: 'Tạo lịch hẹn',
       content: AppointmentModalComponent,
-      footer:null,
-      size:'lg'
+      footer: null,
+      size: 'lg'
     });
-    modal.afterClose.asObservable().subscribe(res=>{
-      if(res){
+    modal.afterClose.asObservable().subscribe(res => {
+      if (res) {
         console.log(res)
         this.initAppointmentList()
       }
     })
   }
 
-  // Open Service Appointment Modal
-  callmodalServiceAppointment(id:number){
+  // Open Edit Appointment Modal
+  onEditAppointment(id: number) {
     const modal = this.tModalSvc.create({
-      title:'Create service appointment',
-      content: ServiceAppointmentModalComponent,
-      footer:null,
-      size:'lg',
-      componentParams:{
+      title: 'Tạo dịch vụ lịch hẹn',
+      content: AppointmentModalComponent,
+      footer: null,
+      size: 'lg',
+      componentParams: {
         id
       }
     });
-    modal.afterClose.asObservable().subscribe(res=>{
-      if(res){
+    modal.afterClose.asObservable().subscribe(res => {
+      if (res) {
         this.initAppointmentList()
       }
     })
   }
 
-  // Open Edit Appointment Modal
-  onEditAppointment(id:number){
+  // Open Edit In Session Modal
+  onEditInSession(id: number) {
     const modal = this.tModalSvc.create({
-      title:'Edit Appointment',
-      content: AppointmentModalComponent,
-      footer:null,
-      size:'lg',
-      componentParams:{
+      title: 'Edit Information',
+      content: InSessionModalComponent,
+      footer: null,
+      size: 'lg',
+      componentParams: {
         id
       }
     });
-    modal.afterClose.asObservable().subscribe(res=>{
-      if(res){
+    modal.afterClose.asObservable().subscribe(res => {
+      if (res) {
         this.initAppointmentList()
       }
     })
   }
+
+  // Open Edit Payment Modal
+  onEditPayment(id: number) {
+    const modal = this.tModalSvc.create({
+      title: 'Edit Information',
+      content: PaymentModalComponent,
+      footer: null,
+      size: 'xl',
+      componentParams: {
+        id
+      }
+    });
+    modal.afterClose.asObservable().subscribe(res => {
+      if (res) {
+        this.initAppointmentList()
+      }
+    })
+  }
+
 
   // Update Status
   updateStatus(id: number, status: string) {
@@ -140,6 +182,54 @@ export class HomeComponent implements OnInit {
         this.initAppointmentList()
       }
     );
+  }
+
+
+  // Choose doctor
+  chooseDoctor(id: number, status: string) {
+    this.sharedService.getAppointment(id).subscribe(
+      (res: any) => {
+        const emp: any[] = res.Assignments
+        if (emp.length == 0) { //|| (res.Assignments.lenght > 0 && res.Assignments[1].)
+          const appointmentDate = res.AppointmentDate
+          const modal = this.tModalSvc.create({
+            title: 'Choose Doctor',
+            content: ChooseDoctorModalComponent,
+            footer: null,
+            size: 'md',
+            componentParams: {
+              id,
+              appointmentDate
+            }
+          });
+          modal.afterClose.asObservable().subscribe(res => {
+            if (res) {
+              this.updateStatus(id, status)
+            }
+          })
+        } else {
+          this.updateStatus(id, status)
+        }
+      }
+    )
+  }
+
+  // Open Service Appointment Modal
+  callmodalServiceAppointment(id: number) {
+    const modal = this.tModalSvc.create({
+      title: 'Create service appointment',
+      content: ServiceAppointmentModalComponent,
+      footer: null,
+      size: 'lg',
+      componentParams: {
+        id
+      }
+    });
+    modal.afterClose.asObservable().subscribe(res => {
+      if (res) {
+        this.initAppointmentList()
+      }
+    })
   }
 
 }

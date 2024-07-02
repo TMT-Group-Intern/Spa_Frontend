@@ -1,0 +1,31 @@
+<form class="py-2" id="idform" [formGroup]="form" autocomplete="off">
+
+  <!-- Full name -->
+  <tds-label>Full Name</tds-label>
+  <tds-form-field class="my-2">
+    <input tdsInput autocomplete="off" formControlName="name" class="appearance-none w-full" type="text" />
+  </tds-form-field>
+
+  <!-- Spa Therapist -->
+  <tds-label>Therapist</tds-label>
+  <tds-form-field class="my-2">
+    <tds-select valueField="id" textField="name" placeholder='---' [data]="spaTherapistOptions" formControlName="spaTherapist">
+    </tds-select>
+  </tds-form-field>
+
+  <!-- Status -->
+  <tds-label>Status</tds-label>
+  <tds-form-field class="my-2">
+    <tds-select placeholder='---' [data]="statusOptions" formControlName="status">
+    </tds-select>
+  </tds-form-field>
+
+</form>
+
+<ng-container *tdsModalFooter>
+  <div class="p-4">
+    <button tds-button form="idform" (click)="submit()" color="success" class="w-full rounded">
+      Submit
+    </button>
+  </div>
+</ng-container>
