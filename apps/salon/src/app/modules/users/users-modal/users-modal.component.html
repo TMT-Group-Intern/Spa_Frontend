@@ -1,0 +1,156 @@
+<form [formGroup]="createUser" id="registerUser" autocomplete="off">
+    <!-- model register -->
+    <div>
+        <tds-label class="pt-4">Họ</tds-label>
+        <tds-form-field class="w-full mt-2">
+            <input tdsInput autocomplete="off" placeholder="Nhập họ" formControlName="lastName" [required]='true'
+                class="appearance-none" />
+            <tds-error>
+                <span
+                    *ngIf="createUser.controls['lastName'].touched && createUser.controls['lastName'].hasError('required')">Vui
+                    lòng nhập họ</span>
+            </tds-error>
+        </tds-form-field>
+        <tds-label class="pt-4">Tên</tds-label>
+        <tds-form-field class="w-full mt-2">
+            <input tdsInput autocomplete="off" placeholder="Nhập tên" formControlName="firstName" [required]='true'
+                class="appearance-none" />
+            <tds-error>
+                <span
+                    *ngIf="createUser.controls['firstName'].touched && createUser.controls['firstName'].hasError('required')">Vui
+                    lòng nhập tên</span>
+            </tds-error>
+        </tds-form-field>
+        <tds-label class="pt-4">Số điện thoại</tds-label>
+        <tds-form-field class="w-full mt-2">
+            <input tdsInput autocomplete="off" placeholder="Nhập số điện thoại" formControlName="phone"
+                [required]='true' class="appearance-none" />
+            <tds-error>
+                <span *ngIf="createUser.controls['phone'].hasError('required')">Vui
+                    lòng nhập số điện thoại</span>
+                <span *ngIf="createUser.controls['phone'].hasError('pattern')">Số điện thoại phải có đủ 10 số và bắt đầu
+                    bằng 0</span>
+            </tds-error>
+        </tds-form-field>
+        
+        <!-- Email -->
+        <tds-label class="pt-4 ">Email</tds-label>
+        <tds-form-field class="w-full mt-2">
+            <input tdsInput autocomplete="off" placeholder="Nhập email" formControlName="email" type="email"
+                [required]='true' class="appearance-none" />
+            <tds-error>
+                <span
+                    *ngIf="createUser.controls['email'].touched && createUser.controls['email'].hasError('required')">Vui
+                    lòng nhập email</span>
+                <span
+                    *ngIf="createUser.controls['email'].touched && createUser.controls['email'].hasError('email')">Email
+                    không hợp lệ</span>
+            </tds-error>
+        </tds-form-field>
+
+        <!-- Password -->
+        <tds-label class="pt-4">Mật khẩu</tds-label>
+        <tds-form-field class="w-full mt-2">
+            <input tdsInput autocomplete="off" placeholder="Nhập mật khẩu" formControlName="pass" type="password"
+                [required]='true' />
+            <tds-error>
+                <span
+                    *ngIf="createUser.controls['pass'].touched && createUser.controls['pass'].hasError('required')">Vui
+                    lòng
+                    nhập mật khẩu</span>
+                <span *ngIf="createUser.controls['pass'].touched && createUser.controls['pass'].hasError('pattern')">Mật
+                    khẩu
+                    ít nhất 8 kí tự, gồm chữ hoa, chữ thường, số và kí tự đặc biệt</span>
+            </tds-error>
+        </tds-form-field>
+        <tds-label class="pt-4">Nhập lại mật khẩu</tds-label>
+        <tds-form-field class="w-full mt-2">
+            <input tdsInput autocomplete="off" placeholder="Xác nhận mật khẩu" formControlName="retype" type="password"
+                [required]='true' />
+            <tds-error>
+                <span *ngIf="createUser.get('retype')?.errors?.['mustMatch']">Mật khẩu không khớp</span>
+            </tds-error>
+        </tds-form-field>
+        <tds-label class="pt-4">Giới tính</tds-label>
+        <tds-form-field class="w-full mt-2">
+            <tds-select valueField="id" textField="name" placeholder='Lựa chọn giới tính' disabledField="isActive"
+                formControlName="gender" [required]='true' [data]="genderOptions" [allowClear]="true"
+                class="appearance-none">
+            </tds-select>
+            <tds-error>
+                <span
+                    *ngIf="createUser.controls['gender'].touched && createUser.controls['gender'].hasError('required')">Vui
+                    lòng chọn giới tính</span>
+            </tds-error>
+        </tds-form-field>
+        <tds-label class="pt-4">Ngày sinh</tds-label>
+        <tds-form-field class="w-full mt-2">
+            <tds-date-picker formControlName="dateOfBirth" [required]="true" [allowClear]="true"></tds-date-picker>
+            <tds-error>
+                <span
+                    *ngIf="createUser.controls['dateOfBirth'].touched && createUser.controls['dateOfBirth'].hasError('required')">
+                    Vui lòng chọn ngày sinh
+                </span>
+            </tds-error>
+        </tds-form-field>
+        <tds-label class="pt-4">Ngày bắt đầu làm việc</tds-label>
+        <tds-form-field class="w-full mt-2">
+            <tds-date-picker formControlName="hireDate" [required]="true" [allowClear]="true"></tds-date-picker>
+            <tds-error>
+                <span
+                    *ngIf="createUser.controls['hireDate'].touched && createUser.controls['hireDate'].hasError('required')">
+                    Vui lòng chọn ngày bắt đầu làm việc
+                </span>
+            </tds-error>
+        </tds-form-field>
+        <tds-label class="pt-4">Loại công việc</tds-label>
+        <tds-form-field class="w-full mt-2">
+            <tds-select valueField="id" textField="name" placeholder='Lựa chọn công việc' disabledField="isActive"
+                formControlName="jobTypeID" [required]='true' [data]="jobTypeOptions" [allowClear]="true"
+                class="appearance-none">
+            </tds-select>
+            <tds-error>
+                <span
+                    *ngIf="createUser.controls['jobTypeID'].touched && createUser.controls['jobTypeID'].hasError('required')">Vui
+                    lòng chọn công việc</span>
+            </tds-error>
+        </tds-form-field>
+        <tds-label class="pt-4">Chi nhánh</tds-label>
+        <tds-form-field class="w-full mt-2">
+            <tds-select valueField="id" textField="name" placeholder='Lựa chọn chi nhánh' disabledField="isActive"
+                formControlName="branchID" [required]='true' [data]="branchOptions" [allowClear]="true"
+                class="appearance-none">
+            </tds-select>
+            <tds-error>
+                <span
+                    *ngIf="createUser.controls['branchID'].touched && createUser.controls['branchID'].hasError('required')">Vui
+                    lòng chọn chi nhánh</span>
+            </tds-error>
+        </tds-form-field>
+        <tds-label class="pt-4">Chức vụ</tds-label>
+        <tds-form-field class="w-full mt-2">
+            <tds-select valueField="id" textField="name" placeholder='Lựa chọn chức vụ' disabledField="isActive"
+                formControlName="role" [required]='true' [data]="roleOptions" [allowClear]="true"
+                class="appearance-none">
+            </tds-select>
+            <tds-error>
+                <span
+                    *ngIf="createUser.controls['role'].touched && createUser.controls['role'].hasError('required')">Vui
+                    lòng chọn chức vụ</span>
+            </tds-error>
+        </tds-form-field>
+
+
+    </div>
+    <!-- Kết thúc mã modal register -->
+</form>
+
+<ng-container *tdsModalFooter>
+    <div class="p-4">
+        <div class="w-full flex flex-col justify-center mt-8">
+            <button class="w-full mt-4" size="lg" tds-button type="submit" (click)="onSignUp()" form="registerUser"
+                style="background-color: #1b7c20;">Đăng Kí
+            </button>
+        </div>
+    </div>
+</ng-container>

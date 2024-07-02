@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { HttpHeaders } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -39,7 +41,29 @@ export class AuthService {
   deleteAService(id: any) {
     return this.http.delete(this.baseUrl + 'Services/' + id);
   }
-
+  UserList(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'User/allUser2')
+  }
+  AdminList(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'User/allAdmin')
+  }
+  EmpList(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'User/allEmployee')
+  }
+  deleteUser(Email: string) {
+    return this.http.delete(this.baseUrl + 'User/deleteUser?email=' + Email);
+  }
+  createUser(val: any) {
+    return this.http.post(this.baseUrl + 'Authentication/register', val);
+  }
+  createAccountForEmployee(Email: string) {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const body = { email: Email };
+    return this.http.post<{mess:object}>(this.baseUrl + 'Authentication/CreateUserForEmployee', body, { headers });
+  }
+  editUser(email: string, val: any) {
+    return this.http.put(this.baseUrl + 'User/updateUser' + email, val);
+  }
   // Show list of Customer
   CustomerList(): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Customers');
@@ -101,7 +125,7 @@ export class AuthService {
   }
 
   // Update Status
-  UpdateStatus(id: number, status: string) {
+  UpdateStatus(id: any, status: any) {
     return this.http.put(this.baseUrl + 'Appointment/updatestatus/' + id + '?status=' + status, status);
   }
 
@@ -115,6 +139,24 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'Appointment/' + id);
   }
 
+  //
+  signUp(lastName: string, firstName: string, gender: string, phone: string, email: string, password: string, confirmPassword: string, dateOfBirth: string, hireDate: string, jobTypeID: string, branchID: string, role: string) {
+    return this.http.post<{ status: object }>(this.baseUrl + 'Authentication/register', {
+      lastName: lastName,
+      firstName: firstName,
+      phone: phone,
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
+      dateOfBirth: dateOfBirth,
+      hireDate: hireDate,
+      gender: gender,
+      jobTypeID: jobTypeID,
+      branchID: branchID,
+      role: role
+    })
+  }
+  
   // Update Discount
   updateDiscount(id: any, discount: any, val: any) {
     return this.http.put(this.baseUrl + 'Appointment/UpdateDiscount?id=' + id + '&perDiscount=' + discount, val);
@@ -123,13 +165,16 @@ export class AuthService {
   getCustomerInQueueForTechnicalStaff(branchID: number, status: string): Observable<any[]> {
     return this.http.get<any[]>('https://localhost:44305/GetAppointmentByStatus?idBrand=' + branchID + '&status=' + status);
   }
-
   getAppointmentById(id: number) {
     return this.http.get(this.baseUrl + 'Appointment/' + id);
   }
 
+  // Assign Spa Therapist
+  assignSpaTherapist(appointment: any, empID: any, val: any) {
+    return this.http.put(this.baseUrl + 'Appointment/assigntechnicalstaff?idApp=' + appointment + '&idEmploy=' + empID, val);
+  }
 
-  // Create a Paymentid
+  // Create a Payment
   createPayment(id: any, val: any) {
     return this.http.post(this.baseUrl + 'Payment?Id=' + id, val);
   }
@@ -144,30 +189,13 @@ export class AuthService {
   getEmployee(branch: number, job: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/EmployeeByBranchAndJob?branchID=' + branch + '&jobTypeID=' + job);
   }
-
-  //
-  signUp(id: string, name: string, email: string, password: string, re_password: string) {
-    return this.http.post<{ flag: boolean, message: string }>(this.baseUrl + 'register', {
-      id: id,
-      name: name,
-      email: email,
-      password: password,
-      confirmPassword: re_password
-    })
-  }
-
+  
   //
   login(email: string, password: string) {
-    return this.http.post<{ user: object, token: object }>(this.baseUrl + 'Authentication/login', {
+    return this.http.post<{ flag: boolean, mess: string, token: string }>(this.baseUrl + 'Authentication/login', {
       email: email,
       password: password
     })
   }
-  // login(email:string,password:string): Observable<any[]> {
-  //   return this.http.post<any>(this.baseUrl+'Authentication/login', {
-  //     email: email,
-  //     password: password
-  //   })
-  // }
 
 }

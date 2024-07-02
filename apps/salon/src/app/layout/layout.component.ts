@@ -10,8 +10,8 @@ import { ServiceListComponent } from '../modules/service-list/service-list.compo
 import { CustomerListComponent } from '../modules/customer-list/customer-list.component';
 import { RevenueStaticsModule } from '../modules/revenue-statistics/revenue-statistics.module';
 import { TDSMenuModule } from 'tds-ui/menu';
-import { EmployeeListComponent } from '../modules/employee-list/employee-list.component';
 import { HomeComponent } from '../modules/home/home.component';
+import { UsersComponent } from '../modules/users/users.component';
 import { CustomerDetailComponent } from '../modules/customer-list/customer-detail/customer-detail.component';
 
 @Component({
@@ -33,8 +33,8 @@ import { CustomerDetailComponent } from '../modules/customer-list/customer-detai
     //  ServiceListComponent,
     //  CustomerListComponent,
       RevenueStaticsModule,
-    //  EmployeeListComponent,
-     // CustomerDetailComponent
+      UsersComponent,
+      CustomerDetailComponent
     ]
 })
 export class LayoutComponent {

@@ -21,7 +21,6 @@ import { startOfToday, isBefore } from 'date-fns';
 import { TDSTimePickerModule } from 'tds-ui/time-picker';
 import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
 import { format } from 'date-fns';
-import { HomeComponent } from '../home.component';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { BehaviorSubject, debounceTime, of, switchMap } from 'rxjs';
 
@@ -46,26 +45,14 @@ import { BehaviorSubject, debounceTime, of, switchMap } from 'rxjs';
   styleUrls: ['./appointment-modal.component.scss'],
 })
 export class AppointmentModalComponent implements OnInit {
-  searchPhone$ = new BehaviorSubject<string>('');
 
-  // public doctorOptions: DoctorOption[] = [];
-  public doctorOptions = [
-    { id: 1, name: 'ABC' },
-    { id: 2, name: 'BAC' },
-    { id: 3, name: 'CBA' },
-  ];
-
+  searchPhone$ = new BehaviorSubject<string>('')
+  public doctorOptions: any[] = [];
   public statusOptions = [
     'Scheduled',
-    'Confirmed',
     'Cancelled',
-    'Waiting',
-    'Examining',
-    'Preparation',
-    'Treating',
-  ];
-
-  private readonly tModalSvc = inject(TDSModalService);
+  ]
+  private readonly tModalSvc = inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
   @Input() id?: number;
   createAppointmentForm!: FormGroup;
@@ -78,10 +65,13 @@ export class AppointmentModalComponent implements OnInit {
     doctor: [],
     appointmentDate: [new Date()],
     status: ['Scheduled'],
-    customer: [null],
+    customer: [null]
   });
-  isExist = false;
-  isHide = false;
+  // isExist = false;
+  // Hide search Phone Number
+  isHide1 = false;
+  // Hide Display Phone Number
+  isHide2 = true;
   today = startOfToday();
   empID: any[] = [];
   dataCustomer: any[] = [];
@@ -97,28 +87,40 @@ export class AppointmentModalComponent implements OnInit {
     this.form.get('name')?.disable();
     this.form.get('branch')?.disable();
 
-    this.isHide = false;
+    this.isHide1 = false;
+    this.isHide2 = true;
 
     if (this.id) {
-      this.form.get('phone')?.disable();
-      this.isHide = true;
-      this.shared.getAppointment(this.id).subscribe((data: any) => {
-        this.form.patchValue({
-          phone: data.Customer.Phone,
-          name: data.Customer.FirstName + ' ' + data.Customer.LastName,
-          appointmentDate: data.AppointmentDate,
-          customerID: data.Customer.CustomerID,
-          status: data.Status,
-          assignments: data.Assignments,
-        });
-        if (this.form.value.assignments) {
+      this.form.get('phone')?.disable()
+      this.isHide1 = true;
+      this.isHide2 = false;
+      this.shared.getAppointment(this.id).subscribe(
+        (data: any) => {
           this.form.patchValue({
-            doctor: data.Assignments[0].EmployerID,
+            phone: data.Customer.Phone,
+            name: data.Customer.FirstName + ' ' + data.Customer.LastName,
+            appointmentDate: data.AppointmentDate,
+            customerID: data.Customer.CustomerID,
+            status: data.Status,           
           });
-        }
-        console.log(this.form.value);
-      });
+           if (data.Assignments[0].EmployerID) {
+            this.form.patchValue({
+                 doctor: data.Assignments[0].EmployerID,
+             });
+           }
+          console.log(this.form.value)
+        });
+
     }
+
+    // Get Doctor
+    this.shared.getEmployee(2, 2).subscribe(
+      (data: any[]) => {
+        this.doctorOptions = [...data.map(item => ({
+          id: item.employeeID,
+          name: `${item.firstName} ${item.lastName}`
+        }))]
+      })
   }
 
   // Disabled Date in the past
@@ -165,23 +167,22 @@ export class AppointmentModalComponent implements OnInit {
   }
 
   initCustomer() {
-    this.searchPhone$
-      .pipe(
-        debounceTime(500),
-        switchMap((search: string) => {
-          return search ? this.shared.searchCustomer(search) : of(null);
-        })
-      )
-      .subscribe((data) => {
-        if (data) this.dataCustomer = data.customers;
-      });
+    this.searchPhone$.pipe(
+      debounceTime(100),
+      switchMap((search: string) => {
+        return search ? this.shared.searchCustomer(search) : of(null)
+      })
+    ).subscribe((data) => {
+      if (data)
+        this.dataCustomer = data.customers;
+    })
 
     this.form.get('customer')?.valueChanges.subscribe((data: any) => {
       this.form.patchValue({
-        ...(data as any),
-        name: data.firstName + ' ' + data.lastName,
-      });
-    });
+        ...data as any,
+        name: data.firstName + ' ' + data.lastName
+      })
+    })
   }
 
   // Create Appointment
@@ -210,13 +211,15 @@ export class AppointmentModalComponent implements OnInit {
     });
     modal.afterClose.asObservable().subscribe((res1) => {
       if (res1) {
-        this.shared.searchCustomer(res1.phone).subscribe((res2: any) => {
-          this.form.patchValue({
-            name: res1.firstName + ' ' + res1.lastName,
-            customerID: res2.customers[0].customerID,
-          });
-        });
-        this.isExist = false;
+        this.shared.searchCustomer(res1.phone).subscribe(
+          (res2: any) => {
+            this.form.patchValue({
+              name: res1.firstName + ' ' + res1.lastName,
+              customerID: res2.customers[0].customerID,
+            });
+          }
+        )
+        // this.isExist = false
       }
     });
   }
@@ -243,9 +246,4 @@ export class AppointmentModalComponent implements OnInit {
   createNotificationError(content: any): void {
     this.notification.error('Error', content);
   }
-}
-
-interface DoctorOption {
-  id: number;
-  name: string;
 }

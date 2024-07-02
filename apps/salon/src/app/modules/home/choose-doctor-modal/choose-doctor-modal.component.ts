@@ -24,24 +24,29 @@ import { TDSNotificationService } from 'tds-ui/notification';
 })
 export class ChooseDoctorModalComponent implements OnInit {
   private readonly modalRef = inject(TDSModalRef);
-  @Input() id?: number;
-  @Input() appointmentDate?: string;
-  public doctorOptions = [
-    { id: 1, name: 'A' },
-    { id: 2, name: 'B' },
-    { id: 3, name: 'C' },
-  ];
+  @Input() id?: number
+  @Input() appointmentDate?: string
+  public doctorOptions: any[] = []
   form = inject(FormBuilder).nonNullable.group({
     doctor: [undefined, Validators.required],
   });
 
   constructor(
     private shared: AuthService,
-    private notification: TDSNotificationService
-  ) {}
+    private notification: TDSNotificationService,
+  ) { }
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+
+    // Get Doctor
+    this.shared.getEmployee(2, 2).subscribe(
+      (data: any[]) => {
+        this.doctorOptions = [...data.map(item => ({
+          id: item.employeeID,
+          name: `${item.firstName} ${item.lastName}`
+        }))]
+      })
+
   }
 
   // Submit button
