@@ -28,11 +28,10 @@
       <ng-template #expandTpl let-dataRow let-expand="expand">
         <tds-timeline>
           <!-- <a tds-link href="customer-list/customer-detail"> Detail </a> -->
-          <a [routerLink]="['customer-detail']"> Detail </a>
+          <a [routerLink]="['customer-detail/1']"> Detail </a>
         </tds-timeline>
       </ng-template>
     </tds-data-table-expand-row>
-
 
     <tds-data-table-column
       [tdsField]="'customerCode'"
@@ -85,7 +84,6 @@
       [tdsColumnType]="'command'"
       tdsClass="flex justify-around"
     >
-
       <ng-template #commandTpl let-dataRow>
         <button
           tds-button-flat-icon

@@ -8,36 +8,36 @@ import { HttpHeaders } from '@angular/common/http';
 })
 export class AuthService {
 
-  private baseUrl: string| undefined;
+  private baseUrl: string | undefined;
 
-  constructor(private http : HttpClient) {
-     this.baseUrl = environment.BASE_URI
+  constructor(private http: HttpClient) {
+    this.baseUrl = environment.BASE_URI
 
   }
 
   // get by id service
-  getByIdService(id:number): Observable<any[]>{
-    return this.http.get<any[]>(this.baseUrl + 'Services/'+ id);
+  getByIdService(id: number): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + 'Services/' + id);
   }
 
   // Render list of service
-  renderListService():Observable<any[]>{
+  renderListService(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + 'Services');
   }
 
   //Create a new service
-  createService(val:any){
+  createService(val: any) {
     return this.http.post(this.baseUrl + 'Services', val);
   }
 
   //Edit a service
-  editService(id: number,val:any){
-    return this.http.put(this.baseUrl + 'Services/'+ id, val);
+  editService(id: number, val: any) {
+    return this.http.put(this.baseUrl + 'Services/' + id, val);
   }
 
   //Delete a service
-  deleteAService(id:any){
-    return this.http.delete(this.baseUrl + 'Services/'+ id);
+  deleteAService(id: any) {
+    return this.http.delete(this.baseUrl + 'Services/' + id);
   }
 
   // Show list of Customer
@@ -51,33 +51,38 @@ export class AuthService {
   }
 
   // Search Customer
-  searchCustomer(val: any): Observable<{customers: any[]}> {
+  searchCustomer(val: any): Observable<{ customers: any[] }> {
     return this.http.get<any>(this.baseUrl + 'Customers/search?searchTerm=' + val);
   }
 
   // Create a new Customer
-  CreateNewCustomer(val:any) {
+  CreateNewCustomer(val: any) {
     return this.http.post(this.baseUrl + 'Customers', val);
   }
 
+  UploadImageCustomer(formData: FormData) {
+    return this.http.post(`${this.baseUrl}Customers/upload`, formData);
+  }
+
+
   // Update Customer
-  UpdateCustomer(id: number, val:any) {
+  UpdateCustomer(id: number, val: any) {
     return this.http.put(this.baseUrl + 'Customers/' + id, val);
   }
 
   //page of customers
   pageCustomers(pageNumber: number, pageSize: number) {
-    return this.http.get(this.baseUrl + 'Customers/Page?pageNumber='+pageNumber+'&pageSize='+pageSize);
+    return this.http.get(this.baseUrl + 'Customers/Page?pageNumber=' + pageNumber + '&pageSize=' + pageSize);
   }
 
   //Delete a customer
-  deleteCustomer(id:any){
-    return this.http.delete(this.baseUrl + 'Customers/'+ id);
+  deleteCustomer(id: any) {
+    return this.http.delete(this.baseUrl + 'Customers/' + id);
   }
 
   //get history of customers
-  getHistoryCustomer(id: number){
-    return this.http.get('https://localhost:44305/GetHistory?cutomerId='+ id);
+  getHistoryCustomer(id: number) {
+    return this.http.get('https://localhost:44305/GetHistory?cutomerId=' + id);
   }
 
   // Show list of Appointment through Branch ID
@@ -86,12 +91,12 @@ export class AuthService {
   }
 
   // Create a new Appointment
-  createAppointment(val:any) {
+  createAppointment(val: any) {
     return this.http.post(this.baseUrl + 'Appointment', val);
   }
 
   // Update Appointment
-  UpdateAppointment(id: number, val:any) {
+  UpdateAppointment(id: number, val: any) {
     return this.http.put(this.baseUrl + 'Appointment/' + id, val);
   }
 
@@ -101,7 +106,7 @@ export class AuthService {
   }
 
   //
-  updateAppointmentWithService(id: number, status: any, val:any) {
+  updateAppointmentWithService(id: number, status: any, val: any) {
     return this.http.put(this.baseUrl + 'Appointment/api/UpdateAppointmentWithService/' + id + '/' + status, val);
   }
 
@@ -111,11 +116,20 @@ export class AuthService {
   }
 
   // Update Discount
-  updateDiscount(id: any, discount: any, val:any) {
+  updateDiscount(id: any, discount: any, val: any) {
     return this.http.put(this.baseUrl + 'Appointment/UpdateDiscount?id=' + id + '&perDiscount=' + discount, val);
   }
+  // get Customer for technical staff
+  getCustomerInQueueForTechnicalStaff(branchID: number, status: string): Observable<any[]> {
+    return this.http.get<any[]>('https://localhost:44305/GetAppointmentByStatus?idBrand=' + branchID + '&status=' + status);
+  }
 
-  // Create a Payment
+  getAppointmentById(id: number) {
+    return this.http.get(this.baseUrl + 'Appointment/' + id);
+  }
+
+
+  // Create a Paymentid
   createPayment(id: any, val: any) {
     return this.http.post(this.baseUrl + 'Payment?Id=' + id, val);
   }
@@ -132,19 +146,19 @@ export class AuthService {
   }
 
   //
-  signUp(id:string,name:string,email:string,password:string,re_password:string){
-    return this.http.post<{flag:boolean, message:string}>(this.baseUrl+'register', {
+  signUp(id: string, name: string, email: string, password: string, re_password: string) {
+    return this.http.post<{ flag: boolean, message: string }>(this.baseUrl + 'register', {
       id: id,
       name: name,
-      email:email,
+      email: email,
       password: password,
       confirmPassword: re_password
     })
   }
 
   //
-  login(email:string,password:string){
-    return this.http.post<{user:object,token:object}>(this.baseUrl+'Authentication/login', {
+  login(email: string, password: string) {
+    return this.http.post<{ user: object, token: object }>(this.baseUrl + 'Authentication/login', {
       email: email,
       password: password
     })

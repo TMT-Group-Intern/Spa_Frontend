@@ -28,13 +28,13 @@ import { CustomerDetailComponent } from '../modules/customer-list/customer-detai
       RouterModule,
       MenuComponent,
       HeaderComponent,
-      HomeComponent,
-      ProductsComponent,
-      ServiceListComponent,
-      CustomerListComponent,
+     // HomeComponent,
+     //  ProductsComponent,
+    //  ServiceListComponent,
+    //  CustomerListComponent,
       RevenueStaticsModule,
-      EmployeeListComponent,
-      CustomerDetailComponent
+    //  EmployeeListComponent,
+     // CustomerDetailComponent
     ]
 })
 export class LayoutComponent {

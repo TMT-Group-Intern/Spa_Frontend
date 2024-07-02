@@ -23,23 +23,22 @@ import { TDSNotificationService } from 'tds-ui/notification';
   styleUrls: ['./choose-doctor-modal.component.scss'],
 })
 export class ChooseDoctorModalComponent implements OnInit {
-
   private readonly modalRef = inject(TDSModalRef);
-  @Input() id?: number
-  @Input() appointmentDate?: string
+  @Input() id?: number;
+  @Input() appointmentDate?: string;
   public doctorOptions = [
-    {id: 6, name: 'A'},
-    {id: 7, name: 'B'},
-    {id: 8, name: 'C'},
-  ]
+    { id: 1, name: 'A' },
+    { id: 2, name: 'B' },
+    { id: 3, name: 'C' },
+  ];
   form = inject(FormBuilder).nonNullable.group({
-    doctor: [undefined ,Validators.required],
+    doctor: [undefined, Validators.required],
   });
 
   constructor(
-    private shared : AuthService,
-    private notification: TDSNotificationService,
-  ){}
+    private shared: AuthService,
+    private notification: TDSNotificationService
+  ) {}
 
   ngOnInit(): void {
     throw new Error('Method not implemented.');
@@ -47,29 +46,23 @@ export class ChooseDoctorModalComponent implements OnInit {
 
   // Submit button
   submit() {
-    if(this.form.invalid) return
+    if (this.form.invalid) return;
 
     const val = {
-      assignments: [{employerID: this.form.value.doctor}],
-      appointmentDate: this.appointmentDate
-    }
+      assignments: [{ employerID: this.form.value.doctor }],
+      appointmentDate: this.appointmentDate,
+    };
 
-    if(this.id) {
-      this.shared.UpdateAppointment(this.id, val).subscribe(
-        () => {
-          this.createNotificationSuccess('');
-          this.modalRef.destroy(val);
-        }
-      )
+    if (this.id) {
+      this.shared.UpdateAppointment(this.id, val).subscribe(() => {
+        this.createNotificationSuccess('');
+        this.modalRef.destroy(val);
+      });
     }
-
   }
 
   // Success Notification
   createNotificationSuccess(content: any): void {
-    this.notification.success(
-      'Succesfully', content
-    );
+    this.notification.success('Succesfully', content);
   }
-
 }
