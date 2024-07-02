@@ -22,8 +22,8 @@
           </tds-card-header>
           <!-- Card content -->
           <tds-card-content>
-            <p><i class="tdsi-earpiece-fill text-green-success-300"></i> ABC 123456789 </p>
-            <p><i class="tdsi-time-fill text-green-success-300"></i> {{formatDate(appoint.AppointmentDate,'HH:mm')}}</p>
+            <p><i class="tdsi-earpiece-fill text-green-success-300"></i> {{appoint.Doctor}}</p>
+            <p><i class="tdsi-time-fill text-green-success-300"></i> {{appoint.AppointmentDate | date:'HH:mm'}}</p>
           </tds-card-content>
         </tds-card>
       </div>
@@ -52,8 +52,8 @@
           <div class="grid grid-cols-3 flex-wrap">
             <!-- Card content -->
             <tds-card-content class="col-span-2">
-              <p><i class="tdsi-earpiece-fill text-green-success-300"></i> ABC 123456789 </p>
-              <p><i class="tdsi-time-fill text-green-success-300"></i> {{formatDate(appoint.AppointmentDate,'HH:mm')}}
+              <p><i class="tdsi-earpiece-fill text-green-success-300"></i> {{appoint.Doctor}}</p>
+              <p><i class="tdsi-time-fill text-green-success-300"></i> {{appoint.AppointmentDate | date:'HH:mm'}}
               </p>
             </tds-card-content>
             <!-- Card button -->
@@ -110,9 +110,10 @@
         </tds-card-header>
         <!-- Card content -->
         <tds-card-content class="">
-          <p><i class="tdsi-earpiece-fill text-green-success-300"></i> {{returnDoctor(appoint.AppointmentID)}}</p>
+          <!-- <p><i class="tdsi-earpiece-fill text-green-success-300"></i> {{appoint.AppointmentID | tdsMapper: returnDoctor}}</p> -->
+          <p><i class="tdsi-earpiece-fill text-green-success-300"></i> {{appoint.Doctor}}</p>
           <div class="flex justify-between">
-            <p><i class="tdsi-time-fill text-green-success-300"></i> {{formatDate(appoint.AppointmentDate,'HH:mm')}}</p>
+            <p><i class="tdsi-time-fill text-green-success-300"></i> {{appoint.AppointmentDate | date:'HH:mm'}}</p>
             <p><i class="tdsi-call-fill text-green-success-300"></i> {{appoint.Customer.Phone}}</p>
           </div>
         </tds-card-content>
@@ -149,11 +150,11 @@
       </tds-card-header>
       <!-- Card content -->
       <tds-card-content class="px-3">
-        <p><i class="tdsi-earpiece-fill text-green-500"></i> ABC 123456789</p>
+        <p><i class="tdsi-earpiece-fill text-green-500"></i> {{appoint.Doctor}}</p>
         <div class="flex justify-between">
           <p>
             <i class="tdsi-time-fill text-green-500"></i>
-            {{ formatDate(appoint.AppointmentDate, 'HH:mm') }}
+            {{appoint.AppointmentDate | date:'HH:mm'}}
           </p>
           <p>
             <i class="tdsi-call-fill text-green-500"></i>
