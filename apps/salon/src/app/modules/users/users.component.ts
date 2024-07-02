@@ -48,7 +48,7 @@ export class UsersComponent implements OnInit{
   ngOnInit(): void {
     this.initUserList();
   }
-  
+
   initUserList() {
     this.auth.UserList().subscribe(data => {
       this.UserList = data;
@@ -89,7 +89,7 @@ export class UsersComponent implements OnInit{
           title: 'Tạo tài khoản nhân viên thành công với mật khẩu Spa@12345',
           okText: 'OK',
         });
-        this.tModalSvc.destroy();
+        // this.tModalSvc.destroy();
       },
       error: (res) => {
         this.tModalSvc.error({
@@ -123,7 +123,7 @@ export class UsersComponent implements OnInit{
             title: 'Tạo tài khoản nhân viên thành công với mật khẩu Spa@12345',
             okText: 'OK',
           });
-          this.tModalSvc.destroy(Email);
+          // this.tModalSvc.destroy(Email);
         },
         error: (res) => {
           this.tModalSvc.error({
