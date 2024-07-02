@@ -96,7 +96,7 @@ export class AuthService {
   }
 
   // Update Status
-  UpdateStatus(id: number, status: string) {
+  UpdateStatus(id: any, status: any) {
     return this.http.put(this.baseUrl + 'Appointment/updatestatus/' + id + '?status=' + status, status);
   }
 
@@ -113,6 +113,11 @@ export class AuthService {
   // Update Discount
   updateDiscount(id: any, discount: any, val:any) {
     return this.http.put(this.baseUrl + 'Appointment/UpdateDiscount?id=' + id + '&perDiscount=' + discount, val);
+  }
+
+  // Assign Spa Therapist
+  assignSpaTherapist(appointment: any, empID: any, val:any) {
+    return this.http.put(this.baseUrl + 'Appointment/assigntechnicalstaff?idApp=' + appointment + '&idEmploy=' + empID, val);
   }
 
   // Create a Payment
