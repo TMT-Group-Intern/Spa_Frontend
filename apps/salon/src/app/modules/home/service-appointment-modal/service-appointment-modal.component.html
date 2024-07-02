@@ -20,7 +20,7 @@
             <input tdsInput autocomplete="off" formControlName="name" class="appearance-none w-full" type="text" />
           </tds-form-field>
           <button tds-button-icon tds-tooltip tooltipTitle="Hồ sơ" (click)="callModalUserProfile()"
-            class="tdsi-user-fill tds-icon-size-xl bg-primary-1"></button>
+            class="ml-2" color="success"><i class="tdsi-user-fill"></i></button>
         </div>
       </div>
 
@@ -66,8 +66,8 @@
 
 <ng-container *tdsModalFooter>
   <div class=" flex flex-row-reverse p-4">
-    <button tds-button (click)="submitUpdateServiceAppointment()" form="idform" color="custom"
-      class="w-[100px] bg-green-primary-2 px-4 py-2 text-white rounded hover:bg-green-1 transition-colors duration-300">
+    <button tds-button (click)="submitUpdateServiceAppointment()" form="idform" color="success"
+      class="w-[100px] px-4 py-2 text-white rounded">
       Lưu
     </button>
   </div>

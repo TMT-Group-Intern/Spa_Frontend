@@ -34,7 +34,8 @@ import * as moment from 'moment';
     TDSCalendarModule,
     TDSFormFieldModule,
     TDSSelectModule,
-    TDSToolTipModule
+    TDSToolTipModule,
+    TDSButtonModule,
   ]
 })
 export class ServiceAppointmentModalComponent implements OnInit {
