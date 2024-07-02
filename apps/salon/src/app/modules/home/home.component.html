@@ -1,24 +1,20 @@
 <div class="w-full gap-x-2 grid grid-cols-3 flex-wrap h-full bg-gray-200">
   <div class="col-span-2 gap-y-2 grid grid-rows-2 flex-wrap">
-
     <!-- Reception -->
     <div class="row-span-1 p-4 border rounded-10 bg-white">
       <span class="text-heading-4">Reception</span>
-      <div
-        class="gap-x-2 grid grid-cols-3 flex-wrap overflow-y-auto mt-3"
-        style="max-height: 225px"
-      >
-        <tds-card
-          *ngFor="let appoint of reception"
-          class="border rounded-10 col-span-1 mb-2"
-        >
+      <div *ngIf="reception.length === 0" class="h-60 flex justify-center items-center">
+        <tds-empty></tds-empty>
+      </div>
+      <div *ngIf="reception.length !== 0" class="gap-x-2 grid grid-cols-3 flex-wrap overflow-y-auto mt-3"
+        style="max-height: 225px">
+        <tds-card *ngFor="let appoint of reception" class="border rounded-10 col-span-1 mb-2">
           <!-- Card Header -->
           <tds-card-header class="bg-green-success-200 text-white">
             <div class="flex justify-between">
 
               <p tds-typography tdsEllipsis>{{appoint.Customer.FirstName}} {{appoint.Customer.LastName}}</p>
               <div>
-                <tds-tag *ngIf="appoint.Status === 'Waiting'" status='custom' class="bg-info-400">Waiting</tds-tag>
                 <tds-tag *ngIf="appoint.Status === 'Examining'" status='custom'
                   class="bg-success-400">Examining</tds-tag>
               </div>
@@ -36,14 +32,12 @@
     <!-- In ssesion -->
     <div class="row-span-1 border p-4 rounded-10 bg-white">
       <span class="text-heading-4">In Session</span>
-      <div
-        class="gap-x-2 grid grid-cols-3 flex-wrap overflow-y-auto mt-3"
-        style="max-height: 225px"
-      >
-        <tds-card
-          *ngFor="let appoint of inSession"
-          class="border rounded-10 col-span-1 mb-2"
-        >
+      <div *ngIf="inSession.length === 0" class="h-60 flex justify-center items-center">
+        <tds-empty></tds-empty>
+      </div>
+      <div *ngIf="inSession.length !== 0" class="gap-x-2 grid grid-cols-3 flex-wrap overflow-y-auto mt-3"
+        style="max-height: 225px">
+        <tds-card *ngFor="let appoint of inSession" class="border rounded-10 col-span-1 mb-2">
           <!-- Card Header -->
           <tds-card-header class="bg-green-success-200 text-white ">
             <div class="flex justify-between">
@@ -86,7 +80,7 @@
   </div>
 
   <!-- Appointment List -->
-  <div class="col-span-1 border p-1 rounded-10 bg-white">
+  <div class="col-span-1 border p-4 rounded-10 bg-white">
     <!-- Header -->
     <div class="flex justify-between">
       <span class="text-heading-4">Today Booking</span>
@@ -98,11 +92,11 @@
       </button>
     </div>
     <!-- List -->
-    <div class="overflow-y-auto mt-3" style="max-height: 550px">
-      <tds-card
-        *ngFor="let appoint of todayBooking"
-        class="border rounded-10 m-4"
-      >
+    <div *ngIf="todayBooking.length === 0" class="flex justify-center items-center" style="height: 550px">
+      <tds-empty></tds-empty>
+    </div>
+    <div *ngIf="todayBooking.length !== 0" class="overflow-y-auto mt-3" style="max-height: 550px">
+      <tds-card *ngFor="let appoint of todayBooking" class="border rounded-10 m-4">
         <!-- Card Header -->
         <tds-card-header class="bg-green-success-200 text-white">
           <div class="flex justify-between">
@@ -126,17 +120,12 @@
         <!-- Card button -->
         <tds-card-actions>
           <div class="flex justify-end">
-            <button
-              tds-button-icon
-              color="secondary"
-              tds-tooltip
-              tooltipTitle="Edit Appointment"
-              (click)="onEditAppointment(appoint.AppointmentID)"
-            >
+            <button tds-button-icon color="secondary" tds-tooltip tooltipTitle="Edit Appointment"
+              (click)="onEditAppointment(appoint.AppointmentID)">
               <i class="tdsi-edit-fill"></i>
             </button>
             <button tds-button-icon color="secondary" tds-tooltip tooltipTitle="Switch To Reception"
-              (click)="chooseDoctor(appoint.AppointmentID, 'Waiting')" class="ml-3">
+              (click)="chooseDoctor(appoint.AppointmentID, 'Examining')" class="ml-3">
               <i class="tdsi-receive-fill"></i>
             </button>
           </div>

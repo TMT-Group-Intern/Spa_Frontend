@@ -16,7 +16,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { TDSDataTableModule } from 'tds-ui/data-table';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
+
 registerLocaleData(localeVi);
+
 @NgModule({
   declarations: [AppComponent],
   imports: [

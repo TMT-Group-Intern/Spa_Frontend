@@ -33,11 +33,6 @@ export class InSessionModalComponent implements OnInit {
     {id: 11, name: 'F'},
   ]
   public statusOptions = [
-    'Scheduled',
-    'Confirmed',
-    'Cancelled',
-    'Waiting',
-    'Examining',
     'Preparation',
     'Treating',
   ]

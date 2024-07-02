@@ -12,6 +12,7 @@ import { RevenueStaticsModule } from '../modules/revenue-statistics/revenue-stat
 import { TDSMenuModule } from 'tds-ui/menu';
 import { EmployeeListComponent } from '../modules/employee-list/employee-list.component';
 import { HomeComponent } from '../modules/home/home.component';
+import { CustomerDetailComponent } from '../modules/customer-list/customer-detail/customer-detail.component';
 
 @Component({
     selector: 'frontend-layout',
@@ -33,6 +34,7 @@ import { HomeComponent } from '../modules/home/home.component';
       CustomerListComponent,
       RevenueStaticsModule,
       EmployeeListComponent,
+      CustomerDetailComponent
     ]
 })
 export class LayoutComponent {

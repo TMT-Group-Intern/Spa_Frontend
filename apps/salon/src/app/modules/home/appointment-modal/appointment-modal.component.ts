@@ -42,23 +42,14 @@ import { BehaviorSubject, debounceTime, of, switchMap } from 'rxjs';
 })
 
 export class AppointmentModalComponent implements OnInit {
-  searchPhone$ = new BehaviorSubject<string>('')
 
-  // public doctorOptions: DoctorOption[] = [];
-  public doctorOptions = [
-    { id: 6, name: 'A' },
-    { id: 7, name: 'B' },
-    { id: 8, name: 'C' },
-  ]
+  searchPhone$ = new BehaviorSubject<string>('')
+  public doctorOptions: any[] = [];
 
   public statusOptions = [
     'Scheduled',
     'Confirmed',
     'Cancelled',
-    'Waiting',
-    'Examining',
-    'Preparation',
-    'Treating',
   ]
 
   private readonly tModalSvc = inject(TDSModalService)
@@ -74,7 +65,7 @@ export class AppointmentModalComponent implements OnInit {
     doctor: [],
     appointmentDate: [new Date()],
     status: ['Scheduled'],
-    customer:[null]
+    customer: [null]
   });
   isExist = false;
   isHide = false;
@@ -117,6 +108,15 @@ export class AppointmentModalComponent implements OnInit {
 
     }
 
+    // Get Doctor
+    this.shared.getEmployee(2, 2).subscribe(
+      (data: any[]) => {
+        this.doctorOptions = [...data.map(item => ({
+          id: item.employeeID,
+          name: `${item.firstName} ${item.lastName}`
+        }))]
+      })
+
   }
 
   // Disabled Date in the past
@@ -142,13 +142,13 @@ export class AppointmentModalComponent implements OnInit {
       this.empID.push(doctor)
     }
 
-    const val:any = {
+    const val: any = {
       ...req,
       appointmentDate: format(new Date(appointmentDate as Date), DATE_CONFIG.DATE_BASE),
 
       employeeID: this.empID,
     };
-    if(doctor != null){
+    if (doctor != null) {
       val.assignments = [{ employerID: doctor }];
     }
 
@@ -162,23 +162,23 @@ export class AppointmentModalComponent implements OnInit {
   }
 
 
-  initCustomer(){
+  initCustomer() {
     this.searchPhone$.pipe(
-      debounceTime(500),
-      switchMap((search:string)=>{
-        return search? this.shared.searchCustomer(search): of(null)
+      debounceTime(100),
+      switchMap((search: string) => {
+        return search ? this.shared.searchCustomer(search) : of(null)
       })
-    ).subscribe((data)=>{
-      if(data)
+    ).subscribe((data) => {
+      if (data)
         this.dataCustomer = data.customers;
-  })
-
-  this.form.get('customer')?.valueChanges.subscribe((data:any)=>{
-    this.form.patchValue({
-      ...data as any,
-      name: data.firstName + ' ' + data.lastName
     })
-  })
+
+    this.form.get('customer')?.valueChanges.subscribe((data: any) => {
+      this.form.patchValue({
+        ...data as any,
+        name: data.firstName + ' ' + data.lastName
+      })
+    })
   }
 
 
@@ -253,9 +253,4 @@ export class AppointmentModalComponent implements OnInit {
     );
   }
 
-}
-
-interface DoctorOption {
-  id: number;
-  name: string;
 }

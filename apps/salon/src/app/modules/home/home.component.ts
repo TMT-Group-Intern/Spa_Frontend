@@ -15,6 +15,7 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { ChooseDoctorModalComponent } from './choose-doctor-modal/choose-doctor-modal.component';
 import { InSessionModalComponent } from './in-session-modal/in-session-modal.component';
 import { PaymentModalComponent } from './payment-modal/payment-modal.component';
+import { TDSEmptyModule } from 'tds-ui/empty';
 
 @Component({
   selector: 'frontend-home',
@@ -27,7 +28,8 @@ import { PaymentModalComponent } from './payment-modal/payment-modal.component';
     TDSTagModule,
     TDSToolTipModule,
     TDSTypographyModule,
-    TDSFormFieldModule
+    TDSFormFieldModule,
+    TDSEmptyModule,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -53,7 +55,7 @@ export class HomeComponent implements OnInit {
   }
   // Display Appointment List
   initAppointmentList() {
-    this.sharedService.appointmentList(1).subscribe((data:any) => {
+    this.sharedService.appointmentList(2).subscribe((data:any) => {
       this.appointmentList = data;
       this.todayBooking = this.appointmentList.filter((appointment: any) =>
         appointment.Status === "Scheduled" ||
@@ -98,7 +100,7 @@ export class HomeComponent implements OnInit {
   onEditAppointment(id:number){
     const modal = this.tModalSvc.create({
       title:'Tạo dịch vụ lịch hẹn',
-      content: ServiceAppointmentModalComponent,
+      content: AppointmentModalComponent,
       footer:null,
       size:'lg',
       componentParams:{

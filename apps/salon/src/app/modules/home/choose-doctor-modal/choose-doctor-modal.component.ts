@@ -27,34 +27,39 @@ export class ChooseDoctorModalComponent implements OnInit {
   private readonly modalRef = inject(TDSModalRef);
   @Input() id?: number
   @Input() appointmentDate?: string
-  public doctorOptions = [
-    {id: 6, name: 'A'},
-    {id: 7, name: 'B'},
-    {id: 8, name: 'C'},
-  ]
+  public doctorOptions: any[] = []
   form = inject(FormBuilder).nonNullable.group({
-    doctor: [undefined ,Validators.required],
+    doctor: [undefined, Validators.required],
   });
 
   constructor(
-    private shared : AuthService,
+    private shared: AuthService,
     private notification: TDSNotificationService,
-  ){}
+  ) { }
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+
+    // Get Doctor
+    this.shared.getEmployee(2, 2).subscribe(
+      (data: any[]) => {
+        this.doctorOptions = [...data.map(item => ({
+          id: item.employeeID,
+          name: `${item.firstName} ${item.lastName}`
+        }))]
+      })
+
   }
 
   // Submit button
   submit() {
-    if(this.form.invalid) return
+    if (this.form.invalid) return
 
     const val = {
-      assignments: [{employerID: this.form.value.doctor}],
+      assignments: [{ employerID: this.form.value.doctor }],
       appointmentDate: this.appointmentDate
     }
 
-    if(this.id) {
+    if (this.id) {
       this.shared.UpdateAppointment(this.id, val).subscribe(
         () => {
           this.createNotificationSuccess('');
