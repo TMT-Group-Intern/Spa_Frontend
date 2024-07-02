@@ -89,9 +89,19 @@ export class AuthService {
     return this.http.put(this.baseUrl + 'Customers/' + id, val);
   }
 
+  //page of customers
+  pageCustomers(pageNumber: number, pageSize: number) {
+    return this.http.get(this.baseUrl + 'Customers/Page?pageNumber='+pageNumber+'&pageSize='+pageSize);
+  }
+
   //Delete a customer
   deleteCustomer(id:any){
     return this.http.delete(this.baseUrl + 'Customers/'+ id);
+  }
+
+  //get history of customers
+  getHistoryCustomer(id: number){
+    return this.http.get('https://localhost:44305/GetHistory?cutomerId='+ id);
   }
 
   // Show list of Appointment through Branch ID
@@ -108,9 +118,12 @@ export class AuthService {
   UpdateAppointment(id: number, val:any) {
     return this.http.put(this.baseUrl + 'Appointment/' + id, val);
   }
-
-  updateAppointmentWithService(id: number, val:any) {
-    return this.http.put(this.baseUrl + 'Appointment/api/UpdateAppointmentWithService/' + id, val);
+  // Update Status
+  UpdateStatus(id: number, status: string) {
+    return this.http.put(this.baseUrl + 'Appointment/updatestatus/' + id + '?status=' + status, status);
+  }
+  updateAppointmentWithService(id: number, status: any, val:any) {
+    return this.http.put(this.baseUrl + 'Appointment/api/UpdateAppointmentWithService/' + id + '/' + status, val);
   }
 
   // Get Appointment by ID
@@ -134,11 +147,17 @@ export class AuthService {
       role : role
     })
   }
-  
+
   login(email:string,password:string){
     return this.http.post<{flag:boolean,mess:string,token:string}>(this.baseUrl+'Authentication/login', {
       email: email,
       password: password
     })
-  } 
+  }
+  // login(email:string,password:string): Observable<any[]> {
+  //   return this.http.post<any>(this.baseUrl+'Authentication/login', {
+  //     email: email,
+  //     password: password
+  //   })
+  // }
 }
