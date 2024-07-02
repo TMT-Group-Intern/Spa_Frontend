@@ -23,7 +23,6 @@ import { TDSNotificationService } from 'tds-ui/notification';
   styleUrls: ['./choose-doctor-modal.component.scss'],
 })
 export class ChooseDoctorModalComponent implements OnInit {
-
   private readonly modalRef = inject(TDSModalRef);
   @Input() id?: number
   @Input() appointmentDate?: string
@@ -52,29 +51,23 @@ export class ChooseDoctorModalComponent implements OnInit {
 
   // Submit button
   submit() {
-    if (this.form.invalid) return
+    if (this.form.invalid) return;
 
     const val = {
       assignments: [{ employerID: this.form.value.doctor }],
-      appointmentDate: this.appointmentDate
-    }
+      appointmentDate: this.appointmentDate,
+    };
 
     if (this.id) {
-      this.shared.UpdateAppointment(this.id, val).subscribe(
-        () => {
-          this.createNotificationSuccess('');
-          this.modalRef.destroy(val);
-        }
-      )
+      this.shared.UpdateAppointment(this.id, val).subscribe(() => {
+        this.createNotificationSuccess('');
+        this.modalRef.destroy(val);
+      });
     }
-
   }
 
   // Success Notification
   createNotificationSuccess(content: any): void {
-    this.notification.success(
-      'Succesfully', content
-    );
+    this.notification.success('Succesfully', content);
   }
-
 }

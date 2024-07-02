@@ -24,6 +24,14 @@
     [tdsPageSize]="20"
     [tdsBordered]="true"
   >
+    <tds-data-table-expand-row [tdsContent]="expandTpl" tdsWidth="2%">
+      <ng-template #expandTpl let-dataRow let-expand="expand">
+        <tds-timeline>
+          <!-- <a tds-link href="customer-list/customer-detail"> Detail </a> -->
+          <a [routerLink]="['customer-detail/1']"> Detail </a>
+        </tds-timeline>
+      </ng-template>
+    </tds-data-table-expand-row>
 
     <tds-data-table-column
       [tdsField]="'customerCode'"
