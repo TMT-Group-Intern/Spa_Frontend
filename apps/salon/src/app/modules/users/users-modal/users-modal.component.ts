@@ -9,6 +9,7 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { AuthService } from '../../../shared.service';
 import { TDSSelectModule } from 'tds-ui/select';
 import { TDSModalService } from 'tds-ui/modal';
+import { concatMap, filter, tap } from 'rxjs';
 const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/;
 
 @Component({
@@ -158,10 +159,45 @@ export class UsersModalComponent implements OnInit {
     // Thực hiện các hành động khi form hợp lệ
     this.auth.signUp(lastName, firstName, gender, phone, email, password, confirmPassword, dateOfBirth, hireDate, jobTypeID, branchID, role).subscribe((result) => {
       //console.log(result)
-      if (result.status != null) {
+      if (result.status != null) { 
+         console.log(result.status)
+         //this.createUser.reset();
+
+         const modal = this.tModalSvc.create({
+          title:'Thành công',
+          content: `<h5 class="text-success-500">Tạo tài khoản <strong>${ email }</strong> thành công!</h5>`,
+          footer:null,
+          size:'lg',
+          okText:'Xác nhận',
+          onOk:()=> true
+        });
+        modal.afterClose.asObservable()
+        .subscribe
+        (res=>{
+          if(res){
+            this.createUser.reset;
+          }
+        });
+      }
+      else{
         console.log(result.status)
-          this.createUser.reset();
-          
+         //this.createUser.reset();
+
+         const modal = this.tModalSvc.create({
+          title:'Thất bại',
+          content: `<h5 class="text-error-500">Tạo tài khoản <strong>${ email }</strong> thất bại! Tài khoản đã tồn tại hoặc đã xảy ra lỗi!</h5>`,
+          footer:null,
+          size:'lg',
+          okText:'Xác nhận',
+          onOk:()=> true
+        });
+        modal.afterClose.asObservable()
+        .subscribe
+        (res=>{
+          if(res){
+            this.createUser;
+          }
+        });
       }
     });
   }

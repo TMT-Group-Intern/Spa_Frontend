@@ -56,7 +56,7 @@ export class HomeComponent implements OnInit {
   }
   // Display Appointment List
   initAppointmentList() {
-    this.sharedService.appointmentList(2).subscribe(
+    this.sharedService.appointmentList(1).subscribe(
       (data: any) => {
         this.appointmentList = data;
         // this.sharedService.getAppointment(data.AppointmentID).subscribe(
@@ -86,8 +86,7 @@ export class HomeComponent implements OnInit {
   // Return Doctor
   returnDoctor(id: any): string {
     this.sharedService.getAppointment(id).subscribe(
-        (data: any) => {
-          if(data.Assignments[0].EmployerID)
+        (data: any) => {          
           this.doctor = `${data.Assignments[0].Employees.FirstName} ${data.Assignments[0].Employees.LastName}`
         }
       )
