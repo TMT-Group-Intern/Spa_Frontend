@@ -98,12 +98,13 @@ export class AppointmentModalComponent implements OnInit {
             appointmentDate: data.AppointmentDate,
             customerID: data.Customer.CustomerID,
             status: data.Status,
+            doctor: data.Assignments[0].EmployerID,
           });
-          if (data.Assignments[0].EmployerID) {
-            this.form.patchValue({
-              doctor: data.Assignments[0].EmployerID,
-            });
-          }
+          // if (data.Assignments[0].EmployerID) {
+          //   this.form.patchValue({
+              
+          //   });
+          // }
           console.log(this.form.value)
         });
 

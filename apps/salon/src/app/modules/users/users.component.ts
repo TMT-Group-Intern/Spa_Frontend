@@ -77,29 +77,11 @@ export class UsersComponent implements OnInit{
       size:'lg'
     });
     modal.afterClose.asObservable().subscribe
-    // (res=>{
-    //   if(res){
-    //     this.initUserList()
-    //   }
-    // })
-    (
-    {
-      next: () => {
-        this.tModalSvc.confirm({
-          title: 'Tạo tài khoản nhân viên thành công với mật khẩu Spa@12345',
-          okText: 'OK',
-        });
-        // this.tModalSvc.destroy();
-      },
-      error: (res) => {
-        this.tModalSvc.error({
-          title: 'Tạo tài khoản thất bại',
-          content: res.error.message,
-          okText: 'OK'
-        });
-      },
-    }
-  );
+    (res=>{
+      if(res){
+        this.initUserList()
+      }
+    });
   }
   createAccountForEmployee(Email:string){
     console.log(Email)
@@ -114,25 +96,41 @@ export class UsersComponent implements OnInit{
     });
     modal.afterClose.asObservable().pipe(
       filter(condition => condition),
-      concatMap(_=> this.auth.createAccountForEmployee(Email)),
-      tap(()=>  this.initUserList())
-    ).subscribe(
-      {
-        next: () => {
-          this.tModalSvc.confirm({
-            title: 'Tạo tài khoản nhân viên thành công với mật khẩu Spa@12345',
-            okText: 'OK',
-          });
-          // this.tModalSvc.destroy(Email);
-        },
-        error: (res) => {
-          this.tModalSvc.error({
-            title: 'Tạo tài khoản thất bại',
-            content: res.error.message,
-            okText: 'OK'
-          });
-        },
-      }
+      concatMap(_=> this.auth.createAccountForEmployee(Email))
+      //tap(()=>  this.initUserList())
+    ).subscribe((result)=>{
+      if (result.mess != null) { 
+        console.log(result.mess)
+        //this.createUser.reset();
+
+        const modal = this.tModalSvc.confirm({
+         title:'Thành công',
+         content: `<h5 class="text-error-500">Tạo tài khoản <strong>${ Email }</strong> thành công! Tài khoản có mật khẩu là Spa@12345.</h5>`,
+         footer:null,
+         size:'lg',
+         okText:'Xác nhận',
+         onOk:()=> true
+       });
+       modal.afterClose.asObservable()
+       .subscribe
+       (tap(()=>  this.initUserList()));
+     }
+     else{
+       console.log(result.mess)
+        //this.createUser.reset();
+
+        const modal = this.tModalSvc.create({
+         title:'Thất bại',
+         content: `<h5 class="text-error-500">Tạo tài khoản <strong>${ Email }</strong> thất bại! Tài khoản đã tồn tại hoặc đã xảy ra lỗi!</h5>`,
+         footer:null,
+         size:'lg',
+         okText:'Xác nhận',
+         onOk:()=> true
+       });
+       modal.afterClose.asObservable()
+       .subscribe(tap(()=>  this.initUserList()));
+     }
+    }
     );
   }
   onEditUser(email:string){

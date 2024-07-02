@@ -59,7 +59,7 @@ export class AuthService {
   createAccountForEmployee(Email: string) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const body = { email: Email };
-    return this.http.post(this.baseUrl + 'Authentication/CreateUserForEmployee', body, { headers });
+    return this.http.post<{mess:object}>(this.baseUrl + 'Authentication/CreateUserForEmployee', body, { headers });
   }
   editUser(email: string, val: any) {
     return this.http.put(this.baseUrl + 'User/updateUser' + email, val);
@@ -133,6 +133,8 @@ export class AuthService {
   getAppointment(id: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Appointment/' + id);
   }
+
+  //
   signUp(lastName: string, firstName: string, gender: string, phone: string, email: string, password: string, confirmPassword: string, dateOfBirth: string, hireDate: string, jobTypeID: string, branchID: string, role: string) {
     return this.http.post<{ status: object }>(this.baseUrl + 'Authentication/register', {
       lastName: lastName,
@@ -149,6 +151,7 @@ export class AuthService {
       role: role
     })
   }
+  
   // Update Discount
   updateDiscount(id: any, discount: any, val: any) {
     return this.http.put(this.baseUrl + 'Appointment/UpdateDiscount?id=' + id + '&perDiscount=' + discount, val);
@@ -182,11 +185,5 @@ export class AuthService {
       password: password
     })
   }
-  // login(email:string,password:string): Observable<any[]> {
-  //   return this.http.post<any>(this.baseUrl+'Authentication/login', {
-  //     email: email,
-  //     password: password
-  //   })
-  // }
 
 }
