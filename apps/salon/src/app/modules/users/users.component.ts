@@ -48,7 +48,7 @@ export class UsersComponent implements OnInit{
   ngOnInit(): void {
     this.initUserList();
   }
-  
+
   initUserList() {
     this.auth.UserList().subscribe(data => {
       this.UserList = data;
@@ -82,7 +82,6 @@ export class UsersComponent implements OnInit{
         this.initUserList()
       }
     });
-
   }
   createAccountForEmployee(Email:string){
     console.log(Email)
