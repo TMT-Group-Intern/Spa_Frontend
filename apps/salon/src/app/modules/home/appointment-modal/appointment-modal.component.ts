@@ -16,7 +16,6 @@ import { startOfToday, isBefore } from 'date-fns';
 import { TDSTimePickerModule } from 'tds-ui/time-picker';
 import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
 import { format } from 'date-fns';
-import { HomeComponent } from '../home.component';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { BehaviorSubject, debounceTime, of, switchMap } from 'rxjs';
 
@@ -35,7 +34,8 @@ import { BehaviorSubject, debounceTime, of, switchMap } from 'rxjs';
     TDSButtonModule,
     TDSSelectModule,
     TDSTimePickerModule,
-    TDSToolTipModule
+    TDSToolTipModule,
+    TDSCalendarModule
   ],
   templateUrl: './appointment-modal.component.html',
   styleUrls: ['./appointment-modal.component.scss'],

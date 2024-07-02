@@ -18,6 +18,8 @@ import { TDSNotificationService } from 'tds-ui/notification';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSSelectModule } from 'tds-ui/select';
 import { startOfToday, isAfter } from 'date-fns';
+import { format } from 'date-fns';
+import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
 
 @Component({
   selector: 'frontend-customer-modal',
@@ -32,13 +34,12 @@ import { startOfToday, isAfter } from 'date-fns';
     TDSDatePickerModule,
     CustomerListComponent,
     TDSButtonModule,
-    TDSSelectModule
+    TDSSelectModule,
   ],
   templateUrl: './customer-modal.component.html',
   styleUrls: ['./customer-modal.component.scss'],
 })
 export class CustomerModalComponent implements OnInit {
-
   private readonly modalRef = inject(TDSModalRef);
   private readonly modalService = inject(TDSModalService);
   @Input() id?: number;
@@ -49,7 +50,7 @@ export class CustomerModalComponent implements OnInit {
     lastName: ['', Validators.required],
     email: ['', Validators.email],
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
-    dateOfBirth: ['', Validators.required],
+    dateOfBirth: [''],
     gender: ['Male'],
   });
   today = startOfToday();
@@ -57,20 +58,29 @@ export class CustomerModalComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private notification: TDSNotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     console.log(this.id);
 
     if (this.phoneNum) {
       this.form.patchValue({
-        phone: this.phoneNum
-      })
+        phone: this.phoneNum,
+      });
     }
 
     if (this.id) {
       this.auth.getCustomer(this.id).subscribe((data: any) => {
-        this.form.patchValue(data.customerDTO);
+        const { firstName, lastName, email, phone, dateOfBirth, gender } = data.customerDTO;
+        this.form.patchValue({
+          firstName,
+          lastName,
+          email,
+          phone,
+          dateOfBirth,
+          gender
+        });
+        console.log(this.form.value);
       });
     }
   }
@@ -103,28 +113,15 @@ export class CustomerModalComponent implements OnInit {
 
   // Create Customer
   createCustomer(val: any) {
-    this.auth.CreateNewCustomer(val).pipe(
-      catchError((ex) =>{
-        console.log(ex);
-        return of(null);
-      })
-    ).subscribe(
-        {
-          next: () => {
-            this.createNotificationSuccess('');
-            this.modalRef.destroy(val);
-          },
-          error: (res) => {
-            this.createNotificationError(res.error.message);
-          },
-        }
-      );
-  }
-
-  // Update Customer
-  updateCustomer(id: number, val: any) {
-    this.auth.UpdateCustomer(id, val).subscribe(
-      {
+    this.auth
+      .CreateNewCustomer(val)
+      .pipe(
+        catchError((ex) => {
+          console.log(ex);
+          return of(null);
+        })
+      )
+      .subscribe({
         next: () => {
           this.createNotificationSuccess('');
           this.modalRef.destroy(val);
@@ -132,22 +129,29 @@ export class CustomerModalComponent implements OnInit {
         error: (res) => {
           this.createNotificationError(res.error.message);
         },
-      }
-    );
+      });
+  }
+
+  // Update Customer
+  updateCustomer(id: number, val: any) {
+    this.auth.UpdateCustomer(id, val).subscribe({
+      next: () => {
+        this.createNotificationSuccess('');
+        this.modalRef.destroy(val);
+      },
+      error: (res) => {
+        this.createNotificationError(res.error.message);
+      },
+    });
   }
 
   // Success Notification
   createNotificationSuccess(content: any): void {
-    this.notification.success(
-      'Succesfully', content
-    );
+    this.notification.success('Succesfully', content);
   }
 
   // Error Notification
   createNotificationError(content: any): void {
-    this.notification.error(
-      'Error', content
-    );
+    this.notification.error('Error', content);
   }
-
 }
