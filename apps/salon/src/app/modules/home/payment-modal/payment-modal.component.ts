@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { InvoiceService } from './../../invoice/invoice.service';
+import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../shared.service';
 import * as moment from 'moment';
@@ -10,6 +11,7 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputNumberModule } from 'tds-ui/input-number';
 import { TDSModalModule, TDSModalRef } from 'tds-ui/modal';
 import { TDSNotificationService } from 'tds-ui/notification';
+import { InvoiceComponent } from '../../invoice/invoice.component';
 
 @Component({
   selector: 'frontend-payment-modal',
@@ -43,6 +45,7 @@ export class PaymentModalComponent implements OnInit {
   constructor(
     private shared: AuthService,
     private notification: TDSNotificationService,
+    private invoiceSvc: InvoiceService
   ) {}
 
   ngOnInit(): void {
@@ -97,6 +100,14 @@ export class PaymentModalComponent implements OnInit {
     )
   }
 
+  invoice(){
+    console.log(1)
+    // this.invoiceComponent.printInvoice();
+    this.invoiceSvc.dataShare.next({
+      print:true
+    })
+  }
+
   // Success Notification
   createNotificationSuccess(content: any): void {
     this.notification.success(
@@ -110,5 +121,4 @@ export class PaymentModalComponent implements OnInit {
       'Error', content
     );
   }
-
 }

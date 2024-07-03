@@ -13,7 +13,7 @@ import { TDSImageModule } from 'tds-ui/image';
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.scss'],
   standalone: true,
-  imports:[
+  imports: [
     CommonModule,
     ReactiveFormsModule,
     TDSFormFieldModule,
@@ -23,16 +23,19 @@ import { TDSImageModule } from 'tds-ui/image';
     TDSImageModule
   ],
 })
-export class UserProfileComponent implements OnInit  {
-  @Input() customerId? : number;
+export class UserProfileComponent implements OnInit {
+  @Input() customerId?: number;
   private readonly shared = inject(AuthService)
   serviceHistory: any;
   fallback = "./assets/img/default.svg";
 
   ngOnInit(): void {
-    if(this.customerId){
-      this.shared.getHistoryCustomer(this.customerId).subscribe( (data:any) =>{
+    console.log(this.customerId)
+    if (this.customerId) {
+
+      this.shared.getHistoryCustomer(this.customerId).subscribe((data: any) => {
         this.serviceHistory = data.listHistoryForCus;
+        console.log(this.serviceHistory);
       }
       )
     }

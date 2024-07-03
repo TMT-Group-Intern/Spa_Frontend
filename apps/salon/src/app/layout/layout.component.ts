@@ -5,12 +5,8 @@ import { MenuComponent } from '../shared/menu/menu.component';
 import { TDSLayoutModule } from 'tds-ui/layout';
 import { TDSHeaderModule } from 'tds-ui/header';
 import { HeaderComponent } from '../shared/header/header.component';
-import { ProductsComponent } from "../modules/products/products.component";
-import { ServiceListComponent } from '../modules/service-list/service-list.component';
-import { CustomerListComponent } from '../modules/customer-list/customer-list.component';
 import { RevenueStaticsModule } from '../modules/revenue-statistics/revenue-statistics.module';
 import { TDSMenuModule } from 'tds-ui/menu';
-import { HomeComponent } from '../modules/home/home.component';
 import { UsersComponent } from '../modules/users/users.component';
 import { CustomerDetailComponent } from '../modules/customer-list/customer-detail/customer-detail.component';
 
@@ -28,10 +24,6 @@ import { CustomerDetailComponent } from '../modules/customer-list/customer-detai
       RouterModule,
       MenuComponent,
       HeaderComponent,
-      HomeComponent,
-      ProductsComponent,
-      ServiceListComponent,
-      CustomerListComponent,
       RevenueStaticsModule,
       UsersComponent,
       CustomerDetailComponent

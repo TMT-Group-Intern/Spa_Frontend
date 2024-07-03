@@ -69,9 +69,9 @@
 
     <!-- Date & Time -->
     <div class="flex items-center justify-between">
-      <tds-label class="w-[30%]" [tdsRequired]="true">Choose date & time</tds-label>
+      <tds-label class="w-[30%]" [tdsRequired]="true">Thời gian</tds-label>
       <tds-form-field class="my-2 w-[70%]">
-        <tds-date-picker showTime [disabledDate]="disabledDate" formControlName="appointmentDate"></tds-date-picker>
+        <tds-date-picker showTime [disabledDate]="disabledDate" [format]="'dd/MM/YYYY hh:mm'" formControlName="appointmentDate"></tds-date-picker>
         <tds-error>
           <span>Your <strong>date & time</strong> cannot be empty!</span>
         </tds-error>

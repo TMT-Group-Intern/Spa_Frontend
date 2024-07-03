@@ -19,8 +19,8 @@
           <tds-form-field class="w-full my-2">
             <input tdsInput autocomplete="off" formControlName="name" class="appearance-none w-full" type="text" />
           </tds-form-field>
-          <button tds-button-icon tds-tooltip tooltipTitle="Hồ sơ" (click)="callModalUserProfile()"
-            class="ml-2" color="success"><i class="tdsi-user-fill"></i></button>
+          <button tds-button-icon tds-tooltip tooltipTitle="Hồ sơ" (click)="callModalUserProfile()" color="success"
+            class="ml-1 tdsi-user-fill"></button>
         </div>
       </div>
 
@@ -56,7 +56,7 @@
       <tds-label>Lựa chọn dịch vụ</tds-label>
       <tds-form-field class="pt-2">
         <tds-select valueField="serviceID" formControlName="service" textField="serviceName" placeholder='select item'
-          disabledField="isActive" [allowClear]="true" [required]="true" [data]="dataSvc" mode="multiple">
+          disabledField="isActive" [allowClear]="true" [data]="dataSvc" mode="multiple">
         </tds-select>
         <tds-error class="text-tds-color-red-500-light">Vui lòng chọn dịch vụ! </tds-error>
       </tds-form-field>

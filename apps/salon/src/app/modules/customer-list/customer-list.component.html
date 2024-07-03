@@ -30,6 +30,7 @@
       [tdsTitle]="'ID'"
       tdsWidth="8%"
       [tdsDataType]="'text'"
+      [routerLink]="['customer-detail/1']"
     >
     </tds-data-table-column>
 
@@ -54,28 +55,9 @@
       [tdsDataType]="'text'"
     ></tds-data-table-column>
 
-    <tds-data-table-column
-      [tdsField]="'dateOfBirth'"
-      [tdsTitle]="'Date of Birth'"
-      tdsWidth="9%"
-      [tdsDataType]="'date'"
-      [tdsFormat]="'dd/mm/yyyy'"
-    ></tds-data-table-column>
-    
-    <!-- <tds-data-table-column
-      [tdsField]="'customerTypeID'"
-      [tdsTitle]="'Customer Type ID'"
-      tdsWidth="10%"
-      [tdsDataType]="'numeric'"
-      tdsClass="text-center"
-    ></tds-data-table-column> -->
+    <tds-data-table-column [tdsField]="'dateOfBirth'" [tdsTitle]="'Ngày sinh'" tdsWidth="9%" [tdsDataType]="'date'"
+      [tdsFormat]="'dd/MM/YYYY'">
 
-    <tds-data-table-column
-      [tdsContent]="commandTpl"
-      tdsWidth="7%"
-      [tdsColumnType]="'command'"
-      tdsClass="flex justify-around"
-    >
       <ng-template #commandTpl let-dataRow>
         <button
           tds-button-flat-icon
@@ -97,7 +79,7 @@
     </tds-data-table-column>
   </tds-data-table>
 
-  <div class="w-full flex items-center m-2">
+  <div class="w-full flex items-center p-2">
     <tds-pagination
       class="w-full"
       [pageSize]="pageSize"

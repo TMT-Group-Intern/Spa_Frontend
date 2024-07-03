@@ -84,6 +84,11 @@ export class AuthService {
     return this.http.post(this.baseUrl + 'Customers', val);
   }
 
+  UploadImageCustomer(formData: FormData) {
+    return this.http.post(`${this.baseUrl}Customers/upload`, formData);
+  }
+
+
   // Update Customer
   UpdateCustomer(id: number, val: any) {
     return this.http.put(this.baseUrl + 'Customers/' + id, val);
@@ -156,6 +161,13 @@ export class AuthService {
   updateDiscount(id: any, discount: any, val: any) {
     return this.http.put(this.baseUrl + 'Appointment/UpdateDiscount?id=' + id + '&perDiscount=' + discount, val);
   }
+  // get Customer for technical staff
+  getCustomerInQueueForTechnicalStaff(branchID: number, status: string): Observable<any[]> {
+    return this.http.get<any[]>('https://localhost:44305/GetAppointmentByStatus?idBrand=' + branchID + '&status=' + status);
+  }
+  getAppointmentById(id: number) {
+    return this.http.get(this.baseUrl + 'Appointment/' + id);
+  }
 
   // Assign Spa Therapist
   assignSpaTherapist(appointment: any, empID: any, val: any) {
@@ -177,7 +189,7 @@ export class AuthService {
   getEmployee(branch: number, job: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/EmployeeByBranchAndJob?branchID=' + branch + '&jobTypeID=' + job);
   }
-
+  
   //
   login(email: string, password: string) {
     return this.http.post<{ flag: boolean, mess: string, token: string }>(this.baseUrl + 'Authentication/login', {
