@@ -61,22 +61,19 @@ export class HomeComponent implements OnInit {
 
   // Display Appointment List
   initAppointmentList() {
-    this.sharedService.appointmentList(1).subscribe((data:any) => {
+    this.sharedService.appointmentList(2).subscribe((data:any) => {
       this.appointmentList = data;
       this.todayBooking = this.appointmentList.filter((appointment: any) =>
         appointment.Status === "Scheduled" ||
-        appointment.Status === "Confirmed" ||
         appointment.Status === "Cancelled"
       );
 
       this.reception = this.appointmentList.filter((appointment: any) =>
-        appointment.Status === "Waiting" ||
         appointment.Status === "Examining"
       );
 
       this.inSession = this.appointmentList.filter((appointment: any) =>
-        appointment.Status === "Preparation" ||
-        appointment.Status === "Treating"
+        appointment.Status === "Treatment"
       );
     });
   }
