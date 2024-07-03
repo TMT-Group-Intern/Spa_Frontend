@@ -11,6 +11,7 @@ import { UsersComponent } from './modules/users/users.component';
 import { CustomerDetailComponent } from './modules/customer-list/customer-detail/customer-detail.component';
 import { TechnicalStaffComponent } from './modules/technical-staff/technical-staff.component';
 import { TreatmentDetailComponent } from './modules/technical-staff/treatment-detail/treatment-detail.component';
+import { DoctorComponent } from './modules/doctor/doctor.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -41,6 +42,7 @@ const routes: Routes = [
           },
         ],
       },
+      { path: 'doctor', loadComponent: () => DoctorComponent },
       { path: 'revenue-statistics', loadChildren: () => RevenueStaticsModule },
       {path: 'users', loadComponent: ()=> UsersComponent}
     ],
