@@ -149,8 +149,7 @@ export class AppointmentModalComponent implements OnInit {
     const val: any = {
       ...req,
       appointmentDate: format(
-        new Date(appointmentDate as Date),
-        DATE_CONFIG.DATE_BASE
+        new Date(appointmentDate as Date), DATE_CONFIG.DATE_BASE
       ),
 
       employeeID: this.empID,
