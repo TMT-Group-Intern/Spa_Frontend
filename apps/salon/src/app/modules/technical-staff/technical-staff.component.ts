@@ -27,7 +27,7 @@ export class TechnicalStaffComponent {
   renderCustomerInQueue() {
 
     this.auth
-      .getCustomerInQueueForTechnicalStaff(1, 'Scheduled')
+      .getCustomerInQueueForTechnicalStaff(1, 'Treatment')
       .subscribe((x: any[]) => {
         this.listSpaServiceQueue = x
       });

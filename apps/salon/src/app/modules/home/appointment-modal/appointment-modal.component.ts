@@ -80,7 +80,7 @@ export class AppointmentModalComponent implements OnInit {
   constructor(
     private shared: AuthService,
     private notification: TDSNotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initCustomer();
@@ -104,18 +104,18 @@ export class AppointmentModalComponent implements OnInit {
             customerID: data.Customer.CustomerID,
             status: data.Status,
           });
-           if (data.Assignments[0].EmployerID) {
+          if (data.Assignments[0].EmployerID) {
             this.form.patchValue({
-                 doctor: data.Assignments[0].EmployerID,
-             });
-           }
+              doctor: data.Assignments[0].EmployerID,
+            });
+          }
           console.log(this.form.value)
         });
 
     }
 
     // Get Doctor
-    this.shared.getEmployee(2, 2).subscribe(
+    this.shared.getEmployee(1, 2).subscribe(
       (data: any[]) => {
         console.log("data empl: ",data)
         this.doctorOptions = [...data.map(item => ({
