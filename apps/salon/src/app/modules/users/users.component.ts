@@ -13,8 +13,26 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSSelectModule } from 'tds-ui/select';
+import { TDSCascaderModule, TDSCascaderOption } from 'tds-ui/cascader';
 import * as moment from 'moment';
 
+const roleOptions = [
+  {
+    value: 'All',
+    label: 'All',
+    isLeaf: true
+},
+  {
+      value: 'Admin',
+      label: 'Admin',
+      isLeaf: true
+  },
+  {
+      value: 'Employee',
+      label: 'Employee',
+      isLeaf: true
+  }
+];
 @Component({
   selector: 'frontend-users',
   templateUrl: './users.component.html',
@@ -33,29 +51,34 @@ import * as moment from 'moment';
     TDSFormFieldModule,
     TDSSelectModule,
     FormsModule,
+    TDSCascaderModule
   ],
 })
 export class UsersComponent implements OnInit{
+  tdsOptions: TDSCascaderOption[] = roleOptions;
+  values: string[] = ['All'];
   private readonly tModalSvc =inject(TDSModalService)
   UserList:any[] = [];
-  selectedUserType = 'All';
+  selectedUserType = this.values.toString();
 
   constructor(
     private auth : AuthService,
   ) {}
-
-
+  onChanges(values: string[]): void {
+    this.selectedUserType=this.values.toString()
+    this.initUserList();
+}
   ngOnInit(): void {
     this.initUserList();
   }
-
-  initUserList() {
+  
+  initUserList() {  
     this.auth.UserList().subscribe(data => {
       this.UserList = data;
       if(this.selectedUserType==='All'){
         this.UserList
       }
-      else if (this.selectedUserType === 'Admin') {
+      else if (this.selectedUserType === 'Admin') {        
         this.UserList = this.UserList.filter(user => user.Role === 'Admin');
       } else if (this.selectedUserType === 'Employee') {
         this.UserList = this.UserList.filter(user => user.Role !== 'Admin');
@@ -76,12 +99,9 @@ export class UsersComponent implements OnInit{
       footer:null,
       size:'lg'
     });
-    modal.afterClose.asObservable().subscribe
-    (res=>{
-      if(res){
-        this.initUserList()
-      }
-    });
+    modal.afterClose.asObservable().pipe(tap(()=>  this.initUserList())).subscribe
+    ();
+
   }
   createAccountForEmployee(Email:string){
     console.log(Email)
@@ -128,7 +148,7 @@ export class UsersComponent implements OnInit{
          onOk:()=> true
        });
        modal.afterClose.asObservable()
-       .subscribe(tap(()=>  this.initUserList()));
+       .subscribe(this.initUserList);
      }
     }
     );
@@ -143,11 +163,7 @@ export class UsersComponent implements OnInit{
         email
       }
     });
-    modal.afterClose.asObservable().subscribe(res=>{
-      if(res){
-        this.initUserList()
-      }
-    })
+    modal.afterClose.asObservable().pipe(tap(()=>  this.initUserList())).subscribe()
   }
   deleteUser(email:string){
     console.log(email)
