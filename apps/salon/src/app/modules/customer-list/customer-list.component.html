@@ -23,15 +23,8 @@
     [tdsShowSizeChanger]="true"
     [tdsPageSize]="20"
     [tdsBordered]="true"
+    [routerLink]="['customer-detail/1']"
   >
-    <tds-data-table-expand-row [tdsContent]="expandTpl" tdsWidth="2%">
-      <ng-template #expandTpl let-dataRow let-expand="expand">
-        <tds-timeline>
-          <!-- <a tds-link href="customer-list/customer-detail"> Detail </a> -->
-          <a [routerLink]="['customer-detail/1']"> Detail </a>
-        </tds-timeline>
-      </ng-template>
-    </tds-data-table-expand-row>
 
     <tds-data-table-column
       [tdsField]="'customerCode'"
@@ -61,14 +54,6 @@
       tdsWidth="10%"
       [tdsDataType]="'text'"
     ></tds-data-table-column>
-
-    <!-- <tds-data-table-column
-      [tdsField]="'dateOfBirth'"
-      [tdsTitle]="'Date of Birth'"
-      tdsWidth="9%"
-      [tdsDataType]="'date'"
-      [tdsFormat]="'dd/mm/yyyy'"
-    ></tds-data-table-column> -->
 
     <tds-data-table-column [tdsField]="'dateOfBirth'" [tdsTitle]="'Ngày sinh'" tdsWidth="9%" [tdsDataType]="'date'"
       [tdsFormat]="'dd/MM/YYYY'">

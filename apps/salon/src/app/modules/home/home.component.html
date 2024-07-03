@@ -1,84 +1,4 @@
-<div class="w-full gap-x-2 grid grid-cols-3 flex-wrap h-full bg-gray-200">
-  <div class="col-span-2 gap-y-2 grid grid-rows-2 flex-wrap">
-    <!-- Reception -->
-    <div class="row-span-1 p-4 border rounded-10 bg-white">
-      <span class="text-heading-4">Reception</span>
-      <div *ngIf="reception.length === 0" class="h-60 flex justify-center items-center">
-        <tds-empty></tds-empty>
-      </div>
-      <div *ngIf="reception.length !== 0" class="gap-x-2 grid grid-cols-3 flex-wrap overflow-y-auto mt-3"
-        style="max-height: 225px">
-        <tds-card *ngFor="let appoint of reception" class="border rounded-10 col-span-1 mb-2">
-          <!-- Card Header -->
-          <tds-card-header class="bg-green-success-200 text-white">
-            <p tds-typography tdsEllipsis>{{appoint.Customer.FirstName}} {{appoint.Customer.LastName}}</p>
-          </tds-card-header>
-          <!-- Card content -->
-          <tds-card-content>
-            <div class="flex justify-between">
-            <div>
-              <p><i class="tdsi-earpiece-fill text-green-success-300"></i> {{appoint.Doctor}}</p>
-              <p><i class="tdsi-time-fill text-green-success-300"></i> {{appoint.AppointmentDate | date:'HH:mm'}}</p>
-            </div>
-            <div class="flex justify-center items-center">
-              <tds-tag status='custom' class="bg-success-400">{{appoint.Status}}</tds-tag>
-            </div>
-          </div>
-          </tds-card-content>
-        </tds-card>
-      </div>
-    </div>
-
-    <!-- In ssesion -->
-    <div class="row-span-1 border p-4 rounded-10 bg-white">
-      <span class="text-heading-4">In Session</span>
-      <div *ngIf="inSession.length === 0" class="h-60 flex justify-center items-center">
-        <tds-empty></tds-empty>
-      </div>
-      <div *ngIf="inSession.length !== 0" class="gap-x-2 grid grid-cols-3 flex-wrap overflow-y-auto mt-3"
-        style="max-height: 225px">
-        <tds-card *ngFor="let appoint of inSession" class="border rounded-10 col-span-1 mb-2">
-          <!-- Card Header -->
-          <tds-card-header class="bg-green-success-200 text-white ">
-            <div class="flex justify-between">
-              <p tds-typography tdsEllipsis>{{appoint.Customer.FirstName}} {{appoint.Customer.LastName}}</p>
-              <div>
-                <!-- <tds-tag *ngIf="appoint.Status === 'Preparation'" status='custom'
-                  class="bg-info-400">Preparation</tds-tag> -->
-                <tds-tag status='custom' class="bg-success-400">{{appoint.Status}}</tds-tag>
-              </div>
-            </div>
-          </tds-card-header>
-          <div class="grid grid-cols-3 flex-wrap">
-            <!-- Card content -->
-            <tds-card-content class="col-span-2">
-              <p><i class="tdsi-earpiece-fill text-green-success-300"></i> {{appoint.Doctor}}</p>
-              <p><i class="tdsi-time-fill text-green-success-300"></i> {{appoint.AppointmentDate | date:'HH:mm'}}
-              </p>
-            </tds-card-content>
-            <!-- Card button -->
-            <tds-card-actions class="col-span-1">
-              <div class="flex justify-end">
-                <button tds-button-icon color="secondary" tds-tooltip tooltipTitle="Edit Appointment"
-                  (click)="onEditInSession(appoint.AppointmentID)">
-                  <i class="tdsi-edit-fill"></i>
-                </button>
-              </div>
-            </tds-card-actions>
-          </div>
-          <hr>
-          <tds-card-actions class="col-span-1">
-            <div class="flex justify-center">
-              <button tds-button color="success" (click)="onEditPayment(appoint.AppointmentID)">
-                Check Out
-              </button>
-            </div>
-          </tds-card-actions>
-        </tds-card>
-      </div>
-    </div>
-  </div>
-
+<div class="w-full gap-x-2 grid grid-cols-4 flex-wrap h-full bg-gray-200">
   <!-- Appointment List -->
   <div class="col-span-1 border p-4 rounded-10 bg-white">
     <!-- Header -->
@@ -133,44 +53,85 @@
       </tds-card>
     </div>
   </div>
-</div>
 
-<!-- display of doctor -->
-<div class="w-full h-full m-2 rounded-10 bg-white">
-  <span class="p-4 text-heading-2">Tiếp nhận tư vấn</span>
-  <div class="gap-x-2 grid grid-cols-4 flex-wrap overflow-y-auto mt-3">
-    <tds-card *ngFor="let appoint of reception" class="border rounded-10 m-4 col-span-1">
-      <!-- Card Header -->
-      <tds-card-header class="bg-green-success-200 text-white">
-        <div class="flex justify-between">
-          <p tds-typography tdsEllipsis>{{appoint.Customer.FirstName}} {{appoint.Customer.LastName}}</p>
-          <tds-tag status='custom' class="bg-success-400">{{appoint.Status}}</tds-tag>
-        </div>
-      </tds-card-header>
-      <!-- Card content -->
-      <tds-card-content class="px-3">
-        <p><i class="tdsi-earpiece-fill text-green-success-300"></i> {{appoint.Doctor}}</p>
-        <div class="flex justify-between">
-          <p>
-            <i class="tdsi-time-fill text-green-success-300"></i>
-            {{appoint.AppointmentDate | date:'HH:mm'}}
-          </p>
-          <p>
-            <i class="tdsi-call-fill text-green-success-300"></i>
-            {{ appoint.Customer.Phone }}
-          </p>
-        </div>
-      </tds-card-content>
-      <hr />
-      <!-- Card button -->
-      <tds-card-actions>
-        <div class="flex justify-end">
-          <button tds-button-icon color="secondary" tds-tooltip tooltipTitle="Edit Appointment"
-            (click)="callmodalServiceAppointment(appoint.AppointmentID)">
-            <i class="tdsi-edit-fill"></i>
-          </button>
-        </div>
-      </tds-card-actions>
-    </tds-card>
+  <!--  -->
+  <div class="col-span-3 gap-y-2 grid grid-rows-2 flex-wrap">
+    <!-- Reception -->
+    <div class="row-span-1 p-4 border rounded-10 bg-white">
+      <span class="text-heading-4">Reception</span>
+      <div *ngIf="reception.length === 0" class="h-60 flex justify-center items-center">
+        <tds-empty></tds-empty>
+      </div>
+      <div *ngIf="reception.length !== 0" class="gap-x-2 grid grid-cols-4 flex-wrap overflow-y-auto mt-3"
+        style="max-height: 225px">
+        <tds-card *ngFor="let appoint of reception" class="border rounded-10 col-span-1 mb-2">
+          <!-- Card Header -->
+          <tds-card-header class="bg-green-success-200 text-white">
+            <p tds-typography tdsEllipsis>{{appoint.Customer.FirstName}} {{appoint.Customer.LastName}}</p>
+          </tds-card-header>
+          <!-- Card content -->
+          <tds-card-content>
+            <div class="flex justify-between">
+            <div>
+              <p><i class="tdsi-earpiece-fill text-green-success-300"></i> {{appoint.Doctor}}</p>
+              <p><i class="tdsi-time-fill text-green-success-300"></i> {{appoint.AppointmentDate | date:'HH:mm'}}</p>
+            </div>
+            <div class="flex justify-center items-center">
+              <tds-tag status='custom' class="bg-success-400">{{appoint.Status}}</tds-tag>
+            </div>
+          </div>
+          </tds-card-content>
+        </tds-card>
+      </div>
+    </div>
+
+    <!-- In ssesion -->
+    <div class="row-span-1 border p-4 rounded-10 bg-white">
+      <span class="text-heading-4">In Session</span>
+      <div *ngIf="inSession.length === 0" class="h-60 flex justify-center items-center">
+        <tds-empty></tds-empty>
+      </div>
+      <div *ngIf="inSession.length !== 0" class="gap-x-2 grid grid-cols-4 flex-wrap overflow-y-auto mt-3"
+        style="max-height: 225px">
+        <tds-card *ngFor="let appoint of inSession" class="border rounded-10 col-span-1 mb-2">
+          <!-- Card Header -->
+          <tds-card-header class="bg-green-success-200 text-white ">
+            <div class="flex justify-between">
+              <p tds-typography tdsEllipsis>{{appoint.Customer.FirstName}} {{appoint.Customer.LastName}}</p>
+              <div>
+                <tds-tag *ngIf="appoint.Status === 'Preparation'" status='custom'
+                  class="bg-info-400">Preparation</tds-tag>
+                <tds-tag status='custom' class="bg-success-400">{{appoint.Status}}</tds-tag>
+              </div>
+            </div>
+          </tds-card-header>
+          <div class="grid grid-cols-3 flex-wrap">
+            <!-- Card content -->
+            <tds-card-content class="col-span-2">
+              <p><i class="tdsi-auto-fix-fill text-green-success-300"></i> {{appoint.SpaTherapist}}</p>
+              <p><i class="tdsi-time-fill text-green-success-300"></i> {{appoint.AppointmentDate | date:'HH:mm'}}
+              </p>
+            </tds-card-content>
+            <!-- Card button -->
+            <tds-card-actions class="col-span-1">
+              <div class="flex justify-end">
+                <button tds-button-icon color="secondary" tds-tooltip tooltipTitle="Edit Appointment"
+                  (click)="onEditInSession(appoint.AppointmentID)">
+                  <i class="tdsi-edit-fill"></i>
+                </button>
+              </div>
+            </tds-card-actions>
+          </div>
+          <hr>
+          <tds-card-actions class="col-span-1">
+            <div class="flex justify-center">
+              <button tds-button color="success" (click)="onEditPayment(appoint.AppointmentID)">
+                Check Out
+              </button>
+            </div>
+          </tds-card-actions>
+        </tds-card>
+      </div>
+    </div>
   </div>
 </div>

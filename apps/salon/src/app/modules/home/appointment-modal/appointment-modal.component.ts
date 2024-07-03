@@ -52,7 +52,6 @@ export class AppointmentModalComponent implements OnInit {
   public statusOptions = [
     'Scheduled',
     'Cancelled',
-    'Waiting'
   ]
   private readonly tModalSvc = inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
@@ -152,8 +151,7 @@ export class AppointmentModalComponent implements OnInit {
     const val: any = {
       ...req,
       appointmentDate: format(
-        new Date(appointmentDate as Date),
-        DATE_CONFIG.DATE_BASE
+        new Date(appointmentDate as Date), DATE_CONFIG.DATE_BASE
       ),
 
       employeeID: this.empID,
