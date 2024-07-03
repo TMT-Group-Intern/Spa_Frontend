@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnInit, } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TDSModalModule, TDSModalRef } from 'tds-ui/modal';
@@ -20,6 +20,7 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z
   styleUrls: ['./users-modal.component.scss'],
 })
 export class UsersModalComponent implements OnInit {
+  
   private readonly tModalSvc =inject(TDSModalService)
   private auth = inject(AuthService);
   private readonly modalRef = inject(TDSModalRef);
@@ -36,30 +37,31 @@ export class UsersModalComponent implements OnInit {
       ])
     ],
     pass: [
-      '',
+      'Spa@12345',
       Validators.compose([
-        Validators.required,
+        //Validators.required,
         Validators.minLength(8),
         Validators.pattern(PASSWORD_PATTERN)
       ])
     ],
     retype: [
-      '',
+      'Spa@12345',
       Validators.compose([
-        Validators.required,
+        //Validators.required,
         Validators.minLength(8),
         Validators.pattern(PASSWORD_PATTERN),
         this.matchValidator.bind(this)
       ])
     ],
     dateOfBirth: ['', Validators.required],
-    hireDate: ['', Validators.required],
+    hireDate: [new Date().toISOString()],
     gender: ['Male', Validators.required],
-    role: ['Employee', Validators.required],
-    jobTypeID: ['', Validators.required],
-    branchID: ['', Validators.required],
-
+    role: ['Admin', Validators.required],
+    jobTypeID: ['Nau Com'],
+    branchID: ['Rua Chen'],
   });
+  
+  
   // createAccountForEmployee = inject(FormBuilder).nonNullable.group({
   //   email: [
   //     '',
@@ -153,9 +155,10 @@ export class UsersModalComponent implements OnInit {
 
     if (this.createUser.invalid) {
       this.markFormGroupTouched(this.createUser);
-      //console.log(this.createUser.value);
+      console.log(this.createUser.value);
       return;
     }
+    console.log(this.createUser)
     // Thực hiện các hành động khi form hợp lệ
     this.auth.signUp(lastName, firstName, gender, phone, email, password, confirmPassword, dateOfBirth, hireDate, jobTypeID, branchID, role).subscribe((result) => {
       //console.log(result)
@@ -165,21 +168,17 @@ export class UsersModalComponent implements OnInit {
 
          const modal = this.tModalSvc.create({
           title:'Thành công',
-          content: `<h5 class="text-success-500">Tạo tài khoản <strong>${ email }</strong> thành công!</h5>`,
+          content: `<h5 class="text-success-500">Tạo tài khoản <strong>${ email }</strong> với mật khẩu <strong>${ password }</strong> thành công!</h5>`,
           footer:null,
-          size:'lg',
+          size:'md',
           okText:'Xác nhận',
           onOk:()=> true
         });
         modal.afterClose.asObservable()
-        .subscribe
-        (res=>{
-          if(res){
-            this.createUser.reset;
-          }
-        });
+        .subscribe();
       }
       else{
+        console.log(this.createUser.value)
         console.log(result.status)
          //this.createUser.reset();
 
