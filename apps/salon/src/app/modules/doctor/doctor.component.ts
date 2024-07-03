@@ -16,31 +16,31 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 
 @Component({
-    selector: 'frontend-doctor',
-    standalone: true,
-    templateUrl: './doctor.component.html',
-    styleUrls: ['./doctor.component.scss'],
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        TDSCardModule,
-        TDSTagModule,
-        TDSButtonModule,
-        TDSTypographyModule,
-        TDSTimePickerModule,
-        TDSHeaderModule,
-        TDSCardModule,
-        TDSImageModule,
-        TDSFormFieldModule,
-        TDSEmptyModule,
-        TDSToolTipModule
-    ]
+  selector: 'frontend-doctor',
+  standalone: true,
+  templateUrl: './doctor.component.html',
+  styleUrls: ['./doctor.component.scss'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TDSCardModule,
+    TDSTagModule,
+    TDSButtonModule,
+    TDSTypographyModule,
+    TDSTimePickerModule,
+    TDSHeaderModule,
+    TDSCardModule,
+    TDSImageModule,
+    TDSFormFieldModule,
+    TDSEmptyModule,
+    TDSToolTipModule
+  ]
 })
-export class DoctorComponent implements OnInit{
+export class DoctorComponent implements OnInit {
   private readonly tModalSvc = inject(TDSModalService)
 
   reception: any[] = [];
-  appointmentList: any ;
+  appointmentList: any;
   @Input() customerId?: number;
   private readonly shared = inject(AuthService)
   serviceHistory: any;
@@ -48,8 +48,8 @@ export class DoctorComponent implements OnInit{
   dataAppointmentbyid: any;
 
   constructor(
-    private sharedService : AuthService,
-  ){}
+    private sharedService: AuthService,
+  ) { }
 
   ngOnInit(): void {
     this.initAppointmentList();
@@ -69,35 +69,35 @@ export class DoctorComponent implements OnInit{
   }
 
   // Open Service Appointment Modal
-  callmodalServiceAppointment(id: number){
+  callmodalServiceAppointment(id: number) {
     const modal = this.tModalSvc.create({
-      title:'Tạo dịch vụ',
+      title: 'Tạo dịch vụ',
       content: ServiceAppointmentModalComponent,
-      footer:null,
-      size:'lg',
-      componentParams:{
+      footer: null,
+      size: 'lg',
+      componentParams: {
         id
       }
     });
-    modal.afterClose.asObservable().subscribe(res=>{
-      if(res){
+    modal.afterClose.asObservable().subscribe(res => {
+      if (res) {
         this.initAppointmentList()
       }
     })
   }
 
-  userFrofile(id: number){
-    this.sharedService.getAppointment(id).subscribe((data: any) =>{
+  userFrofile(id: number) {
+    this.sharedService.getAppointment(id).subscribe((data: any) => {
       console.log(data),
-      this.dataAppointmentbyid = data;
+        this.dataAppointmentbyid = data;
     }
     )
   }
 
-  getHistory(id: number){
+  getHistory(id: number) {
     this.sharedService.getHistoryCustomer(id).subscribe((data: any) => {
       this.serviceHistory = data.listHistoryForCus;
       console.log(this.serviceHistory);
-  })
+    })
   }
 }

@@ -33,9 +33,11 @@ export class TreatmentDetailComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.renderCustomerInQueue();
+    this.renderCustomerDetail();
   }
-  renderCustomerInQueue() {
+
+
+  renderCustomerDetail() {
     const observer = {
       next: (data: any) => {
         this.listSpaServiceQueue = data.ChooseServices.map((chooseService: any) => chooseService.service);
