@@ -153,14 +153,14 @@ export class AppointmentModalComponent implements OnInit {
       appointmentDate: format(
         new Date(appointmentDate as Date), DATE_CONFIG.DATE_BASE
       ),
-
       employeeID: this.empID,
     };
+
     if (doctor != null) {
       val.assignments = [{ employerID: doctor }];
     }
 
-    console.log(val.employeeID);
+    console.log(val);
     if (this.id) {
       this.updateAppointment(this.id, val);
     } else {
