@@ -1,7 +1,7 @@
 <form class="py-2 flex" id="idform" [formGroup]="form" autocomplete="off">
   <div class="w-[50%] mr-2">
     <!-- Phone -->
-    <div class="flex items-center justify-between">
+    <div *ngIf="!isHide1" class="flex items-center justify-between">
       <tds-label class="w-[30%]" [tdsRequired]="true">Số điện thoại</tds-label>
       <div class="flex w-[70%] items-center">
         <tds-form-field class="my-2 w-full">
@@ -14,7 +14,6 @@
               </span>
             </ng-template>
           </tds-select>
-
           <!-- Display error -->
           <tds-error>
             <span *ngIf="form.controls['phone'].hasError('required')">Your <strong>phone number</strong> cannot be
@@ -26,10 +25,19 @@
               digits!</span>
           </tds-error>
         </tds-form-field>
-        <button tds-button-icon color="success" class="border-none tdsi-plus-fill ml-2"
+        <!-- New Customer -->
+        <button tds-button-icon color="success" class="ml-2"
           (click)="createCustomer(form.value.phone)" tds-tooltip="Thêm khách hàng">
+          <i class="tdsi-plus-fill"></i>
         </button>
       </div>
+    </div>
+    <!--  -->
+    <div *ngIf="!isHide2" class="flex items-center justify-between">
+      <tds-label class="w-[30%]">Số điện thoại</tds-label>
+      <tds-form-field class="my-2 w-[70%]">
+        <input tdsInput autocomplete="off" formControlName="phone" class="appearance-none w-full" type="text" />
+      </tds-form-field>
     </div>
 
     <!-- Full name -->
@@ -39,6 +47,7 @@
         <input tdsInput autocomplete="off" formControlName="name" class="appearance-none w-full" type="text" />
       </tds-form-field>
     </div>
+
     <!-- Branch -->
     <div class="flex items-center justify-between">
       <tds-label class="w-[30%]">Chi nhánh</tds-label>
@@ -48,6 +57,7 @@
     </div>
   </div>
   <div class="50% ml-2">
+
     <!-- Doctor -->
     <div class="flex items-center justify-between">
       <tds-label class="w-[30%]">Bác sĩ</tds-label>
@@ -56,6 +66,7 @@
         </tds-select>
       </tds-form-field>
     </div>
+
     <!-- Date & Time -->
     <div class="flex items-center justify-between">
       <tds-label class="w-[30%]" [tdsRequired]="true">Thời gian</tds-label>
@@ -66,6 +77,7 @@
         </tds-error>
       </tds-form-field>
     </div>
+
     <!-- Status -->
     <div class="flex items-center justify-between">
       <tds-label class="w-[30%]">Trạng thái</tds-label>

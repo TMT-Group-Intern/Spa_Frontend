@@ -1,4 +1,4 @@
-import { ModalRegisterComponent } from './../modal-register/modal-register.component';
+//import { ModalRegisterComponent } from './../modal-register/modal-register.component';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSHeaderModule } from 'tds-ui/header';
@@ -42,23 +42,6 @@ export class HeaderComponent  {
 
 signUpForm!: FormGroup;
 persondisplayWith!: FormControl;
-showModal(): void {
- const modal= this.modalSvc.create({
-    content:ModalRegisterComponent,
-    footer:null,
-    cancelText:null,
-    title:'Thêm tài khoản',
-    size:'md'
-    // componentParams:{}
-  })
-
-  modal.afterClose.asObservable().subscribe((a) =>{
-    console.log(a)
-  })
-}
-
-
-// register
 
     constructor(
         private fb: FormBuilder,
@@ -66,26 +49,8 @@ showModal(): void {
         private router:Router 
     ) {
     }
-
-
-
-    matchValidator(control: AbstractControl): { [key: string]: boolean } | null {
-      if (!this.signUpForm) {
-        return null;
-      }
-
-      const pass = this.signUpForm.value.pass;
-      const retype = control.value;
-
-      if (pass !== retype) {
-        return { mustMatch: true };
-      }
-
-      return null;
-    };
-
     onLogOut(){
-      const token = localStorage.getItem('userToken')
+      //const token = localStorage.getItem('userToken')
       localStorage.removeItem('userToken');
       this.router.navigate(['']);
     };

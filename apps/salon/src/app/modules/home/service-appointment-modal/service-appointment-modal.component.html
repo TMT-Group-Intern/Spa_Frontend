@@ -24,29 +24,21 @@
         </div>
       </div>
 
-      <!-- Branch -->
-      <div class="flex items-center justify-between">
-        <tds-label>Chi nhánh</tds-label>
-        <tds-form-field class="my-2 w-[70%]">
-          <input tdsInput autocomplete="off" formControlName="branch" class="appearance-none w-full" type="text" />
-        </tds-form-field>
-      </div>
-
       <!-- Doctor -->
       <div class="flex items-center justify-between">
         <tds-label>Bác sĩ</tds-label>
-        <tds-form-field class="w-[70%] my-2">
-          <tds-select valueField="id" textField="name" placeholder='---' [data]="doctorOptions"
-            formControlName="doctor">
-          </tds-select>
-        </tds-form-field>
+        <div class="flex items-center w-[70%]">
+          <tds-form-field class="w-full my-2">
+            <input tdsInput autocomplete="off" formControlName="doctor" class="appearance-none w-full" type="text" />
+          </tds-form-field>
+        </div>
       </div>
 
       <!-- Date & Time -->
       <div class="flex items-center justify-between">
         <tds-label>Thời gian</tds-label>
         <tds-form-field class="w-[70%] my-2">
-          <tds-date-picker showTime [disabledDate]="disabledDate" formControlName="appointmentDate"></tds-date-picker>
+          <input tdsInput autocomplete="off" formControlName="appointmentDate">
         </tds-form-field>
       </div>
 
@@ -74,8 +66,8 @@
 
 <ng-container *tdsModalFooter>
   <div class=" flex flex-row-reverse p-4">
-    <button tds-button (click)="submitUpdateServiceAppointment()" form="idform" color="custom"
-      class="w-[100px] bg-green-primary-2 px-4 py-2 text-white rounded hover:bg-green-1 transition-colors duration-300">
+    <button tds-button (click)="submitUpdateServiceAppointment()" form="idform" color="success"
+      class="w-[100px] px-4 py-2 text-white rounded">
       Lưu
     </button>
   </div>

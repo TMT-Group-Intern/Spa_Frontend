@@ -62,7 +62,7 @@ export class CustomerListComponent implements OnInit {
   }
   /* get the list of customers by pageNumber and pageSize */
   renderPageCustomers(): void {
-    this.auth.pageCustomers(this.pageNumber, this.pageSize).subscribe((data:any) => {
+      this.auth.pageCustomers(this.pageNumber, this.pageSize).subscribe((data:any) => {
       this.customerOfPage = data.item;
       this.totalItemsCustomers = data.totalItems;
     })

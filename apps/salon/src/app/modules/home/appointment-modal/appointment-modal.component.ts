@@ -1,6 +1,11 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { TDSModalModule, TDSModalRef, TDSModalService } from 'tds-ui/modal';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSInputModule } from 'tds-ui/tds-input';
@@ -40,19 +45,15 @@ import { BehaviorSubject, debounceTime, of, switchMap } from 'rxjs';
   templateUrl: './appointment-modal.component.html',
   styleUrls: ['./appointment-modal.component.scss'],
 })
-
 export class AppointmentModalComponent implements OnInit {
 
   searchPhone$ = new BehaviorSubject<string>('')
   public doctorOptions: any[] = [];
-
   public statusOptions = [
     'Scheduled',
-    'Confirmed',
     'Cancelled',
     'Waiting'
   ]
-
   private readonly tModalSvc = inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
   @Input() id?: number;
@@ -68,44 +69,49 @@ export class AppointmentModalComponent implements OnInit {
     status: ['Scheduled'],
     customer: [null]
   });
-  isExist = false;
-  isHide = false;
+  // isExist = false;
+  // Hide search Phone Number
+  isHide1 = false;
+  // Hide Display Phone Number
+  isHide2 = true;
   today = startOfToday();
-  empID: any[] = []
-  dataCustomer: any[] = []
+  empID: any[] = [];
+  dataCustomer: any[] = [];
 
   constructor(
     private shared: AuthService,
-    private notification: TDSNotificationService,
-  ) { }
+    private notification: TDSNotificationService
+  ) {}
 
   ngOnInit(): void {
     this.initCustomer();
 
-    this.form.get('name')?.disable()
-    this.form.get('branch')?.disable()
+    this.form.get('name')?.disable();
+    this.form.get('branch')?.disable();
 
-    this.isHide = false;
+    this.isHide1 = false;
+    this.isHide2 = true;
 
     if (this.id) {
       this.form.get('phone')?.disable()
-      this.isHide = true;
-      this.shared.getAppointment(this.id).subscribe((data: any) => {
-        this.form.patchValue({
-          phone: data.Customer.Phone,
-          name: data.Customer.FirstName + ' ' + data.Customer.LastName,
-          appointmentDate: data.AppointmentDate,
-          customerID: data.Customer.CustomerID,
-          status: data.Status,
-          assignments: data.Assignments,
-        });
-        if (this.form.value.assignments) {
+      this.isHide1 = true;
+      this.isHide2 = false;
+      this.shared.getAppointment(this.id).subscribe(
+        (data: any) => {
           this.form.patchValue({
-            doctor: data.Assignments[0].EmployerID,
+            phone: data.Customer.Phone,
+            name: data.Customer.FirstName + ' ' + data.Customer.LastName,
+            appointmentDate: data.AppointmentDate,
+            customerID: data.Customer.CustomerID,
+            status: data.Status,
           });
-        }
-        console.log(this.form.value)
-      });
+           if (data.Assignments[0].EmployerID) {
+            this.form.patchValue({
+                 doctor: data.Assignments[0].EmployerID,
+             });
+           }
+          console.log(this.form.value)
+        });
 
     }
 
@@ -117,7 +123,6 @@ export class AppointmentModalComponent implements OnInit {
           name: `${item.firstName} ${item.lastName}`
         }))]
       })
-
   }
 
   // Disabled Date in the past
@@ -133,19 +138,21 @@ export class AppointmentModalComponent implements OnInit {
 
   // Submit button
   submit() {
-
     if (this.form.invalid) return;
 
-    const { doctor, appointmentDate, ...req } = this.form.value
+    const { doctor, appointmentDate, ...req } = this.form.value;
 
     if (doctor != null) {
       // Add employee to the array
-      this.empID.push(doctor)
+      this.empID.push(doctor);
     }
 
     const val: any = {
       ...req,
-      appointmentDate: format(new Date(appointmentDate as Date), DATE_CONFIG.DATE_BASE),
+      appointmentDate: format(
+        new Date(appointmentDate as Date),
+        DATE_CONFIG.DATE_BASE
+      ),
 
       employeeID: this.empID,
     };
@@ -153,15 +160,13 @@ export class AppointmentModalComponent implements OnInit {
       val.assignments = [{ employerID: doctor }];
     }
 
-
-    console.log(val.employeeID)
+    console.log(val.employeeID);
     if (this.id) {
       this.updateAppointment(this.id, val);
     } else {
       this.createAppointment(val);
     }
   }
-
 
   initCustomer() {
     this.searchPhone$.pipe(
@@ -182,35 +187,31 @@ export class AppointmentModalComponent implements OnInit {
     })
   }
 
-
   // Create Appointment
   createAppointment(val: any) {
-    this.shared.createAppointment(val).subscribe(
-      {
-        next: () => {
-          this.createNotificationSuccess('');
-          this.modalRef.destroy(val);
-        },
-        error: (res) => {
-          this.createNotificationError(res.error.message);
-        },
-      }
-    );
+    this.shared.createAppointment(val).subscribe({
+      next: () => {
+        this.createNotificationSuccess('');
+        this.modalRef.destroy(val);
+      },
+      error: (res) => {
+        this.createNotificationError(res.error.message);
+      },
+    });
   }
 
   // Open Create Customer Modal
   createCustomer(phoneNum: any) {
-
     const modal = this.tModalSvc.create({
       title: 'Tạo khách hàng',
       content: CustomerModalComponent,
       footer: null,
       size: 'lg',
       componentParams: {
-        phoneNum
-      }
+        phoneNum,
+      },
     });
-    modal.afterClose.asObservable().subscribe(res1 => {
+    modal.afterClose.asObservable().subscribe((res1) => {
       if (res1) {
         this.shared.searchCustomer(res1.phone).subscribe(
           (res2: any) => {
@@ -220,12 +221,10 @@ export class AppointmentModalComponent implements OnInit {
             });
           }
         )
-        this.isExist = false
+        // this.isExist = false
       }
-    })
+    });
   }
-
-
 
   // Update Appointment
   updateAppointment(id: number, val: any) {
@@ -242,16 +241,11 @@ export class AppointmentModalComponent implements OnInit {
 
   // Success Notification
   createNotificationSuccess(content: any): void {
-    this.notification.success(
-      'Succesfully', content
-    );
+    this.notification.success('Succesfully', content);
   }
 
   // Error Notification
   createNotificationError(content: any): void {
-    this.notification.error(
-      'Error', content
-    );
+    this.notification.error('Error', content);
   }
-
 }

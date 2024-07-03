@@ -1,12 +1,14 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { TDSModalModule } from 'tds-ui/modal';
+import { TDSModalModule, TDSModalRef } from 'tds-ui/modal';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSRadioModule } from 'tds-ui/radio';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSSelectModule } from 'tds-ui/select';
+import { AuthService } from '../../../shared.service';
+import { TDSNotificationService } from 'tds-ui/notification';
 
 @Component({
   selector: 'frontend-in-session-modal',
@@ -27,11 +29,8 @@ import { TDSSelectModule } from 'tds-ui/select';
 export class InSessionModalComponent implements OnInit {
 
   @Input() id?: number
-  public doctorOptions = [
-    {id: 9, name: 'D'},
-    {id: 10, name: 'E'},
-    {id: 11, name: 'F'},
-  ]
+  private readonly modalRef = inject(TDSModalRef);
+  public spaTherapistOptions: any[] = []
   public statusOptions = [
     'Preparation',
     'Treating',
@@ -41,16 +40,51 @@ export class InSessionModalComponent implements OnInit {
     customerID: [],
     name: [''],
     assignments: [],
-    doctor: [0],
-    appointmentDate: [new Date()],
+    spaTherapist: [0],
     status: ['Preparation'],
-    total: []
   });
+
+  constructor(
+    private shared: AuthService,
+    private notification: TDSNotificationService,
+  ) { }
 
   ngOnInit(): void {
 
     this.form.get('name')?.disable()
 
+    if (this.id) {
+      this.shared.getAppointment(this.id).subscribe(
+        (data: any) => {
+          this.form.patchValue({
+            name: data.Customer.FirstName + ' ' + data.Customer.LastName,
+            customerID: data.Customer.CustomerID,
+            status: data.Status,
+            assignments: data.Assignments,
+          });
+          if (data.Assignments[1].EmployerID) {
+            this.form.patchValue({
+              spaTherapist: data.Assignments[1].EmployerID,
+            });
+          }
+        }
+      )
+    }
+
+    // Get Spa Therapist
+    this.shared.getEmployee(2, 3).subscribe(
+      (data: any[]) => {
+        this.spaTherapistOptions = [...data.map(item => ({
+          id: item.employeeID,
+          name: `${item.firstName} ${item.lastName}`
+        }))]
+      })
+
+  }
+
+  // Cancel button
+  handleCancel(): void {
+    this.modalRef.destroy(null);
   }
 
   // Submit button
@@ -58,6 +92,37 @@ export class InSessionModalComponent implements OnInit {
 
     if (this.form.invalid) return;
 
+    this.shared.assignSpaTherapist(this.id, this.form.value.spaTherapist, '').subscribe(
+      () => {
+        this.shared.UpdateStatus(this.id, this.form.value.status).subscribe(
+          () => {
+            this.createNotificationSuccess('');
+            this.modalRef.destroy(this.id);
+          },
+          (res) => {
+            this.createNotificationError(res.error.message);
+          }
+        );
+      },
+      (res) => {
+        this.createNotificationError(res.error.message);
+      }
+    );
+
+  }
+
+  // Success Notification
+  createNotificationSuccess(content: any): void {
+    this.notification.success(
+      'Succesfully', content
+    );
+  }
+
+  // Error Notification
+  createNotificationError(content: any): void {
+    this.notification.error(
+      'Error', content
+    );
   }
 
 }

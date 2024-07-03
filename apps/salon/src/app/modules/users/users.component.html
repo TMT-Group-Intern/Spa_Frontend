@@ -1,0 +1,62 @@
+<div class=" flex flex-col h-full">
+  <div class="flex justify-end mt-2">
+    <select [(ngModel)]="selectedUserType" (change)="initUserList()">
+      <option value="All">All</option>
+      <option value="Admin">Admin</option>
+      <option value="Employee">Employee</option>
+    </select>
+    <button tds-button-icon (click)="createUser()" class="rounded-full mr-8 bg-green-1" color="warning" tds-tooltip
+      tooltipTitle="Tạo tài khoản">
+      <span class="flex items-center">
+        <i class="tdsi-plus-fill text-white"></i>
+      </span>
+    </button>
+    <!-- <button tds-button-icon color="primary" (click)="createEmployee()" tds-tooltip class="rounded-full mr-20 bg-green-1"
+      tooltipTitle="Tạo tài khoản cho nhân viên">
+      <span class="flex items-center">
+        <i class="tdsi-plus-fill text-white"></i>
+      </span>
+    </button> -->
+  </div>
+
+  <tds-data-table class="p-2" [tdsData]="UserList" [tdsShowSizeChanger]="true" [tdsPageSize]="20" [tdsBordered]="true">
+    <tds-data-table-column [tdsField]="'UserCode'" [tdsTitle]="'Mã tài khoản'" tdsWidth="8%"
+      [tdsDataType]="'text'"></tds-data-table-column>
+
+    <tds-data-table-column [tdsField]="'Name'" [tdsTitle]="'Họ tên'" tdsWidth="20%"
+      [tdsDataType]="'text'"></tds-data-table-column>
+
+    <tds-data-table-column [tdsField]="'Email'" [tdsTitle]="'Tài khoản'" tdsWidth="15%"
+      [tdsDataType]="'text'"></tds-data-table-column>
+
+    <tds-data-table-column [tdsField]="'Phone'" [tdsTitle]="'Số điện thoại'" tdsWidth="10%"
+      [tdsDataType]="'text'"></tds-data-table-column>
+
+    <tds-data-table-column [tdsField]="'Gender'" [tdsTitle]="'Giới tính'" tdsWidth="6%"
+      [tdsDataType]="'text'"></tds-data-table-column>
+      <tds-data-table-column [tdsField]="'DateOfBirth'" [tdsTitle]="'Ngày sinh'" tdsWidth="12%"
+                       [tdsDataType]="'date'"></tds-data-table-column>
+      <tds-data-table-column [tdsField]="'Role'" [tdsTitle]="'Chức vụ'" tdsWidth="9%"
+      [tdsDataType]="'text'"></tds-data-table-column>
+
+    <tds-data-table-column [tdsContent]="commandTpl" tdsWidth="12%" [tdsColumnType]="'command'"
+      tdsClass="flex justify-around">
+      <ng-template #commandTpl let-dataRow>
+        <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-green-500"  tds-tooltip
+        tooltipTitle="Tạo tài khoản cho nhân viên" 
+        (click)="createAccountForEmployee(dataRow.Email)">
+        <i class="tdsi-plus-fill"></i>
+      </button>
+        <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-secondary-1"
+          (click)="onEditUser(dataRow.Email)">
+          <i class="tdsi-edit-fill"></i>
+        </button>
+        <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-red-500"
+        (click)="deleteUser(dataRow.Email)">
+          <i class="tdsi-trash-fill"></i>
+        </button>
+
+      </ng-template>
+    </tds-data-table-column>
+  </tds-data-table>
+</div>

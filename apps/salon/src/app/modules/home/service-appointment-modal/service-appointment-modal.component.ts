@@ -14,6 +14,7 @@ import { startOfToday, isBefore } from 'date-fns';
 import { AuthService } from '../../../shared.service';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'frontend-service-appointment-modal',
@@ -31,7 +32,8 @@ import { UserProfileComponent } from '../../user-profile/user-profile.component'
     TDSCalendarModule,
     TDSFormFieldModule,
     TDSSelectModule,
-    TDSToolTipModule
+    TDSToolTipModule,
+    TDSButtonModule,
   ]
 })
 export class ServiceAppointmentModalComponent implements OnInit {
@@ -45,13 +47,8 @@ export class ServiceAppointmentModalComponent implements OnInit {
   ]
 
   public statusOptions = [
-    'Scheduled',
-    'Confirmed',
-    'Cancelled',
-    'Waiting',
     'Examining',
-    'Preparation',
-    'Treatment in Progress',
+    'Treatment',
   ]
 
   private readonly modalRef = inject(TDSModalRef);
@@ -65,7 +62,7 @@ private readonly modalSvc = inject(TDSModalService);
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
     employeeID: [[0]],
     assignments: [[]],
-    doctor: [0],
+    doctor: [''],
     appointmentDate: ['', Validators.required],
     status: [''],
     service:[[]]
@@ -99,11 +96,12 @@ private readonly modalSvc = inject(TDSModalService);
         this.CustomerID = data.CustomerID
         this.form.patchValue({
           phone: data.Customer.Phone,
-          name: data.Customer.FirstName + ' ' + data.Customer.LastName,
-          appointmentDate: data.AppointmentDate,
+          name: `${data.Customer.FirstName} ${data.Customer.LastName}`,
+          appointmentDate: this.formatDate(data.AppointmentDate, 'HH:mm'),
           customerID: data.Customer.CustomerID,
           status: data.Status,
           service: data.ChooseServices.map((item:any)=> item.ServiceID),
+          doctor: `${data.Assignments[0].Employees.FirstName} ${data.Assignments[0].Employees.LastName}`
         });
       });
     }
@@ -115,6 +113,11 @@ private readonly modalSvc = inject(TDSModalService);
         this.dataSvc = data.serviceDTO;
       }
     )
+  }
+
+  // Format Date & Time
+  formatDate(date: string, format: string): string {
+    return moment(date).format(format);
   }
 
 

@@ -1,1 +1,25 @@
-<p>technical-staff works!</p>
+<tds-table
+  class="table-vertical-line"
+  #basicTable
+  [listData]="listSpaServiceQueue"
+>
+  <thead>
+    <tr>
+      <th rowspan="2">Họ Tên Khách Hàng</th>
+      <th rowspan="2" class="text-center">Nhân Viên Tiếp Nhận</th>
+      <th rowspan="2" class="text-center">Mã Nhân Viên</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- <ng-template *ngFor="let data of listSpaServiceQueue"> -->
+    <tr
+      *ngFor="let data of listSpaServiceQueue"
+      (click)="detailCustomerModelForStaff(data)"
+    >
+      <td>{{ data.Customer.FirstName + ' ' + data.Customer.LastName }}</td>
+      <td>{{ data.TeachnicalStaff }}</td>
+      <td>{{ data.EmployeeCode }}</td>
+    </tr>
+    <!-- </ng-template> -->
+  </tbody>
+</tds-table>
