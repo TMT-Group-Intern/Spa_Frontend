@@ -23,7 +23,6 @@
     [tdsShowSizeChanger]="true"
     [tdsPageSize]="20"
     [tdsBordered]="true"
-    [routerLink]="['customer-detail/1']"
   >
 
     <tds-data-table-column
@@ -31,6 +30,7 @@
       [tdsTitle]="'ID'"
       tdsWidth="8%"
       [tdsDataType]="'text'"
+      [routerLink]="['customer-detail/1']"
     >
     </tds-data-table-column>
 
@@ -79,7 +79,7 @@
     </tds-data-table-column>
   </tds-data-table>
 
-  <div class="w-full flex items-center m-2">
+  <div class="w-full flex items-center p-2">
     <tds-pagination
       class="w-full"
       [pageSize]="pageSize"
