@@ -52,7 +52,6 @@ export class AppointmentModalComponent implements OnInit {
   public statusOptions = [
     'Scheduled',
     'Cancelled',
-    'Waiting'
   ]
   private readonly tModalSvc = inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
