@@ -19,14 +19,14 @@ import { TDSTypographyModule } from 'tds-ui/typography';
   templateUrl: './doctor.component.html',
   styleUrls: ['./doctor.component.scss'],
 })
-export class DoctorComponent implements OnInit{
+export class DoctorComponent implements OnInit {
 
   reception: any[] = [];
   appointmentList: any[] = [];
 
   constructor(
-    private sharedService : AuthService,
-  ){}
+    private sharedService: AuthService,
+  ) { }
 
   ngOnInit(): void {
     this.initAppointmentList()
@@ -34,7 +34,7 @@ export class DoctorComponent implements OnInit{
 
   // Display Appointment List
   initAppointmentList() {
-    this.sharedService.appointmentList(2).subscribe(
+    this.sharedService.appointmentList(1).subscribe(
       (data: any) => {
         this.appointmentList = data;
         this.reception = this.appointmentList.filter((appointment: any) =>
