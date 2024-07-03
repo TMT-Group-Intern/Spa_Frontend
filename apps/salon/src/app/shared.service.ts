@@ -185,11 +185,5 @@ export class AuthService {
       password: password
     })
   }
-  // login(email:string,password:string): Observable<any[]> {
-  //   return this.http.post<any>(this.baseUrl+'Authentication/login', {
-  //     email: email,
-  //     password: password
-  //   })
-  // }
 
 }

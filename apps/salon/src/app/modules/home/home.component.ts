@@ -16,6 +16,8 @@ import { ChooseDoctorModalComponent } from './choose-doctor-modal/choose-doctor-
 import { InSessionModalComponent } from './in-session-modal/in-session-modal.component';
 import { PaymentModalComponent } from './payment-modal/payment-modal.component';
 import { TDSEmptyModule } from 'tds-ui/empty';
+import { error } from 'console';
+import { TDSMapperPipeModule } from 'tds-ui/cdk/pipes/mapper';
 
 @Component({
   selector: 'frontend-home',
@@ -30,6 +32,7 @@ import { TDSEmptyModule } from 'tds-ui/empty';
     TDSTypographyModule,
     TDSFormFieldModule,
     TDSEmptyModule,
+    TDSMapperPipeModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -58,46 +61,23 @@ export class HomeComponent implements OnInit {
   initAppointmentList() {
     this.sharedService.appointmentList(1).subscribe(
       (data: any) => {
+
         this.appointmentList = data;
-        // this.sharedService.getAppointment(data.AppointmentID).subscribe(
-        //   (data: any) => {
-        //     if(data.Assignments[0].EmployerID)
-        //     this.doctor = data.Assignments[0].EmployerID
-        //   }
-        // )
         this.todayBooking = this.appointmentList.filter((appointment: any) =>
           appointment.Status === "Scheduled" ||
-          appointment.Status === "Confirmed" ||
           appointment.Status === "Cancelled"
         );
 
         this.reception = this.appointmentList.filter((appointment: any) =>
-          appointment.Status === "Waiting" ||
           appointment.Status === "Examining"
         );
 
         this.inSession = this.appointmentList.filter((appointment: any) =>
-          appointment.Status === "Preparation" ||
-          appointment.Status === "Treating"
+          appointment.Status === "Treatment"
         );
       });
   }
-
-  // Return Doctor
-  returnDoctor(id: any): string {
-    this.sharedService.getAppointment(id).subscribe(
-        (data: any) => {          
-          this.doctor = `${data.Assignments[0].Employees.FirstName} ${data.Assignments[0].Employees.LastName}`
-        }
-      )
-    return this.doctor;
-  }
-
-  // Format Date & Time
-  formatDate(date: string, format: string): string {
-    return moment(date).format(format);
-  }
-
+  
   // Open Create Appointment Modal
   createAppointment() {
     const modal = this.tModalSvc.create({
