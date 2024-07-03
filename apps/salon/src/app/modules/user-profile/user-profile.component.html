@@ -1,6 +1,6 @@
 <div id="id" *ngFor="let history of serviceHistory" class="flex border rounded-10 m-2">
   <div class="flex items-center w-[600px]">
-    <div class="m-4 rounded-10" *ngIf="history.photoCustomer.length > 0; else noImage">
+    <div class="flex m-4 rounded-10" *ngIf="history.photoCustomer.length > 0; else noImage">
       <img *ngFor="let image of history.photoCustomer" tds-image width="150px" height="150px" [fallback]="fallback"
         [tdsSrc]="'https://localhost:44305/photos/' + image" alt="Image" />
     </div>

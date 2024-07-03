@@ -43,8 +43,8 @@
             <div class="flex justify-between">
               <p tds-typography tdsEllipsis>{{appoint.Customer.FirstName}} {{appoint.Customer.LastName}}</p>
               <div>
-                <tds-tag *ngIf="appoint.Status === 'Preparation'" status='custom'
-                  class="bg-info-400">Preparation</tds-tag>
+                <!-- <tds-tag *ngIf="appoint.Status === 'Preparation'" status='custom'
+                  class="bg-info-400">Preparation</tds-tag> -->
                 <tds-tag status='custom' class="bg-success-400">{{appoint.Status}}</tds-tag>
               </div>
             </div>
