@@ -77,7 +77,7 @@ export class HomeComponent implements OnInit {
         );
       });
   }
-  
+
   // Open Create Appointment Modal
   createAppointment() {
     const modal = this.tModalSvc.create({
