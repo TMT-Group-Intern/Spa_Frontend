@@ -1,8 +1,8 @@
 <form class="py-2" id="idform" [formGroup]="form" autocomplete="off">
-  <div class="flex flex-row">
-    <div class="w-[50%]">
+  <!-- <div class="flex flex-row"> -->
+    <!-- <div class="w-[50%]"> -->
       <!-- Phone -->
-      <div class="flex items-center justify-between">
+      <!-- <div class="flex items-center justify-between">
         <tds-label>Số điện thoại</tds-label>
         <tds-form-field class="my-2 w-[70%]">
           <div class="flex">
@@ -10,10 +10,10 @@
               formControlName="phone" type="tel" />
           </div>
         </tds-form-field>
-      </div>
+      </div> -->
 
       <!-- Full name -->
-      <div class="flex items-center justify-between">
+      <!-- <div class="flex items-center justify-between">
         <tds-label>Họ tên</tds-label>
         <div class="flex items-center w-[70%]">
           <tds-form-field class="w-full my-2">
@@ -22,25 +22,25 @@
           <button tds-button-icon tds-tooltip tooltipTitle="Hồ sơ" (click)="callModalUserProfile()" color="success"
             class="ml-1 tdsi-user-fill"></button>
         </div>
-      </div>
+      </div> -->
 
       <!-- Doctor -->
-      <div class="flex items-center justify-between">
+      <!-- <div class="flex items-center justify-between">
         <tds-label>Bác sĩ</tds-label>
         <div class="flex items-center w-[70%]">
           <tds-form-field class="w-full my-2">
             <input tdsInput autocomplete="off" formControlName="doctor" class="appearance-none w-full" type="text" />
           </tds-form-field>
         </div>
-      </div>
+      </div> -->
 
       <!-- Date & Time -->
-      <div class="flex items-center justify-between">
+      <!-- <div class="flex items-center justify-between">
         <tds-label>Thời gian</tds-label>
         <tds-form-field class="w-[70%] my-2">
           <input tdsInput autocomplete="off" formControlName="appointmentDate">
         </tds-form-field>
-      </div>
+      </div> -->
 
       <!-- Status -->
       <div class="flex items-center justify-between">
@@ -50,7 +50,7 @@
           </tds-select>
         </tds-form-field>
       </div>
-    </div>
+    <!-- </div> -->
 
     <div class="pl-4 w-[50%]">
       <tds-label>Lựa chọn dịch vụ</tds-label>
@@ -61,7 +61,7 @@
         <tds-error class="text-tds-color-red-500-light">Vui lòng chọn dịch vụ! </tds-error>
       </tds-form-field>
     </div>
-  </div>
+  <!-- </div> -->
 </form>
 
 <ng-container *tdsModalFooter>
