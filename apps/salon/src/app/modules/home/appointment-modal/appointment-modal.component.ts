@@ -50,6 +50,7 @@ export class AppointmentModalComponent implements OnInit {
     'Scheduled',
     'Confirmed',
     'Cancelled',
+    'Waiting'
   ]
 
   private readonly tModalSvc = inject(TDSModalService)

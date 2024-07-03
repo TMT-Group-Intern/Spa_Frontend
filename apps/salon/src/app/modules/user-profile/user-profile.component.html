@@ -1,23 +1,24 @@
 <div id="id" *ngFor="let history of serviceHistory" class="flex border rounded-10 m-2">
   <div class="flex items-center w-[600px]">
-    <div class="m-4 rounded-10" *ngFor="let image of history.photoCustomer">
-      <ng-container *ngIf="image; else noImage">
-        <img tds-image width="150px" height="150px" [fallback]="fallback"
-          [tdsSrc]="'https://localhost:44305/photos/' + image" alt="Image" />
-      </ng-container>
-      <ng-template #noImage>
-        <div class="flex items-center justify-center h-full w-full text-gray-800">
-          No Image
-        </div>
-      </ng-template>
+    <div class="m-4 rounded-10" *ngIf="history.photoCustomer.length > 0; else noImage">
+      <img *ngFor="let image of history.photoCustomer" tds-image width="150px" height="150px" [fallback]="fallback"
+        [tdsSrc]="'https://localhost:44305/photos/' + image" alt="Image" />
     </div>
+    <ng-template #noImage>
+      <span class="flex items-center justify-center h-full w-full text-gray-800">
+        Chưa cập nhật hình ảnh
+      </span>
+    </ng-template>
   </div>
   <div class="w-[200px] flex-col float-right m-4">
-    <tds-label>Date:</tds-label>
+    <tds-label>Ngày tạo:</tds-label>
     <tds-success> {{ history.date | date:'medium' }}</tds-success>
-    <tds-label>Services Used:</tds-label>
-    <div *ngFor="let service of history.serviceUsed">
-      <tds-success>{{ service }}</tds-success>
+    <tds-label>Dịch vụ:</tds-label>
+    <div *ngIf="history.serviceUsed.length > 0; else noservice">
+      <tds-success *ngFor="let service of history.serviceUsed">{{ service }}</tds-success>
     </div>
+    <ng-template #noservice>
+      <span>Chưa có</span>
+    </ng-template>
   </div>
 </div>

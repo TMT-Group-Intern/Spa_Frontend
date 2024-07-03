@@ -2,13 +2,14 @@ import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSCalendarModule } from 'tds-ui/calendar';
 import { ReactiveFormsModule } from '@angular/forms';
+import { InvoiceComponent } from "../invoice/invoice.component";
 
 @Component({
-  selector: 'frontend-products',
-  standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,TDSCalendarModule],
-  templateUrl: './products.component.html',
-  styleUrls: ['./products.component.scss'],
+    selector: 'frontend-products',
+    standalone: true,
+    templateUrl: './products.component.html',
+    styleUrls: ['./products.component.scss'],
+    imports: [CommonModule, ReactiveFormsModule, TDSCalendarModule, InvoiceComponent]
 })
 export class ProductsComponent {
   selectedDate: Date;

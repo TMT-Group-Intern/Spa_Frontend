@@ -12,8 +12,6 @@ import { TDSTimePickerModule } from 'tds-ui/time-picker';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { startOfToday, isBefore } from 'date-fns';
 import { AuthService } from '../../../shared.service';
-import { AppointmentModalComponent } from '../appointment-modal/appointment-modal.component';
-import { HomeComponent } from '../home.component';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 
@@ -70,7 +68,7 @@ private readonly modalSvc = inject(TDSModalService);
     doctor: [0],
     appointmentDate: ['', Validators.required],
     status: [''],
-    service:[[],Validators.required]
+    service:[[]]
   });
 
   today = startOfToday();
@@ -160,7 +158,7 @@ private readonly modalSvc = inject(TDSModalService);
   // call modal user profile
   callModalUserProfile(){
     this.modalSvc.create({
-      title:"User profile",
+      title:"Hồ sơ",
       content: UserProfileComponent,
       footer:null,
       size: "lg",

@@ -16,6 +16,7 @@ import { ChooseDoctorModalComponent } from './choose-doctor-modal/choose-doctor-
 import { InSessionModalComponent } from './in-session-modal/in-session-modal.component';
 import { PaymentModalComponent } from './payment-modal/payment-modal.component';
 import { TDSEmptyModule } from 'tds-ui/empty';
+import { InvoiceService } from '../invoice/invoice.service';
 
 @Component({
   selector: 'frontend-home',
@@ -47,15 +48,19 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private sharedService : AuthService,
+    private invoiceSvc: InvoiceService
   ) {}
 
   ngOnInit(): void {
+    this.invoiceSvc.dataShare.subscribe(data => {
+      console.log(data);
+    })
     this.initAppointmentList();
     // console.log(this.statusOptions)
   }
   // Display Appointment List
   initAppointmentList() {
-    this.sharedService.appointmentList(2).subscribe((data:any) => {
+    this.sharedService.appointmentList(1).subscribe((data:any) => {
       this.appointmentList = data;
       this.todayBooking = this.appointmentList.filter((appointment: any) =>
         appointment.Status === "Scheduled" ||

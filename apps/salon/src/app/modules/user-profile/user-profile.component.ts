@@ -33,6 +33,7 @@ export class UserProfileComponent implements OnInit  {
     if(this.customerId){
       this.shared.getHistoryCustomer(this.customerId).subscribe( (data:any) =>{
         this.serviceHistory = data.listHistoryForCus;
+        console.log(this.serviceHistory);
       }
       )
     }
