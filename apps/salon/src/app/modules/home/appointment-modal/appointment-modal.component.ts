@@ -63,7 +63,7 @@ export class AppointmentModalComponent implements OnInit {
     branch: ['ABC'],
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
     assignments: [],
-    doctor: [''],
+    doctor: [null],
     appointmentDate: [new Date()],
     status: ['Scheduled'],
     customer: [null]
@@ -115,7 +115,7 @@ export class AppointmentModalComponent implements OnInit {
     }
 
     // Get Doctor
-    this.shared.getEmployee(1, 2).subscribe(
+    this.shared.getEmployee(2, 2).subscribe(
       (data: any[]) => {
         console.log("data empl: ", data)
         this.doctorOptions = [...data.map(item => ({

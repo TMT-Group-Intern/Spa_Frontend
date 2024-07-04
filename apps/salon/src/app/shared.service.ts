@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -70,7 +68,7 @@ export class AuthService {
   }
 
   // Get Customer by ID
-  getCustomer(id: number): Observable<any[]> {
+  getCustomer(id: any): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Customers/' + id);
   }
 
@@ -156,7 +154,7 @@ export class AuthService {
       role: role
     })
   }
-  
+
   // Update Discount
   updateDiscount(id: any, discount: any, val: any) {
     return this.http.put(this.baseUrl + 'Appointment/UpdateDiscount?id=' + id + '&perDiscount=' + discount, val);
@@ -189,7 +187,7 @@ export class AuthService {
   getEmployee(branch: number, job: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/EmployeeByBranchAndJob?branchID=' + branch + '&jobTypeID=' + job);
   }
-  
+
   //
   login(email: string, password: string) {
     return this.http.post<{ flag: boolean, mess: string, token: string }>(this.baseUrl + 'Authentication/login', {

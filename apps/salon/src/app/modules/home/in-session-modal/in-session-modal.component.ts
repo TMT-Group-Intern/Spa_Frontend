@@ -71,7 +71,7 @@ export class InSessionModalComponent implements OnInit {
     }
 
     // Get Spa Therapist
-    this.shared.getEmployee(1, 3).subscribe(
+    this.shared.getEmployee(2, 3).subscribe(
       (data: any[]) => {
         this.spaTherapistOptions = [...data.map(item => ({
           id: item.employeeID,

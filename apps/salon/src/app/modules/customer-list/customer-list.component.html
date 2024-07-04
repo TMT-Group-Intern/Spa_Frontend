@@ -23,6 +23,7 @@
     [tdsShowSizeChanger]="true"
     [tdsPageSize]="20"
     [tdsBordered]="true"
+    (tdsClickRow)="customerDetail($event)"
   >
 
     <tds-data-table-column
@@ -30,7 +31,6 @@
       [tdsTitle]="'ID'"
       tdsWidth="8%"
       [tdsDataType]="'text'"
-      [routerLink]="['customer-detail/1']"
     >
     </tds-data-table-column>
 
@@ -55,26 +55,39 @@
       [tdsDataType]="'text'"
     ></tds-data-table-column>
 
-    <tds-data-table-column [tdsField]="'dateOfBirth'" [tdsTitle]="'Ngày sinh'" tdsWidth="9%" [tdsDataType]="'date'"
-      [tdsFormat]="'dd/MM/YYYY'">
+    <tds-data-table-column
+      [tdsField]="'dateOfBirth'"
+      [tdsTitle]="'Ngày sinh'"
+      tdsWidth="9%"
+      [tdsDataType]="'date'"
+      [tdsFormat]="'dd/MM/YYYY'"
+    >
+    </tds-data-table-column>
 
+    <tds-data-table-column
+      tdsWidth="9%"
+      [tdsContent]="commandTpl"
+      [tdsColumnType]="'command'"
+    >
       <ng-template #commandTpl let-dataRow>
-        <button
-          tds-button-flat-icon
-          color="custom"
-          class="text-slate-500 hover:text-secondary-1"
-          (click)="onEditCustomer(dataRow.customerID)"
-        >
-          <i class="tdsi-edit-fill"></i>
-        </button>
-        <button
-          tds-button-flat-icon
-          color="custom"
-          class="text-slate-500 hover:text-red-500"
-          (click)="deleteCustomer(dataRow.customerID)"
-        >
-          <i class="tdsi-trash-fill"></i>
-        </button>
+        <div class="flex justify-around">
+          <button
+            tds-button-flat-icon
+            color="custom"
+            class="text-slate-500 hover:text-secondary-1"
+            (click)="onEditCustomer(dataRow.customerID)"
+          >
+            <i class="tdsi-edit-fill"></i>
+          </button>
+          <button
+            tds-button-flat-icon
+            color="custom"
+            class="text-slate-500 hover:text-red-500"
+            (click)="deleteCustomer(dataRow.customerID)"
+          >
+            <i class="tdsi-trash-fill"></i>
+          </button>
+        </div>
       </ng-template>
     </tds-data-table-column>
   </tds-data-table>
