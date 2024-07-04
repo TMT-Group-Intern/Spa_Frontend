@@ -38,21 +38,14 @@ import * as moment from 'moment';
 })
 export class ServiceAppointmentModalComponent implements OnInit {
 
-  public doctorOptions = [
-    { id: 11, name: 'Elton John' },
-    { id: 12, name: 'Elvis Presley' },
-    { id: 5, name: 'Paul McCartney' },
-    { id: 14, name: 'Elton John' },
-    { id: 13, name: 'Elvis Presley' },
-  ]
-
   public statusOptions = [
-    'Examining',
-    'Treatment',
+    'Chờ khám',
+    'Đang khám',
+    'Đang chuẩn bị',
   ]
 
   private readonly modalRef = inject(TDSModalRef);
-private readonly modalSvc = inject(TDSModalService);
+  private readonly modalSvc = inject(TDSModalService);
   @Input() id?: number;
   createAppointmentForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({

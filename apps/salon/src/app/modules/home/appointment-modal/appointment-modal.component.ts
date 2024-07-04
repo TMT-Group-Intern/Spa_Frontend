@@ -50,8 +50,8 @@ export class AppointmentModalComponent implements OnInit {
   searchPhone$ = new BehaviorSubject<string>('')
   public doctorOptions: any[] = [];
   public statusOptions = [
-    'Scheduled',
-    'Cancelled',
+    'Hẹn',
+    'Hủy hẹn',
   ]
   private readonly tModalSvc = inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
@@ -63,9 +63,9 @@ export class AppointmentModalComponent implements OnInit {
     branch: ['ABC'],
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
     assignments: [],
-    doctor: [null],
+    doctor: [],
     appointmentDate: [new Date()],
-    status: ['Scheduled'],
+    status: ['Hẹn'],
     customer: [null]
   });
   // isExist = false;
