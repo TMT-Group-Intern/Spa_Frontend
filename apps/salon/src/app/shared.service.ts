@@ -42,7 +42,7 @@ export class AuthService {
     return this.http.delete(this.baseUrl + 'Services/' + id);
   }
   UserList(): Observable<any[]> {
-    return this.http.get<any>(this.baseUrl + 'User/allUser2')
+    return this.http.get<any>(this.baseUrl + 'User/allUserAdminAndEmployee')
   }
   AdminList(): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/allAdmin')
@@ -59,10 +59,16 @@ export class AuthService {
   createAccountForEmployee(Email: string) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const body = { email: Email };
-    return this.http.post<{mess:object}>(this.baseUrl + 'Authentication/CreateUserForEmployee', body, { headers });
+    return this.http.post<{status: object}>(this.baseUrl + 'Authentication/CreateUserForEmployee', body, { headers });
   }
   editUser(email: string, val: any) {
     return this.http.put(this.baseUrl + 'User/updateUser' + email, val);
+  }
+  getAdminByEmail(email:string): Observable<any[]>{
+    return this.http.get<any>(this.baseUrl + 'User/getUserByAdmin?email=' + email)
+  }
+  getEmployeeByEmail(email:string): Observable<any[]>{
+    return this.http.get<any>(this.baseUrl + 'User/getUserByEmployee?email=' + email)
   }
   // Show list of Customer
   CustomerList(): Observable<any[]> {
@@ -140,7 +146,7 @@ export class AuthService {
   }
 
   //
-  signUp(lastName: string, firstName: string, gender: string, phone: string, email: string, password: string, confirmPassword: string, dateOfBirth: string, hireDate: string, jobTypeID: string, branchID: string, role: string) {
+  signUp(lastName: string, firstName: string, gender: string, phone: string, email: string, password: string, confirmPassword: string, dateOfBirth: string, hireDate: string, jobTypeID: number, branchID: number, role: string) {
     return this.http.post<{ status: object }>(this.baseUrl + 'Authentication/register', {
       lastName: lastName,
       firstName: firstName,
@@ -188,6 +194,25 @@ export class AuthService {
   // Get Employee by Branch ID & Job Type
   getEmployee(branch: number, job: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/EmployeeByBranchAndJob?branchID=' + branch + '&jobTypeID=' + job);
+  }
+
+  // Get User by Email
+  getUser(email: string): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'User/getUserByEmail?email=' + email);
+  }
+
+  checkExistUser(email: string){
+    return this.http.get<{check:object}>(this.baseUrl + 'User/getUserBoolByEmail?email=' + email);
+  }
+
+  // Get Branch
+  getBranch(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'User/allBranches');
+  }
+
+  // Get Job Type
+  getJobType(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'User/allJobs');
   }
   
   //
