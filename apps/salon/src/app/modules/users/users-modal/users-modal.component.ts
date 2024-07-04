@@ -1,7 +1,7 @@
 import { Component, inject, Input, OnInit, } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TDSModalModule, TDSModalRef } from 'tds-ui/modal';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSDatePickerModule } from 'tds-ui/date-picker';
@@ -12,6 +12,7 @@ import { TDSModalService } from 'tds-ui/modal';
 import { concatMap, filter, tap } from 'rxjs';
 const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/;
 
+
 @Component({
   selector: 'frontend-users-modal',
   standalone: true,
@@ -19,12 +20,13 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z
   templateUrl: './users-modal.component.html',
   styleUrls: ['./users-modal.component.scss'],
 })
+
 export class UsersModalComponent implements OnInit {
   
   private readonly tModalSvc =inject(TDSModalService)
-  private auth = inject(AuthService);
   private readonly modalRef = inject(TDSModalRef);
   @Input() email?: string;
+  @Input() role?: string;
   createUser = inject(FormBuilder).nonNullable.group({
     lastName: ['', Validators.required],
     firstName: ['', Validators.required],
@@ -37,32 +39,31 @@ export class UsersModalComponent implements OnInit {
       ])
     ],
     pass: [
-      'Spa@12345',
-      Validators.compose([
-        //Validators.required,
-        Validators.minLength(8),
-        Validators.pattern(PASSWORD_PATTERN)
-      ])
+      '',
+      // Validators.compose([
+      //   Validators.required,
+      //   Validators.minLength(8),
+      //   Validators.pattern(PASSWORD_PATTERN)
+      // ])
     ],
     retype: [
-      'Spa@12345',
-      Validators.compose([
-        //Validators.required,
-        Validators.minLength(8),
-        Validators.pattern(PASSWORD_PATTERN),
-        this.matchValidator.bind(this)
-      ])
+      '',
+      // Validators.compose([
+      //   Validators.required,
+      //   this.matchValidator.bind(this)
+      // ])
     ],
+
     dateOfBirth: ['', Validators.required],
     hireDate: [new Date().toISOString()],
     gender: ['Male', Validators.required],
-    role: ['Admin', Validators.required],
-    jobTypeID: ['Nau Com'],
-    branchID: ['Rua Chen'],
-  });
-  
-  
-  // createAccountForEmployee = inject(FormBuilder).nonNullable.group({
+    role: ['Employee', Validators.required],
+    jobTypeID: [0],
+    branchID: [0],
+
+  //   lastName: ['', Validators.required],
+  //   firstName: ['', Validators.required],
+  //   phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
   //   email: [
   //     '',
   //     Validators.compose([
@@ -70,63 +71,163 @@ export class UsersModalComponent implements OnInit {
   //       Validators.email
   //     ])
   //   ],
-  //   pass: [
-  //     '',
-  //     Validators.compose([
-  //       Validators.required,
-  //       Validators.minLength(8),
-  //       Validators.pattern(PASSWORD_PATTERN)
-  //     ])
-  //   ],
-  //   retype: [
-  //     '',
-  //     Validators.compose([
-  //       Validators.required,
-  //       Validators.minLength(8),
-  //       Validators.pattern(PASSWORD_PATTERN),
-  //       this.matchValidator.bind(this)
-  //     ])
-  //   ],
-  // });
+  //   dateOfBirth: ['', Validators.required],
+  //   gender: ['Male', Validators.required],
+  //     // ... các trường khác
+  // role: ['Admin', Validators.required],
+  // jobTypeID: [
+  //   0,
+  //   (control: AbstractControl) =>
+  //     this.isRoleAdmin() ? null : this.optionalValidator(control)
+  // ],
+  // branchID: [
+  //   0,
+  //   (control: AbstractControl) =>
+  //     this.isRoleAdmin() ? null : this.optionalValidator(control)
+  // ],
+  // hireDate: [
+  //   new Date().toISOString(),
+  //   (control: AbstractControl) =>
+  //     this.isRoleAdmin() ? null : this.optionalValidator(control)
+  // ],
+  // pass: ['', Validators.compose([Validators.required, this.passwordValidator])],
+  // retype: [
+  //   '',
+  //   Validators.compose([Validators.required, this.passwordValidator, this.matchValidator])
+  // ]
+
+ });
+  
+  
 
   readonly roleOptions = [{
     id: "Admin", name: ' Admin '
   },
   { id: "Employee", name: 'Employee' },]
 
-  readonly jobTypeOptions = [{
-    id: 1, name: ' Rua Chen'
-  },
-  { id: 2, name: 'Nau Com' },]
-
-  readonly branchOptions = [{
-    id: 1, name: ' Viet Nam'
-  },
-  { id: 2, name: 'Thai Lan' },]
-
   readonly genderOptions = [{
     id: "Male", name: ' Male '
   },
   { id: "Female", name: 'Female' },]
 
+  branchOptions: any[] = [];
+  jobTypeOptions: any[] = [];
+
+  constructor(
+    private shared: AuthService,
+  ) {}
+  isRoleAdmin(): boolean {
+    const roleControl = this.createUser.get('role');
+    return roleControl?.value === 'Admin';
+  }
+  
+// Validator tùy chọn cho trường jobTypeID, branchID, hireDate
+  optionalValidator(control: AbstractControl): { [key: string]: boolean } {
+  if (!control.value || control.value === 0) {
+    return { required: true };
+  }
+  return {required:false};
+}
+
+// Validator tùy chọn cho trường pass, retype
+  passwordOptionalValidator(control: AbstractControl): { [key: string]: boolean } {
+  if (!control.value || control.value.trim() === '') {
+    return { required: true };
+  }
+  return {required:false};
+}
+  passwordValidator(control: AbstractControl): { [key: string]: boolean } {
+    if (control.value.length < 8) {
+      return { invalidPasswordLength: true };
+    }
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/;
+  if (!passwordRegex.test(control.value)) {
+    return { invalidPassword: true };
+  }
+  return { invalidPassword: false };
+}
   matchValidator(control: AbstractControl): { [key: string]: boolean } | null {
     if (!this.createUser) {
-      return null;
+      return {mustMatch:false};
     }
 
     const pass = this.createUser.value.pass;
     const retype = control.value;
 
     if (pass !== retype) {
-      return { mustMatch: true };
+      return { mustMatch: false };
     }
 
     return null;
   }
 
   ngOnInit(): void {
-    console.log(this.email)
-    console.log(this.createUser.value.email)
+    // Get Branch
+    this.shared.getBranch().subscribe(
+      (data: any[]) => {
+        this.branchOptions = [...data.map(item => ({
+          id: item.branchID,
+          name: item.branchName,
+        }))]
+      })
+
+      // Get Job Type
+    this.shared.getJobType().subscribe(
+      (data: any[]) => {
+        this.jobTypeOptions = [...data.map(item => ({
+          id: item.jobTypeID,
+          name: item.jobTypeName,
+        }))]
+      })
+
+      if(this.email) {
+        this.createUser.get('email')?.disable()
+        this.createUser.get('role')?.disable()
+        console.log(this.createUser.get('role'))
+        if(this.role==='Admin'){
+          console.log(this.createUser.value.role)
+          this.shared.getAdminByEmail(this.email).subscribe(
+            (data: any) => {
+              this.createUser.patchValue({
+               role: data.adminDTO.role,
+               lastName: data.adminDTO.lastName,
+               firstName: data.adminDTO.firstName,
+               email: data.adminDTO.email,
+               pass: data.adminDTO.password,
+               retype: data.adminDTO.confirmPassword,
+               phone: data.adminDTO.phone,
+               gender: data.adminDTO.gender,
+               dateOfBirth: data.adminDTO.dateOfBirth,
+              //  hireDate: data.userDTO.hireDate,
+              //  jobTypeID: data.userDTO.jobTypeID,
+              //  branchID: data.userDTO.branchID,
+              })
+              console.log(data)
+            }
+          )
+        }
+      else if(this.role !=='Admin'){
+        this.shared.getEmployeeByEmail(this.email).subscribe(
+          (data: any) => {
+            this.createUser.patchValue({
+             role: "Employee",
+             lastName: data.empDTO.lastName,
+             firstName: data.empDTO.firstName,
+             email: data.empDTO.email,
+             //pass: data.empDTO.password,
+             //retype: data.empDTO.confirmPassword,
+             phone: data.empDTO.phone,
+             gender: data.empDTO.gender,
+             dateOfBirth: data.empDTO.dateOfBirth,
+             hireDate: data.empDTO.hireDate,
+             jobTypeID: data.empDTO.jobTypeID,
+             branchID: data.empDTO.branchID,
+            })
+            console.log(data)
+          }
+        )
+      }
+    }
   }
 
   handleOk(): void {
@@ -140,18 +241,34 @@ export class UsersModalComponent implements OnInit {
   }
 
   onSignUp(): void {
+    if(this.createUser.value.role=='Employee'){
+      this.createUser.value.pass='';
+      this.createUser.value.retype='';
+        //pass: 'null',
+        //retype:'null'
+    }
     const lastName = this.createUser.value.lastName as string;
     const firstName = this.createUser.value.firstName as string;
     const phone = this.createUser.value.phone as string;
     const email = this.createUser.value.email as string;
+    const role = this.createUser.value.role as string;
     const password = this.createUser.value.pass as string;
     const confirmPassword = this.createUser.value.retype as string;
     const dateOfBirth = this.createUser.value.dateOfBirth as string;
     const hireDate = this.createUser.value.hireDate as string;
     const gender = this.createUser.value.gender as string;
-    const jobTypeID = this.createUser.value.jobTypeID as string;
-    const branchID = this.createUser.value.branchID as string;
-    const role = this.createUser.value.role as string;
+    const jobTypeID = this.createUser.value.jobTypeID as number;
+    const branchID = this.createUser.value.branchID as number;
+
+    this.isRoleAdmin();
+    console.log(this.isRoleAdmin());
+
+    if(this.createUser.value.role=='Admin'){
+      this.createUser.patchValue({
+        jobTypeID:0,
+        branchID:0,
+      });
+    }
 
     if (this.createUser.invalid) {
       this.markFormGroupTouched(this.createUser);
@@ -160,7 +277,7 @@ export class UsersModalComponent implements OnInit {
     }
     console.log(this.createUser)
     // Thực hiện các hành động khi form hợp lệ
-    this.auth.signUp(lastName, firstName, gender, phone, email, password, confirmPassword, dateOfBirth, hireDate, jobTypeID, branchID, role).subscribe((result) => {
+    this.shared.signUp(lastName, firstName, gender, phone, email, password, confirmPassword, dateOfBirth, hireDate, jobTypeID, branchID, role).subscribe((result) => {
       //console.log(result)
       if (result.status != null) { 
          console.log(result.status)
@@ -168,13 +285,27 @@ export class UsersModalComponent implements OnInit {
 
          const modal = this.tModalSvc.create({
           title:'Thành công',
-          content: `<h5 class="text-success-500">Tạo tài khoản <strong>${ email }</strong> với mật khẩu <strong>${ password }</strong> thành công!</h5>`,
+          content: `<h5 class="text-success-500">Tạo tài khoản <strong>${ email }</strong> thành công!</h5>`,
           footer:null,
           size:'md',
           okText:'Xác nhận',
           onOk:()=> true
         });
         modal.afterClose.asObservable()
+        // .pipe(tap(()=>this.createUser.reset({
+        //   branchID:0,
+        //   dateOfBirth:'',
+        //   email:'',
+        //   firstName:'',
+        //   gender:'',
+        //   hireDate:'',
+        //   jobTypeID:0,
+        //   lastName:'',
+        //   phone:'',
+        //   role:'',
+        //   pass:'',
+        //   retype:''
+        // })))
         .subscribe();
       }
       else{

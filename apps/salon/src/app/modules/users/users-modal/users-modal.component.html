@@ -51,17 +51,18 @@
         </tds-form-field>
 
         <!-- Password -->
+        <div *ngIf="this.createUser.value.role === 'Admin'">
             <tds-label class="pt-4">Mật khẩu</tds-label>
             <tds-form-field class="w-full mt-2">
                 <input tdsInput autocomplete="off" placeholder="Nhập mật khẩu" formControlName="pass" type="password"
-                    [required]="this.createUser.value.role === 'Admin'" />
+                     />
                 <tds-error>
                     <span
-                        *ngIf="createUser.controls['pass'].touched && createUser.controls['pass'].hasError('required')">Vui
+                        *ngIf="createUser.controls['pass'].touched && createUser.controls['pass'].hasError('required') && this.createUser.value.role === 'Admin'">Vui
                         lòng
                         nhập mật khẩu</span>
                     <span
-                        *ngIf="createUser.controls['pass'].touched && createUser.controls['pass'].hasError('pattern')">Mật
+                        *ngIf="createUser.controls['pass'].touched && createUser.controls['pass'].hasError('pattern') && this.createUser.value.role === 'Admin'">Mật
                         khẩu
                         ít nhất 8 kí tự, gồm chữ hoa, chữ thường, số và kí tự đặc biệt</span>
                 </tds-error>
@@ -70,16 +71,17 @@
             <tds-label class="pt-4">Nhập lại mật khẩu</tds-label>
             <tds-form-field class="w-full mt-2">
                 <input tdsInput autocomplete="off" placeholder="Xác nhận mật khẩu" formControlName="retype"
-                    type="password" [required]='true' />
+                    type="password"  />
                 <tds-error>
                     <span
                         *ngIf="createUser.controls['retype'].touched && createUser.controls['retype'].hasError('required')">Vui
                         lòng
                         nhập mật khẩu</span>
-                    <span *ngIf="createUser.get('retype')?.errors?.['mustMatch']">Mật khẩu không khớp</span>
+                    <span *ngIf="createUser.get('retype')?.errors?.['mustMatch'] && createUser.controls['retype'].touched">Mật khẩu không khớp</span>
                 </tds-error>
             </tds-form-field>
-                <tds-label class="pt-4">Số điện thoại</tds-label>
+        </div>
+        <tds-label class="pt-4">Số điện thoại</tds-label>
         <tds-form-field class="w-full mt-2">
             <input tdsInput autocomplete="off" placeholder="Nhập số điện thoại" formControlName="phone"
                 [required]='true' class="appearance-none" />
@@ -112,12 +114,12 @@
                 </span>
             </tds-error>
         </tds-form-field>
+        <div *ngIf="this.createUser.value.role === 'Employee'">
         <tds-label class="pt-4">Ngày bắt đầu làm việc</tds-label>
         <tds-form-field class="w-full mt-2">
             <tds-date-picker formControlName="hireDate" [allowClear]="true"></tds-date-picker>
             <tds-error>
-                <span
-                    *ngIf="createUser.controls['hireDate'].touched && createUser.controls['hireDate']">
+                <span *ngIf="createUser.controls['hireDate'].touched && createUser.controls['hireDate']">
                     Vui lòng chọn ngày bắt đầu làm việc
                 </span>
             </tds-error>
@@ -125,27 +127,24 @@
         <tds-label class="pt-4">Loại công việc</tds-label>
         <tds-form-field class="w-full mt-2">
             <tds-select valueField="id" textField="name" placeholder='Lựa chọn công việc' disabledField="isActive"
-                formControlName="jobTypeID" [data]="jobTypeOptions" [allowClear]="true"
-                class="appearance-none">
+                formControlName="jobTypeID" [data]="jobTypeOptions" [allowClear]="true" class="appearance-none">
             </tds-select>
             <tds-error>
-                <span
-                    *ngIf="createUser.controls['jobTypeID'].touched && createUser.controls['jobTypeID']">Vui
+                <span *ngIf="createUser.controls['jobTypeID'].touched && createUser.controls['jobTypeID']">Vui
                     lòng chọn công việc</span>
             </tds-error>
         </tds-form-field>
         <tds-label class="pt-4">Chi nhánh</tds-label>
         <tds-form-field class="w-full mt-2">
             <tds-select valueField="id" textField="name" placeholder='Lựa chọn chi nhánh' disabledField="isActive"
-                formControlName="branchID" [data]="branchOptions" [allowClear]="true"
-                class="appearance-none">
+                formControlName="branchID" [data]="branchOptions" [allowClear]="true" class="appearance-none">
             </tds-select>
             <tds-error>
-                <span
-                    *ngIf="createUser.controls['branchID'].touched && createUser.controls['branchID']">Vui
+                <span *ngIf="createUser.controls['branchID'].touched && createUser.controls['branchID']">Vui
                     lòng chọn chi nhánh</span>
             </tds-error>
-        </tds-form-field></div>
+        </tds-form-field>
+    </div></div>
     <!-- Kết thúc mã modal register -->
 </form>
 
