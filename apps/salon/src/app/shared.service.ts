@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -76,7 +74,7 @@ export class AuthService {
   }
 
   // Get Customer by ID
-  getCustomer(id: number): Observable<any[]> {
+  getCustomer(id: any): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Customers/' + id);
   }
 
