@@ -64,10 +64,11 @@
                 type="file"
                 (change)="onFileSelected($event)"
                 class="mr-2 mb-5"
+                multiple
               />
               <button
                 class="rounded-full bg-green-300 py-1 px-2"
-                (click)="uploadImage()"
+                (click)="uploadImage(appointmentAllInfo.AppointmentID)"
               >
                 Upload Photo
               </button>
@@ -103,13 +104,8 @@
           <td class="border border-gray-400 px-4 py-2 text-center">
             <input
               type="checkbox"
-              [checked]="checkboxStates[appointmentAllInfo.AppointmentID]"
-              (change)="
-                toggleCheckbox(
-                  appointmentAllInfo.AppointmentID,
-                  service.ServiceID
-                )
-              "
+              [checked]="checkboxStatess[service.ServiceID]"
+              (change)="toggleCheckbox(service.ServiceID)"
               class="form-checkbox h-5 w-5 text-green-500"
             />
           </td>
@@ -121,6 +117,7 @@
     <div class="flex gap-4 justify-center mt-4">
       <button
         class="rounded-full bg-blue-500 text-white py-2 px-4 hover:bg-blue-600"
+        (click)="onSave(appointmentAllInfo, checkboxStatess)"
       >
         Lưu
       </button>

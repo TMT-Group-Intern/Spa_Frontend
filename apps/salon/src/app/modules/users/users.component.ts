@@ -119,27 +119,24 @@ export class UsersComponent implements OnInit{
       concatMap(_=> this.auth.createAccountForEmployee(Email))
       //tap(()=>  this.initUserList())
     ).subscribe((result)=>{
-      if (result.mess != null) { 
-        console.log(result.mess)
-        //this.createUser.reset();
-
-        const modal = this.tModalSvc.confirm({
+      if (result.status.toString() == 'Create Success!') { 
+        console.log(result.status)
+        const modal = this.tModalSvc.success({
          title:'Thành công',
-         content: `<h5 class="text-error-500">Tạo tài khoản <strong>${ Email }</strong> thành công! Tài khoản có mật khẩu là Spa@12345.</h5>`,
+         content: `<h5 class="text-success-500">Tạo tài khoản <strong>${ Email }</strong> thành công! Tài khoản có mật khẩu là Spa@12345.</h5>`,
          footer:null,
+         iconType:'tdsi-success-line',
          size:'lg',
          okText:'Xác nhận',
          onOk:()=> true
        });
-       modal.afterClose.asObservable()
+       modal.afterClose.asObservable().pipe(tap(()=>  this.initUserList()))
        .subscribe
-       (tap(()=>  this.initUserList()));
+       ();
      }
      else{
-       console.log(result.mess)
-        //this.createUser.reset();
-
-        const modal = this.tModalSvc.create({
+       console.log(result.status)
+        const modal = this.tModalSvc.error({
          title:'Thất bại',
          content: `<h5 class="text-error-500">Tạo tài khoản <strong>${ Email }</strong> thất bại! Tài khoản đã tồn tại hoặc đã xảy ra lỗi!</h5>`,
          footer:null,
@@ -147,20 +144,20 @@ export class UsersComponent implements OnInit{
          okText:'Xác nhận',
          onOk:()=> true
        });
-       modal.afterClose.asObservable()
-       .subscribe(this.initUserList);
+       modal.afterClose.asObservable().pipe(tap(()=>  this.initUserList()))
+       .subscribe();
      }
     }
     );
   }
-  onEditUser(email:string){
+  onEditUser(email:string,role:string){
     const modal = this.tModalSvc.create({
       title:'Sửa thông tin tài khoản',
       content: UsersModalComponent,
       footer:null,
       size:'lg',
       componentParams:{
-        email
+        email,role
       }
     });
     modal.afterClose.asObservable().pipe(tap(()=>  this.initUserList())).subscribe()
@@ -181,6 +178,9 @@ export class UsersComponent implements OnInit{
       concatMap(_=> this.auth.deleteUser(email)),
       tap(()=>  this.initUserList())
     ).subscribe()
+  }
+  checkExistUser(email:string){
+    this.auth.checkExistUser(email)
   }
 }
 
