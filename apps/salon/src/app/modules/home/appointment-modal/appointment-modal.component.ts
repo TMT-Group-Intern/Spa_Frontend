@@ -115,9 +115,8 @@ export class AppointmentModalComponent implements OnInit {
     }
 
     // Get Doctor
-    this.shared.getEmployee(1, 2).subscribe(
+    this.shared.getEmployee(2, 2).subscribe(
       (data: any[]) => {
-        console.log("data empl: ",data)
         this.doctorOptions = [...data.map(item => ({
           id: item.employeeID,
           name: `${item.firstName} ${item.lastName}`
@@ -248,4 +247,6 @@ export class AppointmentModalComponent implements OnInit {
   createNotificationError(content: any): void {
     this.notification.error('Error', content);
   }
+
+
 }

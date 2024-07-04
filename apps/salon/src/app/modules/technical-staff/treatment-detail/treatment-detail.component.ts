@@ -33,9 +33,11 @@ export class TreatmentDetailComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.renderCustomerInQueue();
+    this.renderCustomerDetail();
   }
-  renderCustomerInQueue() {
+
+
+  renderCustomerDetail() {
     const observer = {
       next: (data: any) => {
         this.listSpaServiceQueue = data.ChooseServices.map((chooseService: any) => chooseService.service);
@@ -80,22 +82,22 @@ export class TreatmentDetailComponent implements OnInit {
   }
 
   uploadImage() {
-    if (this.selectedFile) {
-      const formData = new FormData();
-      formData.append('file', this.selectedFile);
-      formData.append('id', this.dataParent.AppointmentID.toString());
+    // if (this.selectedFile) {
+    //   const formData = new FormData();
+    //   formData.append('file', this.selectedFile);
+    //   formData.append('id', this.dataParent.AppointmentID.toString());
 
-      this.auth.UploadImageCustomer(formData).subscribe(
-        () => {
-          this.createNotificationSuccess('Upload successful');
-        },
-        (res) => {
-          this.createNotificationError(res.error.message);
-        }
-      );
-    } else {
-      this.createNotificationError('No file selected');
-    }
+    //   this.auth.UploadImageCustomer(formData).subscribe(
+    //     () => {
+    //       this.createNotificationSuccess('Upload successful');
+    //     },
+    //     (res) => {
+    //       this.createNotificationError(res.error.message);
+    //     }
+    //   );
+    // } else {
+    //   this.createNotificationError('No file selected');
+    // }
   }
 
   // Success Notification

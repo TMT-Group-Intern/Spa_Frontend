@@ -1,9 +1,9 @@
 <div class="w-full gap-x-2 grid grid-cols-4 flex-wrap h-full bg-gray-200">
   <!-- Appointment List -->
   <div class="col-span-1 border p-4 rounded-10 bg-white">
-    <!-- Header -->
     <div class="flex justify-between">
       <span class="text-heading-4">Today Booking</span>
+      <!-- Button Create Appoinment -->
       <button tds-button-icon color="success" class="rounded-full p-2" (click)="createAppointment()" tds-tooltip
         tooltipTitle="New Appointment">
         <span class="flex items-center">
@@ -17,33 +17,37 @@
     </div>
     <div *ngIf="todayBooking.length !== 0" class="overflow-y-auto mt-3" style="max-height: 550px">
       <tds-card *ngFor="let appoint of todayBooking" class="border rounded-10 m-4">
-        <!-- Card Header -->
         <tds-card-header class="bg-green-success-200 text-white">
           <div class="flex justify-between">
+            <!-- Customer Name -->
             <p tds-typography tdsEllipsis>{{appoint.Customer.FirstName}} {{appoint.Customer.LastName}}</p>
+            <!-- Status -->
             <div>
               <tds-tag *ngIf="appoint.Status === 'Scheduled'" status='custom' class="bg-success-400">Scheduled</tds-tag>
               <tds-tag *ngIf="appoint.Status === 'Cancelled'" status='custom' class="bg-red-500">Cancelled</tds-tag>
             </div>
           </div>
         </tds-card-header>
-        <!-- Card content -->
         <tds-card-content class="">
-          <!-- <p><i class="tdsi-earpiece-fill text-green-success-300"></i> {{appoint.AppointmentID | tdsMapper: returnDoctor}}</p> -->
-          <p><i class="tdsi-earpiece-fill text-green-success-300"></i> {{appoint.Doctor}}</p>
+          <!-- Doctor Name -->
+          <p *ngIf="appoint.Doctor === null"><i class="tdsi-earpiece-fill text-green-success-300"></i> ---</p>
+          <p *ngIf="appoint.Doctor !== null"><i class="tdsi-earpiece-fill text-green-success-300"></i>
+            {{appoint.Doctor}}</p>
+          <!-- Date Booking & Customer Phone -->
           <div class="flex justify-between">
             <p><i class="tdsi-time-fill text-green-success-300"></i> {{appoint.AppointmentDate | date:'HH:mm'}}</p>
             <p><i class="tdsi-call-fill text-green-success-300"></i> {{appoint.Customer.Phone}}</p>
           </div>
         </tds-card-content>
         <hr />
-        <!-- Card button -->
         <tds-card-actions>
           <div class="flex justify-end">
+            <!-- Edit Appointment Button -->
             <button tds-button-icon color="secondary" tds-tooltip tooltipTitle="Edit Appointment"
               (click)="onEditAppointment(appoint.AppointmentID)">
               <i class="tdsi-edit-fill"></i>
             </button>
+            <!-- Receive Button -->
             <button tds-button-icon color="secondary" tds-tooltip tooltipTitle="Switch To Reception"
               (click)="chooseDoctor(appoint.AppointmentID, 'Chờ khám')" class="ml-3">
               <i class="tdsi-receive-fill"></i>
@@ -54,7 +58,6 @@
     </div>
   </div>
 
-  <!--  -->
   <div class="col-span-3 gap-y-2 grid grid-rows-2 flex-wrap">
     <!-- Reception -->
     <div class="row-span-1 p-4 border rounded-10 bg-white">
@@ -72,14 +75,16 @@
           <!-- Card content -->
           <tds-card-content>
             <div class="flex justify-between">
-            <div>
-              <p><i class="tdsi-earpiece-fill text-green-success-300"></i> {{appoint.Doctor}}</p>
-              <p><i class="tdsi-time-fill text-green-success-300"></i> {{appoint.AppointmentDate | date:'HH:mm'}}</p>
+              <div>
+                <p *ngIf="appoint.Doctor === null"><i class="tdsi-earpiece-fill text-green-success-300"></i> ---</p>
+                <p *ngIf="appoint.Doctor !== null"><i class="tdsi-earpiece-fill text-green-success-300"></i>
+                  {{appoint.Doctor}}</p>
+                <p><i class="tdsi-time-fill text-green-success-300"></i> {{appoint.AppointmentDate | date:'HH:mm'}}</p>
+              </div>
+              <div class="flex justify-center items-center">
+                <tds-tag status='custom' class="bg-success-400">{{appoint.Status}}</tds-tag>
+              </div>
             </div>
-            <div class="flex justify-center items-center">
-              <tds-tag status='custom' class="bg-success-400">{{appoint.Status}}</tds-tag>
-            </div>
-          </div>
           </tds-card-content>
         </tds-card>
       </div>
@@ -108,7 +113,9 @@
           <div class="grid grid-cols-3 flex-wrap">
             <!-- Card content -->
             <tds-card-content class="col-span-2">
-              <p><i class="tdsi-auto-fix-fill text-green-success-300"></i> {{appoint.SpaTherapist}}</p>
+              <p *ngIf="appoint.SpaTherapist === null"><i class="tdsi-earpiece-fill text-green-success-300"></i> ---</p>
+              <p *ngIf="appoint.SpaTherapist !== null"><i class="tdsi-earpiece-fill text-green-success-300"></i>
+                {{appoint.SpaTherapist}}</p>
               <p><i class="tdsi-time-fill text-green-success-300"></i> {{appoint.AppointmentDate | date:'HH:mm'}}
               </p>
             </tds-card-content>
