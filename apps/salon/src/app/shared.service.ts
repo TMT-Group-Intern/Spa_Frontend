@@ -59,15 +59,15 @@ export class AuthService {
   createAccountForEmployee(Email: string) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const body = { email: Email };
-    return this.http.post<{status: object}>(this.baseUrl + 'Authentication/CreateUserForEmployee', body, { headers });
+    return this.http.post<{ status: object }>(this.baseUrl + 'Authentication/CreateUserForEmployee', body, { headers });
   }
   editUser(email: string, val: any) {
     return this.http.put(this.baseUrl + 'User/updateUser' + email, val);
   }
-  getAdminByEmail(email:string): Observable<any[]>{
+  getAdminByEmail(email: string): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/getUserByAdmin?email=' + email)
   }
-  getEmployeeByEmail(email:string): Observable<any[]>{
+  getEmployeeByEmail(email: string): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/getUserByEmployee?email=' + email)
   }
   // Show list of Customer
@@ -90,8 +90,8 @@ export class AuthService {
     return this.http.post(this.baseUrl + 'Customers', val);
   }
 
-  UploadImageCustomer(formData: FormData) {
-    return this.http.post(`${this.baseUrl}Customers/upload`, formData);
+  UploadImageCustomer(id: number, formData: FormData) {
+    return this.http.post(`${this.baseUrl}Customers/uploadMutil?id=` + id, formData);
   }
 
 
@@ -162,7 +162,7 @@ export class AuthService {
       role: role
     })
   }
-  
+
   // Update Discount
   updateDiscount(id: any, discount: any, val: any) {
     return this.http.put(this.baseUrl + 'Appointment/UpdateDiscount?id=' + id + '&perDiscount=' + discount, val);
@@ -201,8 +201,8 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'User/getUserByEmail?email=' + email);
   }
 
-  checkExistUser(email: string){
-    return this.http.get<{check:object}>(this.baseUrl + 'User/getUserBoolByEmail?email=' + email);
+  checkExistUser(email: string) {
+    return this.http.get<{ check: object }>(this.baseUrl + 'User/getUserBoolByEmail?email=' + email);
   }
 
   // Get Branch
@@ -214,7 +214,7 @@ export class AuthService {
   getJobType(): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/allJobs');
   }
-  
+
   //
   login(email: string, password: string) {
     return this.http.post<{ flag: boolean, mess: string, token: string }>(this.baseUrl + 'Authentication/login', {
