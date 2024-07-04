@@ -89,6 +89,165 @@
   </div>
 </form>
 
+<!-- <form novalidate [formGroup]="form" class="bg-white dark:bg-d-neutral-3-100 rounded p-4">
+  <div class="flex flex-col gap-4 pt-4">
+    <div class="grid grid-cols-2 gap-12">
+      <div class="flex-row space-y-2">
+        <div class="grid grid-cols-3 gap-2">
+          <div class="h-8 flex items-center">
+            <tds-label [tdsRequired]="true" tdsFor="loaiThu">Loại thu</tds-label>
+          </div>
+          <div class="col-span-2">
+            <div class="flex space-x-2">
+              <tds-form-field class="w-full col-span-2">
+                <tds-select valueField="name" textField="name" placeholder='Chọn loại thu'
+                    disabledField="isActive"  [data]=""
+                    formControlName="loaiThu">
+                </tds-select>
+                <tds-error>Vui lòng chọn loại thu</tds-error>
+              </tds-form-field>
+              <div class="h-34 mt-px">
+                <button tds-button-icon color="primary" size="sm">
+                  <span class="flex items-center justify-center">
+                      <i class="tdsi-plus-fill"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div class="h-8 flex items-center">
+            <tds-label [tdsRequired]="true" tdsFor="phuongThuc">Phương thức</tds-label>
+
+          </div>
+          <div class="col-span-2">
+            <div class="flex space-x-2">
+              <tds-form-field class="w-full col-span-2">
+                <tds-select valueField="name" textField="name" placeholder='Chọn phương thức'
+                    disabledField="isActive"  [data]=""
+                    formControlName="phuongThuc">
+                </tds-select>
+                <tds-error>Vui lòng chọn phương thức</tds-error>
+              </tds-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div  class="h-8 flex items-center">
+            <tds-label [tdsRequired]="true" tdsFor="soTien">Số tiền</tds-label>
+          </div>
+          <div class="col-span-2">
+            <div class="flex space-x-2">
+              <tds-form-field class="w-full col-span-2">
+                <tds-input-number
+                    placeholder="Nhập số tiền" formControlName="soTien">
+                </tds-input-number>
+                <tds-error>Vui lòng nhập số tiền</tds-error>
+              </tds-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2 ">
+          <div class="h-8 flex items-center" >
+            <tds-label [tdsRequired]="true" tdsFor="noiDung">Nội dung</tds-label>
+          </div>
+          <div class="col-span-2">
+            <div class="flex space-x-2">
+              <tds-form-field class="w-full col-span-2">
+                <input tdsInput autocomplete="off" placeholder="Hóa đơn, chứng từ giao dịch"
+                    formControlName="noiDung"  />
+                <tds-error>Vui lòng chọn nội dung</tds-error>
+              </tds-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div  class="h-8 flex items-center">
+            <tds-label [tdsRequired]="true" tdsFor="ngay">Ngày</tds-label>
+          </div>
+          <div class="col-span-2">
+            <div class="flex space-x-2 ">
+              <tds-form-field class="w-full col-span-2">
+                <tds-date-picker  formControlName="ngay">
+                </tds-date-picker>
+                <tds-error>Vui lòng chọn ngày</tds-error>
+              </tds-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex-row space-y-2">
+        <div class="grid grid-cols-3 gap-2 ">
+          <div  class="h-8 flex items-center">
+            <tds-label [tdsRequired]="true" tdsFor="nguoiNop">Người nộp</tds-label>
+          </div>
+          <div class="col-span-2">
+            <div class="flex space-x-2 ">
+              <tds-form-field class="w-full col-span-2">
+                <div tdsAddOnRight><i class="tdsi-search-fill text-xl leading-none"></i></div>
+                <input tdsInput placeholder="Chọn người nộp"  formControlName="nguoiNop" />
+                <tds-error>Vui lòng chọn người nộp</tds-error>
+              </tds-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div  class="h-8 flex items-center">
+            <tds-label [tdsRequired]="true" tdsFor="dienThoai">Điện thoại</tds-label>
+          </div>
+          <div class="col-span-2">
+            <div class="flex space-x-2 ">
+              <tds-form-field class="w-full col-span-2">
+                <input tdsInput autocomplete="off" placeholder="Nhập số điện thoại"
+                    minlength="10" maxlength="10"
+                    formControlName="dienThoai" />
+                <tds-error></tds-error>
+              </tds-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2 ">
+          <div  class="h-8 flex items-center">
+            <tds-label [tdsRequired]="true" tdsFor="diaChi">Địa chỉ</tds-label>
+          </div>
+          <div class="col-span-2">
+            <div class="flex space-x-2">
+              <tds-form-field class="w-full col-span-2">
+                <input tdsInput autocomplete="off" placeholder="Nhập địa chỉ" formControlName="diaChi"  />
+                <tds-error>Vui lòng nhập địa chỉ</tds-error>
+              </tds-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2 ">
+          <div class="h-8 flex items-center">
+            <tds-label [tdsRequired]="true" tdsFor="nguoiLH">Người liên hệ</tds-label>
+          </div>
+          <div class="col-span-2">
+            <div class="flex space-x-2">
+              <tds-form-field class="w-full col-span-2">
+                <tds-select valueField="name" textField="name" placeholder='Chọn người liên hệ'
+                    disabledField="isActive"  [data]=""
+                    formControlName="nguoiLH">
+                </tds-select>
+                <tds-error>Vui lòng chọn người liên hệ</tds-error>
+              </tds-form-field>
+              <div class="h-34 mt-px">
+                <button tds-button-icon color="primary" size="sm">
+                  <span class="flex items-center justify-center">
+                      <i class="tdsi-plus-fill"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form> -->
+
 <ng-container *tdsModalFooter>
   <div class="p-4 flex flex-row-reverse">
     <button tds-button form="idform" (click)="submit()" color="success" class="w-[100px] rounded">
