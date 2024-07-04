@@ -59,7 +59,7 @@ export class AuthService {
   createAccountForEmployee(Email: string) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const body = { email: Email };
-    return this.http.post<{mess:object}>(this.baseUrl + 'Authentication/CreateUserForEmployee', body, { headers });
+    return this.http.post<{ mess: object }>(this.baseUrl + 'Authentication/CreateUserForEmployee', body, { headers });
   }
   editUser(email: string, val: any) {
     return this.http.put(this.baseUrl + 'User/updateUser' + email, val);
@@ -84,8 +84,8 @@ export class AuthService {
     return this.http.post(this.baseUrl + 'Customers', val);
   }
 
-  UploadImageCustomer(formData: FormData) {
-    return this.http.post(`${this.baseUrl}Customers/upload`, formData);
+  UploadImageCustomer(id: number, formData: FormData) {
+    return this.http.post(`${this.baseUrl}Customers/uploadMutil?id=` + id, formData);
   }
 
 
@@ -156,7 +156,7 @@ export class AuthService {
       role: role
     })
   }
-  
+
   // Update Discount
   updateDiscount(id: any, discount: any, val: any) {
     return this.http.put(this.baseUrl + 'Appointment/UpdateDiscount?id=' + id + '&perDiscount=' + discount, val);
@@ -189,7 +189,7 @@ export class AuthService {
   getEmployee(branch: number, job: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/EmployeeByBranchAndJob?branchID=' + branch + '&jobTypeID=' + job);
   }
-  
+
   //
   login(email: string, password: string) {
     return this.http.post<{ flag: boolean, mess: string, token: string }>(this.baseUrl + 'Authentication/login', {
