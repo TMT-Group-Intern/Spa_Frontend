@@ -58,7 +58,8 @@ export class ServiceAppointmentModalComponent implements OnInit {
     doctor: [''],
     appointmentDate: ['', Validators.required],
     status: [''],
-    service:[[]]
+    service:[[]],
+    note: [''],
   });
 
   today = startOfToday();
@@ -131,14 +132,14 @@ export class ServiceAppointmentModalComponent implements OnInit {
     };
 
     if (this.id) {
-    this.updateServiceAppointment(this.id, val.status, val.service);
+    this.updateServiceAppointment(this.id, val.status, val.service, val.note);
   }
   }
 
   // Update service Appointment
-  updateServiceAppointment(id: number, status: any, val: any) {
+  updateServiceAppointment(id: number, status: any, val: any,note: any) {
     console.log(id,",",val)
-    this.shared.updateAppointmentWithService(id, status, val).subscribe({
+    this.shared.updateAppointmentWithService(id, {status, serviceIds:val, note}).subscribe({
       next:(data) => {
         console.log(data)
         this.createNotificationSuccess('');

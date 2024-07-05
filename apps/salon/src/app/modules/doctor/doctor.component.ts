@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import { startOfToday } from 'date-fns';
 import { TDSSelectModule } from 'tds-ui/select';
 import { TDSNotificationService } from 'tds-ui/notification';
+import { TDSInputModule } from 'tds-ui/tds-input';
 
 @Component({
   selector: 'frontend-doctor',
@@ -37,26 +38,24 @@ import { TDSNotificationService } from 'tds-ui/notification';
     TDSFormFieldModule,
     TDSEmptyModule,
     TDSToolTipModule,
-    TDSSelectModule
+    TDSSelectModule,
+    TDSInputModule,
   ],
 })
 export class DoctorComponent implements OnInit {
-  public statusOptions = [
-    'Chờ khám',
-    'Đang khám',
-    'Đang chuẩn bị',
-  ]
+  public statusOptions = ['Chờ khám', 'Đang khám', 'Đang chuẩn bị'];
   @Input() id?: number;
-  private readonly notification= inject(TDSNotificationService)
-  private readonly sharedService = inject(AuthService)
+  private readonly notification = inject(TDSNotificationService);
+  private readonly sharedService = inject(AuthService);
   reception: any[] = [];
+  active?: boolean;
   appointmentList: any;
   serviceHistory: any;
   fallback = './assets/img/default.svg';
   dataAppointmentbyid: any;
   today = startOfToday();
-  empID: any[] = []
-  dataSvc: any = []
+  empID: any[] = [];
+  dataSvc: any = [];
   CustomerID: number | undefined;
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
@@ -68,7 +67,8 @@ export class DoctorComponent implements OnInit {
     doctor: [''],
     appointmentDate: ['', Validators.required],
     status: [''],
-    service:[[]]
+    service: [[]],
+    note: [''],
   });
 
   ngOnInit(): void {
@@ -76,16 +76,14 @@ export class DoctorComponent implements OnInit {
   }
   initService(): void {
     //Display Service List
-    this.sharedService.renderListService().subscribe((data:any) =>
-      {
-        this.dataSvc = data.serviceDTO;
-      }
-    )
+    this.sharedService.renderListService().subscribe((data: any) => {
+      this.dataSvc = data.serviceDTO;
+    });
   }
-    // Format Date & Time
-    formatDate(date: string, format: string): string {
-      return moment(date).format(format);
-    }
+  // Format Date & Time
+  formatDate(date: string, format: string): string {
+    return moment(date).format(format);
+  }
 
   // Display Appointment List
   initAppointmentList() {
@@ -99,20 +97,20 @@ export class DoctorComponent implements OnInit {
     });
   }
 
-
   userFrofile(id: number) {
     this.sharedService.getAppointment(id).subscribe((data: any) => {
-      console.log(data);
       this.dataAppointmentbyid = data;
-      this.CustomerID = data.CustomerID
+      this.active = true;
+      this.CustomerID = data.CustomerID;
       this.form.patchValue({
         phone: data.Customer.Phone,
         name: `${data.Customer.FirstName} ${data.Customer.LastName}`,
         appointmentDate: this.formatDate(data.AppointmentDate, 'HH:mm'),
         customerID: data.Customer.CustomerID,
         status: data.Status,
-        service: data.ChooseServices.map((item:any)=> item.ServiceID),
-        doctor: `${data.Assignments[0].Employees.FirstName} ${data.Assignments[0].Employees.LastName}`
+        service: data.ChooseServices.map((item: any) => item.ServiceID),
+        doctor: `${data.Assignments[0].Employees.FirstName} ${data.Assignments[0].Employees.LastName}`,
+        note: data.Notes,
       });
     });
     this.initService();
@@ -120,52 +118,53 @@ export class DoctorComponent implements OnInit {
 
   getHistory(id: number) {
     this.sharedService.getHistoryCustomer(id).subscribe((data: any) => {
-      this.serviceHistory = data.listHistoryForCus.sort(
-        (a: any, b: any) => b.date < a.date? -1: 1);
+      this.serviceHistory = data.listHistoryForCus.sort((a: any, b: any) =>
+        b.date < a.date ? -1 : 1
+      );
     });
   }
 
   submitUpdateServiceAppointment(id: number) {
-
     if (this.form.invalid) return;
 
     const val = {
-      ...this.form.value
+      ...this.form.value,
     };
     console.log(val);
 
     if (id) {
-      console.log(this.id)
-    this.updateServiceAppointment(id, val.status, val.service);
-  }
+      this.updateServiceAppointment(id, val.status, val.service, val.note);
+    }
   }
 
   // Update service Appointment
-  updateServiceAppointment(id: number, status: any, val: any) {
-    console.log(id,",",val)
-    this.sharedService.updateAppointmentWithService(id, status, val).subscribe({
-      next:(data) => {
-        console.log(data)
-        this.createNotificationSuccess('');
-      },
-      error:(res) => {
-        this.createNotificationError(res.error.message);
-      }
-    }
-    );
+  updateServiceAppointment(
+    id: number,
+    status: any,
+    serviceIds: any,
+    note: any
+  ) {
+    this.sharedService
+      .updateAppointmentWithService(id, { serviceIds, status, note })
+      .subscribe({
+        next: (data) => {
+          console.log(data);
+          this.createNotificationSuccess('');
+          this.initAppointmentList();
+          if (status === 'Đang chuẩn bị') this.active = false;
+        },
+        error: (res) => {
+          this.createNotificationError(res.error.message);
+        },
+      });
   }
-   // Success Notification
-   createNotificationSuccess(content: any): void {
-    this.notification.success(
-      'Succesfully', content
-    );
+  // Success Notification
+  createNotificationSuccess(content: any): void {
+    this.notification.success('Succesfully', content);
   }
 
   // Error Notification
   createNotificationError(content: any): void {
-    this.notification.error(
-      'Error', content
-    );
+    this.notification.error('Error', content);
   }
-
 }
