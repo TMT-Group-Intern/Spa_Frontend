@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -59,15 +57,15 @@ export class AuthService {
   createAccountForEmployee(Email: string) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const body = { email: Email };
-    return this.http.post<{status: object}>(this.baseUrl + 'Authentication/CreateUserForEmployee', body, { headers });
+    return this.http.post<{ status: object }>(this.baseUrl + 'Authentication/CreateUserForEmployee', body, { headers });
   }
   editUser(email: string, val: any) {
     return this.http.put(this.baseUrl + 'User/updateUser?email='+email, val);
   }
-  getAdminByEmail(email:string): Observable<any[]>{
+  getAdminByEmail(email: string): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/getUserByAdmin?email=' + email)
   }
-  getEmployeeByEmail(email:string): Observable<any[]>{
+  getEmployeeByEmail(email: string): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/getUserByEmployee?email=' + email)
   }
   // Show list of Customer
@@ -76,7 +74,7 @@ export class AuthService {
   }
 
   // Get Customer by ID
-  getCustomer(id: number): Observable<any[]> {
+  getCustomer(id: any): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Customers/' + id);
   }
 
@@ -90,8 +88,8 @@ export class AuthService {
     return this.http.post(this.baseUrl + 'Customers', val);
   }
 
-  UploadImageCustomer(formData: FormData) {
-    return this.http.post(`${this.baseUrl}Customers/upload`, formData);
+  UploadImageCustomer(id: number, formData: FormData) {
+    return this.http.post(`${this.baseUrl}Customers/uploadMutil?id=` + id, formData);
   }
 
 
@@ -136,8 +134,8 @@ export class AuthService {
   }
 
   //
-  updateAppointmentWithService(id: number, status: any, val: any) {
-    return this.http.put(this.baseUrl + 'Appointment/api/UpdateAppointmentWithService/' + id + '/' + status, val);
+  updateAppointmentWithService(id: number, body:any) {
+    return this.http.put(this.baseUrl + 'Appointment/api/UpdateAppointmentWithService/' + id, body);
   }
 
   // Get Appointment by ID
@@ -162,7 +160,7 @@ export class AuthService {
       role: role
     })
   }
-  
+
   // Update Discount
   updateDiscount(id: any, discount: any, val: any) {
     return this.http.put(this.baseUrl + 'Appointment/UpdateDiscount?id=' + id + '&perDiscount=' + discount, val);
@@ -201,8 +199,8 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'User/getUserByEmail?email=' + email);
   }
 
-  checkExistUser(email: string){
-    return this.http.get<{check:object}>(this.baseUrl + 'User/getUserBoolByEmail?email=' + email);
+  checkExistUser(email: string) {
+    return this.http.get<{ check: object }>(this.baseUrl + 'User/getUserBoolByEmail?email=' + email);
   }
 
   // Get Branch
@@ -214,7 +212,7 @@ export class AuthService {
   getJobType(): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/allJobs');
   }
-  
+
   //
   login(email: string, password: string) {
     return this.http.post<{ flag: boolean, mess: string, token: string }>(this.baseUrl + 'Authentication/login', {
