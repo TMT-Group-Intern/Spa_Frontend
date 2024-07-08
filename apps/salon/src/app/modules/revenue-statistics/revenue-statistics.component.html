@@ -1,2 +1,53 @@
-<!-- <div echarts [options]="options" [size]="size"></div> -->
-<div class="w-full h-full" echarts [options]="options" [size]="size"></div>
+<div class="h-full bg-slate-200">
+  <div class="flex flex-col h-full ">
+    <div class="basis-2/4 mb-1 bg-white rounded-b-lg">
+      <div class="p-2">
+        <span class="font-bold text-heading-3">Biểu đồ doanh thu</span>
+        <div class="h-full" echarts [options]="options" [size]="size"></div>
+      </div>
+    </div>
+    <div class="basis-2/4 mt-1 bg-white rounded-t-lg">
+      <div class="rounded-10">
+        <span class="ml-2 py-4 font-bold text-heading-3">Số liệu doanh thu</span>
+        <tds-table #table [listData]="listOfData" tableLayout="fixed">
+          <thead>
+            <tr>
+              <th width="60px"></th>
+              <th>Ngày</th>
+              <th>Doanh thu</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let data of table.data">
+              <tr>
+                <td [expand]="expandSet.has(data.id)" (expandChange)="onExpandChange(data.id, $event)"></td>
+                <td>{{ data.name }}</td>
+                <td>{{ data.address }}</td>
+              </tr>
+              <tr class="w-full " [expand]="expandSet.has(data.id)">
+                <div class=" m-4 border rounded-md">
+                  <tds-table #table [listData]="listOfData" tableLayout="fixed">
+                    <thead>
+                      <tr>
+                        <th>Ngày</th>
+                        <th>Doanh thu</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let data of table.data">
+                        <tr>
+                          <td>{{ data.name }}</td>
+                          <td>{{ data.address }}</td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </tds-table>
+                </div>
+              </tr>
+            </ng-container>
+          </tbody>
+        </tds-table>
+      </div>
+    </div>
+  </div>
+</div>
