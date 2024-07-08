@@ -130,7 +130,6 @@ export class DoctorComponent implements OnInit {
     const val = {
       ...this.form.value,
     };
-    console.log(val);
 
     if (id) {
       this.updateServiceAppointment(id, val.status, val.service, val.note);
@@ -140,18 +139,17 @@ export class DoctorComponent implements OnInit {
   // Update service Appointment
   updateServiceAppointment(
     id: number,
-    status: any,
-    serviceIds: any,
-    note: any
+    Status: any,
+    ListServiceID: any,
+    Notes: any
   ) {
     this.sharedService
-      .updateAppointmentWithService(id, { serviceIds, status, note })
+      .updateAppointmentWithService(id, {ListServiceID, Status, Notes })
       .subscribe({
         next: (data) => {
-          console.log(data);
           this.createNotificationSuccess('');
           this.initAppointmentList();
-          if (status === 'Đang chuẩn bị') this.active = false;
+          if (Status === 'Đang chuẩn bị') this.active = false;
         },
         error: (res) => {
           this.createNotificationError(res.error.message);
