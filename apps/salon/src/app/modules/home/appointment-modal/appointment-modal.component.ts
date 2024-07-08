@@ -63,7 +63,7 @@ export class AppointmentModalComponent implements OnInit {
     branch: ['ABC'],
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
     assignments: [],
-    doctor: [''],
+    doctor: [],
     appointmentDate: [new Date()],
     status: ['Scheduled'],
     customer: [null]

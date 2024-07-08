@@ -7,6 +7,7 @@ import { RouterLink } from '@angular/router';
 import { TDSModalService } from 'tds-ui/modal';
 import { TreatmentDetailComponent } from './treatment-detail/treatment-detail.component';
 import { TDSNotificationService } from 'tds-ui/notification';
+import { UserProfileComponent } from '../user-profile/user-profile.component';
 
 @Component({
   selector: 'frontend-technical-staff',
@@ -16,14 +17,16 @@ import { TDSNotificationService } from 'tds-ui/notification';
   imports: [CommonModule, ReactiveFormsModule, TDSTableModule, RouterLink],
 })
 export class TechnicalStaffComponent {
+  private readonly modalSvc = inject(TDSModalService)
   listSpaServiceQueue: any[] = [];
   customerDetail?: any = [] || null;
-  appointmentAllInfo?: any;
+  appointmentAllInfo: any | null = null;
   private readonly tModalSvc = inject(TDSModalService);
   selectedFiles: File[] = [];
   checkboxStatess: { [key: number]: boolean } = {};
   dataTemp: any;
   urls = [];
+  checkActive?: boolean = false;
 
   ngOnInit(): void {
     this.renderCustomerInQueue();
@@ -46,19 +49,15 @@ export class TechnicalStaffComponent {
   renderCustomerDetail(data: any) {
     const observer = {
       next: (data: any) => {
+        this.checkActive = true;
         this.checkboxStatess = {};
         this.loadData()
         this.appointmentAllInfo = data;
+        console.log(this.appointmentAllInfo)
         this.customerDetail = data.ChooseServices.map(
           (chooseService: any) => chooseService.service
         );
         console.log(this.listSpaServiceQueue);
-        // this.listSpaServiceQueue.forEach((service: any) => {
-        //   this.checkboxStates[data.AppointmentID] = {
-        //     state: false,
-        //     serviceID: service.serviceID,
-        //   }; // Default state is unchecked
-        // });
         console.log(this.dataTemp);
         const appointmentData = this.dataTemp.find((item: any) => item.data.AppointmentID === this.appointmentAllInfo.AppointmentID);
         if (appointmentData) {
@@ -121,16 +120,16 @@ export class TechnicalStaffComponent {
   }
 
   callModalHistory() {
-    // console.log(this.listSpaServiceQueue)
-    // this.modalSvc.create({
-    //   title: 'Hồ sơ',
-    //   content: UserProfileComponent,
-    //   footer: null,
-    //   size: 'lg',
-    //   componentParams: {
-    //     customerId: this.dataParent.CustomerID
-    //   }
-    // })
+    //console.log(this.dataParent.CustomerID)
+    this.modalSvc.create({
+      title: 'Hồ sơ',
+      content: UserProfileComponent,
+      footer: null,
+      size: 'lg',
+      componentParams: {
+        customerId: this.appointmentAllInfo.CustomerID
+      }
+    })
   }
 
   // Success Notification
@@ -173,6 +172,32 @@ export class TechnicalStaffComponent {
     const data: any = localStorage.getItem('appointmentDetail');
     this.dataTemp = JSON.parse(data);
     console.log(this.dataTemp);
+  }
+
+  onStatusChange(event: any, id: number) {
+    const status = event.target.value;
+    this.onDelete(id);
+    this.updateStatus(id, status);
+  }
+
+  updateStatus(id: number, status: string) {
+    this.auth.UpdateStatus(id, status).subscribe(
+      () => {
+        this.renderCustomerInQueue();
+        this.checkActive = false;
+      },
+      (error) => {
+        console.error('Error updating status:', error);
+        // Handle error (if needed)
+      }
+    );
+  }
+
+  onDelete(appointmentID: number) {
+    const appointmentDetailList = JSON.parse(localStorage.getItem('appointmentDetail') || '[]');
+    const updatedList = appointmentDetailList.filter((item: any) => item.data.AppointmentID !== appointmentID);
+    localStorage.setItem('appointmentDetail', JSON.stringify(updatedList));
+    this.loadData();
   }
 
 }

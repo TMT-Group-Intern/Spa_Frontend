@@ -73,7 +73,7 @@ export class HomeComponent implements OnInit {
       );
 
       this.inSession = this.appointmentList.filter((appointment: any) =>
-        appointment.Status === "Treatment"
+        appointment.Status === "Treatment" || appointment.Status === "Completed"
       );
     });
   }

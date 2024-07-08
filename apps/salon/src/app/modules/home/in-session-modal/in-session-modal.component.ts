@@ -60,12 +60,15 @@ export class InSessionModalComponent implements OnInit {
             customerID: data.Customer.CustomerID,
             status: data.Status,
             assignments: data.Assignments,
+            spaTherapist: data.TeachnicalStaff
           });
-          if (data.Assignments[1].EmployerID) {
-            this.form.patchValue({
-              spaTherapist: data.Assignments[1].EmployerID,
-            });
-          }
+          // if (data.TeachnicalStaff) {
+          //   console.log(data.TeachnicalStaff)
+          //   this.form.patchValue({
+          //     spaTherapist: data.TeachnicalStaff
+          //   });
+          // }
+          console.log(this.form.get('spaTherapist')?.value)
         }
       )
     }
