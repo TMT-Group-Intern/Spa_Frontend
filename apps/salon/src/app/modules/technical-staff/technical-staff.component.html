@@ -2,12 +2,13 @@
   <div class="basis-1/4 border p-4 rounded-10 bg-white">
     <tds-table
       class="table-vertical-line"
-      #basicTable
       [listData]="listSpaServiceQueue"
+      [showPagination]="false"
     >
       <thead>
         <tr>
-          <th rowspan="2">Họ Tên Khách Hàng</th>
+          <th>Họ Tên Khách Hàng</th>
+          <th>Trạng Thái</th>
         </tr>
       </thead>
       <tbody>
@@ -17,6 +18,30 @@
           (click)="renderCustomerDetail(data)"
         >
           <td>{{ data.Customer.FirstName + ' ' + data.Customer.LastName }}</td>
+          <td>
+            <select
+              name="status"
+              class=""
+              (change)="onStatusChange($event, data.AppointmentID)"
+            >
+              <option value="In_progress">Đang tiến hành</option>
+              <option value="Completed">Hoàn thành</option>
+            </select>
+            <!-- <select name="status" class="">
+              <option
+                value="none conplete"
+                (click)="
+                  updateStatus(
+                    appointmentAllInfo.appointmentAllInfo,
+                    'completed'
+                  )
+                "
+              >
+                Đang tiến hành
+              </option>
+              <option value="completed">Hoàn thành</option>
+            </select> -->
+          </td>
           <!-- <td>{{ data.TeachnicalStaff }}</td>
           <td>{{ data.EmployeeCode }}</td> -->
         </tr>
@@ -27,7 +52,7 @@
   <!-- //////////bên phải /////////// -->
   <div
     class="basis-3/4 border p-4 rounded-10 bg-white ml-4"
-    *ngIf="customerDetail.length > 0; else elseBlock"
+    *ngIf="appointmentAllInfo !== null && checkActive === true; else elseBlock"
   >
     <div class="flex flex-row">
       <!-- Left section with image -->

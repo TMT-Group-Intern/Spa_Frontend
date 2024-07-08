@@ -74,9 +74,8 @@ export class HomeComponent implements OnInit {
       );
 
       this.inSession = this.appointmentList.filter((appointment: any) =>
-        appointment.Status === "Đang chuẩn bị" ||
-        appointment.Status === "Đang thực hiện" ||
-        appointment.Status === "Hoàn thành"
+        appointment.Status === "Treatment" || appointment.Status === "Completed"
+
       );
     });
   }
