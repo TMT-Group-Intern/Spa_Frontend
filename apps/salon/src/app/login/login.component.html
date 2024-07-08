@@ -8,31 +8,29 @@
     <!-- Form đăng nhập -->
 
     <div class="w-full bg-white p-4 rounded max-w-prose">
-      <!-- <div class="flex justify-center mb-6">
-        <img class="object-center md:object-top" style="width: 25%;" src="../../assets/img/logo2.png" alt="Logo Spa" >
-      </div> -->
-      <div class="text-heading-3 mb-6 text-center font-semibold sign-in-font-login " style="font-size: x-large; color: #1b7c20;">Sign in</div>
+      <div class="text-heading-3 mb-6 text-center font-semibold sign-in-font-login " style="font-size: x-large; color: #1b7c20;">Đăng nhập</div>
         <form [formGroup]="loginForm">
-        <tds-label><span style="color: rgb(53, 53, 53);">Email</span></tds-label>
+        <tds-label><span style="color: rgb(53, 53, 53);">Tài khoản</span></tds-label>
         <tds-form-field class="w-full mt-2 mb-6">
           <input tdsInput autocomplete="off" type="email" placeholder="abc@example.com"
           formControlName="taiKhoan" [required]='true' />
-          <tds-error>Please enter your phone number</tds-error>
+          <tds-error>Vui lòng nhập tài khoản</tds-error>
         </tds-form-field>
 
-        <tds-label><span style="color: rgb(53, 53, 53);">Password</span></tds-label>
+        <tds-label><span style="color: rgb(53, 53, 53);">Mật khẩu</span></tds-label>
         <tds-form-field class="w-full mt-2">
           <input tdsInput placeholder="Password" type="password" autocomplete="new-password"
             formControlName="matKhau" [required]='true' />
-          <tds-error>Please enter your password</tds-error>
+          <tds-error>Vui lòng nhập mật khẩu</tds-error>
         </tds-form-field>
 
-        <tds-checkbox class="mt-6 mb-6" [checked]="false"><span style="color: rgb(53, 53, 53);">Remmember password</span></tds-checkbox>
+        <tds-checkbox class="mt-6 mb-6" [checked]="false"><span style="color: rgb(53, 53, 53);">Nhớ mật khẩu</span></tds-checkbox>
         <div class="w-full flex flex-col justify-center mt-8">
           <button class="sign-in-font-button-login" size="lg" tds-button type="submit" (click)="onLogin()" [disabled]="!loginForm.valid"
-            style="background-color:#1b7c20;">Sign in</button>
+            style="background-color:#1b7c20;">Đăng nhập</button>
         </div>
       </form>
+      <div class="text-center text-red-500 mt-4" *ngIf="errorMessage">{{ errorMessage }}</div>
     </div>
   </div>
 </div>

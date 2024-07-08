@@ -51,9 +51,13 @@ persondisplayWith!: FormControl;
     }
     onLogOut(){
       //const token = localStorage.getItem('userToken')
-      localStorage.removeItem('userToken');
+      //localStorage.removeItem('userToken');
+      deleteCookie('userCookie')
       this.router.navigate(['']);
     };
+}
+function deleteCookie(cookieName:any) {
+  document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 
 
