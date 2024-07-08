@@ -62,7 +62,7 @@ export class AuthService {
     return this.http.post<{status: object}>(this.baseUrl + 'Authentication/CreateUserForEmployee', body, { headers });
   }
   editUser(email: string, val: any) {
-    return this.http.put(this.baseUrl + 'User/updateUser' + email, val);
+    return this.http.put(this.baseUrl + 'User/updateUser?email='+email, val);
   }
   getAdminByEmail(email:string): Observable<any[]>{
     return this.http.get<any>(this.baseUrl + 'User/getUserByAdmin?email=' + email)

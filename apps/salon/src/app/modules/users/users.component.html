@@ -1,6 +1,6 @@
 <div class=" flex flex-col h-full">
   <div class="flex justify-end mt-2">
-  <div class="flex w-1/2 flex-col gap-2 pl-4">
+  <div class="flex w-1/6 mr-4 flex-col gap-2 pl-4">
     <tds-cascader [tdsOptions]="tdsOptions" [(ngModel)]="values"  (ngModelChange)="onChanges($event)"></tds-cascader>
 </div>
     <button tds-button-icon (click)="createUser()" class="rounded-full mr-8 bg-green-1" color="warning" tds-tooltip
@@ -40,7 +40,7 @@
         <i class="tdsi-plus-fill"></i>
       </button>
         <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-secondary-1"
-          (click)="onEditUser(dataRow.Email,dataRow.Role)">
+          (click)="onEditUser(dataRow.Email,dataRow.Role,dataRow.isActive)">
           <i class="tdsi-edit-fill"></i>
         </button>
         <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-red-500"
