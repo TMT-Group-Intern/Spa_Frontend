@@ -12,12 +12,14 @@ import { CustomerDetailComponent } from './modules/customer-list/customer-detail
 import { TechnicalStaffComponent } from './modules/technical-staff/technical-staff.component';
 import { TreatmentDetailComponent } from './modules/technical-staff/treatment-detail/treatment-detail.component';
 import { DoctorComponent } from './modules/doctor/doctor.component';
+import { AuthGuardService } from './auth/auth-guard.service';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
+  //{ path: 'protected', canActivate: [AuthGuardService], component:  UsersComponent},
   {
     path: '',
-    component: LayoutComponent,
+    component: LayoutComponent,canActivate: [AuthGuardService],
     children: [
       { path: 'home', loadComponent: () => HomeComponent },
       { path: 'products', loadComponent: () => ProductsComponent },

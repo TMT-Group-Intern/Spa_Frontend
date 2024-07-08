@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -62,7 +60,7 @@ export class AuthService {
     return this.http.post<{ status: object }>(this.baseUrl + 'Authentication/CreateUserForEmployee', body, { headers });
   }
   editUser(email: string, val: any) {
-    return this.http.put(this.baseUrl + 'User/updateUser' + email, val);
+    return this.http.put(this.baseUrl + 'User/updateUser?email='+email, val);
   }
   getAdminByEmail(email: string): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/getUserByAdmin?email=' + email)
@@ -76,7 +74,7 @@ export class AuthService {
   }
 
   // Get Customer by ID
-  getCustomer(id: number): Observable<any[]> {
+  getCustomer(id: any): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Customers/' + id);
   }
 
@@ -136,8 +134,8 @@ export class AuthService {
   }
 
   //
-  updateAppointmentWithService(id: number, status: any, val: any) {
-    return this.http.put(this.baseUrl + 'Appointment/api/UpdateAppointmentWithService/' + id + '/' + status, val);
+  updateAppointmentWithService(id: number, body:any) {
+    return this.http.put(this.baseUrl + 'Appointment/api/UpdateAppointmentWithService/' + id, body);
   }
 
   // Get Appointment by ID

@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, inject, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  inject,
+  ViewEncapsulation,
+} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../shared.service';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
@@ -7,6 +13,7 @@ import { TDSTimePickerModule } from 'tds-ui/time-picker';
 import { TDSHeaderModule } from 'tds-ui/header';
 import { TDSCardModule } from 'tds-ui/card';
 import { TDSImageModule } from 'tds-ui/image';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'frontend-user-profile',
@@ -20,24 +27,21 @@ import { TDSImageModule } from 'tds-ui/image';
     TDSTimePickerModule,
     TDSHeaderModule,
     TDSCardModule,
-    TDSImageModule
+    TDSImageModule,
   ],
 })
 export class UserProfileComponent implements OnInit {
   @Input() customerId?: number;
-  private readonly shared = inject(AuthService)
+  private readonly shared = inject(AuthService);
   serviceHistory: any;
-  fallback = "./assets/img/default.svg";
+  fallback = './assets/img/default.svg';
 
   ngOnInit(): void {
-    console.log(this.customerId)
     if (this.customerId) {
-
       this.shared.getHistoryCustomer(this.customerId).subscribe((data: any) => {
         this.serviceHistory = data.listHistoryForCus;
         console.log(this.serviceHistory);
-      }
-      )
+      });
     }
   }
 }
