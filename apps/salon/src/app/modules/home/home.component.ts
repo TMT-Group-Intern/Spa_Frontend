@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit {
 
   // Display Appointment List
   initAppointmentList() {
-    this.sharedService.appointmentList(1).subscribe((data:any) => {
+    this.sharedService.appointmentList(1).subscribe((data: any) => {
       this.appointmentList = data;
       this.todayBooking = this.appointmentList.filter((appointment: any) =>
         appointment.Status === "Hẹn" ||
@@ -74,7 +74,7 @@ export class HomeComponent implements OnInit {
       );
 
       this.inSession = this.appointmentList.filter((appointment: any) =>
-        appointment.Status === "Treatment" || appointment.Status === "Completed"
+        appointment.Status === "Đã khám" || appointment.Status === "Hoàn thành"
 
       );
     });
