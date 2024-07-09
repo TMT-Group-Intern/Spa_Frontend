@@ -22,7 +22,7 @@ export class AuthGuardService implements CanActivate {
       //localStorage.getItem('userToken')
       getCookie('userCookie')
     ) {
-      console.log(getCookie('userCookie'))
+      //console.log(getCookie('userCookie'))
       return true;
     } else {
       // Chuyển hướng người dùng đến trang đăng nhập

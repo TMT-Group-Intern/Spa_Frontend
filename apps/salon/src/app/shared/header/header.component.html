@@ -1,13 +1,7 @@
 <tds-header [tdsTheme]="'light'" urlAvatar="https://randomuser.me/api/portraits/women/68.jpg"
   class="flex w-full rounded-bl-lg">
+ 
   <div class="inline-flex tds-header-toolbar-right items-center">
-    <!-- <button tds-button-icon color="primary" (click)="showModal()" routerLinkActive="router-link-active" tds-tooltip
-      tooltipTitle="Thêm tài khoản" class="rounded-full mr-2 bg-green-1">
-      <span class="flex items-center">
-        <i class="tdsi-plus-fill text-white"></i>
-      </span>
-    </button> -->
-
     <button tds-button-flat-icon color="red" class="rounded-full" tds-tooltip
         tooltipTitle="Log out" (click)="onLogOut()">
           <i class="tdsi-log-out-line text-primary-1"></i>
@@ -27,17 +21,24 @@
         <i class="tdsi-full-screen-line"></i>
       </span>
     </button>
-  </div>
-  <tds-form-field class="w-full" tdsClass="dark:!border-transpanent">
-    <input tdsInput class="text-d-neutral-1-600" placeholder="search.." autocomplete="off" />
-    <span tdsPrefix class="bg-transparent"><i class="text-d-neutral-1-600 tdsi-search-fill"></i></span>
-  </tds-form-field>
-  <tds-select class='w-40' classIcon="tdsi-arrow-down-fill text-d-neutral-1-300" [border]='false' valueField="id"
+    <tds-select class='w-40' classIcon="tdsi-arrow-down-fill text-d-neutral-1-300" [border]='false' valueField="id"
     textField="name" [data]="contactOptions" [(ngModel)]="contact">
     <ng-template tds-label-tmp let-item="item">
       <span class="text-d-neutral-1-300">{{item.data.name}}</span>
     </ng-template>
   </tds-select>
+    <div class="flex">
+      <span class="flex items-center">
+        <h3 class="tdsi-full-screen-line">{{this.userSession.user.name}}!</h3>
+      </span>
+    </div>
+  </div>
+  <tds-form-field class="w-full" tdsClass="dark:!border-transpanent">
+    <input tdsInput class="text-d-neutral-1-600" placeholder="search.." autocomplete="off" />
+    <span tdsPrefix class="bg-transparent"><i class="text-d-neutral-1-600 tdsi-search-fill"></i></span>
+  </tds-form-field>
+ 
+
 </tds-header>
 
 
