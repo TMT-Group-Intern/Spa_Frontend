@@ -1,7 +1,12 @@
 <div [style.width.px]="!isCollapsed ? 260 : 50" class="h-full">
-  <tds-menu class="h-full" [data]="lstMenu" [inlineCollapsed]="isCollapsed" [showLogo]="true"
-    (onOpenChange)="onOpenChange($event)">
-    <img src="assets/images/tpos-text-02.svg" logo-text class="h-10">
-    <img src="assets/images/tpos-icon.svg" logo class="h-10">
+  <tds-menu
+    class="h-full"
+    [data]="lstMenu"
+    [inlineCollapsed]="isCollapsed"
+    [showLogo]="true"
+    (onOpenChange)="onOpenChange($event)"
+  >
+    <img src="../../assets/img/imgspa.jpg" logo-text class="h-10" />
+    <img src="../../assets/img/imgspa.jpg" logo class="h-7" />
   </tds-menu>
 </div>
