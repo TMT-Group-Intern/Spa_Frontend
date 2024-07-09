@@ -116,7 +116,7 @@ export class AppointmentModalComponent implements OnInit {
     }
 
     // Get Doctor
-    this.shared.getEmployee(1, 2).subscribe(
+    this.shared.getEmployee(2, 2).subscribe(
       (data: any[]) => {
         this.doctorOptions = [...data.map(item => ({
           id: item.employeeID,
