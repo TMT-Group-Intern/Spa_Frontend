@@ -170,11 +170,6 @@ export class AuthService {
     return this.http.get<any[]>('https://localhost:44305/GetAppointmentByStatus?idBrand=' + branchID + '&status=' + status);
   }
 
-  //
-  getAppointmentById(id: number) {
-    return this.http.get(this.baseUrl + 'Appointment/' + id);
-  }
-
   // Assign Spa Therapist
   assignSpaTherapist(appointment: any, empID: any, val: any) {
     return this.http.put(this.baseUrl + 'Appointment/assigntechnicalstaff?idApp=' + appointment + '&idEmploy=' + empID, val);

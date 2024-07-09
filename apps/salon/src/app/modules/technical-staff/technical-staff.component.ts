@@ -39,7 +39,7 @@ export class TechnicalStaffComponent {
 
   renderCustomerInQueue() {
     this.auth
-      .getCustomerInQueueForTechnicalStaff(1, 'Treatment')
+      .getCustomerInQueueForTechnicalStaff(1, 'Đang thực hiện')
       .subscribe((x: any[]) => {
         this.listSpaServiceQueue = x;
         console.log(this.listSpaServiceQueue);
@@ -73,7 +73,7 @@ export class TechnicalStaffComponent {
       complete: () => console.log('Observer got a complete notification'),
     };
 
-    this.auth.getAppointmentById(data.AppointmentID).subscribe(observer);
+    this.auth.getAppointment(data.AppointmentID).subscribe(observer);
   }
 
   uploadImage(id: number) {
