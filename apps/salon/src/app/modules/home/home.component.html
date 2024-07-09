@@ -12,7 +12,6 @@
         tds-tooltip
         tooltipTitle="New Appointment"
       >
-
         <span class="flex items-center">
           <i class="tdsi-plus-fill"></i>
         </span>
@@ -59,13 +58,11 @@
           </div>
         </tds-card-header>
         <tds-card-content class="">
-
           <!-- <p><i class="tdsi-earpiece-fill text-green-success-300"></i> {{appoint.AppointmentID | tdsMapper: returnDoctor}}</p> -->
           <p>
             <i class="tdsi-earpiece-fill text-green-success-400"></i>
             {{ appoint.Doctor }}
           </p>
-
 
           <div class="flex justify-between">
             <p>
@@ -81,7 +78,6 @@
         <hr />
         <tds-card-actions>
           <div class="flex justify-end">
-
             <button
               tds-button-icon
               color="secondary"
@@ -99,7 +95,6 @@
               (click)="chooseDoctor(appoint.AppointmentID, 'Chờ khám')"
               class="ml-3"
             >
-
               <i class="tdsi-receive-fill"></i>
             </button>
           </div>
@@ -137,7 +132,6 @@
           <tds-card-content>
             <div class="flex justify-between">
               <div>
-
                 <p>
                   <i class="tdsi-earpiece-fill text-green-success-400"></i>
                   {{ appoint.Doctor }}
@@ -151,7 +145,6 @@
                 <tds-tag status="custom" class="bg-base-yellow-500">{{
                   appoint.Status
                 }}</tds-tag>
-
               </div>
             </div>
           </tds-card-content>
@@ -199,15 +192,14 @@
           <div class="grid grid-cols-3 flex-wrap">
             <!-- Card content -->
             <tds-card-content class="col-span-2">
-
               <p>
-                <i class="tdsi-auto-fix-fill text-green-success-400"></i>
-                {{ appoint.SpaTherapist }}
+                <i class="tdsi-auto-fix-fill text-green-success-300"></i>
+                {{ appoint.TeachnicalStaff }}
+
               </p>
               <p>
                 <i class="tdsi-time-fill text-green-success-400"></i>
                 {{ appoint.AppointmentDate | date : 'HH:mm' }}
-
               </p>
             </tds-card-content>
             <!-- Card button -->
@@ -229,7 +221,7 @@
           <tds-card-actions class="col-span-1">
             <div class="flex justify-center">
               <button
-                [disabled]="appoint?.Status === 'Treatment'"
+                [disabled]="appoint?.Status !== 'Hoàn thành'"
                 tds-button
                 color="success"
                 (click)="onEditPayment(appoint.AppointmentID)"
