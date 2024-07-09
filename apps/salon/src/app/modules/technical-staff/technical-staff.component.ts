@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TDSTableModule } from 'tds-ui/table';
 import { AuthService } from '../../shared.service';
 import { RouterLink } from '@angular/router';
@@ -8,17 +8,20 @@ import { TDSModalService } from 'tds-ui/modal';
 import { TreatmentDetailComponent } from './treatment-detail/treatment-detail.component';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
+import { TDSFormFieldModule } from 'tds-ui/form-field';
+import { TDSSelectModule } from 'tds-ui/select';
 
 @Component({
   selector: 'frontend-technical-staff',
   templateUrl: './technical-staff.component.html',
   styleUrls: ['./technical-staff.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TDSTableModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, TDSTableModule, RouterLink, TDSFormFieldModule, TDSSelectModule],
 })
 export class TechnicalStaffComponent {
   private readonly modalSvc = inject(TDSModalService)
   listSpaServiceQueue: any[] = [];
+  listWait: any[] = [];
   customerDetail?: any = [] || null;
   appointmentAllInfo: any | null = null;
   private readonly tModalSvc = inject(TDSModalService);
@@ -27,6 +30,11 @@ export class TechnicalStaffComponent {
   dataTemp: any;
   urls = [];
   checkActive?: boolean = false;
+  public statusOptions = [
+    'Hẹn',
+    'Hủy hẹn',
+  ]
+  status!: FormControl;
 
 
   timer = false;
@@ -51,11 +59,20 @@ export class TechnicalStaffComponent {
 
   renderCustomerInQueue() {
     this.auth
-      .getCustomerInQueueForTechnicalStaff(1, 'Đã khám')
+      .getCustomerInQueueForTechnicalStaff(1, 'Đang làm')
       .subscribe((x: any[]) => {
         this.listSpaServiceQueue = x;
-        console.log(this.listSpaServiceQueue);
+        this.auth
+          .getCustomerInQueueForTechnicalStaff(1, 'Chờ làm')
+          .subscribe((x: any[]) => {
+            this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...x];
+          });
       });
+
+
+
+    console.log(this.listSpaServiceQueue);
+
   }
 
   renderCustomerDetail(data: any) {
@@ -191,19 +208,23 @@ export class TechnicalStaffComponent {
 
   onStatusChange(event: any, id: number) {
     const status = event.target.value;
-    this.onDelete(id);
+    if (status === 'Hoàn thành') {
+      this.onDelete(id);
+      this.checkActive = false;
+    }
     this.updateStatus(id, status);
   }
 
   updateStatus(id: number, status: string) {
     this.auth.UpdateStatus(id, status).subscribe(
       () => {
+        this.listSpaServiceQueue = [];
         this.renderCustomerInQueue();
-        this.checkActive = false;
       },
       (error) => {
         console.error('Error updating status:', error);
         // Handle error (if needed)
+        this.renderCustomerInQueue();
       }
     );
   }

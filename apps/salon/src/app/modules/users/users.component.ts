@@ -19,17 +19,17 @@ import * as moment from 'moment';
 const roleOptions = [
   {
     value: 'All',
-    label: 'All',
+    label: 'Tất cả',
     isLeaf: true
 },
   {
       value: 'Admin',
-      label: 'Admin',
+      label: 'Quản lý',
       isLeaf: true
   },
   {
       value: 'Employee',
-      label: 'Employee',
+      label: 'Nhân viên',
       isLeaf: true
   }
 ];
@@ -60,6 +60,7 @@ export class UsersComponent implements OnInit{
   private readonly tModalSvc =inject(TDSModalService)
   UserList:any[] = [];
   selectedUserType = this.values.toString();
+  userSession:any;
 
   constructor(
     private auth : AuthService,
@@ -70,6 +71,10 @@ export class UsersComponent implements OnInit{
 }
   ngOnInit(): void {
     this.initUserList();
+    const storedUserSession = localStorage.getItem('userSession');
+    if (storedUserSession !== null) {
+      this.userSession = JSON.parse(storedUserSession);
+    }
   }
   
   initUserList() {  
@@ -79,18 +84,16 @@ export class UsersComponent implements OnInit{
         this.UserList
       }
       else if (this.selectedUserType === 'Admin') {        
-        this.UserList = this.UserList.filter(user => user.Role === 'Admin');
+        this.UserList = this.UserList.filter(user => user.Role === 'Quản lý');
       } else if (this.selectedUserType === 'Employee') {
-        this.UserList = this.UserList.filter(user => user.Role !== 'Admin');
+        this.UserList = this.UserList.filter(user => user.Role !== 'Quản lý');
       }
     });
   }
-
   // Format Date & Time
   formatDate(date: string, format: string): string {
     return moment(date).format(format);
   }
-
 
   createUser(){
     const modal = this.tModalSvc.create({
@@ -101,10 +104,8 @@ export class UsersComponent implements OnInit{
     });
     modal.afterClose.asObservable().pipe(tap(()=>  this.initUserList())).subscribe
     ();
-
   }
   createAccountForEmployee(Email:string){
-    console.log(Email)
     const modal = this.tModalSvc.confirm({
       title:'Tạo tài khoản cho nhân viên',
       content: `<h5 class="text-success-500">Bạn có chắc chắn muốn tạo tài khoản cho <strong>${ Email }</strong> không?</h5>`,
@@ -117,10 +118,8 @@ export class UsersComponent implements OnInit{
     modal.afterClose.asObservable().pipe(
       filter(condition => condition),
       concatMap(_=> this.auth.createAccountForEmployee(Email))
-      //tap(()=>  this.initUserList())
     ).subscribe((result)=>{
       if (result.status.toString() == 'Create Success!') { 
-        console.log(result.status)
         const modal = this.tModalSvc.success({
          title:'Thành công',
          content: `<h5 class="text-success-500">Tạo tài khoản <strong>${ Email }</strong> thành công! Tài khoản có mật khẩu là Spa@12345.</h5>`,
@@ -135,7 +134,6 @@ export class UsersComponent implements OnInit{
        ();
      }
      else{
-       console.log(result.status)
         const modal = this.tModalSvc.error({
          title:'Thất bại',
          content: `<h5 class="text-error-500">Tạo tài khoản <strong>${ Email }</strong> thất bại! Tài khoản đã tồn tại hoặc đã xảy ra lỗi!</h5>`,
@@ -163,7 +161,6 @@ export class UsersComponent implements OnInit{
     modal.afterClose.asObservable().pipe(tap(()=>  this.initUserList())).subscribe()
   }
   deleteUser(email:string){
-    console.log(email)
     const modal = this.tModalSvc.error({
       title:'Xóa tài khoản',
       content: `<h5 class="text-error-500">Bạn có chắc chắn muốn xóa tài khoản <strong>${ email }</strong> không?</h5>`,

@@ -1,5 +1,5 @@
 //import { ModalRegisterComponent } from './../modal-register/modal-register.component';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSHeaderModule } from 'tds-ui/header';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
@@ -30,8 +30,10 @@ import { AuthService } from '../../shared.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent  {
+export class HeaderComponent  implements OnInit{
   public contact = 1;
+  userSession:any;
+  
 
   readonly contactOptions = [ { id: 1, name: ' Elton John ' },
     { id: 2, name: 'Elvis Presley' },
@@ -40,9 +42,15 @@ export class HeaderComponent  {
     { id: 5, name: 'Elvis Presley' },
     { id: 6, name: 'Paul McCartney' }]
 
-signUpForm!: FormGroup;
-persondisplayWith!: FormControl;
+  signUpForm!: FormGroup;
+  persondisplayWith!: FormControl;
 
+  ngOnInit() {
+  const storedUserSession = localStorage.getItem('userSession');
+  if (storedUserSession !== null) {
+    this.userSession = JSON.parse(storedUserSession);
+  }
+    }
     constructor(
         private fb: FormBuilder,
         private modalSvc:TDSModalService,
@@ -50,8 +58,7 @@ persondisplayWith!: FormControl;
     ) {
     }
     onLogOut(){
-      //const token = localStorage.getItem('userToken')
-      //localStorage.removeItem('userToken');
+      localStorage.removeItem('userSession');
       deleteCookie('userCookie')
       this.router.navigate(['']);
     };

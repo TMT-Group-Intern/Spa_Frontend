@@ -1,5 +1,5 @@
-<div class="flex flex-row bg-gray-200 h-full">
-  <div class="basis-1/4 border p-4 rounded-10 bg-white left-content">
+<div class="grid grid-cols-12 gap-2 bg-gray-200 h-full">
+  <div class="col-span-3 border p-4 rounded-10 bg-white left-content">
     <tds-table
       class="table-vertical-line table-cus"
       [listData]="listSpaServiceQueue"
@@ -19,13 +19,33 @@
         >
           <td>{{ data.Customer.FirstName + ' ' + data.Customer.LastName }}</td>
           <td>
+            <!-- <tds-form-field class="col-span-2">
+              <tds-select
+                valueField="id"
+                textField="name"
+                placeholder="---"
+                [data]="statusOptions"
+                [formControl]="status"
+              >
+              </tds-select>
+            </tds-form-field> -->
             <select
               name="status"
               class=""
               (change)="onStatusChange($event, data.AppointmentID)"
             >
-              <option value="In_progress">Đang tiến hành</option>
-              <option value="Hoàn thành">Hoàn thành</option>
+              <option [selected]="data.Status === 'Chờ làm'" value="Chờ làm">
+                Chờ làm
+              </option>
+              <option [selected]="data.Status === 'Đang làm'" value="Đang làm">
+                Đang làm
+              </option>
+              <option
+                [selected]="data.Status === 'Hoàn thành'"
+                value="Hoàn thành"
+              >
+                Hoàn thành
+              </option>
             </select>
           </td>
         </tr>
@@ -35,7 +55,7 @@
   </div>
   <!-- //////////bên phải /////////// -->
   <div
-    class="basis-3/4 border p-4 rounded-10 bg-white ml-4"
+    class="col-span-9 border p-4 rounded-10 bg-white"
     *ngIf="appointmentAllInfo !== null && checkActive === true; else elseBlock"
   >
     <div class="flex flex-row">
@@ -175,8 +195,11 @@
       </button>
     </div>
   </div>
-  <ng-template #elseBlock class="basis-3/4 border p-4 rounded-10 bg-white ml-4">
-    <div class="w-full flex items-center justify-center">
+  <ng-template
+    #elseBlock
+    class="col-span-9 border p-4 rounded-10 bg-white ml-4"
+  >
+    <div class="col-span-9 w-full flex items-center justify-center">
       <p class="text-2xl">Vui lòng chọn khách hàng để khám</p>
     </div>
   </ng-template>
