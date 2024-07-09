@@ -85,7 +85,7 @@ export class TechnicalStaffComponent {
       complete: () => console.log('Observer got a complete notification'),
     };
 
-    this.auth.getAppointmentById(data.AppointmentID).subscribe(observer);
+    this.auth.getAppointment(data.AppointmentID).subscribe(observer);
   }
 
   uploadImage(id: number) {
