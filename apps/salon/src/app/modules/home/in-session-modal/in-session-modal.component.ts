@@ -32,7 +32,9 @@ export class InSessionModalComponent implements OnInit {
   private readonly modalRef = inject(TDSModalRef);
   public spaTherapistOptions: any[] = []
   public statusOptions = [
-    'Treatment',
+    'Đang chuẩn bị',
+    'Đang thực hiện',
+    'Hoàn thành',
   ]
   createAppointmentForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
@@ -40,7 +42,7 @@ export class InSessionModalComponent implements OnInit {
     name: [''],
     assignments: [],
     spaTherapist: [0],
-    status: ['Treatment'],
+    status: ['Đang chuẩn bị'],
   });
 
   constructor(
