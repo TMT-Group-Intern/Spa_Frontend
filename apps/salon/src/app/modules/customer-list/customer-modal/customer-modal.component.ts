@@ -13,7 +13,7 @@ import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSDatePickerModule } from 'tds-ui/date-picker';
 import { CustomerListComponent } from '../customer-list.component';
 import { AuthService } from '../../../shared.service';
-import { catchError, of } from 'rxjs';
+import { BehaviorSubject, catchError, debounceTime, filter, of, switchMap, tap } from 'rxjs';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSSelectModule } from 'tds-ui/select';
@@ -40,11 +40,15 @@ import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
   styleUrls: ['./customer-modal.component.scss'],
 })
 export class CustomerModalComponent implements OnInit {
+  searchPhone$ = new BehaviorSubject<string>('')
   private readonly modalRef = inject(TDSModalRef);
   private readonly modalService = inject(TDSModalService);
   @Input() id?: number;
   @Input() phoneNum?: string;
   createCustomerForm!: FormGroup;
+  dataCustomer: any;
+  today = startOfToday();
+  checkPhone?:boolean = false
   form = inject(FormBuilder).nonNullable.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
@@ -53,7 +57,6 @@ export class CustomerModalComponent implements OnInit {
     dateOfBirth: [''],
     gender: ['Male'],
   });
-  today = startOfToday();
 
   constructor(
     private auth: AuthService,
@@ -61,14 +64,8 @@ export class CustomerModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.checkNumberPhone()
     console.log(this.id);
-
-    if (this.phoneNum) {
-      this.form.patchValue({
-        phone: this.phoneNum,
-      });
-    }
-
     if (this.id) {
       this.auth.getCustomer(this.id).subscribe((data: any) => {
         const { firstName, lastName, email, phone, dateOfBirth, gender } = data.customerDTO;
@@ -83,6 +80,25 @@ export class CustomerModalComponent implements OnInit {
         console.log(this.form.value);
       });
     }
+  }
+
+  checkNumberPhone(){
+    this.form.get("phone")?.valueChanges.pipe(
+      debounceTime(500),
+      filter((phone) =>(phone !== null && phone.length == 10)),
+      switchMap((search: string) => {
+        return search ? this.auth.searchCustomer(search) : of(null)
+      })
+    ).subscribe((data:any) => {
+      if (data.customers.phone !== null && data.customers.length > 0){
+        this.checkPhone = true;
+      }else{
+        this.checkPhone = false;
+      }
+      console.log(this.checkPhone)
+      console.log(data.customers)
+
+    })
   }
 
   // Disabled Date in the future
