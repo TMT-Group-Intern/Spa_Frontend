@@ -169,6 +169,8 @@ export class AuthService {
   getCustomerInQueueForTechnicalStaff(branchID: number, status: string): Observable<any[]> {
     return this.http.get<any[]>('https://localhost:44305/GetAppointmentByStatus?idBrand=' + branchID + '&status=' + status);
   }
+
+  //
   getAppointmentById(id: number) {
     return this.http.get(this.baseUrl + 'Appointment/' + id);
   }

@@ -30,13 +30,14 @@
   <!-- Status -->
   <tds-label>Status</tds-label>
   <tds-form-field class="my-2">
-    <input
-      tdsInput
-      autocomplete="off"
+    <tds-select
+      valueField="id"
+      textField="name"
+      placeholder="---"
+      [data]="statusOptions"
       formControlName="status"
-      class="appearance-none w-full"
-      type="text"
-    />
+    >
+    </tds-select>
   </tds-form-field>
 </form>
 
