@@ -22,7 +22,7 @@ import { TDSTimePickerModule } from 'tds-ui/time-picker';
 import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
 import { format } from 'date-fns';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
-import { BehaviorSubject, debounceTime, of, switchMap } from 'rxjs';
+import { BehaviorSubject, debounceTime, of, switchMap, Observable, observable, filter } from 'rxjs';
 
 @Component({
   selector: 'frontend-appointment-modal',
@@ -109,7 +109,6 @@ export class AppointmentModalComponent implements OnInit {
               doctor: data.Assignments[0].EmployerID,
             });
           }
-          console.log(this.form.value)
         });
 
     }
@@ -200,23 +199,20 @@ export class AppointmentModalComponent implements OnInit {
   }
 
   // Open Create Customer Modal
-  createCustomer(phoneNum: any) {
+  createCustomer() {
     const modal = this.tModalSvc.create({
       title: 'Tạo khách hàng',
       content: CustomerModalComponent,
       footer: null,
       size: 'lg',
-      componentParams: {
-        phoneNum,
-      },
     });
-    modal.afterClose.asObservable().subscribe((res1) => {
-      if (res1) {
-        this.shared.searchCustomer(res1.phone).subscribe(
-          (res2: any) => {
+    modal.afterClose.asObservable().subscribe((res) => {
+      if (res) {
+        this.shared.searchCustomer(res.phone).subscribe(
+          (_res: any) => {
             this.form.patchValue({
-              name: res1.firstName + ' ' + res1.lastName,
-              customerID: res2.customers[0].customerID,
+              name: res.firstName + ' ' + res.lastName,
+              customerID: _res.customers[0].customerID,
             });
           }
         )

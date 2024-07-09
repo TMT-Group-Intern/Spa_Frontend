@@ -101,14 +101,14 @@ export class ModalServiceComponent implements OnInit {
   // Success Notification
   createNotificationSuccess(content: any): void {
     this.notification.success(
-      'Succesfully', content
+      'Thành công', content
     );
   }
 
   // Error Notification
   createNotificationError(content: any): void {
     this.notification.error(
-      'Error', content
+      'Lỗi. Vui lòng kiểm tra!', content
     );
   }
 

@@ -28,7 +28,7 @@
             </tds-error>
           </tds-form-field>
           <!-- New Customer -->
-          <button tds-button-icon color="success" (click)="createCustomer(form.value.phone)"
+          <button tds-button-icon color="success" (click)="createCustomer()"
             tds-tooltip="Thêm khách hàng">
             <i class="tdsi-plus-fill"></i>
           </button>
@@ -84,7 +84,7 @@
 
       <!-- Status -->
       <div class="grid grid-cols-3 gap-1 my-2">
-        <tds-label [tdsRequired]="true">Trạng thái</tds-label>
+        <tds-label>Trạng thái</tds-label>
         <tds-form-field class="col-span-2">
           <tds-select placeholder='---' [data]="statusOptions" formControlName="status">
           </tds-select>

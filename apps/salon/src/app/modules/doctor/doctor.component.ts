@@ -43,7 +43,12 @@ import { TDSInputModule } from 'tds-ui/tds-input';
   ],
 })
 export class DoctorComponent implements OnInit {
-  public statusOptions = ['Chờ khám', 'Đang khám', 'Đang chuẩn bị'];
+  public statusOptions = [
+    'Chờ khám',
+    'Đang khám',
+    'Đã khám',
+    'Không sử dụng dịch vụ',
+  ];
   @Input() id?: number;
   private readonly notification = inject(TDSNotificationService);
   private readonly sharedService = inject(AuthService);
@@ -144,12 +149,13 @@ export class DoctorComponent implements OnInit {
     Notes: any
   ) {
     this.sharedService
-      .updateAppointmentWithService(id, {ListServiceID, Status, Notes })
+      .updateAppointmentWithService(id, { ListServiceID, Status, Notes })
       .subscribe({
         next: (data) => {
           this.createNotificationSuccess('');
           this.initAppointmentList();
-          if (Status === 'Đang chuẩn bị') this.active = false;
+          if (Status === 'Đã khám' || Status === 'Không sử dụng dịch vụ')
+            this.active = false;
         },
         error: (res) => {
           this.createNotificationError(res.error.message);
@@ -158,11 +164,11 @@ export class DoctorComponent implements OnInit {
   }
   // Success Notification
   createNotificationSuccess(content: any): void {
-    this.notification.success('Succesfully', content);
+    this.notification.success('Thành công', content);
   }
 
   // Error Notification
   createNotificationError(content: any): void {
-    this.notification.error('Error', content);
+    this.notification.error('Lỗi. Vui lòng kiểm tra!', content);
   }
 }

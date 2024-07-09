@@ -9,9 +9,8 @@
     </button>
   </div>
 
-  <div [style.width.%]="100" class="flex h-screen overflow-x-auto items-center">
-    <tds-data-table class="p-2" [tdsData]="ServiceList" [tdsShowSizeChanger]="true"
-      [tdsPageSize]="10" [tdsBordered]="true">
+  <div [style.width.%]="100" class="flex h-screen overflow-x-auto items-center ">
+    <tds-data-table [tdsData]="ServiceList" [tdsShowSizeChanger]="true" [tdsPageSize]="10">
       <tds-data-table-column [tdsField]="'serviceCode'" [tdsTitle]="'Mã số'" tdsWidth="10%" [tdsLeft]="true">
       </tds-data-table-column>
 
@@ -21,8 +20,7 @@
       <tds-data-table-column [tdsField]="'price'" [tdsTitle]="'Giá'" tdsWidth="20%" [tdsDataType]="'numeric'"
         [tdsFormat]="{ thousandSeparator: ',' }">
       </tds-data-table-column>
-      <tds-data-table-column [tdsField]="'description'" [tdsTitle]="'Mô tả'" [tdsDataType]="'text'"
-        tdsWidth="40%">
+      <tds-data-table-column [tdsField]="'description'" [tdsTitle]="'Mô tả'" [tdsDataType]="'text'" tdsWidth="40%">
       </tds-data-table-column>
 
       <tds-data-table-column [tdsContent]="commandTpl" tdsWidth="10%" [tdsColumnType]="'command'">
