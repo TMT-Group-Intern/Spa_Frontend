@@ -20,7 +20,6 @@ import { InvoiceService } from '../invoice/invoice.service';
 import { error } from 'console';
 import { TDSMapperPipeModule } from 'tds-ui/cdk/pipes/mapper';
 
-
 @Component({
   selector: 'frontend-home',
   standalone: true,
@@ -38,16 +37,14 @@ import { TDSMapperPipeModule } from 'tds-ui/cdk/pipes/mapper';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-
 export class HomeComponent implements OnInit {
-
-  private readonly tModalSvc = inject(TDSModalService)
+  private readonly tModalSvc = inject(TDSModalService);
   appointmentList: any[] = [];
   time: any;
   todayBooking: any[] = [];
   reception: any[] = [];
   inSession: any[] = [];
-  status: any
+  status: any;
 
   constructor(
     private sharedService: AuthService,
@@ -61,18 +58,18 @@ export class HomeComponent implements OnInit {
 
   // Display Appointment List
   initAppointmentList() {
-    this.sharedService.appointmentList(1).subscribe((data:any) => {
+    this.sharedService.appointmentList(1).subscribe((data: any) => {
       this.appointmentList = data;
-      this.todayBooking = this.appointmentList.filter((appointment: any) =>
-        appointment.Status === "Hẹn" ||
-        appointment.Status === "Hủy hẹn"
+      this.todayBooking = this.appointmentList.filter(
+        (appointment: any) =>
+          appointment.Status === 'Hẹn' || appointment.Status === 'Hủy hẹn'
       );
 
-      this.reception = this.appointmentList.filter((appointment: any) =>
-        appointment.Status === "Chờ khám" ||
-        appointment.Status === "Đang khám"
+      this.reception = this.appointmentList.filter(
+        (appointment: any) =>
+          appointment.Status === 'Chờ khám' ||
+          appointment.Status === 'Đang khám'
       );
-
       this.inSession = this.appointmentList.filter((appointment: any) =>
         appointment.Status === "Đã khám" ||
         appointment.Status === "Không sử dụng dịch vụ" ||
@@ -93,13 +90,13 @@ export class HomeComponent implements OnInit {
       title: 'Tạo lịch hẹn',
       content: AppointmentModalComponent,
       footer: null,
-      size: 'lg'
+      size: 'lg',
     });
-    modal.afterClose.asObservable().subscribe(res => {
+    modal.afterClose.asObservable().subscribe((res) => {
       if (res) {
         this.initAppointmentList()
       }
-    })
+    });
   }
 
   // Open Edit Appointment Modal
@@ -110,14 +107,14 @@ export class HomeComponent implements OnInit {
       footer: null,
       size: 'lg',
       componentParams: {
-        id
+        id,
+      },
+    });
+    modal.afterClose.asObservable().subscribe((res) => {
+      if (res) {
+        this.initAppointmentList();
       }
     });
-    modal.afterClose.asObservable().subscribe(res => {
-      if (res) {
-        this.initAppointmentList()
-      }
-    })
   }
 
   // Open Edit In Session Modal
@@ -128,14 +125,14 @@ export class HomeComponent implements OnInit {
       footer: null,
       size: 'lg',
       componentParams: {
-        id
+        id,
+      },
+    });
+    modal.afterClose.asObservable().subscribe((res) => {
+      if (res) {
+        this.initAppointmentList();
       }
     });
-    modal.afterClose.asObservable().subscribe(res => {
-      if (res) {
-        this.initAppointmentList()
-      }
-    })
   }
 
   // Open Edit Payment Modal
@@ -146,59 +143,52 @@ export class HomeComponent implements OnInit {
       footer: null,
       size: 'xl',
       componentParams: {
-        id
+        id,
+      },
+    });
+    modal.afterClose.asObservable().subscribe((res) => {
+      if (res) {
+        this.initAppointmentList();
       }
     });
-    modal.afterClose.asObservable().subscribe(res => {
-      if (res) {
-        this.initAppointmentList()
-      }
-    })
   }
-
 
   // Update Status
   updateStatus(id: number, status: string) {
-    this.sharedService.UpdateStatus(id, status).subscribe(
-      () => {
-        this.sharedService.getAppointment(id).subscribe(
-          (res: any) => {
-            console.log(res)
-          }
-        )
-        this.initAppointmentList()
-      }
-    );
+    this.sharedService.UpdateStatus(id, status).subscribe(() => {
+      this.sharedService.getAppointment(id).subscribe((res: any) => {
+        console.log(res);
+      });
+      this.initAppointmentList();
+    });
   }
-
 
   // Choose doctor
   chooseDoctor(id: number, status: string) {
-    this.sharedService.getAppointment(id).subscribe(
-      (res: any) => {
-        const emp: any[] = res.Assignments
-        if (emp.length == 0) { //|| (res.Assignments.lenght > 0 && res.Assignments[1].)
-          const appointmentDate = res.AppointmentDate
-          const modal = this.tModalSvc.create({
-            title: 'Choose Doctor',
-            content: ChooseDoctorModalComponent,
-            footer: null,
-            size: 'md',
-            componentParams: {
-              id,
-              appointmentDate
-            }
-          });
-          modal.afterClose.asObservable().subscribe(res => {
-            if (res) {
-              this.updateStatus(id, status)
-            }
-          })
-        } else {
-          this.updateStatus(id, status)
-        }
+    this.sharedService.getAppointment(id).subscribe((res: any) => {
+      const emp: any[] = res.Assignments;
+      if (emp.length == 0) {
+        //|| (res.Assignments.lenght > 0 && res.Assignments[1].)
+        const appointmentDate = res.AppointmentDate;
+        const modal = this.tModalSvc.create({
+          title: 'Choose Doctor',
+          content: ChooseDoctorModalComponent,
+          footer: null,
+          size: 'md',
+          componentParams: {
+            id,
+            appointmentDate,
+          },
+        });
+        modal.afterClose.asObservable().subscribe((res) => {
+          if (res) {
+            this.updateStatus(id, status);
+          }
+        });
+      } else {
+        this.updateStatus(id, status);
       }
-    )
+    });
   }
 
   // Open Service Appointment Modal
@@ -209,14 +199,13 @@ export class HomeComponent implements OnInit {
       footer: null,
       size: 'lg',
       componentParams: {
-        id
+        id,
+      },
+    });
+    modal.afterClose.asObservable().subscribe((res) => {
+      if (res) {
+        this.initAppointmentList();
       }
     });
-    modal.afterClose.asObservable().subscribe(res => {
-      if (res) {
-        this.initAppointmentList()
-      }
-    })
   }
-
 }

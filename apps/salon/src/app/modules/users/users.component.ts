@@ -150,14 +150,14 @@ export class UsersComponent implements OnInit{
     }
     );
   }
-  onEditUser(email:string,role:string){
+  onEditUser(email:string,role:string,isActive:boolean){
     const modal = this.tModalSvc.create({
       title:'Sửa thông tin tài khoản',
       content: UsersModalComponent,
       footer:null,
       size:'lg',
       componentParams:{
-        email,role
+        email,role,isActive
       }
     });
     modal.afterClose.asObservable().pipe(tap(()=>  this.initUserList())).subscribe()

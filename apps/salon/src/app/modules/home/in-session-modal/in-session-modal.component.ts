@@ -32,7 +32,9 @@ export class InSessionModalComponent implements OnInit {
   private readonly modalRef = inject(TDSModalRef);
   public spaTherapistOptions: any[] = []
   public statusOptions = [
-    'Treatment',
+    'Đang chuẩn bị',
+    'Đang thực hiện',
+    'Hoàn thành',
   ]
   createAppointmentForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
@@ -40,8 +42,9 @@ export class InSessionModalComponent implements OnInit {
     name: [''],
     assignments: [],
     spaTherapist: [0],
-    status: ['Treatment'],
+    status: ['Đang chuẩn bị'],
   });
+  assignments: any[] = []
 
   constructor(
     private shared: AuthService,
@@ -55,17 +58,20 @@ export class InSessionModalComponent implements OnInit {
     if (this.id) {
       this.shared.getAppointment(this.id).subscribe(
         (data: any) => {
+
           this.form.patchValue({
             name: data.Customer.FirstName + ' ' + data.Customer.LastName,
             customerID: data.Customer.CustomerID,
             status: data.Status,
-            assignments: data.Assignments,
           });
-          if (data.Assignments[1].EmployerID) {
+          this.assignments = data.Assignments
+          const foundSpaTherapist = this.assignments.find(item => item.Employees.JobTypeID === 3);
+          if(foundSpaTherapist) {
             this.form.patchValue({
-              spaTherapist: data.Assignments[1].EmployerID,
+              spaTherapist: foundSpaTherapist.Employees.EmployeeID
             });
           }
+          console.log(this.form.get('spaTherapist')?.value)
         }
       )
     }

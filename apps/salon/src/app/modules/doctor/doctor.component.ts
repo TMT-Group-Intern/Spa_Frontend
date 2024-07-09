@@ -171,4 +171,8 @@ export class DoctorComponent implements OnInit {
   createNotificationError(content: any): void {
     this.notification.error('Lỗi. Vui lòng kiểm tra!', content);
   }
+
+  onCardClick() {
+    console.log("hehe")
+  }
 }

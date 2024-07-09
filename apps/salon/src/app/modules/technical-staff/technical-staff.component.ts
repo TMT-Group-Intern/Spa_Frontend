@@ -7,6 +7,7 @@ import { RouterLink } from '@angular/router';
 import { TDSModalService } from 'tds-ui/modal';
 import { TreatmentDetailComponent } from './treatment-detail/treatment-detail.component';
 import { TDSNotificationService } from 'tds-ui/notification';
+import { UserProfileComponent } from '../user-profile/user-profile.component';
 
 @Component({
   selector: 'frontend-technical-staff',
@@ -16,14 +17,28 @@ import { TDSNotificationService } from 'tds-ui/notification';
   imports: [CommonModule, ReactiveFormsModule, TDSTableModule, RouterLink],
 })
 export class TechnicalStaffComponent {
+  private readonly modalSvc = inject(TDSModalService)
   listSpaServiceQueue: any[] = [];
   customerDetail?: any = [] || null;
-  appointmentAllInfo?: any;
+  appointmentAllInfo: any | null = null;
   private readonly tModalSvc = inject(TDSModalService);
   selectedFiles: File[] = [];
   checkboxStatess: { [key: number]: boolean } = {};
   dataTemp: any;
   urls = [];
+  checkActive?: boolean = false;
+
+
+  timer = false;
+  hour = 0;
+  minute = 0;
+  second = 0;
+  count = 0;
+
+  hrString = '00';
+  minString = '00';
+  secString = '00';
+  countString = '00';
 
   ngOnInit(): void {
     this.renderCustomerInQueue();
@@ -36,7 +51,7 @@ export class TechnicalStaffComponent {
 
   renderCustomerInQueue() {
     this.auth
-      .getCustomerInQueueForTechnicalStaff(1, 'Treatment')
+      .getCustomerInQueueForTechnicalStaff(1, 'Đã khám')
       .subscribe((x: any[]) => {
         this.listSpaServiceQueue = x;
         console.log(this.listSpaServiceQueue);
@@ -46,19 +61,15 @@ export class TechnicalStaffComponent {
   renderCustomerDetail(data: any) {
     const observer = {
       next: (data: any) => {
+        this.checkActive = true;
         this.checkboxStatess = {};
         this.loadData()
         this.appointmentAllInfo = data;
+        console.log(this.appointmentAllInfo)
         this.customerDetail = data.ChooseServices.map(
           (chooseService: any) => chooseService.service
         );
         console.log(this.listSpaServiceQueue);
-        // this.listSpaServiceQueue.forEach((service: any) => {
-        //   this.checkboxStates[data.AppointmentID] = {
-        //     state: false,
-        //     serviceID: service.serviceID,
-        //   }; // Default state is unchecked
-        // });
         console.log(this.dataTemp);
         const appointmentData = this.dataTemp.find((item: any) => item.data.AppointmentID === this.appointmentAllInfo.AppointmentID);
         if (appointmentData) {
@@ -74,7 +85,7 @@ export class TechnicalStaffComponent {
       complete: () => console.log('Observer got a complete notification'),
     };
 
-    this.auth.getAppointmentById(data.AppointmentID).subscribe(observer);
+    this.auth.getAppointment(data.AppointmentID).subscribe(observer);
   }
 
   uploadImage(id: number) {
@@ -121,16 +132,16 @@ export class TechnicalStaffComponent {
   }
 
   callModalHistory() {
-    // console.log(this.listSpaServiceQueue)
-    // this.modalSvc.create({
-    //   title: 'Hồ sơ',
-    //   content: UserProfileComponent,
-    //   footer: null,
-    //   size: 'lg',
-    //   componentParams: {
-    //     customerId: this.dataParent.CustomerID
-    //   }
-    // })
+    //console.log(this.dataParent.CustomerID)
+    this.modalSvc.create({
+      title: 'Hồ sơ',
+      content: UserProfileComponent,
+      footer: null,
+      size: 'lg',
+      componentParams: {
+        customerId: this.appointmentAllInfo.CustomerID
+      }
+    })
   }
 
   // Success Notification
@@ -166,13 +177,95 @@ export class TechnicalStaffComponent {
       appointmentDetailList.push({ data, checkBox });
     }
     localStorage.setItem('appointmentDetail', JSON.stringify(appointmentDetailList));
+    this.createNotificationSuccess('Upload successful');
     this.loadData();
+
   }
 
   loadData() {
     const data: any = localStorage.getItem('appointmentDetail');
     this.dataTemp = JSON.parse(data);
     console.log(this.dataTemp);
+
   }
+
+  onStatusChange(event: any, id: number) {
+    const status = event.target.value;
+    this.onDelete(id);
+    this.updateStatus(id, status);
+  }
+
+  updateStatus(id: number, status: string) {
+    this.auth.UpdateStatus(id, status).subscribe(
+      () => {
+        this.renderCustomerInQueue();
+        this.checkActive = false;
+      },
+      (error) => {
+        console.error('Error updating status:', error);
+        // Handle error (if needed)
+      }
+    );
+  }
+
+  onDelete(appointmentID: number) {
+    const appointmentDetailList = JSON.parse(localStorage.getItem('appointmentDetail') || '[]');
+    const updatedList = appointmentDetailList.filter((item: any) => item.data.AppointmentID !== appointmentID);
+    localStorage.setItem('appointmentDetail', JSON.stringify(updatedList));
+    this.loadData();
+  }
+
+
+  start(): void {
+    this.timer = true;
+    this.stopWatch();
+  }
+
+  stop(): void {
+    this.timer = false;
+  }
+
+  reset(): void {
+    this.timer = false;
+    this.hour = 0;
+    this.minute = 0;
+    this.second = 0;
+    this.count = 0;
+    this.updateDisplay();
+  }
+
+  stopWatch(): void {
+    if (this.timer) {
+      this.count++;
+
+      if (this.count == 100) {
+        this.second++;
+        this.count = 0;
+      }
+
+      if (this.second == 60) {
+        this.minute++;
+        this.second = 0;
+      }
+
+      if (this.minute == 60) {
+        this.hour++;
+        this.minute = 0;
+        this.second = 0;
+      }
+
+      this.updateDisplay();
+
+      setTimeout(() => this.stopWatch(), 10);
+    }
+  }
+
+  updateDisplay(): void {
+    this.hrString = this.hour < 10 ? '0' + this.hour : this.hour.toString();
+    this.minString = this.minute < 10 ? '0' + this.minute : this.minute.toString();
+    this.secString = this.second < 10 ? '0' + this.second : this.second.toString();
+    this.countString = this.count < 10 ? '0' + this.count : this.count.toString();
+  }
+
 
 }
