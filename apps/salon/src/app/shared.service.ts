@@ -42,7 +42,7 @@ export class AuthService {
     return this.http.delete(this.baseUrl + 'Services/' + id);
   }
   UserList(): Observable<any[]> {
-    return this.http.get<any>(this.baseUrl + 'User/allUserAdminAndEmployee')
+    return this.http.get<any>(this.baseUrl + 'User/allUser')
   }
   AdminList(): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/allAdmin')
@@ -217,7 +217,7 @@ export class AuthService {
   
   //
   login(email: string, password: string) {
-    return this.http.post<{ flag: boolean, mess: string, token: string }>(this.baseUrl + 'Authentication/login', {
+    return this.http.post<{ flag: boolean, mess: string,userSession:object, token: string }>(this.baseUrl + 'Authentication/login', {
       email: email,
       password: password
     })
