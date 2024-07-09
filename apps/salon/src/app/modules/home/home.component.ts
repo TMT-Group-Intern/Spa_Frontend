@@ -71,8 +71,12 @@ export class HomeComponent implements OnInit {
           appointment.Status === 'Đang khám'
       );
       this.inSession = this.appointmentList.filter((appointment: any) =>
-        appointment.Status === "Đã khám" || appointment.Status === "Hoàn thành" || appointment.Status === "Chờ làm"
-        || appointment.Status === "Đang làm"
+
+        appointment.Status === "Đã khám" ||
+        appointment.Status === "Không sử dụng dịch vụ" ||
+        appointment.Status === "Đang thực hiện" ||
+        appointment.Status === "Hoàn thành"
+
       );
     });
   }
@@ -92,8 +96,7 @@ export class HomeComponent implements OnInit {
     });
     modal.afterClose.asObservable().subscribe((res) => {
       if (res) {
-        console.log(res);
-        this.initAppointmentList();
+        this.initAppointmentList()
       }
     });
   }

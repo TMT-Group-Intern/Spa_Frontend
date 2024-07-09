@@ -25,6 +25,7 @@ import { Router } from '@angular/router';
 
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
+  userSession:any;
   builder = inject(FormBuilder);
   httpService = inject(AuthService);
   
@@ -38,12 +39,7 @@ export class LoginComponent implements OnInit {
       taiKhoan: ['' , Validators.required],
       matKhau: ['' , Validators.required],
     });
-    //const token = localStorage.getItem('userToken');
     const cookie= getCookie('userCookie')
-    console.log(cookie)
-    // if (token) {
-    //       this.router.navigate(['home']);
-    //     }
         if (cookie) {
           this.router.navigate(['home']);
         }
@@ -53,11 +49,21 @@ export class LoginComponent implements OnInit {
     const email=this.loginForm.value.taiKhoan;
     const password = this.loginForm.value.matKhau;
     this.auth.login(email,password).subscribe((result:any) => {
-      //console.log(result.token,result.flag,result.mess);
       if(result.token!= null&&result.flag != false)
         {
-          //localStorage.setItem('userToken', result.token);
-          // Khi đăng nhập thành công
+          const userSession = {
+            user: result.user,
+          };
+          //console.log(userSession)
+          localStorage.setItem('userSession', JSON.stringify(userSession));
+          // const storedUserSession = localStorage.getItem('userSession');
+          // if (storedUserSession !== null) {
+          //   this.userSession = JSON.parse(storedUserSession);
+          //   //console.log(this.userSession);
+          // }
+          //console.log(result.user)
+          //this.userSession = localStorage.getItem('userSession');
+          //console.log(this.userSession)
           setCookie('userCookie', result.token, 7); // Lưu token vào cookie với hạn sử dụng 7 ngày
           this.router.navigate(['home']);
         }

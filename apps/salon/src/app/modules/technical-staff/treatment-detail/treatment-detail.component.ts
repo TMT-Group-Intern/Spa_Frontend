@@ -59,7 +59,7 @@ export class TreatmentDetailComponent implements OnInit {
     };
 
     this.auth
-      .getAppointmentById(this.dataParent.AppointmentID as number)
+      .getAppointment(this.dataParent.AppointmentID as number)
       .subscribe(observer);
   }
 

@@ -57,21 +57,19 @@ export class UsersModalComponent implements OnInit {
 
     dateOfBirth: ['', Validators.required],
     hireDate: [new Date().toISOString()],
-    gender: ['Male', Validators.required],
+    gender: ['Nam', Validators.required],
     role: ['Employee', Validators.required],
     jobTypeID: [0],
     branchID: [0],
  });
   
-  
-
   readonly roleOptions = [{
-    id: "Admin", name: 'Admin'},
-  { id: "Employee", name: 'Employee' },]
+    id: "Admin", name: 'Quản lý'},
+  { id: "Employee", name: 'Nhân viên' },]
 
   readonly genderOptions = [{
-    id: "Male", name: 'Male'},
-  { id: "Female", name: 'Female' },]
+    id: "Nam", name: 'Nam'},
+  { id: "Nữ", name: 'Nữ' },]
 
   branchOptions: any[] = [];
   jobTypeOptions: any[] = [];
@@ -116,12 +114,7 @@ export class UsersModalComponent implements OnInit {
 
       if(this.email) {
         this.checkDislay = false
-        // this.createUser.get('email')?.disable()
-        // this.createUser.get('role')?.disable()
-        console.log(this.createUser.get('role'))
-        console.log(this.isActive)
         if(this.role==='Admin'){
-          console.log(this.role)
           this.shared.getAdminByEmail(this.email).subscribe(
             (data: any) => {
               this.createUser.patchValue({
@@ -135,13 +128,10 @@ export class UsersModalComponent implements OnInit {
                gender: data.adminDTO.gender,
                dateOfBirth: data.adminDTO.dateOfBirth,
               })
-              console.log(data)
             }
           )
         }
       else if(this.role !=='Admin'){
-        console.log(this.role)
-        //this.checkDislay = false
         this.shared.getEmployeeByEmail(this.email).subscribe(
           (data: any) => {
             this.createUser.patchValue({
@@ -156,7 +146,6 @@ export class UsersModalComponent implements OnInit {
              jobTypeID: data.empDTO.jobTypeID,
              branchID: data.empDTO.branchID,
             })
-            console.log(data)
           }
         )
       }
@@ -164,36 +153,27 @@ export class UsersModalComponent implements OnInit {
   }
 
   handleOk(): void {
-    console.log('Button ok clicked!');
     this.modalRef.destroy(true)
   }
 
   handleCancel(): void {
-    console.log('Button cancel clicked!');
     this.modalRef.destroy(false)
   }
   submit() {
     if (this.createUser.invalid) {
       this.markFormGroupTouched(this.createUser);
-      console.log(this.createUser.value);
       return;
     } 
     const val = {
       ...this.createUser.value,
     };
-    console.log(val)
-
-    if (this.email) {
-     
+    if (this.email) {  
       this.updateUser(this.email, val);
-      console.log(val)
-      console.log(val.role)
     } else {
       this.onSignUp();
     }
   }
   updateUser(email: string, val: any) {
-    console.log(val)
     this.shared.editUser(email, val).subscribe({
       next: () => {
         this.createNotificationSuccess('');
@@ -205,18 +185,12 @@ export class UsersModalComponent implements OnInit {
     });
   }
   createNotificationSuccess(content: any): void {
-    this.notification.success('Succesfully', content);
+    this.notification.success('Thành công!', content);
   }
-
-  // Error Notification
   createNotificationError(content: any): void {
-    this.notification.error('Error', content);
+    this.notification.error('Thất bại!', content);
   }
   onSignUp(): void {
-    // if(this.createUser.value.role ==='Employee'){
-    //   this.createUser.value.pass='';
-    //   this.createUser.value.retype='';
-    // }
     if(this.role ==='Admin'){
       this.createUser.value.branchID=0;
       this.createUser.value.jobTypeID=0;
@@ -226,7 +200,6 @@ export class UsersModalComponent implements OnInit {
     const firstName = this.createUser.value.firstName as string;
     const phone = this.createUser.value.phone as string;
     const email = this.createUser.value.email as string;
-    //const role = this.role as string;
     const role = this.createUser.value.role as string;
     const password = this.createUser.value.password as string;
     const confirmPassword = this.createUser.value.confirmPassword as string;
@@ -236,21 +209,11 @@ export class UsersModalComponent implements OnInit {
     const jobTypeID = this.createUser.value.jobTypeID as number;
     const branchID = this.createUser.value.branchID as number;
 
-    // if (this.createUser.invalid) {
-    //   this.markFormGroupTouched(this.createUser);
-    //   console.log(this.createUser.value);
-    //   return;
-    // }
-
-    console.log(this.createUser)
-    // Thực hiện các hành động khi form hợp lệ
-    this.shared.signUp(lastName, firstName, gender, phone, email, password, confirmPassword, dateOfBirth, hireDate, jobTypeID, branchID, role).subscribe((result) => {
-      //console.log(result)
+    this.shared.signUp(lastName, firstName, gender, phone, email, password,
+       confirmPassword, dateOfBirth, hireDate, jobTypeID, branchID, role)
+       .subscribe((result) => {
       if (result.status != null) { 
-         console.log(result.status)
-         //this.createUser.reset();
-
-         const modal = this.tModalSvc.create({
+         const modal = this.tModalSvc.success({
           title:'Thành công',
           content: `<h5 class="text-success-500">Tạo tài khoản <strong>${ email }</strong> thành công!</h5>`,
           footer:null,
@@ -259,33 +222,28 @@ export class UsersModalComponent implements OnInit {
           onOk:()=> true
         });
         modal.afterClose.asObservable()
-        // .pipe(tap(()=>this.createUser.reset({
-        //   branchID:0,
-        //   dateOfBirth:'',
-        //   email:'',
-        //   firstName:'',
-        //   gender:'',
-        //   hireDate:'',
-        //   jobTypeID:0,
-        //   lastName:'',
-        //   phone:'',
-        //   role:'',
-        //   pass:'',
-        //   retype:''
-        // })))
+        .pipe(tap(()=>this.createUser.reset({
+          // branchID:0,
+          // dateOfBirth:'',
+          // email:'',
+          // firstName:'',
+          // gender:'',
+          // hireDate:'',
+          // jobTypeID:0,
+          // lastName:'',
+          // phone:'',
+          // role:'',
+          // password:'',
+          // confirmPassword:'',
+        })))
         .subscribe();
       }
       else{
-        console.log(this.createUser.value)
-        console.log(this.role)
-        console.log(result.status)
-         //this.createUser.reset();
-
-         const modal = this.tModalSvc.create({
+         const modal = this.tModalSvc.error({
           title:'Thất bại',
           content: `<h5 class="text-error-500">Tạo tài khoản <strong>${ email }</strong> thất bại! Tài khoản đã tồn tại hoặc đã xảy ra lỗi!</h5>`,
           footer:null,
-          size:'lg',
+          size:'md',
           okText:'Xác nhận',
           onOk:()=> true
         });
@@ -299,7 +257,6 @@ export class UsersModalComponent implements OnInit {
       }
     });
   }
-
   markFormGroupTouched(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);

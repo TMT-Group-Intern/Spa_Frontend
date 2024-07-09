@@ -45,6 +45,7 @@ export class InSessionModalComponent implements OnInit {
     spaTherapist: [],
     status: ['Đang chuẩn bị'],
   });
+  assignments: any[] = []
 
   constructor(
     private shared: AuthService,
@@ -58,19 +59,19 @@ export class InSessionModalComponent implements OnInit {
     if (this.id) {
       this.shared.getAppointment(this.id).subscribe(
         (data: any) => {
+
           this.form.patchValue({
             name: data.Customer.FirstName + ' ' + data.Customer.LastName,
             customerID: data.Customer.CustomerID,
             status: data.Status,
-            assignments: data.Assignments,
-            spaTherapist: data.TeachnicalStaff
           });
-          // if (data.TeachnicalStaff) {
-          //   console.log(data.TeachnicalStaff)
-          //   this.form.patchValue({
-          //     spaTherapist: data.TeachnicalStaff
-          //   });
-          // }
+          this.assignments = data.Assignments
+          const foundSpaTherapist = this.assignments.find(item => item.Employees.JobTypeID === 3);
+          if(foundSpaTherapist) {
+            this.form.patchValue({
+              spaTherapist: foundSpaTherapist.Employees.EmployeeID
+            });
+          }
           console.log(this.form.get('spaTherapist')?.value)
         }
       )
