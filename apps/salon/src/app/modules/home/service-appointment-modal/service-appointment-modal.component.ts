@@ -38,21 +38,14 @@ import * as moment from 'moment';
 })
 export class ServiceAppointmentModalComponent implements OnInit {
 
-  public doctorOptions = [
-    { id: 11, name: 'Elton John' },
-    { id: 12, name: 'Elvis Presley' },
-    { id: 5, name: 'Paul McCartney' },
-    { id: 14, name: 'Elton John' },
-    { id: 13, name: 'Elvis Presley' },
-  ]
-
   public statusOptions = [
-    'Examining',
-    'Treatment',
+    'Chờ khám',
+    'Đang khám',
+    'Đang chuẩn bị',
   ]
 
   private readonly modalRef = inject(TDSModalRef);
-private readonly modalSvc = inject(TDSModalService);
+  private readonly modalSvc = inject(TDSModalService);
   @Input() id?: number;
   createAppointmentForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
@@ -65,7 +58,8 @@ private readonly modalSvc = inject(TDSModalService);
     doctor: [''],
     appointmentDate: ['', Validators.required],
     status: [''],
-    service:[[]]
+    service:[[]],
+    note: [''],
   });
 
   today = startOfToday();
@@ -138,14 +132,14 @@ private readonly modalSvc = inject(TDSModalService);
     };
 
     if (this.id) {
-    this.updateServiceAppointment(this.id, val.status, val.service);
+    this.updateServiceAppointment(this.id, val.status, val.service, val.note);
   }
   }
 
   // Update service Appointment
-  updateServiceAppointment(id: number, status: any, val: any) {
+  updateServiceAppointment(id: number, status: any, val: any,note: any) {
     console.log(id,",",val)
-    this.shared.updateAppointmentWithService(id, status, val).subscribe({
+    this.shared.updateAppointmentWithService(id, {status, serviceIds:val, note}).subscribe({
       next:(data) => {
         console.log(data)
         this.createNotificationSuccess('');

@@ -1,70 +1,77 @@
-<form class="py-2 flex" id="idform" [formGroup]="form" autocomplete="off">
-  <div class="w-[50%] mr-2">
-    <div class="flex items-center justify-between">
-      <tds-label [tdsRequired]="true" class="w-[20%]">Họ</tds-label>
-      <tds-form-field class="my-2 w-[80%]">
-        <input tdsInput autocomplete="off" placeholder="Christine" formControlName="firstName"
-          class="appearance-none w-full" type="text" />
-        <tds-error>
-          <span>Your <strong>first name</strong> cannot be empty!</span>
-        </tds-error>
-      </tds-form-field>
-    </div>
-
-    <div class="flex items-center justify-between ">
-      <tds-label [tdsRequired]="true" class="w-[20%]">Tên</tds-label>
-      <tds-form-field class="my-2 w-[80%]">
-        <input tdsInput autocomplete="off" placeholder="Nguyen" formControlName="lastName"
-          class="appearance-none w-full" type="text" />
-        <tds-error>
-          <span>Your <strong>last name</strong> cannot be empty!</span>
-        </tds-error>
-      </tds-form-field>
-    </div>
-
-    <div class="flex items-center justify-between">
-      <tds-label class="w-[20%]">Email</tds-label>
-      <tds-form-field class="my-2 w-[80%]">
-        <input tdsInput autocomplete="off" placeholder="abc@example.com" formControlName="email" type="email"
-          class="appearance-none w-full" />
-        <tds-error>
-          <span>Your <strong>email</strong> is not in the correct
-            format!</span>
-        </tds-error>
-      </tds-form-field>
-    </div>
-  </div>
-
-  <div class="w-[50%] ml-2">
-    <div class="flex items-center">
-      <tds-label class="w-[30%]" [tdsRequired]="true">Số điện thoại</tds-label>
-      <tds-form-field class="my-2 w-[70%]">
-        <input tdsInput autocomplete="off" placeholder="0123456789" class="appearance-none w-full"
-          formControlName="phone" type="tel" />
-        <tds-error>
-          <span *ngIf="form.controls['phone'].hasError('required')">Your <strong>phone number</strong> cannot be
-            empty!</span>
-          <span *ngIf="form.controls['phone'].hasError('pattern')">Your <strong>phone number</strong> must start with 0
-            and have 10 digits!</span>
-        </tds-error>
-      </tds-form-field>
-    </div>
-    <!-- Ngày sinh  -->
-    <div class="flex items-center">
-      <tds-label class="w-[30%]">Ngày sinh</tds-label>
-      <div class="my-2 w-[70%]">
-        <tds-date-picker formControlName="dateOfBirth"></tds-date-picker>
+<form class="py-2" id="idform" [formGroup]="form" autocomplete="off">
+  <div class="grid grid-cols-2 gap-12">
+    <div class="col-span-1">
+      <!-- Last Name -->
+      <div class="grid grid-cols-3 gap-1 my-2">
+        <tds-label [tdsRequired]="true">Họ</tds-label>
+        <tds-form-field class="col-span-2">
+          <input tdsInput autocomplete="off" placeholder="Christine" formControlName="firstName"
+            class="appearance-none w-full" type="text" />
+          <tds-error>
+            <span>Your <strong>first name</strong> cannot be empty!</span>
+          </tds-error>
+        </tds-form-field>
       </div>
 
+      <!-- First Name -->
+      <div class="grid grid-cols-3 gap-1 my-2">
+        <tds-label [tdsRequired]="true">Tên</tds-label>
+        <tds-form-field class="col-span-2">
+          <input tdsInput autocomplete="off" placeholder="Nguyen" formControlName="lastName"
+            class="appearance-none w-full" type="text" />
+          <tds-error>
+            <span>Your <strong>last name</strong> cannot be empty!</span>
+          </tds-error>
+        </tds-form-field>
+      </div>
+
+      <!-- Email -->
+      <div class="grid grid-cols-3 gap-1 my-2">
+        <tds-label>Email</tds-label>
+        <tds-form-field class="col-span-2">
+          <input tdsInput autocomplete="off" placeholder="abc@example.com" formControlName="email" type="email"
+            class="appearance-none w-full" />
+          <tds-error>
+            <span>Your <strong>email</strong> is not in the correct
+              format!</span>
+          </tds-error>
+        </tds-form-field>
+      </div>
     </div>
-    <div class="flex items-center">
-      <tds-label class="w-[30%]" >Giới tính</tds-label>
-      <tds-radio-group class="my-2 w-[70%]" formControlName="gender">
-        <div>
-          <label tds-radio value="Male">Nam</label>
-          <label tds-radio value="Female">Nữ</label>
-        </div>
-      </tds-radio-group>
+
+    <div class="col-span-1">
+      <!-- Phone -->
+      <div class="grid grid-cols-3 gap-1 my-2">
+        <tds-label [tdsRequired]="true">Số điện thoại</tds-label>
+        <tds-form-field class="col-span-2">
+          <input tdsInput autocomplete="off" placeholder="0123456789" class="appearance-none w-full"
+            formControlName="phone" type="tel" />
+          <tds-error>
+            <span *ngIf="form.controls['phone'].hasError('required')">Your <strong>phone number</strong> cannot be
+              empty!</span>
+            <span *ngIf="form.controls['phone'].hasError('pattern')">Your <strong>phone number</strong> must start with
+              0
+              and have 10 digits!</span>
+          </tds-error>
+        </tds-form-field>
+      </div>
+
+      <!-- Ngày sinh  -->
+      <div class="grid grid-cols-3 gap-1 my-2">
+        <tds-label>Ngày sinh</tds-label>
+          <tds-date-picker class="col-span-2" formControlName="dateOfBirth"></tds-date-picker>
+      </div>
+
+      <!-- Gender -->
+      <div class="grid grid-cols-3 gap-1 my-2">
+        <tds-label>Giới tính</tds-label>
+        <tds-radio-group class="col-span-2" formControlName="gender">
+          <div>
+            <label tds-radio value="Male">Nam</label>
+            <label tds-radio value="Female">Nữ</label>
+          </div>
+        </tds-radio-group>
+      </div>
     </div>
   </div>
 

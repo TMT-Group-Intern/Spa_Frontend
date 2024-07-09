@@ -13,7 +13,7 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { TDSPaginationModule } from 'tds-ui/pagination';
 import { TDSBreadCrumbModule } from 'tds-ui/breadcrumb';
 import { CustomerDetailComponent } from './customer-detail/customer-detail.component';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 
 
@@ -48,25 +48,22 @@ export class CustomerListComponent implements OnInit {
 
   constructor(
     private auth : AuthService,
+    private router: Router,
   ) {}
-
-  // Display Customer List
-  private initCustomerList() {
-    this.auth.CustomerList().subscribe((data:any) => {
-      this.CustomerList = data.item;
-    });
-  }
 
   ngOnInit(): void {
     this.renderPageCustomers();
   }
+
   /* get the list of customers by pageNumber and pageSize */
   renderPageCustomers(): void {
       this.auth.pageCustomers(this.pageNumber, this.pageSize).subscribe((data:any) => {
       this.customerOfPage = data.item;
       this.totalItemsCustomers = data.totalItems;
+      console.log(this.customerOfPage)
     })
   }
+
   /*get back pageNumber*/
   changeNumberPage(event: number): void {
     this.pageNumber = event;
@@ -84,6 +81,7 @@ export class CustomerListComponent implements OnInit {
     this.renderPageCustomers();
   }
 
+  //
   createCustomer(){
     const modal = this.tModalSvc.create({
       title:'Thêm khách hàng',
@@ -98,6 +96,7 @@ export class CustomerListComponent implements OnInit {
     })
   }
 
+  //
   onEditCustomer(id:number){
     const modal = this.tModalSvc.create({
       title:'Edit Customer',
@@ -115,6 +114,7 @@ export class CustomerListComponent implements OnInit {
     })
   }
 
+  //
   deleteCustomer(id:number){
     const modal = this.tModalSvc.error({
       title:'Delete Customer',
@@ -131,6 +131,13 @@ export class CustomerListComponent implements OnInit {
       tap(()=> { this.renderPageCustomers()})
     ).subscribe()
   }
+
+  // Get to Customer Detail Page
+  customerDetail(event: any) {
+    const customerID = event.dataRow.dataRow.customerID
+    this.router.navigate(['customer-list/customer-detail/' + customerID]);
+  }
+
 
 }
 

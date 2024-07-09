@@ -63,6 +63,11 @@ export class MenuComponent {
       "icon": "tdsi-list-product-fill",
       "link": '/service-list'
     },
+    {
+      "name": "Báo cáo doanh thu",
+      "icon": "tdsi-revenue-fill",
+      "link": '/revenue-statistics'
+    },
   ]
 
   setActiveTab(event: TDSSafeAny) {

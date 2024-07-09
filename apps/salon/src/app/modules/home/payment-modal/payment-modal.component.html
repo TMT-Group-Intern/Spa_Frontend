@@ -1,7 +1,7 @@
 <div class="my-2">
   <p><strong>Phone Number:</strong> {{inforCus.Customer.Phone}}</p>
   <p><strong>Customer:</strong> {{inforCus.Customer.FirstName}} {{inforCus.Customer.LastName}}</p>
-  <p><strong>Date:</strong> {{formatDate(inforCus.AppointmentDate,'DD/MM/YYYY HH:mm')}}</p>
+  <p><strong>Date:</strong> {{inforCus.AppointmentDate | date:'HH:mm'}}</p>
   <br>
   <tds-table #basicTable [listData]="service" [showPagination]="false">
     <thead>
@@ -43,6 +43,6 @@
     <button tds-button form="idform" (click)="submit()" color="success" class="w-full rounded">
       Submit
     </button>
-    <button tds-button (click)="invoice()">In hóa đơn</button>
+    <!-- <button tds-button (click)="invoice()">In hóa đơn</button> -->
   </div>
 </ng-container>

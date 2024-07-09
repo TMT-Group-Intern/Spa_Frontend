@@ -50,8 +50,8 @@ export class AppointmentModalComponent implements OnInit {
   searchPhone$ = new BehaviorSubject<string>('')
   public doctorOptions: any[] = [];
   public statusOptions = [
-    'Scheduled',
-    'Cancelled',
+    'Hẹn',
+    'Hủy hẹn',
   ]
   private readonly tModalSvc = inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
@@ -63,9 +63,9 @@ export class AppointmentModalComponent implements OnInit {
     branch: ['ABC'],
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
     assignments: [],
-    doctor: [''],
+    doctor: [],
     appointmentDate: [new Date()],
-    status: ['Scheduled'],
+    status: ['Hẹn'],
     customer: [null]
   });
   // isExist = false;
@@ -76,6 +76,7 @@ export class AppointmentModalComponent implements OnInit {
   today = startOfToday();
   empID: any[] = [];
   dataCustomer: any[] = [];
+  assign: any[] = []
 
   constructor(
     private shared: AuthService,
@@ -104,9 +105,10 @@ export class AppointmentModalComponent implements OnInit {
             customerID: data.Customer.CustomerID,
             status: data.Status,
           });
-          if (data.Assignments[0].EmployerID) {
+          const foundDoctor = this.assign.find(item => item.Employees.JobTypeID === 2);
+          if(foundDoctor) {
             this.form.patchValue({
-              doctor: data.Assignments[0].EmployerID,
+              doctor: foundDoctor.Employees.EmployeeID
             });
           }
           console.log(this.form.value)

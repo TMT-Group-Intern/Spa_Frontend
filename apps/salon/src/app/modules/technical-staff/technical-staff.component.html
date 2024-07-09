@@ -1,13 +1,14 @@
 <div class="flex flex-row bg-gray-200 h-full">
-  <div class="basis-1/4 border p-4 rounded-10 bg-white">
+  <div class="basis-1/4 border p-4 rounded-10 bg-white left-content">
     <tds-table
-      class="table-vertical-line"
-      #basicTable
+      class="table-vertical-line table-cus"
       [listData]="listSpaServiceQueue"
+      [showPagination]="false"
     >
       <thead>
         <tr>
-          <th rowspan="2">Họ Tên Khách Hàng</th>
+          <th>Họ Tên Khách Hàng</th>
+          <th>Trạng Thái</th>
         </tr>
       </thead>
       <tbody>
@@ -17,8 +18,16 @@
           (click)="renderCustomerDetail(data)"
         >
           <td>{{ data.Customer.FirstName + ' ' + data.Customer.LastName }}</td>
-          <!-- <td>{{ data.TeachnicalStaff }}</td>
-          <td>{{ data.EmployeeCode }}</td> -->
+          <td>
+            <select
+              name="status"
+              class=""
+              (change)="onStatusChange($event, data.AppointmentID)"
+            >
+              <option value="In_progress">Đang tiến hành</option>
+              <option value="Hoàn thành">Hoàn thành</option>
+            </select>
+          </td>
         </tr>
         <!-- </ng-template> -->
       </tbody>
@@ -27,7 +36,7 @@
   <!-- //////////bên phải /////////// -->
   <div
     class="basis-3/4 border p-4 rounded-10 bg-white ml-4"
-    *ngIf="customerDetail.length > 0; else elseBlock"
+    *ngIf="appointmentAllInfo !== null && checkActive === true; else elseBlock"
   >
     <div class="flex flex-row">
       <!-- Left section with image -->
@@ -49,9 +58,31 @@
           }}</span>
         </div>
         <div class="font-medium mb-4">
+          Ngày giờ vào:
+          <span class="font-normal">{{
+            appointmentAllInfo.AppointmentDate | date : 'dd/MM/yyyy HH:mm'
+          }}</span>
+        </div>
+        <div class="font-medium mb-4">
           Dịch vụ đã chọn:
-          <span *ngFor="let service of customerDetail; let first = first">
+          <span
+            class="font-normal"
+            *ngFor="let service of customerDetail; let first = first"
+          >
             {{ (first ? '' : ', ') + service.ServiceName }}
+          </span>
+        </div>
+
+        <div class="font-medium mb-4">
+          Bác sĩ khám:
+          <span class="font-normal">
+            {{ appointmentAllInfo.Doctor }}
+          </span>
+        </div>
+        <div class="font-medium mb-4">
+          Nhân viên phụ trách:
+          <span class="font-normal">
+            {{ appointmentAllInfo.TeachnicalStaff }}
           </span>
         </div>
 
@@ -64,10 +95,11 @@
                 type="file"
                 (change)="onFileSelected($event)"
                 class="mr-2 mb-5"
+                multiple
               />
               <button
                 class="rounded-full bg-green-300 py-1 px-2"
-                (click)="uploadImage()"
+                (click)="uploadImage(appointmentAllInfo.AppointmentID)"
               >
                 Upload Photo
               </button>
@@ -83,6 +115,22 @@
           >
             History Customer
           </button>
+        </div>
+        <div class="container">
+          <div id="time">
+            <span class="digit">{{ hrString }}</span>
+            <span class="txt">Hr</span>
+            <span class="digit">{{ minString }}</span>
+            <span class="txt">Min</span>
+            <span class="digit">{{ secString }}</span>
+            <span class="txt">Sec</span>
+            <span class="digit">{{ countString }}</span>
+          </div>
+          <div id="buttons">
+            <button class="btn" id="start" (click)="start()">Start</button>
+            <button class="btn" id="stop" (click)="stop()">Stop</button>
+            <button class="btn" id="reset" (click)="reset()">Reset</button>
+          </div>
         </div>
       </div>
     </div>
@@ -103,13 +151,8 @@
           <td class="border border-gray-400 px-4 py-2 text-center">
             <input
               type="checkbox"
-              [checked]="checkboxStates[appointmentAllInfo.AppointmentID]"
-              (change)="
-                toggleCheckbox(
-                  appointmentAllInfo.AppointmentID,
-                  service.ServiceID
-                )
-              "
+              [checked]="checkboxStatess[service.ServiceID]"
+              (change)="toggleCheckbox(service.ServiceID)"
               class="form-checkbox h-5 w-5 text-green-500"
             />
           </td>
@@ -121,6 +164,7 @@
     <div class="flex gap-4 justify-center mt-4">
       <button
         class="rounded-full bg-blue-500 text-white py-2 px-4 hover:bg-blue-600"
+        (click)="onSave(appointmentAllInfo, checkboxStatess)"
       >
         Lưu
       </button>
