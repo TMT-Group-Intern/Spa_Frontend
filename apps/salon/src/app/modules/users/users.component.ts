@@ -76,14 +76,14 @@ export class UsersComponent implements OnInit{
       this.userSession = JSON.parse(storedUserSession);
     }
   }
-  
-  initUserList() {  
+
+  initUserList() {
     this.auth.UserList().subscribe(data => {
       this.UserList = data;
       if(this.selectedUserType==='All'){
         this.UserList
       }
-      else if (this.selectedUserType === 'Admin') {        
+      else if (this.selectedUserType === 'Admin') {
         this.UserList = this.UserList.filter(user => user.Role === 'Quản lý');
       } else if (this.selectedUserType === 'Employee') {
         this.UserList = this.UserList.filter(user => user.Role !== 'Quản lý');
@@ -100,7 +100,7 @@ export class UsersComponent implements OnInit{
       title:'Tạo tài khoản',
       content: UsersModalComponent,
       footer:null,
-      size:'lg'
+      size:'xl'
     });
     modal.afterClose.asObservable().pipe(tap(()=>  this.initUserList())).subscribe
     ();
@@ -119,7 +119,7 @@ export class UsersComponent implements OnInit{
       filter(condition => condition),
       concatMap(_=> this.auth.createAccountForEmployee(Email))
     ).subscribe((result)=>{
-      if (result.status.toString() == 'Create Success!') { 
+      if (result.status.toString() == 'Create Success!') {
         const modal = this.tModalSvc.success({
          title:'Thành công',
          content: `<h5 class="text-success-500">Tạo tài khoản <strong>${ Email }</strong> thành công! Tài khoản có mật khẩu là Spa@12345.</h5>`,
@@ -153,7 +153,7 @@ export class UsersComponent implements OnInit{
       title:'Sửa thông tin tài khoản',
       content: UsersModalComponent,
       footer:null,
-      size:'lg',
+      size:'xl',
       componentParams:{
         email,role,isActive
       }

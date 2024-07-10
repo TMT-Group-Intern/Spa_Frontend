@@ -59,7 +59,11 @@
         </tds-card-header>
         <tds-card-content class="">
           <!-- <p><i class="tdsi-earpiece-fill text-green-success-300"></i> {{appoint.AppointmentID | tdsMapper: returnDoctor}}</p> -->
-          <p>
+          <p *ngIf="appoint.Doctor === null">
+            <i class="tdsi-earpiece-fill text-green-success-400"></i>
+            ---
+          </p>
+          <p *ngIf="appoint.Doctor !== null">
             <i class="tdsi-earpiece-fill text-green-success-400"></i>
             {{ appoint.Doctor }}
           </p>
@@ -192,10 +196,13 @@
           <div class="grid grid-cols-3 flex-wrap">
             <!-- Card content -->
             <tds-card-content class="col-span-2">
-              <p>
-                <i class="tdsi-auto-fix-fill text-green-success-300"></i>
+              <p *ngIf="appoint.TeachnicalStaff === null">
+                <i class="tdsi-earpiece-fill text-green-success-400"></i>
+                ---
+              </p>
+              <p *ngIf="appoint.TeachnicalStaff !== null">
+                <i class="tdsi-earpiece-fill text-green-success-400"></i>
                 {{ appoint.TeachnicalStaff }}
-
               </p>
               <p>
                 <i class="tdsi-time-fill text-green-success-400"></i>
