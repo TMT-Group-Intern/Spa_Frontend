@@ -68,6 +68,11 @@ export class MenuComponent {
       "icon": "tdsi-revenue-fill",
       "link": '/revenue-statistics'
     },
+    {
+      "name": "Schedule",
+      "icon": "tdsi-calendar-fill",
+      "link": '/schedule'
+    },
   ]
 
   setActiveTab(event: TDSSafeAny) {
