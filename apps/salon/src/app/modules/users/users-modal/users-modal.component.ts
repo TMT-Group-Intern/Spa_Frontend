@@ -11,19 +11,30 @@ import { TDSSelectModule } from 'tds-ui/select';
 import { TDSModalService } from 'tds-ui/modal';
 import { concatMap, filter, tap } from 'rxjs';
 import { TDSNotificationService } from 'tds-ui/notification';
+import { TDSRadioModule } from 'tds-ui/radio';
 const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}$/;
 
 
 @Component({
   selector: 'frontend-users-modal',
   standalone: true,
-  imports: [TDSDatePickerModule, CommonModule, TDSFormFieldModule, ReactiveFormsModule, TDSModalModule, TDSInputModule, TDSButtonModule, TDSSelectModule],
+  imports: [
+    TDSDatePickerModule,
+    CommonModule,
+    TDSFormFieldModule,
+    ReactiveFormsModule,
+    TDSModalModule,
+    TDSInputModule,
+    TDSButtonModule,
+    TDSSelectModule,
+    TDSRadioModule,
+  ],
   templateUrl: './users-modal.component.html',
   styleUrls: ['./users-modal.component.scss'],
 })
 
 export class UsersModalComponent implements OnInit {
-  
+
   private readonly tModalSvc =inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
   @Input() email?: string;
@@ -62,7 +73,7 @@ export class UsersModalComponent implements OnInit {
     jobTypeID: [0],
     branchID: [0],
  });
-  
+
   readonly roleOptions = [{
     id: "Admin", name: 'Quản lý'},
   { id: "Employee", name: 'Nhân viên' },]
@@ -95,7 +106,7 @@ export class UsersModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
     this.shared.getBranch().subscribe(
       (data: any[]) => {
         this.branchOptions = [...data.map(item => ({
@@ -163,11 +174,11 @@ export class UsersModalComponent implements OnInit {
     if (this.createUser.invalid) {
       this.markFormGroupTouched(this.createUser);
       return;
-    } 
+    }
     const val = {
       ...this.createUser.value,
     };
-    if (this.email) {  
+    if (this.email) {
       this.updateUser(this.email, val);
     } else {
       this.onSignUp();
@@ -212,7 +223,7 @@ export class UsersModalComponent implements OnInit {
     this.shared.signUp(lastName, firstName, gender, phone, email, password,
        confirmPassword, dateOfBirth, hireDate, jobTypeID, branchID, role)
        .subscribe((result) => {
-      if (result.status != null) { 
+      if (result.status != null) {
          const modal = this.tModalSvc.success({
           title:'Thành công',
           content: `<h5 class="text-success-500">Tạo tài khoản <strong>${ email }</strong> thành công!</h5>`,
