@@ -125,7 +125,7 @@ export class UsersModalComponent implements OnInit {
 
       if(this.email) {
         this.checkDislay = false
-        if(this.role==='Admin'){
+        if(this.role==='Quản lý'){
           this.shared.getAdminByEmail(this.email).subscribe(
             (data: any) => {
               this.createUser.patchValue({
@@ -142,7 +142,7 @@ export class UsersModalComponent implements OnInit {
             }
           )
         }
-      else if(this.role !=='Admin'){
+      else if(this.role !=='Quản lý'){
         this.shared.getEmployeeByEmail(this.email).subscribe(
           (data: any) => {
             this.createUser.patchValue({
@@ -233,7 +233,7 @@ export class UsersModalComponent implements OnInit {
           onOk:()=> true
         });
         modal.afterClose.asObservable()
-        .pipe(tap(()=>this.createUser.reset({
+        //.pipe(tap(()=>this.createUser.reset({
           // branchID:0,
           // dateOfBirth:'',
           // email:'',
@@ -246,7 +246,7 @@ export class UsersModalComponent implements OnInit {
           // role:'',
           // password:'',
           // confirmPassword:'',
-        })))
+        //})))
         .subscribe();
       }
       else{

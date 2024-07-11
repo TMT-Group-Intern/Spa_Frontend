@@ -1,5 +1,5 @@
 //import { ModalRegisterComponent } from './../modal-register/modal-register.component';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSHeaderModule } from 'tds-ui/header';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
@@ -7,15 +7,19 @@ import { TDSSelectModule } from 'tds-ui/select';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputModule } from 'tds-ui/tds-input';
-import {  Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
-import {  TDSModalModule, TDSModalService } from 'tds-ui/modal';
+import { TDSModalModule, TDSModalService } from 'tds-ui/modal';
 import { AuthService } from '../../shared.service';
+import { TDSCascaderModule, TDSCascaderOption } from 'tds-ui/cascader';
+import { HomeComponent } from '../../modules/home/home.component';
+import { CompanyService } from '../../core/services/company.service';
+
 
 @Component({
   selector: 'frontend-header',
   standalone: true,
-  imports: [CommonModule ,
+  imports: [CommonModule,
     ReactiveFormsModule,
     TDSHeaderModule,
     TDSFormFieldModule,
@@ -26,44 +30,69 @@ import { AuthService } from '../../shared.service';
     RouterModule,
     TDSToolTipModule,
     TDSModalModule,
+    TDSCascaderModule,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent  implements OnInit{
+export class HeaderComponent implements OnInit {
+
   public contact = 1;
-  userSession:any;
-  
+  userSession: any;
 
-  readonly contactOptions = [ { id: 1, name: ' Elton John ' },
-    { id: 2, name: 'Elvis Presley' },
-    { id: 3, name: 'Paul McCartney' },
-    { id: 4, name: 'Elton John' },
-    { id: 5, name: 'Elvis Presley' },
-    { id: 6, name: 'Paul McCartney' }]
-
+  branchOptions: any[] = [];
+  branchName='';
+  branchID = 0;
+  selectedBranch :any;
   signUpForm!: FormGroup;
-  persondisplayWith!: FormControl;
-
+  branch = inject(FormBuilder).nonNullable.control({
+    branch: [''],
+  });
+  //@Output() branchIDChanged: EventEmitter<string> = new EventEmitter<string>();
   ngOnInit() {
-  const storedUserSession = localStorage.getItem('userSession');
-  if (storedUserSession !== null) {
-    this.userSession = JSON.parse(storedUserSession);
+    const storedUserSession = localStorage.getItem('userSession');
+    if (storedUserSession !== null) {
+      this.userSession = JSON.parse(storedUserSession);
+    }
+    if(this.userSession.user.role ==='Admin' && this.userSession.user.branchID===0){
+      this.userSession.user.branchID = this.branchID = 1
+      localStorage.setItem('userSession', JSON.stringify(this.userSession));
+    } else {
+      this.branchID = this.userSession.user.branchID
+      this.branchName = this.userSession.user.branch
+      localStorage.setItem('userSession', JSON.stringify(this.userSession));
+    }
+
+    this.shared.getBranch().subscribe(
+      (data: any[]) => {
+        this.branchOptions = [...data.map(item => ({
+          id: item.branchID,
+          name: item.branchName,
+        }))]
+      })
   }
-    }
-    constructor(
-        private fb: FormBuilder,
-        private modalSvc:TDSModalService,
-        private router:Router 
-    ) {
-    }
-    onLogOut(){
-      localStorage.removeItem('userSession');
-      deleteCookie('userCookie')
-      this.router.navigate(['']);
-    };
+  constructor(
+    private shared: AuthService,
+    private fb: FormBuilder,
+    private modalSvc: TDSModalService,
+    private router: Router,
+    private companySvc: CompanyService
+  ) {
+  }
+  onBranchChanges(values: string[]): void {
+    this.selectedBranch=this.branchID
+    this.userSession.user.branchID=this.selectedBranch
+    this.companySvc._companyIdCur$.next(this.branchID)
+    localStorage.setItem('userSession', JSON.stringify(this.userSession));
+    //this.branchIDChanged.emit(this.selectedBranch);
+  };
+  onLogOut() {
+    localStorage.removeItem('userSession');
+    deleteCookie('userCookie')
+    this.router.navigate(['']);
+  };
 }
-function deleteCookie(cookieName:any) {
+function deleteCookie(cookieName: any) {
   document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 

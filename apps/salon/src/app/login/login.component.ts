@@ -54,16 +54,7 @@ export class LoginComponent implements OnInit {
           const userSession = {
             user: result.user,
           };
-          //console.log(userSession)
           localStorage.setItem('userSession', JSON.stringify(userSession));
-          // const storedUserSession = localStorage.getItem('userSession');
-          // if (storedUserSession !== null) {
-          //   this.userSession = JSON.parse(storedUserSession);
-          //   //console.log(this.userSession);
-          // }
-          //console.log(result.user)
-          //this.userSession = localStorage.getItem('userSession');
-          //console.log(this.userSession)
           setCookie('userCookie', result.token, 7); // Lưu token vào cookie với hạn sử dụng 7 ngày
           this.router.navigate(['home']);
         }
