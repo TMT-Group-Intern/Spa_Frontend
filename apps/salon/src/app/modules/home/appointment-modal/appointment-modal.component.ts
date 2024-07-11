@@ -23,6 +23,7 @@ import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
 import { format } from 'date-fns';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { BehaviorSubject, debounceTime, of, switchMap } from 'rxjs';
+import { HeaderComponent } from '../../../shared/header/header.component';
 
 @Component({
   selector: 'frontend-appointment-modal',
@@ -40,7 +41,8 @@ import { BehaviorSubject, debounceTime, of, switchMap } from 'rxjs';
     TDSSelectModule,
     TDSTimePickerModule,
     TDSToolTipModule,
-    TDSCalendarModule
+    TDSCalendarModule,
+    HeaderComponent
   ],
   templateUrl: './appointment-modal.component.html',
   styleUrls: ['./appointment-modal.component.scss'],
@@ -60,7 +62,7 @@ export class AppointmentModalComponent implements OnInit {
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
     name: [''],
-    branch: ['ABC'],
+    branch: [''],
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
     assignments: [],
     doctor: [],
@@ -76,7 +78,8 @@ export class AppointmentModalComponent implements OnInit {
   today = startOfToday();
   empID: any[] = [];
   dataCustomer: any[] = [];
-  assign: any[] = []
+  assign: any[] = [];
+  userSession: any;
 
   constructor(
     private shared: AuthService,
@@ -84,13 +87,21 @@ export class AppointmentModalComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    
     this.initCustomer();
-
+    const storedUserSession = localStorage.getItem('userSession');
+    if (storedUserSession !== null) {
+      this.userSession = JSON.parse(storedUserSession);
+    }
     this.form.get('name')?.disable();
     this.form.get('branch')?.disable();
 
     this.isHide1 = false;
     this.isHide2 = true;
+
+    this.form.patchValue({
+      branch:this.userSession.user.branch
+    })
 
     if (this.id) {
       this.form.get('phone')?.disable()
@@ -98,6 +109,15 @@ export class AppointmentModalComponent implements OnInit {
       this.isHide2 = false;
       this.shared.getAppointment(this.id).subscribe(
         (data: any) => {
+
+          this.shared.getBranchName(data.BranchID).subscribe(
+            (res: any) => {
+              this.form.patchValue({
+                branch: res.getBranchNameByID
+              });
+            }
+          )
+
           this.form.patchValue({
             phone: data.Customer.Phone,
             name: data.Customer.FirstName + ' ' + data.Customer.LastName,
@@ -105,19 +125,20 @@ export class AppointmentModalComponent implements OnInit {
             customerID: data.Customer.CustomerID,
             status: data.Status,
           });
-          const foundDoctor = this.assign.find(item => item.Employees.JobTypeID === 2);
+
+          this.assign = data.Assignments
+          const foundDoctor = this.assign.find(item => item.Employees.JobTypeID === 1);
           if(foundDoctor) {
             this.form.patchValue({
               doctor: foundDoctor.Employees.EmployeeID
             });
           }
-          console.log(this.form.value)
-        });
 
+        });
     }
 
     // Get Doctor
-    this.shared.getEmployee(1, 2).subscribe(
+    this.shared.getEmployee(this.userSession.user.branchID, 1).subscribe(
       (data: any[]) => {
         this.doctorOptions = [...data.map(item => ({
           id: item.employeeID,
@@ -155,6 +176,7 @@ export class AppointmentModalComponent implements OnInit {
         new Date(appointmentDate as Date), DATE_CONFIG.DATE_BASE
       ),
       employeeID: this.empID,
+      branchID:this.userSession.user.branchID
     };
 
     if (doctor != null) {
@@ -240,6 +262,9 @@ export class AppointmentModalComponent implements OnInit {
     );
   }
 
+  // getBranch(branchID:number):any{
+  //   return ;
+  // }
   // Success Notification
   createNotificationSuccess(content: any): void {
     this.notification.success('Succesfully', content);

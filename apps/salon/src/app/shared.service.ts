@@ -68,6 +68,9 @@ export class AuthService {
   getEmployeeByEmail(email: string): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/getUserByEmployee?email=' + email)
   }
+  getBranchName(branchID: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Branch/getBranchNameByID?id=' + branchID)
+  }
   // Show list of Customer
   CustomerList(): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Customers');
