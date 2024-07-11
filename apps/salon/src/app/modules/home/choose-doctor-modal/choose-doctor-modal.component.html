@@ -1,11 +1,11 @@
 <form class="py-2" id="idform" [formGroup]="form" autocomplete="off">
 
   <!-- Doctor -->
-  <tds-label [tdsRequired]="true">Doctor</tds-label>
+  <tds-label [tdsRequired]="true">Bác sĩ</tds-label>
   <tds-form-field class="my-2">
     <tds-select valueField="id" textField="name" placeholder='---' [data]="doctorOptions" formControlName="doctor">
     </tds-select>
-    <tds-error><span>Please choose a <strong>doctor</strong>.</span></tds-error>
+    <tds-error><span>Hãy chọn một <strong>bác sĩ</strong>.</span></tds-error>
   </tds-form-field>
 
 </form>
@@ -13,7 +13,7 @@
 <ng-container *tdsModalFooter>
   <div class="p-4">
     <button tds-button form="idform" (click)="submit()" color="success" class="w-full rounded">
-      Submit
+      Chấp Nhận
     </button>
   </div>
 </ng-container>
