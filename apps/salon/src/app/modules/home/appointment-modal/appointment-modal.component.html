@@ -17,14 +17,8 @@
             </tds-select>
             <!-- Display error -->
             <tds-error>
-              <span *ngIf="form.controls['phone'].hasError('required')">Your <strong>phone number</strong> cannot be
-                empty!</span>
-              <span *ngIf="form.controls['phone'].hasError('pattern')">Your <strong>phone number</strong> must start
-                with
-                0
-                and
-                have 10
-                digits!</span>
+              <span *ngIf="form.controls['phone'].hasError('required')"><strong>Số điện thoại</strong> không được để trống!</span>
+              <span *ngIf="form.controls['phone'].hasError('pattern')"><strong>Số điện thoại</strong> phải bắt đầu bằng số 0 và có 10 chữ số!</span>
             </tds-error>
           </tds-form-field>
           <!-- New Customer -->
@@ -72,12 +66,12 @@
 
       <!-- Date & Time -->
       <div class="grid grid-cols-3 gap-1 my-2">
-        <tds-label [tdsRequired]="true">Thời gian</tds-label>
+        <tds-label [tdsRequired]="true">Ngày giờ</tds-label>
         <tds-form-field class="col-span-2">
           <tds-date-picker showTime [disabledDate]="disabledDate" [format]="'dd/MM/YYYY hh:mm'"
             formControlName="appointmentDate"></tds-date-picker>
           <tds-error>
-            <span>Your <strong>date & time</strong> cannot be empty!</span>
+            <span><strong>Ngày giờ</strong> không được để trống!</span>
           </tds-error>
         </tds-form-field>
       </div>
@@ -97,7 +91,7 @@
 <ng-container *tdsModalFooter>
   <div class="p-4 flex flex-row-reverse">
     <button tds-button form="idform" (click)="submit()" color="success" class="w-[100px] rounded">
-      Lưu
+      Chấp Nhận
     </button>
   </div>
 </ng-container>

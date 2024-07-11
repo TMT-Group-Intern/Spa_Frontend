@@ -1,4 +1,3 @@
-import { ServiceAppointmentModalComponent } from './service-appointment-modal/service-appointment-modal.component';
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSButtonModule } from 'tds-ui/button';
@@ -194,20 +193,20 @@ export class HomeComponent implements OnInit {
   }
 
   // Open Service Appointment Modal
-  callmodalServiceAppointment(id: number) {
-    const modal = this.tModalSvc.create({
-      title: 'Create service appointment',
-      content: ServiceAppointmentModalComponent,
-      footer: null,
-      size: 'lg',
-      componentParams: {
-        id,
-      },
-    });
-    modal.afterClose.asObservable().subscribe((res) => {
-      if (res) {
-        this.initAppointmentList();
-      }
-    });
-  }
+  // callmodalServiceAppointment(id: number) {
+  //   const modal = this.tModalSvc.create({
+  //     title: 'Create service appointment',
+  //     content: ServiceAppointmentModalComponent,
+  //     footer: null,
+  //     size: 'lg',
+  //     componentParams: {
+  //       id,
+  //     },
+  //   });
+  //   modal.afterClose.asObservable().subscribe((res) => {
+  //     if (res) {
+  //       this.initAppointmentList();
+  //     }
+  //   });
+  // }
 }

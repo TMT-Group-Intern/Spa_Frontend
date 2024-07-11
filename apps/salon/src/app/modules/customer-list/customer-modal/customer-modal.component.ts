@@ -55,7 +55,7 @@ export class CustomerModalComponent implements OnInit {
     email: ['', Validators.email],
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
     dateOfBirth: [''],
-    gender: ['Male'],
+    gender: ['Nam'],
   });
 
   constructor(

@@ -101,7 +101,7 @@
                 </label>
                 <span class="block text-gray-700">
                   {{
-                  dataAppointmentbyid.Customer.Gender === 'Male'
+                  dataAppointmentbyid.Customer.Gender === 'Nam'
                   ? 'Nam'
                   : 'Nữ'
                   }}
@@ -131,7 +131,7 @@
                   <div>
                     <tds-label>Ghi chú</tds-label>
                     <tds-form-field class="pt-2">
-                      <textarea tdsInput [tdsAutosize]="{ minRows: 4,  maxRows: 20}"  formControlName="note"
+                      <textarea tdsInput [tdsAutosize]="{ minRows: 4,  maxRows: 20}" formControlName="note"
                         placeholder='Ghi chú'>
                       </textarea>
                     </tds-form-field>
