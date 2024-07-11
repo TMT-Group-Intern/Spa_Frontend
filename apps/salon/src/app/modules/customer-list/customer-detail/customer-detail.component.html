@@ -9,8 +9,8 @@
     <div class="p-4">
       <p><i class="tdsi-call-fill text-success-400"></i> {{customer.customerDTO.phone}}</p>
       <p><i class="tdsi-birthday-fill text-success-400"></i> {{customer.customerDTO.dateOfBirth | date:'dd/MM/YYYY'}}</p>
-      <p *ngIf="customer.customerDTO.gender === 'Male'"><i class="tdsi-male-fill text-success-400"></i> Male</p>
-      <p *ngIf="customer.customerDTO.gender === 'Female'"><i class="tdsi-female-fill text-success-400"></i> Female</p>
+      <p *ngIf="customer.customerDTO.gender === 'Nam'"><i class="tdsi-male-fill text-success-400"></i> Nam</p>
+      <p *ngIf="customer.customerDTO.gender === 'Nữ'"><i class="tdsi-female-fill text-success-400"></i> Nữ</p>
     </div>
   </div>
 </div>

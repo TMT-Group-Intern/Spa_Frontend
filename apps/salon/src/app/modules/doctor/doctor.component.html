@@ -1,25 +1,22 @@
 <!-- display of doctor -->
-<div class="flex flex-row bg-gray-200 h-full">
-  <div class="basis-1/4 border p-2 rounded-10 bg-white">
+<div class="grid grid-cols-12 gap-2 bg-gray-200 h-full">
+  <div class="col-span-3 border p-2 rounded-10 bg-white overflow-y-auto">
     <div class="w-full h-full p-2 rounded-10 bg-white">
       <span class="p-4 text-heading-2">Tiếp nhận tư vấn</span>
       <div class="overflow-y-auto mt-3" style="max-height: 570px">
-        <tds-card
-          *ngFor="let appoint of reception"
-          class="border rounded-20 mb-2 hover:bg-neutral-200 cursor-pointer"
+        <tds-card *ngFor="let appoint of reception" class="border rounded-20 mb-2 hover:bg-neutral-200 cursor-pointer"
           (click)="
             userFrofile(appoint.AppointmentID); getHistory(appoint.CustomerID)
-          "
-        >
+          ">
           <!-- Card Header -->
           <tds-card-header class="bg-green-success-200 text-white rounded-t-md">
             <div class="flex justify-between">
               <p tds-typography tdsEllipsis>
                 {{ appoint.Customer.FirstName }} {{ appoint.Customer.LastName }}
               </p>
-              <tds-tag status="custom" class="bg-success-400 rounded-full">{{
+              <tds-tag status="custom" class="bg-success-400 rounded-md">{{
                 appoint.Status
-              }}</tds-tag>
+                }}</tds-tag>
             </div>
           </tds-card-header>
           <!-- Card content -->
@@ -60,36 +57,27 @@
       </div>
     </div>
   </div>
-  <div class="basis-3/4 border rounded-10 ml-2">
+  <div class="col-span-9 border rounded-10 overflow-y-auto" style="max-height: 650px;">
     <!-- && active == true thì  -->
-    <div
-      class="bg-gray-200 flex flex-col h-full"
-      *ngIf="dataAppointmentbyid && active === true; else nodata"
-    >
-      <div class="basis-1/4 border p-4 rounded-10 bg-white h-[300px]">
-        <div class="ml-2 p-2 flex flex-col">
+    <div class=" bg-gray-200 flex flex-col h-full" *ngIf="dataAppointmentbyid && active === true; else nodata">
+
+      <div class="basis-1/4 border p-4 rounded-10 bg-white h-[1000px]">
+        <div class="p-2 flex flex-col">
           <div class="flex justify-between bg-white rounded-lg">
-            <div
-              class="border bg-white p-4 rounded-lg shadow-md w-[340px] flex flex-col justify-between"
-            >
+            <div class="border bg-white p-4 rounded-lg shadow-md w-[340px] flex flex-col gap-4">
               <div class="flex flex-row">
-                <label
-                  class="flex items-center font-tds-font-family-body text-tds-font-size-3 w-[105px]"
-                >
+                <label class="flex items-center font-tds-font-family-body text-tds-font-size-3 w-[105px]">
                   Họ tên:
                 </label>
                 <span class="block text-lg font-bold text-gray-700">
                   {{
-                    dataAppointmentbyid.Customer.FirstName +
-                      ' ' +
-                      dataAppointmentbyid.Customer.LastName
-                  }}</span
-                >
+                  dataAppointmentbyid.Customer.FirstName +
+                  ' ' +
+                  dataAppointmentbyid.Customer.LastName
+                  }}</span>
               </div>
               <div class="flex flex-row">
-                <label
-                  class="flex items-center font-tds-font-family-body text-tds-font-size-3 w-[105px]"
-                >
+                <label class="flex items-center font-tds-font-family-body text-tds-font-size-3 w-[105px]">
                   Số điện thoại:
                 </label>
                 <span class="block text-gray-700">
@@ -97,94 +85,64 @@
                 </span>
               </div>
               <div class="flex flex-row">
-                <label
-                  class="flex items-center font-tds-font-family-body text-tds-font-size-3 w-[105px]"
-                >
+                <label class="flex items-center font-tds-font-family-body text-tds-font-size-3 w-[105px]">
                   Ngày sinh:
                 </label>
                 <span class="block text-gray-700">
                   {{
-                    dataAppointmentbyid.Customer.DateOfBirth
-                      | date : 'dd/MM/YYYY'
+                  dataAppointmentbyid.Customer.DateOfBirth
+                  | date : 'dd/MM/YYYY'
                   }}
                 </span>
               </div>
               <div class="flex flex-row">
-                <label
-                  class="flex items-center font-tds-font-family-body text-tds-font-size-3 w-[105px]"
-                >
+                <label class="flex items-center font-tds-font-family-body text-tds-font-size-3 w-[105px]">
                   Giới tính:
                 </label>
                 <span class="block text-gray-700">
                   {{
-                    dataAppointmentbyid.Customer.Gender === 'Male'
-                      ? 'Nam'
-                      : 'Nữ'
+                  dataAppointmentbyid.Customer.Gender === 'Nam'
+                  ? 'Nam'
+                  : 'Nữ'
                   }}
                 </span>
               </div>
             </div>
-            <div class="border w-[650px] bg-white p-2 rounded-lg shadow-md">
+            <div class="border w-[680px] bg-white p-4 rounded-lg shadow-md">
               <form id="idform" [formGroup]="form" autocomplete="off">
                 <!-- Status -->
-                <div class="flex flex-row">
-                  <div class="w-[50%]">
-                    <div class="pl-4">
-                      <tds-label>Trạng thái</tds-label>
-                      <tds-form-field class="pt-2">
-                        <tds-select
-                          placeholder="---"
-                          [data]="statusOptions"
-                          formControlName="status"
-                        >
-                        </tds-select>
-                      </tds-form-field>
-                    </div>
-                    <div class="pl-4">
-                      <tds-label>Lựa chọn dịch vụ</tds-label>
-                      <tds-form-field class="pt-2">
-                        <tds-select
-                          valueField="serviceID"
-                          formControlName="service"
-                          textField="serviceName"
-                          placeholder="Chọn dịch vụ"
-                          disabledField="isActive"
-                          [allowClear]="true"
-                          [data]="dataSvc"
-                          mode="multiple"
-                        >
-                        </tds-select>
-                        <tds-error class="text-tds-color-red-500-light"
-                          >Vui lòng chọn dịch vụ!
-                        </tds-error>
-                      </tds-form-field>
-                    </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <tds-label>Trạng thái</tds-label>
+                    <tds-form-field class="py-2">
+                      <tds-select placeholder="---" [data]="statusOptions" formControlName="status">
+                      </tds-select>
+                    </tds-form-field>
+                    <tds-label>Lựa chọn dịch vụ</tds-label>
+                    <tds-form-field class="py-2">
+                      <tds-select valueField="serviceID" formControlName="service" textField="serviceName"
+                        placeholder="Chọn dịch vụ" disabledField="isActive" [allowClear]="true" [data]="dataSvc"
+                        mode="multiple">
+                      </tds-select>
+                      <tds-error class="text-tds-color-red-500-light">Vui lòng chọn dịch vụ!
+                      </tds-error>
+                    </tds-form-field>
                   </div>
-                  <div class="pl-4 w-[50%]">
+                  <div>
                     <tds-label>Ghi chú</tds-label>
                     <tds-form-field class="pt-2">
-                      <textarea
-                        tdsInput
-                        [tdsAutosize]="{ minRows: 4, maxRows: 4 }"
-                        formControlName="note"
-                        placeholder="Ghi chú"
-                      >
+                      <textarea tdsInput [tdsAutosize]="{ minRows: 4,  maxRows: 20}" formControlName="note"
+                        placeholder='Ghi chú'>
                       </textarea>
                     </tds-form-field>
                   </div>
                 </div>
                 <div class="flex flex-row-reverse p-4">
-                  <button
-                    tds-button
-                    form="idform"
-                    (click)="
+                  <button tds-button form="idform" (click)="
                       submitUpdateServiceAppointment(
                         dataAppointmentbyid.AppointmentID
                       )
-                    "
-                    color="success"
-                    class="w-[100px] px-4 py-2 text-white rounded"
-                  >
+                    " color="success" class="w-[100px] px-4 py-2 text-white rounded">
                     Lưu
                   </button>
                 </div>
@@ -195,50 +153,30 @@
       </div>
       <div class="basis-3/4 border p-2 rounded-10 bg-white mt-2">
         <span class="m-2 text-heading-3">Lịch sử điều trị </span>
-        <div
-          *ngIf="serviceHistory; else noHistory"
-          class="overflow-y-auto max-h-[400px]"
-        >
-          <div
-            id="id"
-            *ngFor="let history of serviceHistory"
-            class="flex border rounded-10 m-2"
-          >
+        <div *ngIf="serviceHistory; else noHistory" class="overflow-y-auto max-h-[400px]">
+          <div id="id" *ngFor="let history of serviceHistory" class="flex border rounded-10 m-2">
             <div class="flex items-center w-[600px] overflow-y-auto">
-              <div
-                class="flex m-4 rounded-10"
-                *ngIf="history.photoCustomer.length > 0; else noImage"
-              >
-                <img
-                  *ngFor="let image of history.photoCustomer"
-                  tds-image
-                  width="150px"
-                  height="150px"
-                  [tdsSrc]="'https://localhost:44305/photos/' + image"
-                  alt="Image"
-                />
+              <div class="flex m-4 rounded-10" *ngIf="history.photoCustomer.length > 0; else noImage">
+                <img *ngFor="let image of history.photoCustomer" tds-image width="150px" height="150px"
+                  [tdsSrc]="'https://localhost:44305/photos/' + image" alt="Image" />
               </div>
               <ng-template #noImage>
-                <span
-                  class="flex items-center justify-center h-full w-full text-gray-800"
-                >
+                <span class="flex items-center justify-center h-full w-full text-gray-800">
                   <tds-empty></tds-empty>
                 </span>
               </ng-template>
             </div>
             <div class="w-[200px] flex-col float-right m-4">
-              <tds-label
-                >Ngày tạo:
+              <tds-label>Ngày tạo:
                 <div class="text-primary-1">
                   {{ history.date | date : 'dd/MM/YYYY hh:mm' }}
                 </div>
               </tds-label>
-              <tds-label
-                >Dịch vụ:
+              <tds-label>Dịch vụ:
                 <div *ngIf="history.serviceUsed.length > 0; else noservice">
                   <tds-success *ngFor="let service of history.serviceUsed">{{
                     service
-                  }}</tds-success>
+                    }}</tds-success>
                 </div>
               </tds-label>
               <ng-template #noservice>
@@ -247,11 +185,7 @@
             </div>
           </div>
         </div>
-        <ng-template
-          #noHistory
-          class="flex justify-center items-center"
-          style="height: 400px"
-        >
+        <ng-template #noHistory class="flex justify-center items-center" style="height: 400px">
           <tds-empty></tds-empty>
         </ng-template>
       </div>

@@ -2,7 +2,7 @@
   <!-- Appointment List -->
   <div class="col-span-1 border p-4 rounded-10 bg-white">
     <div class="flex justify-between">
-      <span class="text-heading-4">Today Booking</span>
+      <span class="text-heading-4">Lichj hẹn hôm nay</span>
 
       <button
         tds-button-icon
@@ -46,7 +46,7 @@
                 *ngIf="appoint.Status === 'Hẹn'"
                 status="custom"
                 class="bg-base-yellow-500"
-                >Hẹn</tds-tag
+                >Đã Hẹn</tds-tag
               >
               <tds-tag
                 *ngIf="appoint.Status === 'Hủy hẹn'"
@@ -59,7 +59,11 @@
         </tds-card-header>
         <tds-card-content class="">
           <!-- <p><i class="tdsi-earpiece-fill text-green-success-300"></i> {{appoint.AppointmentID | tdsMapper: returnDoctor}}</p> -->
-          <p>
+          <p *ngIf="appoint.Doctor === null">
+            <i class="tdsi-earpiece-fill text-green-success-400"></i>
+            ---
+          </p>
+          <p *ngIf="appoint.Doctor !== null">
             <i class="tdsi-earpiece-fill text-green-success-400"></i>
             {{ appoint.Doctor }}
           </p>
@@ -106,7 +110,7 @@
   <div class="col-span-3 gap-y-2 grid grid-rows-2 flex-wrap">
     <!-- Reception -->
     <div class="row-span-1 p-4 border rounded-10 bg-white">
-      <span class="text-heading-4">Reception</span>
+      <span class="text-heading-4">Tiếp Nhận</span>
       <div
         *ngIf="reception.length === 0"
         class="h-60 flex justify-center items-center"
@@ -154,7 +158,7 @@
 
     <!-- In ssesion -->
     <div class="row-span-1 border p-4 rounded-10 bg-white">
-      <span class="text-heading-4">In Session</span>
+      <span class="text-heading-4">Chờ Chăm Sóc</span>
       <div
         *ngIf="inSession.length === 0"
         class="h-60 flex justify-center items-center"
@@ -163,7 +167,7 @@
       </div>
       <div
         *ngIf="inSession.length !== 0"
-        class="gap-x-2 grid grid-cols-4 flex-wrap overflow-y-auto mt-3"
+        class="gap-x-2 grid grid-cols-3 flex-wrap overflow-y-auto mt-3"
         style="max-height: 225px"
       >
         <tds-card
@@ -192,10 +196,13 @@
           <div class="grid grid-cols-3 flex-wrap">
             <!-- Card content -->
             <tds-card-content class="col-span-2">
-              <p>
-                <i class="tdsi-auto-fix-fill text-green-success-300"></i>
+              <p *ngIf="appoint.TeachnicalStaff === null">
+                <i class="tdsi-earpiece-fill text-green-success-400"></i>
+                ---
+              </p>
+              <p *ngIf="appoint.TeachnicalStaff !== null">
+                <i class="tdsi-earpiece-fill text-green-success-400"></i>
                 {{ appoint.TeachnicalStaff }}
-
               </p>
               <p>
                 <i class="tdsi-time-fill text-green-success-400"></i>
@@ -226,7 +233,7 @@
                 color="success"
                 (click)="onEditPayment(appoint.AppointmentID)"
               >
-                Check Out
+                Thanh toán
               </button>
             </div>
           </tds-card-actions>

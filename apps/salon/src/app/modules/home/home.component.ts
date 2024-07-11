@@ -1,4 +1,3 @@
-import { ServiceAppointmentModalComponent } from './service-appointment-modal/service-appointment-modal.component';
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSButtonModule } from 'tds-ui/button';
@@ -110,7 +109,12 @@ export class HomeComponent implements OnInit {
           appointment.Status === 'Đang khám'
       );
       this.inSession = this.appointmentList.filter((appointment: any) =>
-        appointment.Status === "Đã khám" || appointment.Status === "Hoàn thành"
+
+        appointment.Status === "Đã khám" ||
+        appointment.Status === "Không sử dụng dịch vụ" ||
+        appointment.Status === "Đang thực hiện" ||
+        appointment.Status === "Hoàn thành"
+
       );
     });
   }
@@ -130,8 +134,7 @@ export class HomeComponent implements OnInit {
     });
     modal.afterClose.asObservable().subscribe((res) => {
       if (res) {
-        console.log(res);
-        this.initAppointmentList();
+        this.initAppointmentList()
       }
     });
   }
@@ -229,20 +232,20 @@ export class HomeComponent implements OnInit {
   }
 
   // Open Service Appointment Modal
-  callmodalServiceAppointment(id: number) {
-    const modal = this.tModalSvc.create({
-      title: 'Create service appointment',
-      content: ServiceAppointmentModalComponent,
-      footer: null,
-      size: 'lg',
-      componentParams: {
-        id,
-      },
-    });
-    modal.afterClose.asObservable().subscribe((res) => {
-      if (res) {
-        this.initAppointmentList();
-      }
-    });
-  }
+  // callmodalServiceAppointment(id: number) {
+  //   const modal = this.tModalSvc.create({
+  //     title: 'Create service appointment',
+  //     content: ServiceAppointmentModalComponent,
+  //     footer: null,
+  //     size: 'lg',
+  //     componentParams: {
+  //       id,
+  //     },
+  //   });
+  //   modal.afterClose.asObservable().subscribe((res) => {
+  //     if (res) {
+  //       this.initAppointmentList();
+  //     }
+  //   });
+  // }
 }

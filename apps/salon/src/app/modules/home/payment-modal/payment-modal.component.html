@@ -1,14 +1,18 @@
-<div class="my-2">
-  <p><strong>Phone Number:</strong> {{inforCus.Customer.Phone}}</p>
-  <p><strong>Customer:</strong> {{inforCus.Customer.FirstName}} {{inforCus.Customer.LastName}}</p>
-  <p><strong>Date:</strong> {{inforCus.AppointmentDate | date:'HH:mm'}}</p>
+<div class="my-2 font-tds-font-family-body text-tds-font-size-4">
+  <!-- <p><strong>Số điện thoại:</strong> {{inforCus.Customer.Phone}}</p> -->
+  <p class="mb-2 grid grid-cols-10 gap-4"><strong>Khách hàng:</strong> <span
+      class="col-span-9">{{inforCus.Customer.FirstName}} {{inforCus.Customer.LastName}}</span></p>
+  <p class="mb-2 grid grid-cols-10 gap-4"><strong>Ngày:</strong> <span class="col-span-9">{{inforCus.AppointmentDate |
+      date:'dd/MM/YYYY'}}</span></p>
+  <p class="mb-2 grid grid-cols-10 gap-4"><strong>Giờ:</strong> <span class="col-span-9">{{inforCus.AppointmentDate |
+      date:'HH:mm'}}</span></p>
   <br>
   <tds-table #basicTable [listData]="service" [showPagination]="false">
     <thead>
       <tr>
         <th width="20%">ID</th>
-        <th width="65%">Name</th>
-        <th width="15%">Price</th>
+        <th width="65%">Tên</th>
+        <th width="15%">Giá</th>
       </tr>
     </thead>
     <tbody>
@@ -22,26 +26,30 @@
     </tbody>
   </tds-table>
 
-  <p class="pr-2 pt-2"><strong>Total:</strong> {{inforCus.Total}}</p>
+  <p class="pt-2 grid grid-cols-10 gap-4"><strong>Tổng tiền:</strong> <span class="col-span-9">{{inforCus.Total}}</span>
+  </p>
   <form class="py-2" id="idform" [formGroup]="form" autocomplete="off">
-    <div class="flex">
-      <p class="pr-2 pt-2"><strong>Discount %:</strong> </p>
-      <tds-form-field class="w-20 mr-2">
-        <tds-input-number [min]="0" [max]="100" [step]="1" formControlName="diDiscountPercentage">
-        </tds-input-number>
-      </tds-form-field>
-      <button tds-button-icon color="success" size="sm" (click)="updateDiscount()">
-        <i class="tdsi-check-fill"></i>
-      </button>
+    <div class="pt-2 grid grid-cols-10 gap-2">
+      <p><strong>Giảm giá:</strong> </p>
+      <div class="col-span-9 flex">
+        <tds-form-field class="mr-2 w-[70px]">
+          <tds-input-number [min]="0" [max]="100" [step]="1" formControlName="diDiscountPercentage">
+          </tds-input-number>
+        </tds-form-field>
+        <button tds-button-icon color="success" size="sm" (click)="updateDiscount()">
+          <i class="tdsi-check-fill"></i>
+        </button>
+      </div>
     </div>
   </form>
-  <p class="pr-2 pt-2"><strong>Total Amount:</strong> {{totalAmount}}</p>
+  <p class="pt-2 grid grid-cols-10 gap-2"><strong>Thành tiền:</strong> <span class="col-span-9">{{totalAmount}}</span>
+  </p>
 </div>
 
 <ng-container *tdsModalFooter>
   <div class="p-4">
     <button tds-button form="idform" (click)="submit()" color="success" class="w-full rounded">
-      Submit
+      Chấp Nhận
     </button>
     <!-- <button tds-button (click)="invoice()">In hóa đơn</button> -->
   </div>
