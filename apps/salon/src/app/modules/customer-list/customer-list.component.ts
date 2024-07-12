@@ -60,7 +60,6 @@ export class CustomerListComponent implements OnInit {
       this.auth.pageCustomers(this.pageNumber, this.pageSize).subscribe((data:any) => {
       this.customerOfPage = data.item;
       this.totalItemsCustomers = data.totalItems;
-      console.log(this.customerOfPage)
     })
   }
 
@@ -76,7 +75,6 @@ export class CustomerListComponent implements OnInit {
   }
 
   onRefresh(event: MouseEvent): void {
-    console.log(event);
     this.pageNumber = 1;
     this.renderPageCustomers();
   }

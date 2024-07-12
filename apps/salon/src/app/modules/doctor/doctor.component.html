@@ -12,7 +12,7 @@
           <tds-card-header class="bg-green-success-200 text-white rounded-t-md">
             <div class="flex justify-between">
               <p tds-typography tdsEllipsis>
-                {{ appoint.Customer.FirstName }} {{ appoint.Customer.LastName }}
+              {{ appoint.Customer.LastName }} {{ appoint.Customer.FirstName }}
               </p>
               <tds-tag status="custom" class="bg-success-400 rounded-md">{{
                 appoint.Status
@@ -71,9 +71,9 @@
                 </label>
                 <span class="block text-lg font-bold text-gray-700">
                   {{
-                  dataAppointmentbyid.Customer.FirstName +
+                  dataAppointmentbyid.Customer.LastName +
                   ' ' +
-                  dataAppointmentbyid.Customer.LastName
+                  dataAppointmentbyid.Customer.FirstName
                   }}</span>
               </div>
               <div class="flex flex-row">
