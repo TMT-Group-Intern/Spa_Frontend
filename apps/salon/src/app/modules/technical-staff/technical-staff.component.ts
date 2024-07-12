@@ -209,8 +209,8 @@ export class TechnicalStaffComponent {
   onStatusChange(event: any, id: number) {
     const status = event.target.value;
     if (status === 'Hoàn thành') {
-      this.onDelete(id);
       this.checkActive = false;
+      this.onDelete(id);
     }
     this.updateStatus(id, status);
   }

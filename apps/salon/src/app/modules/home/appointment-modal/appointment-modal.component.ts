@@ -85,7 +85,7 @@ export class AppointmentModalComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    
+
     this.initCustomer();
     const storedUserSession = localStorage.getItem('userSession');
     if (storedUserSession !== null) {
@@ -98,7 +98,7 @@ export class AppointmentModalComponent implements OnInit {
     this.isHide2 = true;
 
     this.form.patchValue({
-      branch:this.userSession.user.branch
+      branch: this.userSession.user.branch
     })
 
     if (this.id) {
@@ -126,7 +126,7 @@ export class AppointmentModalComponent implements OnInit {
 
           this.assign = data.Assignments
           const foundDoctor = this.assign.find(item => item.Employees.JobTypeID === 1);
-          if(foundDoctor) {
+          if (foundDoctor) {
             this.form.patchValue({
               doctor: foundDoctor.Employees.EmployeeID
             });
@@ -136,7 +136,7 @@ export class AppointmentModalComponent implements OnInit {
     }
 
     // Get Doctor
-    this.shared.getEmployee(this.userSession.user.branchID, 1).subscribe(
+    this.shared.getEmployee(this.userSession.user.branchID, 2).subscribe(
       (data: any[]) => {
         this.doctorOptions = [...data.map(item => ({
           id: item.employeeID,
@@ -174,7 +174,7 @@ export class AppointmentModalComponent implements OnInit {
         new Date(appointmentDate as Date), DATE_CONFIG.DATE_BASE
       ),
       employeeID: this.empID,
-      branchID:this.userSession.user.branchID
+      branchID: this.userSession.user.branchID
     };
 
     if (doctor != null) {
