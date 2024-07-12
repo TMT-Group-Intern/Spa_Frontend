@@ -18,6 +18,8 @@ import { startOfToday } from 'date-fns';
 import { TDSSelectModule } from 'tds-ui/select';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { TDSInputModule } from 'tds-ui/tds-input';
+import { CompanyService } from '../../core/services/company.service';
+import { concatMap, filter } from 'rxjs';
 
 @Component({
   selector: 'frontend-doctor',
@@ -42,6 +44,7 @@ import { TDSInputModule } from 'tds-ui/tds-input';
     TDSInputModule,
   ],
 })
+
 export class DoctorComponent implements OnInit {
   public statusOptions = [
     'Chờ khám',
@@ -62,6 +65,9 @@ export class DoctorComponent implements OnInit {
   empID: any[] = [];
   dataSvc: any = [];
   CustomerID: number | undefined;
+  userSession: any;
+  companyId:number|null = null;
+
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
     name: [''],
@@ -75,9 +81,30 @@ export class DoctorComponent implements OnInit {
     service: [[]],
     note: [''],
   });
+  constructor(
+    private companySvc: CompanyService
+  ) { }
 
   ngOnInit(): void {
+    const storedUserSession = localStorage.getItem('userSession');
+    if (storedUserSession !== null) {
+      this.userSession = JSON.parse(storedUserSession);
+    }
     this.initAppointmentList();
+
+    this.companySvc._companyIdCur$.pipe(
+      filter(companyId=> !!companyId),
+      concatMap((branchID)=> {
+      return  this.sharedService.appointmentList(branchID as number)
+      })
+    ).subscribe((data: any) => {
+      this.appointmentList = data;
+      this.reception = this.appointmentList.filter(
+        (appointment: any) =>
+          appointment.Status === 'Chờ khám' ||
+          appointment.Status === 'Đang khám'
+      );
+    });
   }
   initService(): void {
     //Display Service List
@@ -92,7 +119,8 @@ export class DoctorComponent implements OnInit {
 
   // Display Appointment List
   initAppointmentList() {
-    this.sharedService.appointmentList(1).subscribe((data: any) => {
+    const branchID = this.userSession.user.branchID 
+    this.sharedService.appointmentList(branchID).subscribe((data: any) => {
       this.appointmentList = data;
       this.reception = this.appointmentList.filter(
         (appointment: any) =>
