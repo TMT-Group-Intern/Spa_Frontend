@@ -1,4 +1,3 @@
-import { ServiceAppointmentModalComponent } from './service-appointment-modal/service-appointment-modal.component';
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSButtonModule } from 'tds-ui/button';
@@ -19,6 +18,8 @@ import { TDSEmptyModule } from 'tds-ui/empty';
 import { InvoiceService } from '../invoice/invoice.service';
 import { error } from 'console';
 import { TDSMapperPipeModule } from 'tds-ui/cdk/pipes/mapper';
+import { CompanyService } from '../../core/services/company.service';
+import { concatMap, filter } from 'rxjs';
 
 @Component({
   selector: 'frontend-home',
@@ -38,6 +39,7 @@ import { TDSMapperPipeModule } from 'tds-ui/cdk/pipes/mapper';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  
   private readonly tModalSvc = inject(TDSModalService);
   appointmentList: any[] = [];
   time: any;
@@ -45,20 +47,56 @@ export class HomeComponent implements OnInit {
   reception: any[] = [];
   inSession: any[] = [];
   status: any;
-
+  userSession: any;
+ 
+   storedUserSession = localStorage.getItem('userSession');
+   oldBranch: any ;
+   companyId:number|null = null;
   constructor(
     private sharedService: AuthService,
-    private invoiceSvc: InvoiceService
+    private invoiceSvc: InvoiceService,
+    private companySvc: CompanyService
   ) { }
 
   ngOnInit(): void {
-    this.initAppointmentList();
-    // console.log(this.statusOptions)
-  }
+   // const storedUserSession = localStorage.getItem('userSession');
+    if (this.storedUserSession !== null) {
+      this.userSession = JSON.parse(this.storedUserSession);
+      this.oldBranch = this.userSession.user.branchID ;
+      this.initAppointmentList();
+    }
 
+    this.companySvc._companyIdCur$.pipe(
+      filter(companyId=> !!companyId),
+      concatMap((branchID)=> {
+      return  this.sharedService.appointmentList(branchID as number)
+      })
+    ).subscribe((data: any) => {
+      this.appointmentList = data;
+      this.todayBooking = this.appointmentList.filter(
+        (appointment: any) =>
+          appointment.Status === 'Hẹn' || appointment.Status === 'Hủy hẹn'
+      );
+      this.reception = this.appointmentList.filter(
+        (appointment: any) =>
+          appointment.Status === 'Chờ khám' ||
+          appointment.Status === 'Đang khám'
+      );
+      this.inSession = this.appointmentList.filter((appointment: any) =>
+        appointment.Status === "Đã khám" || appointment.Status === "Hoàn thành"
+      );
+    });
+   
+  }
+  // onBranchIDChanged(branchID: string): void {
+  //   // Gọi initAppointmentList() sau khi nhận được sự kiện thành công
+  //   this.initAppointmentList();
+  // }
   // Display Appointment List
   initAppointmentList() {
-    this.sharedService.appointmentList(1).subscribe((data: any) => {
+    const branchID = this.userSession.user.branchID 
+
+    this.sharedService.appointmentList(branchID).subscribe((data: any) => {
       this.appointmentList = data;
       this.todayBooking = this.appointmentList.filter(
         (appointment: any) =>
@@ -194,20 +232,20 @@ export class HomeComponent implements OnInit {
   }
 
   // Open Service Appointment Modal
-  callmodalServiceAppointment(id: number) {
-    const modal = this.tModalSvc.create({
-      title: 'Create service appointment',
-      content: ServiceAppointmentModalComponent,
-      footer: null,
-      size: 'lg',
-      componentParams: {
-        id,
-      },
-    });
-    modal.afterClose.asObservable().subscribe((res) => {
-      if (res) {
-        this.initAppointmentList();
-      }
-    });
-  }
+  // callmodalServiceAppointment(id: number) {
+  //   const modal = this.tModalSvc.create({
+  //     title: 'Create service appointment',
+  //     content: ServiceAppointmentModalComponent,
+  //     footer: null,
+  //     size: 'lg',
+  //     componentParams: {
+  //       id,
+  //     },
+  //   });
+  //   modal.afterClose.asObservable().subscribe((res) => {
+  //     if (res) {
+  //       this.initAppointmentList();
+  //     }
+  //   });
+  // }
 }

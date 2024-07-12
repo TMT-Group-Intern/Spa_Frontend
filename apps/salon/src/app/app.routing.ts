@@ -2,7 +2,6 @@ import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ServiceListComponent } from './modules/service-list/service-list.component';
 import { LoginComponent } from './login/login.component';
-import { ProductsComponent } from './modules/products/products.component';
 import { LayoutComponent } from './layout/layout.component';
 import { CustomerListComponent } from './modules/customer-list/customer-list.component';
 import { RevenueStaticsModule } from './modules/revenue-statistics/revenue-statistics.module';
@@ -13,6 +12,7 @@ import { TechnicalStaffComponent } from './modules/technical-staff/technical-sta
 import { TreatmentDetailComponent } from './modules/technical-staff/treatment-detail/treatment-detail.component';
 import { DoctorComponent } from './modules/doctor/doctor.component';
 import { AuthGuardService } from './auth/auth-guard.service';
+import { SchedulesComponent } from './modules/schedule/schedule.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -22,7 +22,7 @@ const routes: Routes = [
     component: LayoutComponent,canActivate: [AuthGuardService],
     children: [
       { path: 'home', loadComponent: () => HomeComponent },
-      { path: 'products', loadComponent: () => ProductsComponent },
+      { path: 'schedule', loadComponent: () => SchedulesComponent },
       { path: 'service-list', loadComponent: () => ServiceListComponent },
       { path: 'customer-list', loadComponent: () => CustomerListComponent },
       { path: 'technical-staff', loadComponent: () => TechnicalStaffComponent },

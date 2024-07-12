@@ -39,7 +39,7 @@ export class ChooseDoctorModalComponent implements OnInit {
   ngOnInit(): void {
 
     // Get Doctor
-    this.shared.getEmployee(1, 2).subscribe(
+    this.shared.getEmployee(2, 2).subscribe(
       (data: any[]) => {
         this.doctorOptions = [...data.map(item => ({
           id: item.employeeID,

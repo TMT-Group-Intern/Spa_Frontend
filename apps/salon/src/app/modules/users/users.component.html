@@ -1,9 +1,9 @@
 <div class=" flex flex-col h-full">
   <div class="flex justify-end mt-2">
-  <div class="flex w-1/6 mr-4 flex-col gap-2 pl-4">
-    <tds-cascader [tdsOptions]="tdsOptions" [(ngModel)]="values"  (ngModelChange)="onChanges($event)"></tds-cascader>
-</div>
-    <button tds-button-icon (click)="createUser()" class="rounded-full mr-8 bg-green-1" color="warning" tds-tooltip
+    <div class="flex w-1/6 mr-4 flex-col gap-2 pl-4">
+      <tds-cascader [tdsOptions]="tdsOptions" [(ngModel)]="values" (ngModelChange)="onChanges($event)"></tds-cascader>
+    </div>
+    <button tds-button-icon (click)="createUser()" class="rounded-full mr-8 bg-green-1" color="success" tds-tooltip
       tooltipTitle="Tạo tài khoản">
       <span class="flex items-center">
         <i class="tdsi-plus-fill text-white"></i>
@@ -26,28 +26,28 @@
 
     <tds-data-table-column [tdsField]="'Gender'" [tdsTitle]="'Giới tính'" tdsWidth="5%"
       [tdsDataType]="'text'"></tds-data-table-column>
-      <tds-data-table-column [tdsField]="'DateOfBirth'" [tdsTitle]="'Ngày sinh'" tdsWidth="8%"
-                       [tdsDataType]="'date'"></tds-data-table-column>
-      <tds-data-table-column [tdsField]="'Role'" [tdsTitle]="'Chức vụ'" tdsWidth="12%"
+    <tds-data-table-column [tdsField]="'DateOfBirth'" [tdsTitle]="'Ngày sinh'" tdsWidth="8%"
+      [tdsDataType]="'date'"></tds-data-table-column>
+    <tds-data-table-column [tdsField]="'Role'" [tdsTitle]="'Chức vụ'" tdsWidth="12%"
       [tdsDataType]="'text'"></tds-data-table-column>
 
     <tds-data-table-column [tdsContent]="commandTpl" tdsWidth="12%" [tdsColumnType]="'command'"
       tdsClass="flex justify-around">
       <ng-template #commandTpl let-dataRow>
-        <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-green-500"  tds-tooltip
-        tooltipTitle="Tạo tài khoản cho nhân viên" 
-        (click)="createAccountForEmployee(dataRow.Email)" *ngIf="dataRow.isActive === false">
-        <i class="tdsi-plus-fill"></i>
-      </button>
-        <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-secondary-1"
-        tds-tooltip tooltipTitle="Cập nhật thông tin tài khoản" 
-          (click)="onEditUser(dataRow.Email,dataRow.Role,dataRow.isActive)">
+        <span class="px-4" *ngIf="dataRow.isActive === true"></span>
+        <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-green-500" tds-tooltip
+          tooltipTitle="Tạo tài khoản cho nhân viên" (click)="createAccountForEmployee(dataRow.Email)"
+          *ngIf="dataRow.isActive === false">
+          <i class="tdsi-plus-fill"></i>
+        </button>
+        <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-secondary-1" tds-tooltip
+          tooltipTitle="Cập nhật thông tin tài khoản" (click)="onEditUser(dataRow.Email,dataRow.Role,dataRow.isActive)">
           <i class="tdsi-edit-fill"></i>
         </button>
-      <button tds-button-flat-icon color="custom" [disabled]="this.userSession.user.email ===dataRow.Email" class="text-slate-500 hover:text-red-500 tdsi-trash-fill"
-      tds-tooltip tooltipTitle="Xóa tài khoản"      
-      (click)="deleteUser(dataRow.Email)">
-      </button>
+        <button tds-button-flat-icon color="custom" [disabled]="this.userSession.user.email ===dataRow.Email"
+          class="text-slate-500 hover:text-red-500 tdsi-trash-fill" tds-tooltip tooltipTitle="Xóa tài khoản"
+          (click)="deleteUser(dataRow.Email)">
+        </button>
       </ng-template>
     </tds-data-table-column>
   </tds-data-table>
