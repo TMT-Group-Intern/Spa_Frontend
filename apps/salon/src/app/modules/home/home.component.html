@@ -195,7 +195,6 @@
               <p>
                 <i class="tdsi-auto-fix-fill text-green-success-300"></i>
                 {{ appoint.TeachnicalStaff }}
-
               </p>
               <p>
                 <i class="tdsi-time-fill text-green-success-400"></i>
@@ -221,7 +220,10 @@
           <tds-card-actions class="col-span-1">
             <div class="flex justify-center">
               <button
-                [disabled]="appoint?.Status !== 'Hoàn thành'"
+                [disabled]="
+                  appoint?.Status !== 'Hoàn thành' &&
+                  appoint?.Status !== 'Không sử dụng dịch vụ'
+                "
                 tds-button
                 color="success"
                 (click)="onEditPayment(appoint.AppointmentID)"

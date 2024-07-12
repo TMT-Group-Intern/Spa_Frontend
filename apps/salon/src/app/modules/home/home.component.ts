@@ -74,7 +74,7 @@ export class HomeComponent implements OnInit {
 
         appointment.Status === "Đã khám" ||
         appointment.Status === "Không sử dụng dịch vụ" ||
-        appointment.Status === "Đang thực hiện" ||
+        appointment.Status === "Đang làm" || appointment.Status === "Chờ làm" ||
         appointment.Status === "Hoàn thành"
 
       );
