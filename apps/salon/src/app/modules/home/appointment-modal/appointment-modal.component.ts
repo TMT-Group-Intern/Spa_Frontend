@@ -85,7 +85,7 @@ export class AppointmentModalComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    
+
     this.initCustomer();
     const storedUserSession = localStorage.getItem('userSession');
     if (storedUserSession !== null) {
@@ -135,8 +135,10 @@ export class AppointmentModalComponent implements OnInit {
         });
     }
 
+    console.log(this.userSession.user.branchID)
+
     // Get Doctor
-    this.shared.getEmployee(this.userSession.user.branchID, 1).subscribe(
+    this.shared.getEmployee(this.userSession.user.branchID, 2).subscribe(
       (data: any[]) => {
         this.doctorOptions = [...data.map(item => ({
           id: item.employeeID,
