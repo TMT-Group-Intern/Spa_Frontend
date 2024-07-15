@@ -17,18 +17,8 @@
           *ngFor="let data of listSpaServiceQueue"
           (click)="renderCustomerDetail(data)"
         >
-          <td>{{ data.Customer.FirstName + ' ' + data.Customer.LastName }}</td>
+          <td>{{ data.Customer.LastName + ' ' + data.Customer.FirstName }}</td>
           <td>
-            <!-- <tds-form-field class="col-span-2">
-              <tds-select
-                valueField="id"
-                textField="name"
-                placeholder="---"
-                [data]="statusOptions"
-                [formControl]="status"
-              >
-              </tds-select>
-            </tds-form-field> -->
             <select
               name="status"
               class=""
