@@ -34,10 +34,11 @@ export class InSessionModalComponent implements OnInit {
   private readonly modalRef = inject(TDSModalRef);
   public spaTherapistOptions: any[] = []
   public statusOptions = [
+    'Đã khám',
     'Chờ làm',
     'Đang làm',
     'Hoàn thành',
-    'Đã khám',
+    'Không sử dụng dịch vụ',
   ]
   companyId:number|null = null;
   userSession:any

@@ -57,7 +57,7 @@
       </div>
     </div>
   </div>
-  <div class="col-span-9 border rounded-10 overflow-y-auto" style="max-height: 650px;">
+  <div class="col-span-9 border rounded-10 overflow-y-auto h-full">
     <!-- && active == true thì  -->
     <div class=" bg-gray-200 flex flex-col h-full" *ngIf="dataAppointmentbyid && active === true; else nodata">
 
@@ -118,6 +118,7 @@
                       <tds-select placeholder="---" [data]="statusOptions" formControlName="status">
                       </tds-select>
                     </tds-form-field>
+                    <div *ngIf="form.value.status !== 'Không sử dụng dịch vụ'">
                     <tds-label>Lựa chọn dịch vụ</tds-label>
                     <tds-form-field class="py-2">
                       <tds-select valueField="serviceID" formControlName="service" textField="serviceName"
@@ -127,6 +128,7 @@
                       <tds-error class="text-tds-color-red-500-light">Vui lòng chọn dịch vụ!
                       </tds-error>
                     </tds-form-field>
+                  </div>
                   </div>
                   <div>
                     <tds-label>Ghi chú</tds-label>

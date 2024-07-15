@@ -2,7 +2,7 @@
   <!-- Appointment List -->
   <div class="col-span-1 border p-4 rounded-10 bg-white">
     <div class="flex justify-between">
-      <span class="text-heading-4">Lịch hẹn hôm nay</span>
+      <span class="text-heading-4">Lịch Hẹn Hôm Nay</span>
 
       <button
         tds-button-icon
@@ -228,7 +228,7 @@
           <tds-card-actions class="col-span-1">
             <div class="flex justify-center">
               <button
-                [disabled]="appoint?.Status !== 'Hoàn thành'"
+                [disabled]="appoint?.Status !== 'Hoàn thành' && appoint?.Status !==  'Không sử dụng dịch vụ'"
                 tds-button
                 color="success"
                 (click)="onEditPayment(appoint.AppointmentID)"
