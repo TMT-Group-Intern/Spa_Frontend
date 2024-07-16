@@ -9,6 +9,8 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { TDSSelectModule } from 'tds-ui/select';
 import { AuthService } from '../../../shared.service';
 import { TDSNotificationService } from 'tds-ui/notification';
+import { CompanyService } from '../../../core/services/company.service';
+import { concatMap, filter } from 'rxjs';
 
 @Component({
   selector: 'frontend-in-session-modal',
@@ -38,6 +40,8 @@ export class InSessionModalComponent implements OnInit {
     'Hoàn thành',
     'Không sử dụng dịch vụ',
   ]
+  companyId:number|null = null;
+  userSession:any
   createAppointmentForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
@@ -51,12 +55,30 @@ export class InSessionModalComponent implements OnInit {
   constructor(
     private shared: AuthService,
     private notification: TDSNotificationService,
+    private companySvc: CompanyService,
   ) { }
 
   ngOnInit(): void {
-
+    const storedUserSession = localStorage.getItem('userSession');
+    if (storedUserSession !== null) {
+      this.userSession = JSON.parse(storedUserSession);
+    }
+    const branchID = this.userSession.user.branchID 
     this.form.get('name')?.disable()
 
+    // this.companySvc._companyIdCur$.pipe(
+    //   filter(companyId=> !!companyId),
+    //   concatMap((branchID)=> {
+    //   return  this.shared.getEmployee(branchID as number,2)
+    //   })
+    // ).subscribe(
+    //   (data: any[]) => {
+    //     this.spaTherapistOptions = [...data.map(item => ({
+    //       id: item.employeeID,
+    //       name: `${item.firstName} ${item.lastName}`
+    //     }))]
+    //   })
+    
     if (this.id) {
       this.shared.getAppointment(this.id).subscribe(
         (data: any) => {
@@ -67,7 +89,7 @@ export class InSessionModalComponent implements OnInit {
             status: data.Status,
           });
           this.assignments = data.Assignments
-          const foundSpaTherapist = this.assignments.find(item => item.Employees.JobTypeID === 3);
+          const foundSpaTherapist = this.assignments.find(item => item.Employees.JobTypeID === 2);
           if(foundSpaTherapist) {
             this.form.patchValue({
               spaTherapist: foundSpaTherapist.Employees.EmployeeID
@@ -77,9 +99,8 @@ export class InSessionModalComponent implements OnInit {
         }
       )
     }
-
     // Get Spa Therapist
-    this.shared.getEmployee(1, 3).subscribe(
+    this.shared.getEmployee(branchID, 2).subscribe(
       (data: any[]) => {
         this.spaTherapistOptions = [...data.map(item => ({
           id: item.employeeID,

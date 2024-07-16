@@ -88,10 +88,6 @@ export class HomeComponent implements OnInit {
     });
    
   }
-  // onBranchIDChanged(branchID: string): void {
-  //   // Gọi initAppointmentList() sau khi nhận được sự kiện thành công
-  //   this.initAppointmentList();
-  // }
   // Display Appointment List
   initAppointmentList() {
     const branchID = this.userSession.user.branchID 
