@@ -91,10 +91,10 @@
       <p><strong>Giảm giá:</strong></p>
       <div class="col-span-9 flex">
         <tds-form-field class="mr-2 w-[150px]">
-          <tds-input-number *ngIf="isPercentageActive" [min]="0" [max]="100" [step]="1" [(ngModel)]="discountPercentage"
+          <tds-input-number *ngIf="isPercentageActive" [min]="0" [max]="100" [step]="1" [(ngModel)]="discountTotal"
             (ngModelChange)="totalAmountAfterDiscount()">
           </tds-input-number>
-          <tds-input-number *ngIf="isVNDActive" [min]="0" [max]="total" [step]="1" [(ngModel)]="discountVND"
+          <tds-input-number *ngIf="isVNDActive" [min]="0" [max]="total" [step]="1" [(ngModel)]="discountTotal"
             (ngModelChange)="totalAmountAfterDiscount()">
           </tds-input-number>
         </tds-form-field>

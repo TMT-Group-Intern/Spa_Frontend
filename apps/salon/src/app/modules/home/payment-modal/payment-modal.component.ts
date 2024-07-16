@@ -45,8 +45,7 @@ export class PaymentModalComponent implements OnInit {
   totalAmount: any;
   createAppointmentForm!: FormGroup;
 
-  discountPercentage = 0
-  discountVND = 0
+  discountTotal = 0
 
   isPercentageActive = true
   isPercentageInactive = false
@@ -102,7 +101,7 @@ export class PaymentModalComponent implements OnInit {
     this.isPercentageInactive = false
     this.isVNDActive = false
     this.isVNDInactive = true
-    this.discountPercentage = 0
+    this.discountTotal = 0
     this.totalAmount = this.total
   }
 
@@ -111,7 +110,7 @@ export class PaymentModalComponent implements OnInit {
     this.isPercentageInactive = true
     this.isVNDActive = true
     this.isVNDInactive = false
-    this.discountVND = 0
+    this.discountTotal = 0
     this.totalAmount = this.total
   }
 
@@ -158,9 +157,9 @@ export class PaymentModalComponent implements OnInit {
   // Calculate the total after use discount
   totalAmountAfterDiscount() {
     if (this.isPercentageActive) {
-      this.totalAmount = this.total * (100 - this.discountPercentage) / 100;
+      this.totalAmount = this.total * (100 - this.discountTotal) / 100;
     } else {
-      this.totalAmount = this.total - this.discountVND;
+      this.totalAmount = this.total - this.discountTotal;
     }
   }
 

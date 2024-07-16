@@ -84,7 +84,7 @@ export class CustomerModalComponent implements OnInit {
 
   checkNumberPhone(){
     this.form.get("phone")?.valueChanges.pipe(
-      debounceTime(500),
+      debounceTime(100),
       filter((phone) =>(phone !== null && phone.length == 10)),
       switchMap((search: string) => {
         return search ? this.auth.searchCustomer(search) : of(null)
