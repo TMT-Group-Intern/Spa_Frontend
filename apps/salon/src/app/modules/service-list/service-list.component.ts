@@ -37,9 +37,7 @@ export class ServiceListComponent implements OnInit {
   //Display Service List
   initshowServiceList(): void {
     this.auth.renderListService().subscribe((data: any) => {
-      this.ServiceList = data.serviceDTO.sort((a: any, b: any) =>
-        b.serviceID < a.serviceID ? -1 : 1
-      );
+      this.ServiceList = data.serviceDTO
     });
   }
   // Call display modal create a service

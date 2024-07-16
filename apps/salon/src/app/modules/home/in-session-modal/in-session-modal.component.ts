@@ -89,7 +89,7 @@ export class InSessionModalComponent implements OnInit {
             status: data.Status,
           });
           this.assignments = data.Assignments
-          const foundSpaTherapist = this.assignments.find(item => item.Employees.JobTypeID === 2);
+          const foundSpaTherapist = this.assignments.find(item => item.Employees.JobTypeID === 3);
           if(foundSpaTherapist) {
             this.form.patchValue({
               spaTherapist: foundSpaTherapist.Employees.EmployeeID
@@ -100,11 +100,11 @@ export class InSessionModalComponent implements OnInit {
       )
     }
     // Get Spa Therapist
-    this.shared.getEmployee(branchID, 2).subscribe(
+    this.shared.getEmployee(branchID, 3).subscribe(
       (data: any[]) => {
         this.spaTherapistOptions = [...data.map(item => ({
           id: item.employeeID,
-          name: `${item.firstName} ${item.lastName}`
+          name: `${item.lastName} ${item.firstName}`
         }))]
       })
 
