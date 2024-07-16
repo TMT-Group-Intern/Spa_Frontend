@@ -1,11 +1,11 @@
 <div class="bg-gray-200 h-full">
   <tds-breadcrumb class="bg-white p-4 rounded-lg mb-2">
     <tds-breadcrumb-item><a [routerLink]="['/customer-list']">Khách Hàng</a></tds-breadcrumb-item>
-    <tds-breadcrumb-item>{{customer.customerDTO.firstName}} {{customer.customerDTO.lastName}}</tds-breadcrumb-item>
+    <tds-breadcrumb-item>{{customer.customerDTO.lastName}} {{customer.customerDTO.firstName}}</tds-breadcrumb-item>
   </tds-breadcrumb>
 
   <div class="bg-white p-4 rounded-lg" style="min-height: 589px;">
-    <p class="text-4xl">{{customer.customerDTO.firstName}} {{customer.customerDTO.lastName}}</p>
+    <p class="text-4xl">{{customer.customerDTO.lastName}} {{customer.customerDTO.firstName}}</p>
     <div class="p-4">
       <p><i class="tdsi-call-fill text-success-400"></i> {{customer.customerDTO.phone}}</p>
       <p><i class="tdsi-birthday-fill text-success-400"></i> {{customer.customerDTO.dateOfBirth | date:'dd/MM/YYYY'}}</p>

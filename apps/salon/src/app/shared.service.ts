@@ -205,12 +205,12 @@ export class AuthService {
 
   // Get Branch
   getBranch(): Observable<any[]> {
-    return this.http.get<any>(this.baseUrl + 'User/allBranches');
+    return this.http.get<any>(this.baseUrl + 'Branch/allBranches');
   }
 
   // Get Job Type
   getJobType(): Observable<any[]> {
-    return this.http.get<any>(this.baseUrl + 'User/allJobs');
+    return this.http.get<any>(this.baseUrl + 'Job/allJobs');
   }
 
   //

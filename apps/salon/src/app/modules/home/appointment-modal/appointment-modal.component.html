@@ -11,7 +11,7 @@
               [allowClear]="true" [valuePrimitive]="false" [allowSearch]="true" (onSearch)="searchPhone$.next($event)">
               <ng-template tds-option-tmp let-label='label' let-item="item" let-value='value' let-selected="selected">
                 <span [ngClass]="{'text-primary-1':selected}">
-                  {{item.firstName}} {{item.lastName}}
+                  {{item.lastName}} {{item.firstName}}
                 </span>
               </ng-template>
             </tds-select>

@@ -48,19 +48,14 @@ export class HeaderComponent implements OnInit {
   branch = inject(FormBuilder).nonNullable.control({
     branch: [''],
   });
-  //@Output() branchIDChanged: EventEmitter<string> = new EventEmitter<string>();
   ngOnInit() {
     const storedUserSession = localStorage.getItem('userSession');
     if (storedUserSession !== null) {
       this.userSession = JSON.parse(storedUserSession);
     }
-    // if(this.userSession.user.role ==='Admin' && this.userSession.user.branchID===0){
-    //   this.userSession.user.branchID = this.branchID = 1
-    //   localStorage.setItem('userSession', JSON.stringify(this.userSession));
-    // } else 
     if(this.userSession.user.role ==='Admin'){
       this.branchID = this.userSession.user.branchID
-      this.branchName = this.userSession.user.branch
+      //this.branchName = this.userSession.user.branch
       localStorage.setItem('userSession', JSON.stringify(this.userSession));
     }
 
@@ -85,7 +80,6 @@ export class HeaderComponent implements OnInit {
     this.userSession.user.branchID=this.selectedBranch
     this.companySvc._companyIdCur$.next(this.branchID)
     localStorage.setItem('userSession', JSON.stringify(this.userSession));
-    //this.branchIDChanged.emit(this.selectedBranch);
   };
   onLogOut() {
     localStorage.removeItem('userSession');

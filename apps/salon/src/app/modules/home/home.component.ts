@@ -62,7 +62,6 @@ export class HomeComponent implements OnInit {
    // const storedUserSession = localStorage.getItem('userSession');
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
-      this.oldBranch = this.userSession.user.branchID ;
       this.initAppointmentList();
     }
 
