@@ -183,7 +183,6 @@ export class AuthService {
     return this.http.post(this.baseUrl + 'Payment?Id=' + id, val);
   }
 
-
   //
   employeeList(): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/allEmployee');
@@ -211,6 +210,21 @@ export class AuthService {
   // Get Job Type
   getJobType(): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Job/allJobs');
+  }
+
+  // Create Bill
+  createBill(val: any) {
+    return this.http.post(this.baseUrl + 'Bill', val);
+  }
+
+  //
+  getBill(id: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Bill/' + id);
+  }
+
+  // Update Bill
+  updateBill(id: any, val: any) {
+    return this.http.put(this.baseUrl + 'Bill/' + id, val);
   }
 
   //
