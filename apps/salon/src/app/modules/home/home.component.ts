@@ -20,6 +20,7 @@ import { error } from 'console';
 import { TDSMapperPipeModule } from 'tds-ui/cdk/pipes/mapper';
 import { CompanyService } from '../../core/services/company.service';
 import { concatMap, filter } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'frontend-home',
@@ -39,7 +40,7 @@ import { concatMap, filter } from 'rxjs';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  
+
   private readonly tModalSvc = inject(TDSModalService);
   appointmentList: any[] = [];
   time: any;
@@ -48,27 +49,29 @@ export class HomeComponent implements OnInit {
   inSession: any[] = [];
   status: any;
   userSession: any;
- 
-   storedUserSession = localStorage.getItem('userSession');
-   oldBranch: any ;
-   companyId:number|null = null;
+  assign: any[] = [];
+
+  storedUserSession = localStorage.getItem('userSession');
+  oldBranch: any;
+  companyId: number | null = null;
   constructor(
     private sharedService: AuthService,
     private invoiceSvc: InvoiceService,
-    private companySvc: CompanyService
+    private companySvc: CompanyService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
-   // const storedUserSession = localStorage.getItem('userSession');
+    // const storedUserSession = localStorage.getItem('userSession');
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
       this.initAppointmentList();
     }
 
     this.companySvc._companyIdCur$.pipe(
-      filter(companyId=> !!companyId),
-      concatMap((branchID)=> {
-      return  this.sharedService.appointmentList(branchID as number)
+      filter(companyId => !!companyId),
+      concatMap((branchID) => {
+        return this.sharedService.appointmentList(branchID as number)
       })
     ).subscribe((data: any) => {
       this.appointmentList = data;
@@ -85,11 +88,11 @@ export class HomeComponent implements OnInit {
         appointment.Status === "Đã khám" || appointment.Status === "Hoàn thành"
       );
     });
-   
+
   }
   // Display Appointment List
   initAppointmentList() {
-    const branchID = this.userSession.user.branchID 
+    const branchID = this.userSession.user.branchID
 
     this.sharedService.appointmentList(branchID).subscribe((data: any) => {
       this.appointmentList = data;
@@ -172,20 +175,57 @@ export class HomeComponent implements OnInit {
 
   // Open Edit Payment Modal
   onEditPayment(id: number) {
-    const modal = this.tModalSvc.create({
-      title: 'Edit Information',
-      content: PaymentModalComponent,
-      footer: null,
-      size: 'xl',
-      componentParams: {
-        id,
-      },
-    });
-    modal.afterClose.asObservable().subscribe((res) => {
-      if (res) {
-        this.initAppointmentList();
+    // const modal = this.tModalSvc.create({
+    //   title: 'Edit Information',
+    //   content: PaymentModalComponent,
+    //   footer: null,
+    //   size: 'xl',
+    //   componentParams: {
+    //     id,
+    //   },
+    // });
+    // modal.afterClose.asObservable().subscribe((res) => {
+    //   if (res) {
+    //     this.initAppointmentList();
+    //   }
+    // });
+
+    this.sharedService.getAppointment(id).subscribe(
+      (data: any) => {
+        const val = {
+          customerID: data.CustomerID,
+          appointmentID: id,
+          date: data.AppointmentDate,
+          billStatus: "",
+          doctor: "",
+          technicalStaff: "",
+          totalAmount: data.Total,
+          amountInvoiced: 0,
+          amountResidual: data.Total
+        }
+
+        this.assign = data.Assignments
+        const foundDoctor = this.assign.find(item => item.Employees.JobTypeID === 2);
+        const foundSpaTherapist = this.assign.find(item => item.Employees.JobTypeID === 3);
+        if(foundDoctor) {
+          val.doctor = foundDoctor.Employees.LastName + ' ' + foundDoctor.Employees.FirstName
+        }
+
+        if(foundSpaTherapist) {
+          val.technicalStaff = foundSpaTherapist.Employees.LastName + ' ' + foundSpaTherapist.Employees.FirstName
+        }
+
+        this.sharedService.createBill(val).subscribe(
+          (data: any) => {
+            this.sharedService.UpdateStatus(id, 'Đã thanh toán').subscribe()
+            this.router.navigate(['bill/' + data.item]);
+          },
+          () => {
+            console.log(Error)
+          }
+        )
       }
-    });
+    )
   }
 
   // Update Status

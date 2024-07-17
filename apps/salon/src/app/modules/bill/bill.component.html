@@ -1,0 +1,170 @@
+<div class="bg-gray-200 h-full">
+  <tds-breadcrumb class="bg-white p-4 rounded-lg mb-2">
+    <tds-breadcrumb-item><a [routerLink]="['/home']">Trang Tiếp Tân</a></tds-breadcrumb-item>
+    <tds-breadcrumb-item>Bill {{BillID}}</tds-breadcrumb-item>
+  </tds-breadcrumb>
+
+  <div class="grid grid-cols-2 gap-x-2 mb-2">
+    <div class="bg-white p-4 rounded-lg">
+      <p class="text-xl">{{inforCus?.lastName}} {{inforCus?.firstName}}</p>
+      <p><i class="tdsi-call-fill text-success-400"></i> {{inforCus?.phone}}</p>
+      <p><i class="tdsi-birthday-fill text-success-400"></i> {{inforCus?.dateOfBirth | date:'dd/MM/YYYY'}}</p>
+      <p *ngIf="inforCus?.gender === 'Nam'"><i class="tdsi-male-fill text-success-400"></i> Nam</p>
+      <p *ngIf="inforCus?.gender === 'Nữ'"><i class="tdsi-female-fill text-success-400"></i> Nữ</p>
+    </div>
+
+    <div class="bg-white p-2 rounded-lg">
+
+    </div>
+  </div>
+
+  <div class="bg-white p-4 rounded-lg h-fit">
+    <tds-table #basicTable [listData]="service" [showPagination]="false">
+      <thead>
+        <tr>
+          <th width="20%">Tên</th>
+          <th width="10%">Số lượng</th>
+          <th width="10%">Đơn giá</th>
+          <th width="10%">Giảm giá</th>
+          <th width="10%">Thành tiền</th>
+          <th width="40%">Ghi chú</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-template ngFor let-data [ngForOf]="basicTable.data">
+          <tr>
+            <td>{{ data.ServiceName }}</td>
+            <td>
+              <div class="w-16">
+                <tds-input-number [min]="1" [(ngModel)]="data.Quantity" (ngModelChange)="totalPrice(data.ServiceID)">
+                </tds-input-number>
+              </div>
+            </td>
+            <td>
+              <tds-input-number [min]="1" [(ngModel)]="data.UnitPrice" (ngModelChange)="totalPrice(data.ServiceID)">
+              </tds-input-number>
+            </td>
+            <td>
+              <button class="border-none" color="secondary" tds-dropdown trigger="click" [tdsDropdownMenu]="menu"
+                [placement]="'bottomRight'">
+                <p class="flex items-center">
+                  <i class="tdsi-cash-payment-fill text-success-400 text-2xl"></i>
+                  <span *ngIf="data.KindofDiscount === '%'">{{ data.AmountDiscount }}%</span>
+                  <span *ngIf="data.KindofDiscount === 'VND'">{{ data.AmountDiscount | tdsFormatNumber }} VND</span>
+                </p>
+              </button>
+              <tds-dropdown-menu #menu="tdsDropdownMenu">
+                <div class="p-4">
+                  <p><strong>Giảm giá:</strong></p>
+                  <div class="flex">
+                    <tds-form-field class="mr-2 w-52">
+                      <tds-input-number *ngIf="data.KindofDiscount === '%'" [min]="0" [max]="100" [step]="1"
+                        [(ngModel)]="data.AmountDiscount" (ngModelChange)="priceAfterDiscount(data.ServiceID)">
+                      </tds-input-number>
+                      <tds-input-number *ngIf="data.KindofDiscount === 'VND'" [min]="0" [max]="data.TotalPrice"
+                        [step]="1" [(ngModel)]="data.AmountDiscount"
+                        (ngModelChange)="priceAfterDiscount(data.ServiceID)">
+                      </tds-input-number>
+                    </tds-form-field>
+                    <tds-button-group>
+                      <button *ngIf="data.KindofDiscount === '%'" tds-button color="success" size="sm">
+                        <span>%</span>
+                      </button>
+                      <button *ngIf="data.KindofDiscount !== '%'" tds-button-outline color="success" size="sm"
+                        (tdsBtnClick)="activeDiscountPercentagePrice(data.ServiceID)">
+                        <span>%</span>
+                      </button>
+                      <button *ngIf="data.KindofDiscount === 'VND'" tds-button color="success" size="sm">
+                        <span>VND</span>
+                      </button>
+                      <button *ngIf="data.KindofDiscount !== 'VND'" tds-button-outline color="success" size="sm"
+                        (tdsBtnClick)="activeDiscountVNDPrice(data.ServiceID)">
+                        <span>VND</span>
+                      </button>
+                    </tds-button-group>
+                  </div>
+                </div>
+              </tds-dropdown-menu>
+            </td>
+            <td>{{ data.FinalPrice | tdsFormatNumber }}</td>
+            <td>
+              <tds-form-field>
+                <input tdsInput autocomplete="off" [(ngModel)]="data.Note" />
+              </tds-form-field>
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </tds-table>
+
+    <!-- Total -->
+    <p class="pt-2 grid grid-cols-10 gap-2">
+      <span class="col-span-7"></span><strong>Tổng tiền:</strong> <span class="col-span-2">{{ total | tdsFormatNumber
+        }}</span>
+    </p>
+
+    <!-- Discount -->
+    <div class="py-2 grid grid-cols-10 gap-2">
+      <span class="col-span-7"></span>
+      <p class="flex items-center"><strong>Giảm giá:</strong></p>
+      <div class="col-span-2 flex">
+        <tds-form-field class="mr-2 w-[150px]">
+          <tds-input-number *ngIf="isPercentageActive" [min]="0" [max]="100" [step]="1" [(ngModel)]="discountTotal"
+            (ngModelChange)="totalAmountAfterDiscount()">
+          </tds-input-number>
+          <tds-input-number *ngIf="isVNDActive" [min]="0" [max]="total" [step]="1" [(ngModel)]="discountTotal"
+            (ngModelChange)="totalAmountAfterDiscount()">
+          </tds-input-number>
+        </tds-form-field>
+        <tds-button-group>
+          <button *ngIf="isPercentageActive" tds-button color="success" size="sm">
+            <span>%</span>
+          </button>
+          <button *ngIf="isPercentageInactive" tds-button-outline color="success" size="sm"
+            (tdsBtnClick)="activeDiscountPercentage()">
+            <span>%</span>
+          </button>
+          <button *ngIf="isVNDActive" tds-button color="success" size="sm">
+            <span>VND</span>
+          </button>
+          <button *ngIf="isVNDInactive" tds-button-outline color="success" size="sm"
+            (tdsBtnClick)="activeDiscountVND()">
+            <span>VND</span>
+          </button>
+        </tds-button-group>
+      </div>
+    </div>
+
+    <!-- Final Total -->
+    <p class="pb-2 grid grid-cols-10 gap-2">
+      <span class="col-span-7"></span>
+      <strong>Thành tiền:</strong>
+      <span class="col-span-2">{{ infoBill.TotalAmount | tdsFormatNumber }}</span>
+    </p>
+
+    <p class="pb-2 grid grid-cols-10 gap-2">
+      <span class="col-span-7"></span>
+      <strong>Đã thanh toán:</strong>
+      <span class="col-span-2">{{ infoBill.AmountInvoiced | tdsFormatNumber }}</span>
+    </p>
+
+    <p class="pb-2 grid grid-cols-10 gap-2">
+      <span class="col-span-7"></span>
+      <strong>Còn lại:</strong>
+      <span class="col-span-2">{{ infoBill.AmountResidual | tdsFormatNumber }}</span>
+    </p>
+
+    <div class="grid grid-cols-2 gap-2 py-4">
+      <button tds-button form="idform" (click)="save()" color="primary" class="w-full rounded">
+        Lưu
+      </button>
+      <button tds-button form="idform" (click)="submit()" color="success" class="w-full rounded">
+        Thanh Toán
+      </button>
+      <!-- <button tds-button (click)="invoice()">In hóa đơn</button> -->
+    </div>
+
+  </div>
+
+
+</div>
