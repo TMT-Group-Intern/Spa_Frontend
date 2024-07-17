@@ -221,4 +221,13 @@ export class AuthService {
     })
   }
 
+  // báo cáo theo ngày
+  getByDays(branchId: number, fromDay: string, toDay: string){
+    return this.http.get(this.baseUrl + 'Report/getbyday?idBrand=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay);
+  }
+  // danh sách các thanh toán trong ngày
+  getDetails(branchId: number, fromDay: string, toDay: string){
+    return this.http.get(this.baseUrl + 'Report/getdetail?idBrand=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay);
+  }
+
 }

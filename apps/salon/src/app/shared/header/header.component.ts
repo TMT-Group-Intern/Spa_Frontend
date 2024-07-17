@@ -66,7 +66,6 @@ export class HeaderComponent implements OnInit {
           name: item.branchName,
         }))]
       })
-    console.log(this.branchID);
   }
   constructor(
     private shared: AuthService,
