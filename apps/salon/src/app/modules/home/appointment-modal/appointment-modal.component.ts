@@ -57,6 +57,8 @@ export class AppointmentModalComponent implements OnInit {
   private readonly tModalSvc = inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
   @Input() id?: number;
+  @Input() formatTime?: string;
+
   createAppointmentForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
@@ -65,7 +67,7 @@ export class AppointmentModalComponent implements OnInit {
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
     assignments: [],
     doctor: [],
-    appointmentDate: [new Date()],
+    appointmentDate: [new Date()] ||null,
     status: ['Hẹn'],
     customer: [null]
   });
@@ -87,7 +89,6 @@ export class AppointmentModalComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.initCustomer();
     const storedUserSession = localStorage.getItem('userSession');
     if (storedUserSession !== null) {
@@ -124,7 +125,13 @@ export class AppointmentModalComponent implements OnInit {
               });
             }
           )
-
+          let timeNew: any = ''
+          if(this.formatTime){
+            timeNew = this.formatTime
+          }else{
+            timeNew = data.AppointmentDate
+          }
+          console.log(timeNew);
           this.form.patchValue({
             phone: data.Customer.Phone,
             name: data.Customer.LastName + ' ' + data.Customer.FirstName,
@@ -144,8 +151,6 @@ export class AppointmentModalComponent implements OnInit {
         });
     }
 
-    console.log(this.userSession.user.branchID)
-
     // Get Doctor
     this.shared.getEmployee(this.userSession.user.branchID, 2).subscribe(
       (data: any[]) => {
@@ -153,7 +158,6 @@ export class AppointmentModalComponent implements OnInit {
           id: item.employeeID,
           name: `${item.lastName} ${item.firstName}`
         }))]
-        console.log(this.doctorOptions);
       })
   }
 
@@ -192,7 +196,6 @@ export class AppointmentModalComponent implements OnInit {
       val.assignments = [{ employerID: doctor }];
     }
 
-    console.log(val);
     if (this.id) {
       this.updateAppointment(this.id, val);
     } else {
@@ -222,7 +225,7 @@ export class AppointmentModalComponent implements OnInit {
   // Create Appointment
   createAppointment(val: any) {
     this.shared.createAppointment(val).subscribe({
-      
+
       next: () => {
         this.createNotificationSuccess('');
         this.modalRef.destroy(val);
