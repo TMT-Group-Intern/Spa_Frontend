@@ -13,6 +13,7 @@ import { TreatmentDetailComponent } from './modules/technical-staff/treatment-de
 import { DoctorComponent } from './modules/doctor/doctor.component';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { SchedulesComponent } from './modules/schedule/schedule.component';
+import { BillComponent } from './modules/bill/bill.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -46,7 +47,8 @@ const routes: Routes = [
       },
       { path: 'doctor', loadComponent: () => DoctorComponent },
       { path: 'revenue-statistics', loadChildren: () => RevenueStaticsModule },
-      {path: 'users', loadComponent: ()=> UsersComponent}
+      {path: 'users', loadComponent: ()=> UsersComponent},
+      {path: 'bill/:id', loadComponent: ()=> BillComponent},
     ],
   },
 ];

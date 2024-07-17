@@ -43,7 +43,6 @@ export class PaymentModalComponent implements OnInit {
 
   total = 0;
   totalAmount: any;
-  createAppointmentForm!: FormGroup;
 
   discountTotal = 0
 
