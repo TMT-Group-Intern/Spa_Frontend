@@ -42,7 +42,7 @@ export class HeaderComponent implements OnInit {
 
   branchOptions: any[] = [];
   branchName='';
-  branchID = 0;
+  public branchID = 0;
   selectedBranch :any;
   signUpForm!: FormGroup;
   branch = inject(FormBuilder).nonNullable.control({
@@ -66,6 +66,7 @@ export class HeaderComponent implements OnInit {
           name: item.branchName,
         }))]
       })
+    console.log(this.branchID);
   }
   constructor(
     private shared: AuthService,

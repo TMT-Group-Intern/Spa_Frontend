@@ -39,7 +39,7 @@ import { concatMap, filter } from 'rxjs';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  
+
   private readonly tModalSvc = inject(TDSModalService);
   appointmentList: any[] = [];
   time: any;
@@ -47,11 +47,11 @@ export class HomeComponent implements OnInit {
   reception: any[] = [];
   inSession: any[] = [];
   status: any;
-  userSession: any;
- 
-   storedUserSession = localStorage.getItem('userSession');
-   oldBranch: any ;
-   companyId:number|null = null;
+  public userSession: any;
+
+  storedUserSession = localStorage.getItem('userSession');
+  oldBranch: any ;
+  companyId:number|null = null;
   constructor(
     private sharedService: AuthService,
     private invoiceSvc: InvoiceService,
@@ -85,11 +85,11 @@ export class HomeComponent implements OnInit {
         appointment.Status === "Đã khám" || appointment.Status === "Hoàn thành"
       );
     });
-   
+
   }
   // Display Appointment List
   initAppointmentList() {
-    const branchID = this.userSession.user.branchID 
+    const branchID = this.userSession.user.branchID
 
     this.sharedService.appointmentList(branchID).subscribe((data: any) => {
       this.appointmentList = data;
