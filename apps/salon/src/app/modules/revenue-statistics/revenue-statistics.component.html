@@ -1,12 +1,10 @@
 <div class="h-full bg-slate-200">
   <div class="flex flex-col h-full ">
     <div class="basis-2/4 mb-1 bg-white rounded-b-lg">
-
-      <div class="w-96">
-        <tds-range-picker [ranges]="leftControl">
+      <div class="m-2 flex justify-end w-full">
+        <tds-range-picker [(ngModel)]="leftControl['Tháng này']" (ngModelChange)="onSelectionChange($event)">
         </tds-range-picker>
       </div>
-
       <div class="p-2">
         <span class="font-bold text-heading-3">Biểu đồ doanh thu</span>
         <div class="h-full" echarts [options]="options" [size]="size"></div>

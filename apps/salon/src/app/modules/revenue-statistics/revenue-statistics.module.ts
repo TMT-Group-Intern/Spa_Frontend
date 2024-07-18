@@ -6,6 +6,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { TDSTableModule } from 'tds-ui/table';
 import { TDSDatePickerModule} from 'tds-ui/date-picker';
 import { TDSInputModule } from 'tds-ui/tds-input';
+import { TDSFormField, TDSFormFieldModule } from 'tds-ui/form-field';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes : Routes = [
       {path: '', component: RevenueStatisticsComponent},
@@ -18,6 +20,8 @@ const routes : Routes = [
     TDSTableModule,
     TDSDatePickerModule,
     TDSInputModule,
+    ReactiveFormsModule,
+    FormsModule,
     RouterModule.forChild(routes),
     TDSEchartsModule.forRoot({
       echarts: () => import('echarts')
