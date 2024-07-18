@@ -1,1 +1,71 @@
-<p>payment-modal works!</p>
+<form id="idform" [formGroup]="form" autocomplete="off">
+  <div class="grid grid-cols-2 gap-12">
+    <div>
+      <!--  -->
+      <div class="grid grid-cols-3 gap-2 py-2">
+        <tds-label>Số hóa đơn:</tds-label>
+        <tds-form-field class="col-span-2">
+          <input tdsInput autocomplete="off" formControlName="billID" />
+        </tds-form-field>
+      </div>
+
+      <!--  -->
+      <div class="grid grid-cols-3 gap-2 py-2">
+        <tds-label>Ngày thanh toán:</tds-label>
+        <tds-date-picker class="col-span-2" formControlName="paymentDate"></tds-date-picker>
+      </div>
+
+      <!--  -->
+      <div class="grid grid-cols-3 gap-2 py-2">
+        <tds-label>Ghi chú:</tds-label>
+        <tds-form-field class="col-span-2">
+          <input tdsInput autocomplete="off" formControlName="notes" />
+        </tds-form-field>
+      </div>
+    </div>
+
+    <div>
+      <!--  -->
+      <div class="grid grid-cols-3 gap-2 py-2">
+        <tds-label>Số tiền cần TT:</tds-label>
+        <p class="col-span-2">{{infoBill.AmountResidual | tdsFormatNumber }}</p>
+      </div>
+
+      <!--  -->
+      <div class="grid grid-cols-3 gap-2 py-2">
+        <tds-label>Khách TT:</tds-label>
+        <tds-input-number class="col-span-2" [min]="0" [max]="infoBill.AmountResidual" formControlName="amount" (ngModelChange)="updateAmountResidual()">
+        </tds-input-number>
+      </div>
+
+      <!--  -->
+      <div class="grid grid-cols-3 gap-2 py-2">
+        <tds-label>Còn lại:</tds-label>
+        <p class="col-span-2">{{ amountResidual | tdsFormatNumber }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-2 py-2">
+    <!--  -->
+    <div class="grid grid-cols-2 gap-2">
+      <tds-label>Phương thức thanh toán:</tds-label>
+      <tds-radio-group formControlName="paymentMethod">
+          <label tds-radio value="Tiền mặt">Tiền mặt</label>
+          <label tds-radio value="Chuyển khoản">Chuyển khoản</label>
+      </tds-radio-group>
+    </div>
+
+    <img *ngIf="form.value.paymentMethod === 'Chuyển khoản'" src="../../../../assets/img/1721276662570.png"
+      alt="QR Code" width="225px">
+  </div>
+</form>
+
+<ng-container *tdsModalFooter>
+  <div class="p-4">
+    <button tds-button form="idform" color="success" (click)="submit()" class="w-full rounded">
+      Thanh Toán
+    </button>
+    <!-- <button tds-button (click)="invoice()">In hóa đơn</button> -->
+  </div>
+</ng-container>

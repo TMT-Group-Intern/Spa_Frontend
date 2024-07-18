@@ -13,7 +13,6 @@ import { TDSTypographyModule } from 'tds-ui/typography';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { ChooseDoctorModalComponent } from './choose-doctor-modal/choose-doctor-modal.component';
 import { InSessionModalComponent } from './in-session-modal/in-session-modal.component';
-import { PaymentModalComponent } from './payment-modal/payment-modal.component';
 import { TDSEmptyModule } from 'tds-ui/empty';
 import { InvoiceService } from '../invoice/invoice.service';
 import { error } from 'console';

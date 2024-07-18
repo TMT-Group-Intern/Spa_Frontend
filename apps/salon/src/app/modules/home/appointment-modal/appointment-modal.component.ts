@@ -59,7 +59,6 @@ export class AppointmentModalComponent implements OnInit {
   @Input() id?: number;
   @Input() formatTime?: string;
 
-  createAppointmentForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
     name: [''],

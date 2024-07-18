@@ -179,8 +179,8 @@ export class AuthService {
   }
 
   // Create a Payment
-  createPayment(id: any, val: any) {
-    return this.http.post(this.baseUrl + 'Payment?Id=' + id, val);
+  createPayment(val: any) {
+    return this.http.post(this.baseUrl + 'Payment', val);
   }
 
   //
@@ -220,6 +220,11 @@ export class AuthService {
   //
   getBill(id: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Bill/' + id);
+  }
+
+  //
+  getAllBillOfCus(id: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Bill/getbillbycustomer?cusId=' + id);
   }
 
   // Update Bill
