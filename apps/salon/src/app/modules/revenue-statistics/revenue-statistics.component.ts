@@ -5,7 +5,6 @@ import { addDays, endOfMonth, format, startOfMonth } from 'date-fns';
 import { DATE_CONFIG } from '../../core/enums/date-format.enum';
 import { concatMap, filter } from 'rxjs';
 import { CompanyService } from '../../core/services/company.service';
-import { log } from 'console';
 
 @Component({
   selector: 'frontend-revenue-statistics',
@@ -16,6 +15,8 @@ export class RevenueStatisticsComponent implements OnInit {
   private readonly sharedServices = inject(AuthService);
   private readonly company = inject(CompanyService);
 
+  dateTime: any;
+  branchId?: number;
   options: any;
   listOfData: any;
   listOfDataDetail: any;
@@ -24,7 +25,10 @@ export class RevenueStatisticsComponent implements OnInit {
   storedUserSession = localStorage.getItem('userSession');
   rangeDate: any = [];
   size: any = [1350, 350];
-  // lstData: Array<{ start: Date; end: Date; data: TDSSafeAny }> = [];
+
+  constructor(){
+    this.branchId = undefined;
+  }
 
   // Tạo mảng mới chứa 31 phần tử, ban đầu chứa toàn số 0
   newArray = Array(31).fill(0);
@@ -65,7 +69,7 @@ export class RevenueStatisticsComponent implements OnInit {
   chartComponent: TDSBarChartComponent = { ...this.dataFirst };
   // khởi tạo 1 object TDSBarChartComponent với 2 thành phần cơ bản axis, series
 
-  expandSet = new Set<number>();
+  expandSet = new Set<Date>();
   thisMonth = this.leftControl['Tháng này'];
   startOfMonthDate = format(this.thisMonth[0], DATE_CONFIG.DATE_BASE_FROM);
   endOfMonthDate = format(this.thisMonth[1], DATE_CONFIG.DATE_BASE_TO);
@@ -117,7 +121,7 @@ export class RevenueStatisticsComponent implements OnInit {
   // Lấy dữ liệu báo cáo doanh thu theo ngày.
   getReportDataByDate() {
     const branchID = this.userSession.user.branchID;
-
+    this.branchId = branchID;
     this.sharedServices
       .getByDays(
         branchID,
@@ -125,15 +129,7 @@ export class RevenueStatisticsComponent implements OnInit {
         this.endOfMonthDate as unknown as string
       )
       .subscribe((data: any) => {
-        //  this.listOfData = data;
-        this.listOfData = data.map((item: any, index = 1) => ({
-          id: ++index,
-          Date: item.Date,
-          TotalRevenue: item.TotalRevenue,
-          Value: item.Value,
-        }));
-
-        console.log(this.listOfData);
+        this.listOfData = data.sort((a: any, b: any) =>a.Date > b.Date? -1: 1);
         this.valueArray = [
           ...data.map((item: any) => ({
             day: new Date(item.Date).getDate(),
@@ -147,7 +143,6 @@ export class RevenueStatisticsComponent implements OnInit {
           );
           return matchedItem ? matchedItem.value : 0;
         });
-        console.log(this.newArray);
 
         this.chartComponent = {
           ...this.dataFirst,
@@ -173,35 +168,38 @@ export class RevenueStatisticsComponent implements OnInit {
       });
   }
 
-  onExpandChange(id: number, date: Date, checked: boolean): void {
+  onExpandChange(date: Date, checked: boolean): void {
+
     if (checked) {
-      this.expandSet.add(id);
-      this.onChangeShowDetail(date);
+      this.expandSet.add(date);
+      this.dateTime = date;
+      // this.onChangeShowDetail(date);
     } else {
-      this.expandSet.delete(id);
+      this.expandSet.delete(date);
     }
   }
-  // Hiển thị chi tiết danh sách giao dịch thanh toán của 1 ngày
-  onChangeShowDetail(date: Date): void {
-    const fromDay = format(date, DATE_CONFIG.DATE_BASE_FROM);
-    const fromTo = format(date, DATE_CONFIG.DATE_BASE_TO);
-    const branchID = this.userSession.user.branchID;
-    this.sharedServices
-      .getDetails(
-        branchID,
-        fromDay as unknown as string,
-        fromTo as unknown as string
-      )
-      .subscribe((data: any) => {
-        this.listOfDataDetail = data;
-      });
-  }
+
+  // // Hiển thị chi tiết danh sách giao dịch thanh toán của 1 ngày
+  // onChangeShowDetail(date: Date): void {
+  //   const fromDay = format(date, DATE_CONFIG.DATE_BASE_FROM);
+  //   const fromTo = format(date, DATE_CONFIG.DATE_BASE_TO);
+  //   const branchID = this.userSession.user.branchID;
+  //   this.sharedServices
+  //     .getDetails(
+  //       branchID,
+  //       fromDay as unknown as string,
+  //       fromTo as unknown as string
+  //     )
+  //     .subscribe((data: any) => {
+  //       this.listOfDataDetail = data;
+  //     });
+  // }
   ngOnInit(): void {
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
-      this.getReportDataByDate();
+      this.onSelectionChange(this.thisMonth)
     }
-    this.onSelectionChange(this.thisMonth)
+
     // chạy khi chi nhánh thay đổi
     this.company._companyIdCur$
       .pipe(

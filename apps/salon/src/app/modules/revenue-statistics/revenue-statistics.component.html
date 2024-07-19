@@ -1,8 +1,11 @@
 <div class="h-full bg-slate-200">
-  <div class="flex flex-col h-full ">
+  <div class="flex flex-col h-full">
     <div class="basis-2/4 mb-1 bg-white rounded-b-lg">
-      <div class="m-2 flex justify-end w-full">
-        <tds-range-picker [(ngModel)]="leftControl['Tháng này']" (ngModelChange)="onSelectionChange($event)">
+      <div class="m-2 flex justify-center w-full">
+        <tds-range-picker
+          [(ngModel)]="leftControl['Tháng này']"
+          (ngModelChange)="onSelectionChange($event)"
+        >
         </tds-range-picker>
       </div>
       <div class="p-2">
@@ -12,7 +15,9 @@
     </div>
     <div class="basis-2/4 mt-1 bg-white rounded-t-lg">
       <div class="rounded-10">
-        <span class="ml-2 py-4 font-bold text-heading-3">Số liệu doanh thu</span>
+        <span class="ml-2 py-4 font-bold text-heading-3"
+          >Số liệu doanh thu</span
+        >
         <tds-table #table [listData]="listOfData" tableLayout="fixed">
           <thead>
             <tr>
@@ -24,41 +29,20 @@
           <tbody>
             <ng-container *ngFor="let data of table.data">
               <tr>
-                <td [expand]="expandSet.has(data.id)" (expandChange)="onExpandChange(data.id,data.Date, $event)"></td>
-                <td>{{ data.Date | date:'dd/MM/YYYY' }}</td>
-                <td>{{ data.TotalRevenue}}</td>
+                <td
+                  [expand]="expandSet.has(data.Date)"
+                  (expandChange)="onExpandChange(data.Date, $event)"
+                ></td>
+                <td>{{ data.Date | date : 'dd/MM/YYYY' }}</td>
+                <td>{{ data.TotalRevenue }}</td>
               </tr>
-              <tr class="w-full " [expand]="expandSet.has(data.id)">
-                <div class=" m-4 border rounded-md">
-                  <tds-table #table [listData]="listOfData" tableLayout="fixed">
-                    <thead>
-                      <tr>
-                        <th>Kỹ thuật viên</th>
-                        <th>Khách hàng</th>
-                        <th>Bác sĩ</th>
-                        <th>Thanh toán</th>
-                      </tr>
-                    </thead>
-          <tbody>
-            <ng-container *ngFor="let data of listOfDataDetail">
-              <tr>
-                <td>{{ data.teachnicalStaff}}<br>
-                  <span class="text-slate-500 text-sm">{{data.dateBill | date:'dd/MM/YYYY'}}</span>
-                </td>
-                <td>{{ data.customerName}}<br>
-                  <span class="text-slate-500 text-sm">{{data.customerPhone}}</span></td>
-                <td>{{ data.doctor }}</td>
-                <td>{{ data.totalAmount }}</td>
+              <tr class="w-full" [expand]="expandSet.has(data.Date)">
+                <frontend-revenue-statistics-detail [date]="data.Date" [branchId]="branchId"></frontend-revenue-statistics-detail>
               </tr>
             </ng-container>
           </tbody>
         </tds-table>
       </div>
-      </tr>
-      </ng-container>
-      </tbody>
-      </tds-table>
     </div>
   </div>
-</div>
 </div>

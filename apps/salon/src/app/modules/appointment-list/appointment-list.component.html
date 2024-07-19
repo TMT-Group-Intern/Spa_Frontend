@@ -1,0 +1,16 @@
+<div class="bg-gray-200 h-screen w-full">
+  <div class="w-96 flex flex-col gap-3 bg-white p-4 rounded-lg mb-2">
+    <tds-range-picker [(ngModel)]="rangeDate" (ngModelChange)="onChange($event)">
+    </tds-range-picker>
+  </div>
+  <div class="w-full">
+    <tds-tabset [tdsSize]="'small'">
+      <tds-tab title="Tất cả">Đã hẹn</tds-tab>
+      <tds-tab title="Đã hẹn">Đã hẹn</tds-tab>
+      <tds-tab title="Đang tới">Đang tới</tds-tab>
+      <tds-tab title="Hoàn thành">Hoàn thành</tds-tab>
+    </tds-tabset>
+  </div>
+
+
+</div>

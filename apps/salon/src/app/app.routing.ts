@@ -14,6 +14,7 @@ import { DoctorComponent } from './modules/doctor/doctor.component';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { SchedulesComponent } from './modules/schedule/schedule.component';
 import { BillComponent } from './modules/bill/bill.component';
+import { AppointmentListComponent } from './modules/appointment-list/appointment-list.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -49,6 +50,7 @@ const routes: Routes = [
       { path: 'revenue-statistics', loadChildren: () => RevenueStaticsModule },
       {path: 'users', loadComponent: ()=> UsersComponent},
       {path: 'bill/:id', loadComponent: ()=> BillComponent},
+      {path: 'appoitmentList', loadComponent: ()=> AppointmentListComponent},
     ],
   },
 ];

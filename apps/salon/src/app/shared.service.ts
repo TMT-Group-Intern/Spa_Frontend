@@ -243,5 +243,8 @@ export class AuthService {
   getDetails(branchId: number, fromDay: string, toDay: string){
     return this.http.get(this.baseUrl + 'Report/getdetail?idBrand=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay);
   }
-
+  // lấy danh sách lịch sử của người dùng
+  getBillHistory(customerId:number){
+    return this.http.get(this.baseUrl + 'Bill/getbillhistory?customerId=' + customerId);
+  }
 }
