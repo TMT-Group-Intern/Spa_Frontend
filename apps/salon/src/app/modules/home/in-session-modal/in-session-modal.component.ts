@@ -39,8 +39,8 @@ export class InSessionModalComponent implements OnInit {
     'Hoàn thành',
     'Đã khám',
   ]
-  companyId:number|null = null;
-  userSession:any
+  companyId: number | null = null;
+  userSession: any
   createAppointmentForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
@@ -62,7 +62,7 @@ export class InSessionModalComponent implements OnInit {
     if (storedUserSession !== null) {
       this.userSession = JSON.parse(storedUserSession);
     }
-    const branchID = this.userSession.user.branchID 
+    const branchID = this.userSession.user.branchID
     this.form.get('name')?.disable()
 
     // this.companySvc._companyIdCur$.pipe(
@@ -77,7 +77,7 @@ export class InSessionModalComponent implements OnInit {
     //       name: `${item.firstName} ${item.lastName}`
     //     }))]
     //   })
-    
+
     if (this.id) {
       this.shared.getAppointment(this.id).subscribe(
         (data: any) => {
@@ -88,8 +88,8 @@ export class InSessionModalComponent implements OnInit {
             status: data.Status,
           });
           this.assignments = data.Assignments
-          const foundSpaTherapist = this.assignments.find(item => item.Employees.JobTypeID === 2);
-          if(foundSpaTherapist) {
+          const foundSpaTherapist = this.assignments.find(item => item.Employees.JobTypeID === 3);
+          if (foundSpaTherapist) {
             this.form.patchValue({
               spaTherapist: foundSpaTherapist.Employees.EmployeeID
             });
@@ -99,7 +99,7 @@ export class InSessionModalComponent implements OnInit {
       )
     }
     // Get Spa Therapist
-    this.shared.getEmployee(branchID, 2).subscribe(
+    this.shared.getEmployee(branchID, 3).subscribe(
       (data: any[]) => {
         this.spaTherapistOptions = [...data.map(item => ({
           id: item.employeeID,

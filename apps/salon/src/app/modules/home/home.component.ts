@@ -39,7 +39,7 @@ import { concatMap, filter } from 'rxjs';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  
+
   private readonly tModalSvc = inject(TDSModalService);
   appointmentList: any[] = [];
   time: any;
@@ -48,10 +48,10 @@ export class HomeComponent implements OnInit {
   inSession: any[] = [];
   status: any;
   userSession: any;
- 
-   storedUserSession = localStorage.getItem('userSession');
-   oldBranch: any ;
-   companyId:number|null = null;
+
+  storedUserSession = localStorage.getItem('userSession');
+  oldBranch: any;
+  companyId: number | null = null;
   constructor(
     private sharedService: AuthService,
     private invoiceSvc: InvoiceService,
@@ -59,17 +59,17 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-   // const storedUserSession = localStorage.getItem('userSession');
+    // const storedUserSession = localStorage.getItem('userSession');
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
-      this.oldBranch = this.userSession.user.branchID ;
+      this.oldBranch = this.userSession.user.branchID;
       this.initAppointmentList();
     }
 
     this.companySvc._companyIdCur$.pipe(
-      filter(companyId=> !!companyId),
-      concatMap((branchID)=> {
-      return  this.sharedService.appointmentList(branchID as number)
+      filter(companyId => !!companyId),
+      concatMap((branchID) => {
+        return this.sharedService.appointmentList(branchID as number)
       })
     ).subscribe((data: any) => {
       this.appointmentList = data;
@@ -83,14 +83,17 @@ export class HomeComponent implements OnInit {
           appointment.Status === 'Đang khám'
       );
       this.inSession = this.appointmentList.filter((appointment: any) =>
-        appointment.Status === "Đã khám" || appointment.Status === "Hoàn thành"
+        appointment.Status === "Đã khám" ||
+        appointment.Status === "Không sử dụng dịch vụ" ||
+        appointment.Status === "Đang làm" || appointment.Status === "Chờ làm" ||
+        appointment.Status === "Hoàn thành"
       );
     });
-   
+
   }
   // Display Appointment List
   initAppointmentList() {
-    const branchID = this.userSession.user.branchID 
+    const branchID = this.userSession.user.branchID
 
     this.sharedService.appointmentList(branchID).subscribe((data: any) => {
       this.appointmentList = data;

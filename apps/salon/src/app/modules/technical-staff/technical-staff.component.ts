@@ -31,13 +31,16 @@ export class TechnicalStaffComponent {
   checkboxStatess: { [key: number]: boolean } = {};
   dataTemp: any;
   urls = [];
-  userSession:any
+  userSession: any
   checkActive?: boolean = false;
+  companyId: number | null = null;
+  //count:number = 0;
   public statusOptions = [
     'Hẹn',
     'Hủy hẹn',
   ]
   status!: FormControl;
+  currentBranch: number | null = null;
 
 
   timer = false;
@@ -50,25 +53,28 @@ export class TechnicalStaffComponent {
   minString = '00';
   secString = '00';
   countString = '00';
+  //count:number = 0;
+
 
   ngOnInit(): void {
     const storedUserSession = localStorage.getItem('userSession');
     if (storedUserSession !== null) {
       this.userSession = JSON.parse(storedUserSession);
+      this.currentBranch = this.userSession.user.branchID;
+      this.renderCustomerInQueue();
     }
-    const branchID = this.userSession.user.branchID 
-    this.renderCustomerInQueue();
 
     this.companySvc._companyIdCur$.pipe(
-      filter(companyId=> !!companyId),
-      concatMap((branchID)=> {
-      return  this.auth.getCustomerInQueueForTechnicalStaff(branchID as number, 'Đang làm')
+      filter(companyId => !!companyId),
+      concatMap((branchID) => {
+        this.currentBranch = branchID
+        return this.auth.getCustomerInQueueForTechnicalStaff(branchID as number, 'Đang làm')
       })
     ).subscribe((x: any[]) => {
       this.listSpaServiceQueue = x;
       console.log(this.listSpaServiceQueue)
       this.auth
-        .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ làm')
+        .getCustomerInQueueForTechnicalStaff(this.currentBranch as number, 'Chờ làm')
         .subscribe((x: any[]) => {
           this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...x];
           console.log(this.listSpaServiceQueue)
@@ -79,24 +85,21 @@ export class TechnicalStaffComponent {
   constructor(
     private auth: AuthService,
     private notification: TDSNotificationService,
-    private companySvc: CompanyService,
+    private companySvc: CompanyService
   ) { }
 
   renderCustomerInQueue() {
-    console.log(this.userSession.user.branchID)
     this.auth
       .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Đang làm')
       .subscribe((x: any[]) => {
         this.listSpaServiceQueue = x;
-        console.log(this.listSpaServiceQueue)
         this.auth
           .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ làm')
           .subscribe((x: any[]) => {
             this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...x];
-            console.log(this.listSpaServiceQueue)
           });
       });
-      console.log(this.userSession.user.branchID)
+    console.log(this.listSpaServiceQueue);
   }
 
   renderCustomerDetail(data: any) {
@@ -110,8 +113,9 @@ export class TechnicalStaffComponent {
         this.customerDetail = data.ChooseServices.map(
           (chooseService: any) => chooseService.service
         );
+        console.log(this.listSpaServiceQueue);
+        console.log(this.dataTemp);
         const appointmentData = this.dataTemp.find((item: any) => item.data.AppointmentID === this.appointmentAllInfo.AppointmentID);
-        console.log(appointmentData)
         if (appointmentData) {
           Object.keys(appointmentData.checkBox).forEach(key => {
             const numKey = +key;
@@ -172,6 +176,7 @@ export class TechnicalStaffComponent {
   }
 
   callModalHistory() {
+    //console.log(this.dataParent.CustomerID)
     this.modalSvc.create({
       title: 'Hồ sơ',
       content: UserProfileComponent,
@@ -195,6 +200,7 @@ export class TechnicalStaffComponent {
 
   toggleCheckbox(serviceId: number) {
     this.checkboxStatess[serviceId] = !this.checkboxStatess[serviceId];
+    console.log(this.checkboxStatess);
   }
 
   onSave(data: any, checkBox: any) {
@@ -223,13 +229,16 @@ export class TechnicalStaffComponent {
   loadData() {
     const data: any = localStorage.getItem('appointmentDetail');
     this.dataTemp = JSON.parse(data);
+    console.log(this.dataTemp);
+
   }
 
   onStatusChange(event: any, id: number) {
     const status = event.target.value;
     if (status === 'Hoàn thành') {
-      this.checkActive = false;
       this.onDelete(id);
+      this.checkActive = false;
+
     }
     this.updateStatus(id, status);
   }

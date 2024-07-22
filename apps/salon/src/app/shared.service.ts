@@ -60,7 +60,7 @@ export class AuthService {
     return this.http.post<{ status: object }>(this.baseUrl + 'Authentication/CreateUserForEmployee', body, { headers });
   }
   editUser(email: string, val: any) {
-    return this.http.put(this.baseUrl + 'User/updateUser?email='+email, val);
+    return this.http.put(this.baseUrl + 'User/updateUser?email=' + email, val);
   }
   getAdminByEmail(email: string): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/getUserByAdmin?email=' + email)
@@ -137,7 +137,7 @@ export class AuthService {
   }
 
   //
-  updateAppointmentWithService(id: number, body:any) {
+  updateAppointmentWithService(id: number, body: any) {
     return this.http.put(this.baseUrl + 'Appointment/Test/' + id, body);
   }
 
@@ -215,7 +215,7 @@ export class AuthService {
 
   //
   login(email: string, password: string) {
-    return this.http.post<{ flag: boolean, mess: string,userSession:object, token: string }>(this.baseUrl + 'Authentication/login', {
+    return this.http.post<{ flag: boolean, mess: string, userSession: object, token: string }>(this.baseUrl + 'Authentication/login', {
       email: email,
       password: password
     })
