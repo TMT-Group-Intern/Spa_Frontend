@@ -65,7 +65,6 @@ export class CustomerModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkNumberPhone()
-    console.log(this.id);
     if (this.id) {
       this.auth.getCustomer(this.id).subscribe((data: any) => {
         const { firstName, lastName, email, phone, dateOfBirth, gender } = data.customerDTO;
@@ -77,14 +76,13 @@ export class CustomerModalComponent implements OnInit {
           dateOfBirth,
           gender
         });
-        console.log(this.form.value);
       });
     }
   }
 
   checkNumberPhone(){
     this.form.get("phone")?.valueChanges.pipe(
-      debounceTime(500),
+      debounceTime(100),
       filter((phone) =>(phone !== null && phone.length == 10)),
       switchMap((search: string) => {
         return search ? this.auth.searchCustomer(search) : of(null)
@@ -95,9 +93,6 @@ export class CustomerModalComponent implements OnInit {
       }else{
         this.checkPhone = false;
       }
-      console.log(this.checkPhone)
-      console.log(data.customers)
-
     })
   }
 
@@ -133,7 +128,6 @@ export class CustomerModalComponent implements OnInit {
       .CreateNewCustomer(val)
       .pipe(
         catchError((ex) => {
-          console.log(ex);
           return of(null);
         })
       )

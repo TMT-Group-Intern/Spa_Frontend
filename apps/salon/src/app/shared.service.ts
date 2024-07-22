@@ -183,7 +183,6 @@ export class AuthService {
     return this.http.post(this.baseUrl + 'Payment?Id=' + id, val);
   }
 
-
   //
   employeeList(): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/allEmployee');
@@ -205,12 +204,27 @@ export class AuthService {
 
   // Get Branch
   getBranch(): Observable<any[]> {
-    return this.http.get<any>(this.baseUrl + 'User/allBranches');
+    return this.http.get<any>(this.baseUrl + 'Branch/allBranches');
   }
 
   // Get Job Type
   getJobType(): Observable<any[]> {
-    return this.http.get<any>(this.baseUrl + 'User/allJobs');
+    return this.http.get<any>(this.baseUrl + 'Job/allJobs');
+  }
+
+  // Create Bill
+  createBill(val: any) {
+    return this.http.post(this.baseUrl + 'Bill', val);
+  }
+
+  //
+  getBill(id: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Bill/' + id);
+  }
+
+  // Update Bill
+  updateBill(id: any, val: any) {
+    return this.http.put(this.baseUrl + 'Bill/' + id, val);
   }
 
   //
@@ -219,6 +233,15 @@ export class AuthService {
       email: email,
       password: password
     })
+  }
+
+  // báo cáo theo ngày
+  getByDays(branchId: number, fromDay: string, toDay: string){
+    return this.http.get(this.baseUrl + 'Report/getbyday?idBrand=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay);
+  }
+  // danh sách các thanh toán trong ngày
+  getDetails(branchId: number, fromDay: string, toDay: string){
+    return this.http.get(this.baseUrl + 'Report/getdetail?idBrand=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay);
   }
 
 }

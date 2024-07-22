@@ -20,6 +20,7 @@ import { error } from 'console';
 import { TDSMapperPipeModule } from 'tds-ui/cdk/pipes/mapper';
 import { CompanyService } from '../../core/services/company.service';
 import { concatMap, filter } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'frontend-home',
@@ -48,6 +49,7 @@ export class HomeComponent implements OnInit {
   inSession: any[] = [];
   status: any;
   userSession: any;
+  assign: any[] = [];
 
   storedUserSession = localStorage.getItem('userSession');
   oldBranch: any;
@@ -55,14 +57,14 @@ export class HomeComponent implements OnInit {
   constructor(
     private sharedService: AuthService,
     private invoiceSvc: InvoiceService,
-    private companySvc: CompanyService
+    private companySvc: CompanyService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
     // const storedUserSession = localStorage.getItem('userSession');
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
-      this.oldBranch = this.userSession.user.branchID;
       this.initAppointmentList();
     }
 
@@ -176,20 +178,57 @@ export class HomeComponent implements OnInit {
 
   // Open Edit Payment Modal
   onEditPayment(id: number) {
-    const modal = this.tModalSvc.create({
-      title: 'Edit Information',
-      content: PaymentModalComponent,
-      footer: null,
-      size: 'xl',
-      componentParams: {
-        id,
-      },
-    });
-    modal.afterClose.asObservable().subscribe((res) => {
-      if (res) {
-        this.initAppointmentList();
+    // const modal = this.tModalSvc.create({
+    //   title: 'Edit Information',
+    //   content: PaymentModalComponent,
+    //   footer: null,
+    //   size: 'xl',
+    //   componentParams: {
+    //     id,
+    //   },
+    // });
+    // modal.afterClose.asObservable().subscribe((res) => {
+    //   if (res) {
+    //     this.initAppointmentList();
+    //   }
+    // });
+
+    this.sharedService.getAppointment(id).subscribe(
+      (data: any) => {
+        const val = {
+          customerID: data.CustomerID,
+          appointmentID: id,
+          date: data.AppointmentDate,
+          billStatus: "",
+          doctor: "",
+          technicalStaff: "",
+          totalAmount: data.Total,
+          amountInvoiced: 0,
+          amountResidual: data.Total
+        }
+
+        this.assign = data.Assignments
+        const foundDoctor = this.assign.find(item => item.Employees.JobTypeID === 2);
+        const foundSpaTherapist = this.assign.find(item => item.Employees.JobTypeID === 3);
+        if (foundDoctor) {
+          val.doctor = foundDoctor.Employees.LastName + ' ' + foundDoctor.Employees.FirstName
+        }
+
+        if (foundSpaTherapist) {
+          val.technicalStaff = foundSpaTherapist.Employees.LastName + ' ' + foundSpaTherapist.Employees.FirstName
+        }
+
+        this.sharedService.createBill(val).subscribe(
+          (data: any) => {
+            this.sharedService.UpdateStatus(id, 'Đã thanh toán').subscribe()
+            this.router.navigate(['bill/' + data.item]);
+          },
+          () => {
+            console.log(Error)
+          }
+        )
       }
-    });
+    )
   }
 
   // Update Status
