@@ -18,6 +18,7 @@ import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { AuthorizeService } from './auth/authorize.service';
+import { AppointmentListModule } from './modules/appointment-list/appointment-list.module';
 
 registerLocaleData(localeVi);
 
@@ -37,6 +38,8 @@ registerLocaleData(localeVi);
     TDSDataTableModule,
     RouterModule,
     AppRoutingModule,
+    AppointmentListModule
+
   ],
   providers: [
     { provide: TDS_I18N, useValue: vi_VN },

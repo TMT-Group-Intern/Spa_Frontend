@@ -1,4 +1,4 @@
-import { Component, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ServiceListComponent } from './modules/service-list/service-list.component';
 import { LoginComponent } from './login/login.component';
@@ -14,6 +14,8 @@ import { DoctorComponent } from './modules/doctor/doctor.component';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { SchedulesComponent } from './modules/schedule/schedule.component';
 import { AuthorizeService } from './auth/authorize.service';
+import { BillComponent } from './modules/bill/bill.component';
+import { AppointmentListModule } from './modules/appointment-list/appointment-list.module';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -48,7 +50,9 @@ const routes: Routes = [
       },
       { path: 'doctor', loadComponent: () => DoctorComponent },
       { path: 'revenue-statistics', loadChildren: () => RevenueStaticsModule },
-      {path: 'users', loadComponent: ()=> UsersComponent}
+      {path: 'users', loadComponent: ()=> UsersComponent},
+      {path: 'bill/:id', loadComponent: ()=> BillComponent},
+      {path: 'appoitmentList', loadChildren: ()=> AppointmentListModule},
     ],
   },
 ];

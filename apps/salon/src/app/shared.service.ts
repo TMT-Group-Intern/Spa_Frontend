@@ -145,6 +145,10 @@ export class AuthService {
   getAppointment(id: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Appointment/' + id);
   }
+  // lấy danh sách lịch hẹn theo thời gian
+  getAppointmentByDays(branchId: number, fromDay: string, toDay: string) {
+    return this.http.get<any>(this.baseUrl + 'Appointment/getbyday?branchID='+ branchId + '&fromDate='+ fromDay +'&toDate='+ toDay);
+  }
 
   //
   signUp(lastName: string, firstName: string, gender: string, phone: string, email: string, password: string, confirmPassword: string, dateOfBirth: string, hireDate: string, jobTypeID: number, branchID: number, role: string) {
@@ -179,10 +183,9 @@ export class AuthService {
   }
 
   // Create a Payment
-  createPayment(id: any, val: any) {
-    return this.http.post(this.baseUrl + 'Payment?Id=' + id, val);
+  createPayment(val: any) {
+    return this.http.post(this.baseUrl + 'Payment', val);
   }
-
 
   //
   employeeList(): Observable<any[]> {
@@ -213,6 +216,26 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'Job/allJobs');
   }
 
+  // Create Bill
+  createBill(val: any) {
+    return this.http.post(this.baseUrl + 'Bill', val);
+  }
+
+  //
+  getBill(id: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Bill/' + id);
+  }
+
+  //
+  getAllBillOfCus(id: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Bill/getbillbycustomer?cusId=' + id);
+  }
+
+  // Update Bill
+  updateBill(id: any, val: any) {
+    return this.http.put(this.baseUrl + 'Bill/' + id, val);
+  }
+
   //
   login(email: string, password: string) {
     return this.http.post<{ flag: boolean, mess: string,userSession:object, token: string }>(this.baseUrl + 'Authentication/login', {
@@ -221,4 +244,16 @@ export class AuthService {
     })
   }
 
+  // báo cáo theo ngày
+  getByDays(branchId: number, fromDay: string, toDay: string){
+    return this.http.get(this.baseUrl + 'Report/getbyday?idBrand=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay);
+  }
+  // danh sách các thanh toán trong ngày
+  getDetails(branchId: number, fromDay: string, toDay: string){
+    return this.http.get(this.baseUrl + 'Report/getdetail?idBrand=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay);
+  }
+  // lấy danh sách lịch sử của người dùng
+  getBillHistory(customerId:number){
+    return this.http.get(this.baseUrl + 'Bill/getbillhistory?customerId=' + customerId);
+  }
 }

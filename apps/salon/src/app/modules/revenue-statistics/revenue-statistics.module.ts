@@ -4,21 +4,27 @@ import { RevenueStatisticsComponent } from './revenue-statistics.component';
 import { TDSEchartsModule } from 'tds-report';
 import { RouterModule, Routes } from '@angular/router';
 import { TDSTableModule } from 'tds-ui/table';
+import { TDSDatePickerModule } from 'tds-ui/date-picker';
+import { TDSInputModule } from 'tds-ui/tds-input';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RevenueStatisticsDetailComponent } from './revenue-statistics-detail/revenue-statistics-detail.component';
 
-const routes : Routes = [
-      {path: '', component: RevenueStatisticsComponent},
-]
+const routes: Routes = [{ path: '', component: RevenueStatisticsComponent }];
 
 @NgModule({
-  declarations: [RevenueStatisticsComponent],
+  declarations: [RevenueStatisticsComponent, RevenueStatisticsDetailComponent],
   imports: [
     CommonModule,
     TDSTableModule,
+    TDSDatePickerModule,
+    TDSInputModule,
+    ReactiveFormsModule,
+    FormsModule,
     RouterModule.forChild(routes),
     TDSEchartsModule.forRoot({
-      echarts: () => import('echarts')
+      echarts: () => import('echarts'),
     }),
   ],
-  exports:[RevenueStatisticsComponent]
+  exports: [RevenueStatisticsComponent],
 })
-export class RevenueStaticsModule { }
+export class RevenueStaticsModule {}

@@ -51,7 +51,7 @@
               <span *ngIf="form.controls['phone'].hasError('pattern')"><strong>Số điện thoại</strong> phải bắt đầu bằng số 0 và có 10 chữ số!</span>
             </tds-error>
           </tds-form-field>
-          <tds-error *ngIf="checkPhone"><strong>Số điện thoại</strong> đã tồn tại</tds-error>
+          <tds-error *ngIf="checkPhone"><span><strong>Số điện thoại</strong> đã tồn tại</span></tds-error>
         </div>
       </div>
 

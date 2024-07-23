@@ -34,10 +34,11 @@ export class InSessionModalComponent implements OnInit {
   private readonly modalRef = inject(TDSModalRef);
   public spaTherapistOptions: any[] = []
   public statusOptions = [
-    'Chờ làm',
-    'Đang làm',
-    'Hoàn thành',
     'Đã khám',
+    'Chờ làm',
+    'Đang chăm sóc',
+    'Hoàn thành',
+    'Không sử dụng dịch vụ',
   ]
   companyId:number|null = null;
   userSession:any
@@ -62,7 +63,7 @@ export class InSessionModalComponent implements OnInit {
     if (storedUserSession !== null) {
       this.userSession = JSON.parse(storedUserSession);
     }
-    const branchID = this.userSession.user.branchID 
+    const branchID = this.userSession.user.branchID
     this.form.get('name')?.disable()
 
     // this.companySvc._companyIdCur$.pipe(
@@ -77,24 +78,24 @@ export class InSessionModalComponent implements OnInit {
     //       name: `${item.firstName} ${item.lastName}`
     //     }))]
     //   })
-    
+
     if (this.id) {
       this.shared.getAppointment(this.id).subscribe(
         (data: any) => {
 
           this.form.patchValue({
-            name: data.Customer.FirstName + ' ' + data.Customer.LastName,
-            customerID: data.Customer.CustomerID,
-            status: data.Status,
+            name: data.customer.firstName + ' ' + data.customer.lastName,
+            customerID: data.customer.customerID,
+            status: data.status,
           });
-          this.assignments = data.Assignments
-          const foundSpaTherapist = this.assignments.find(item => item.Employees.JobTypeID === 3);
+          this.assignments = data.assignments
+          const foundSpaTherapist = this.assignments.find(item => item.employees.jobTypeID === 3);
           if(foundSpaTherapist) {
             this.form.patchValue({
-              spaTherapist: foundSpaTherapist.Employees.EmployeeID
+              spaTherapist: foundSpaTherapist.employees.employeeID
             });
           }
-          console.log(this.form.get('spaTherapist')?.value)
+          // console.log(this.form.get('spaTherapist')?.value)
         }
       )
     }

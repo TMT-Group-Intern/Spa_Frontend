@@ -34,32 +34,32 @@ export class MenuComponent {
   active1 = 'top';
   lstMenu: Array<TDSMenuDTO> = [
     {
-      "name": "Reception",
+      "name": "Tiếp tân",
       "icon": "tdsi-receive-fill",
       "link": "/home",
     },
     {
-      "name": "Doctor",
+      "name": "Bác sĩ",
       "icon": "tdsi-earpiece-fill",
       "link": '/doctor'
     },
     {
-      "name": "Spa Therapist",
+      "name": "Nhân viên chăm sóc",
       "icon": "tdsi-auto-fix-fill",
       "link": '/technical-staff'
     },
     {
-      "name": 'Customer',
+      "name": 'Khách hàng',
       "icon": "tdsi-group-people-fill",
       "link": '/customer-list'
     },
     {
-      "name": 'Users',
+      "name": 'Nhân viên',
       "icon": "tdsi-contact-fill",
       "link": '/users'
     },
     {
-      "name": "Service",
+      "name": "Dịch vụ",
       "icon": "tdsi-list-product-fill",
       "link": '/service-list'
     },
@@ -69,9 +69,14 @@ export class MenuComponent {
       "link": '/revenue-statistics'
     },
     {
-      "name": "Schedule",
+      "name": "Lịch trình",
       "icon": "tdsi-calendar-fill",
       "link": '/schedule'
+    },
+    {
+      "name": "Tra lịch hẹn",
+      "icon": "tdsi-paper-fill",
+      "link": '/appoitmentList'
     },
   ]
 
