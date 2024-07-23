@@ -389,9 +389,7 @@ export class HomeComponent implements OnInit {
   // Update Status
   updateStatus(id: number, status: string) {
     this.sharedService.UpdateStatus(id, status).subscribe(() => {
-      this.sharedService.getAppointment(id).subscribe((res: any) => {
-        console.log(res);
-      });
+      this.sharedService.getAppointment(id).subscribe();
       this.initAppointment();
     });
   }

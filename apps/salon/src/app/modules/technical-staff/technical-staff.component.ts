@@ -66,12 +66,10 @@ export class TechnicalStaffComponent {
       })
     ).subscribe((x: any[]) => {
       this.listSpaServiceQueue = x;
-      console.log(this.listSpaServiceQueue)
       this.auth
         .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ chăm sóc')
         .subscribe((x: any[]) => {
           this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...x];
-          console.log(this.listSpaServiceQueue)
         });
     });
   }
@@ -83,20 +81,16 @@ export class TechnicalStaffComponent {
   ) { }
 
   renderCustomerInQueue() {
-    console.log(this.userSession.user.branchID)
     this.auth
       .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Đang chăm sóc')
       .subscribe((x: any[]) => {
         this.listSpaServiceQueue = x;
-        console.log(this.listSpaServiceQueue)
         this.auth
           .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ chăm sóc')
           .subscribe((x: any[]) => {
             this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...x];
-            console.log(this.listSpaServiceQueue)
           });
       });
-    console.log(this.userSession.user.branchID)
   }
 
   renderCustomerDetail(data: any) {
@@ -106,7 +100,6 @@ export class TechnicalStaffComponent {
         this.checkboxStatess = {};
         this.loadData()
         this.appointmentAllInfo = data;
-        console.log(this.appointmentAllInfo)
         this.customerDetail = data.chooseServices.map(
           (chooseService: any) => chooseService.service
         );

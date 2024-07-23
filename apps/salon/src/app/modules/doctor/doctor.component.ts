@@ -124,8 +124,10 @@ export class DoctorComponent implements OnInit {
       this.appointmentList = data;
       this.reception = this.appointmentList.filter(
         (appointment: any) =>
-          appointment.status === 'Chờ khám' ||
-          appointment.status === 'Đang khám'
+          (appointment.status === 'Chờ khám' ||
+          appointment.status === 'Đang khám')
+          && (appointment.EmployeeCode===this.userSession.user.userCode
+            || this.userSession.user.role==='Admin')
       );
     });
   }
@@ -142,7 +144,7 @@ export class DoctorComponent implements OnInit {
         customerID: data.customer.customerID,
         status: data.status,
         service: data.chooseServices.map((item: any) => item.serviceID),
-        doctor: `${data.assignments[0].employees.firstName} ${data.assignments[0].employees.lastName}`,
+        doctor: `${data.assignments[0].employees.lastName} ${data.assignments[0].employees.firstName}`,
         note: data.notes,
       });
     });
