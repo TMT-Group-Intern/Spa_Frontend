@@ -30,14 +30,14 @@
             <ng-container *ngFor="let data of table.data">
               <tr>
                 <td
-                  [expand]="expandSet.has(data.Date)"
-                  (expandChange)="onExpandChange(data.Date, $event)"
+                  [expand]="expandSet.has(data.date)"
+                  (expandChange)="onExpandChange(data.date, $event)"
                 ></td>
-                <td>{{ data.Date | date : 'dd/MM/YYYY' }}</td>
-                <td>{{ data.TotalRevenue }}</td>
+                <td>{{ data.date | date : 'dd/MM/YYYY' }}</td>
+                <td>{{ data.totalRevenue }}</td>
               </tr>
-              <tr class="w-full" [expand]="expandSet.has(data.Date)">
-                <frontend-revenue-statistics-detail [date]="data.Date" [branchId]="branchId"></frontend-revenue-statistics-detail>
+              <tr class="w-full" [expand]="expandSet.has(data.date)">
+                <frontend-revenue-statistics-detail [date]="data.date" [branchId]="branchId"></frontend-revenue-statistics-detail>
               </tr>
             </ng-container>
           </tbody>

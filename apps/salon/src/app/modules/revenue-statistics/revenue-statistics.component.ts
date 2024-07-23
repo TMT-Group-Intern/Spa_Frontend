@@ -129,11 +129,11 @@ export class RevenueStatisticsComponent implements OnInit {
         this.endOfMonthDate as unknown as string
       )
       .subscribe((data: any) => {
-        this.listOfData = data.sort((a: any, b: any) =>a.Date > b.Date? -1: 1);
+        this.listOfData = data.sort((a: any, b: any) =>a.date > b.date? -1: 1);
         this.valueArray = [
           ...data.map((item: any) => ({
-            day: new Date(item.Date).getDate(),
-            value: item.Value,
+            day: new Date(item.date).getDate(),
+            value: item.value,
           })),
         ];
 
@@ -178,22 +178,6 @@ export class RevenueStatisticsComponent implements OnInit {
       this.expandSet.delete(date);
     }
   }
-
-  // // Hiển thị chi tiết danh sách giao dịch thanh toán của 1 ngày
-  // onChangeShowDetail(date: Date): void {
-  //   const fromDay = format(date, DATE_CONFIG.DATE_BASE_FROM);
-  //   const fromTo = format(date, DATE_CONFIG.DATE_BASE_TO);
-  //   const branchID = this.userSession.user.branchID;
-  //   this.sharedServices
-  //     .getDetails(
-  //       branchID,
-  //       fromDay as unknown as string,
-  //       fromTo as unknown as string
-  //     )
-  //     .subscribe((data: any) => {
-  //       this.listOfDataDetail = data;
-  //     });
-  // }
   ngOnInit(): void {
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);

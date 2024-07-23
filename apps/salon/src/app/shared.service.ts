@@ -145,6 +145,10 @@ export class AuthService {
   getAppointment(id: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Appointment/' + id);
   }
+  // lấy danh sách lịch hẹn theo thời gian
+  getAppointmentByDays(branchId: number, fromDay: string, toDay: string) {
+    return this.http.get<any>(this.baseUrl + 'Appointment/getbyday?branchID='+ branchId + '&fromDate='+ fromDay +'&toDate='+ toDay);
+  }
 
   //
   signUp(lastName: string, firstName: string, gender: string, phone: string, email: string, password: string, confirmPassword: string, dateOfBirth: string, hireDate: string, jobTypeID: number, branchID: number, role: string) {
