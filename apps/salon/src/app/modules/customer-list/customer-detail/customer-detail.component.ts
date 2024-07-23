@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription, switchMap } from 'rxjs';
 import { TDSBreadCrumbModule } from 'tds-ui/breadcrumb';
@@ -7,6 +7,14 @@ import { AuthService } from '../../../shared.service';
 import { TDSListModule } from 'tds-ui/list';
 import { TDSDataTableModule } from 'tds-ui/data-table';
 import { TDSColumnSettingsModule } from 'tds-ui/column-settings';
+import { TDSTabsModule } from 'tds-ui/tabs';
+import { UserProfileComponent } from '../../user-profile/user-profile.component';
+import { TDSEmptyModule } from 'tds-ui/empty';
+import { TDSImageModule } from 'tds-ui/image';
+import { ReactiveFormsModule } from '@angular/forms';
+import { TDSFormFieldModule } from 'tds-ui/form-field';
+import { TDSTableModule } from 'tds-ui/table';
+import { TDSTagModule } from 'tds-ui/tag';
 
 @Component({
   selector: 'frontend-customer-detail',
@@ -15,18 +23,27 @@ import { TDSColumnSettingsModule } from 'tds-ui/column-settings';
   standalone: true,
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     TDSBreadCrumbModule,
     RouterLink,
     TDSListModule,
     TDSDataTableModule,
     TDSColumnSettingsModule,
+    TDSTabsModule,
+    UserProfileComponent,
+    TDSEmptyModule,
+    TDSImageModule,
+    TDSFormFieldModule,
+    TDSTableModule,
+    TDSTagModule
   ],
 })
 export class CustomerDetailComponent implements OnInit {
-
-  routeSub: Subscription | undefined
-  id: any
-  customer: any
+  routeSub: Subscription | undefined;
+  id: any;
+  customer: any;
+  serviceHistory: any;
+  listOfData: any;
   billsOfCus: any
 
   constructor(
@@ -42,12 +59,26 @@ export class CustomerDetailComponent implements OnInit {
       this.customer = data
     });
 
-    this.shared.getCustomer(this.id).subscribe(
-      (data: any) => {
-        this.customer = data
-      }
-    )
-
+    this.shared.getCustomer(this.id).subscribe((data: any) => {
+      this.customer = data;
+    });
+    this.treatmentHistory();
+    this.billHistory()
   }
-
+  treatmentHistory() {
+    if (this.id) {
+      this.shared.getHistoryCustomer(this.id).subscribe((data: any) => {
+        this.serviceHistory = data.listHistoryForCus.sort((a: any, b: any) =>
+          b.date < a.date ? -1 : 1
+        );
+      });
+    }
+  }
+  billHistory(){
+    if(this.id){
+      this.shared.getBillHistory(this.id).subscribe((data: any)=>{
+        this.listOfData = data.sort((a: any, b: any)=> a.date > b.date ? -1 :1);
+      })
+    }
+  }
 }

@@ -1,28 +1,11 @@
-<div
-  id="id"
-  *ngFor="let history of serviceHistory"
-  class="flex border rounded-10 m-2"
->
+<div id="id" *ngFor="let history of serviceHistory" class="flex border rounded-10 m-2">
   <div class="flex items-center w-[600px] overflow-x-auto">
-    <div
-      class="flex m-4 rounded-10 history"
-      *ngIf="history.photoCustomer.length > 0; else noImage"
-    >
-      <img
-        class="image-history"
-        *ngFor="let image of history.photoCustomer"
-        tds-image
-        width="150px"
-        height="150px"
-        [fallback]="fallback"
-        [tdsSrc]="'https://localhost:44305/photos/' + image"
-        alt="Image"
-      />
+    <div class="flex m-4 rounded-10 history" *ngIf="history.photoCustomer.length > 0; else noImage">
+      <img class="image-history" *ngFor="let image of history.photoCustomer" tds-image width="150px" height="150px"
+        [fallback]="fallback" [tdsSrc]="'https://localhost:44305/photos/' + image" alt="Image" />
     </div>
     <ng-template #noImage>
-      <span
-        class="flex items-center justify-center h-full w-full text-gray-800"
-      >
+      <span class="flex items-center justify-center h-full w-full text-gray-800">
         Chưa cập nhật hình ảnh
       </span>
     </ng-template>
@@ -34,7 +17,7 @@
     <div *ngIf="history.serviceUsed.length > 0; else noservice">
       <tds-success *ngFor="let service of history.serviceUsed">{{
         service
-      }}</tds-success>
+        }}</tds-success>
     </div>
     <ng-template #noservice>
       <span>Chưa có</span>

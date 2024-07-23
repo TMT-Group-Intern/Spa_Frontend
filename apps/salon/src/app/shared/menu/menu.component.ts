@@ -73,6 +73,11 @@ export class MenuComponent {
       "icon": "tdsi-calendar-fill",
       "link": '/schedule'
     },
+    {
+      "name": "Tra lịch hẹn",
+      "icon": "tdsi-paper-fill",
+      "link": '/appoitmentList'
+    },
   ]
 
   setActiveTab(event: TDSSafeAny) {
