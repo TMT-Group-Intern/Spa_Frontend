@@ -3,7 +3,7 @@ import { TDSBarChartComponent, TDSChartOptions } from 'tds-report';
 import { AuthService } from '../../shared.service';
 import { addDays, endOfMonth, format, startOfMonth } from 'date-fns';
 import { DATE_CONFIG } from '../../core/enums/date-format.enum';
-import { concatMap, filter } from 'rxjs';
+import { concatMap, filter, tap } from 'rxjs';
 import { CompanyService } from '../../core/services/company.service';
 
 @Component({
@@ -15,7 +15,6 @@ export class RevenueStatisticsComponent implements OnInit {
   private readonly sharedServices = inject(AuthService);
   private readonly company = inject(CompanyService);
 
-  dateTime: any;
   branchId?: number;
   options: any;
   listOfData: any;
@@ -24,11 +23,9 @@ export class RevenueStatisticsComponent implements OnInit {
   valueArray: any;
   storedUserSession = localStorage.getItem('userSession');
   rangeDate: any = [];
+  saveSelectDate: any;
   size: any = [1350, 350];
 
-  constructor(){
-    this.branchId = undefined;
-  }
 
   // Tạo mảng mới chứa 31 phần tử, ban đầu chứa toàn số 0
   newArray = Array(31).fill(0);
@@ -104,6 +101,7 @@ export class RevenueStatisticsComponent implements OnInit {
   }
   // chọn thời gian
   onSelectionChange(selection: any) {
+    this.saveSelectDate = selection;
     this.startOfMonthDate = format(selection[0], DATE_CONFIG.DATE_BASE_FROM);
     this.endOfMonthDate = format(selection[1], DATE_CONFIG.DATE_BASE_TO);
     const start = new Date(this.startOfMonthDate).getMonth();
@@ -120,11 +118,9 @@ export class RevenueStatisticsComponent implements OnInit {
   }
   // Lấy dữ liệu báo cáo doanh thu theo ngày.
   getReportDataByDate() {
-    const branchID = this.userSession.user.branchID;
-    this.branchId = branchID;
     this.sharedServices
       .getByDays(
-        branchID,
+        this.branchId as number,
         this.startOfMonthDate as unknown as string,
         this.endOfMonthDate as unknown as string
       )
@@ -172,8 +168,6 @@ export class RevenueStatisticsComponent implements OnInit {
 
     if (checked) {
       this.expandSet.add(date);
-      this.dateTime = date;
-      // this.onChangeShowDetail(date);
     } else {
       this.expandSet.delete(date);
     }
@@ -181,23 +175,18 @@ export class RevenueStatisticsComponent implements OnInit {
   ngOnInit(): void {
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
+      this.branchId = this.userSession.user.branchID;
       this.onSelectionChange(this.thisMonth)
     }
 
-    // chạy khi chi nhánh thay đổi
     this.company._companyIdCur$
       .pipe(
         filter((companyId) => !!companyId),
-        concatMap((branchID) => {
-          return this.sharedServices.getByDays(
-            branchID as number,
-            this.startOfMonthDate as unknown as string,
-            this.endOfMonthDate as unknown as string
-          );
-        })
+        tap((company) => company)
       )
       .subscribe((data: any) => {
-        this.listOfData = data;
+        this.branchId = data;
+        this.onSelectionChange(this.saveSelectDate)
       });
   }
 }

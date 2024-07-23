@@ -8,6 +8,9 @@ import { TDSTabsModule } from 'tds-ui/tabs';
 import { TDSTableModule } from 'tds-ui/table';
 import { TDSTagModule } from 'tds-ui/tag';
 import { AppointmentTableListComponent } from './appointment-table-list/appointment-table-list.component';
+import { TDSFormFieldModule } from 'tds-ui/form-field';
+import { TDSAutocompleteModule } from 'tds-ui/auto-complete';
+import { TDSInputModule } from 'tds-ui/tds-input';
 
 const routes: Routes = [{ path: '', component: AppointmentListComponent }];
 @NgModule({
@@ -19,7 +22,10 @@ const routes: Routes = [{ path: '', component: AppointmentListComponent }];
     TDSTabsModule,
     RouterModule.forChild(routes),
     TDSTableModule,
-    TDSTagModule
+    TDSTagModule,
+    TDSFormFieldModule,
+    TDSAutocompleteModule,
+    TDSInputModule
   ],
   exports: [AppointmentListComponent],
 })
