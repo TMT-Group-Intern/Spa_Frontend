@@ -1,0 +1,13 @@
+<div class="bg-white h-full w-full">
+  <div class="w-96 flex flex-col gap-3 bg-white p-4 rounded-lg mb-2">
+    <tds-range-picker [(ngModel)]="rangeDate['Hôm nay']" (ngModelChange)="onChange($event)">
+    </tds-range-picker>
+  </div>
+  <div class="bg-white w-full">
+    <tds-tabset [tdsSize]="'small'" [(selectedIndex)]="selectedIndex">
+      <tds-tab *ngFor="let tab of tabs" [title]="tab">
+        <frontend-appointment-table-list [branchId]="branchId" [selectedIndex]="selectedIndex" [startDay]="startDate" [endDay]="endDate"></frontend-appointment-table-list>
+      </tds-tab>
+    </tds-tabset>
+  </div>
+</div>

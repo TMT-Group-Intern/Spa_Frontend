@@ -16,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { TDSDataTableModule } from 'tds-ui/data-table';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
+import { AppointmentListModule } from './modules/appointment-list/appointment-list.module';
 
 registerLocaleData(localeVi);
 
@@ -35,6 +36,8 @@ registerLocaleData(localeVi);
     TDSDataTableModule,
     RouterModule,
     AppRoutingModule,
+    AppointmentListModule
+
   ],
   providers: [{ provide: TDS_I18N, useValue: vi_VN }],
   bootstrap: [AppComponent],
