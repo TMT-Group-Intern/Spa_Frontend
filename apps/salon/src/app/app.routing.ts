@@ -13,13 +13,15 @@ import { TreatmentDetailComponent } from './modules/technical-staff/treatment-de
 import { DoctorComponent } from './modules/doctor/doctor.component';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { SchedulesComponent } from './modules/schedule/schedule.component';
+import { AuthorizeService } from './auth/authorize.service';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
   //{ path: 'protected', canActivate: [AuthGuardService], component:  UsersComponent},
   {
     path: '',
-    component: LayoutComponent,canActivate: [AuthGuardService],
+    component: LayoutComponent,
+    canActivate: [AuthGuardService],
     children: [
       { path: 'home', loadComponent: () => HomeComponent },
       { path: 'schedule', loadComponent: () => SchedulesComponent },

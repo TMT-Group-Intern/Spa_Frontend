@@ -26,6 +26,7 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   userSession:any;
+  storedUserSession = localStorage.getItem('userSession');
   builder = inject(FormBuilder);
   httpService = inject(AuthService);
   
@@ -39,9 +40,20 @@ export class LoginComponent implements OnInit {
       taiKhoan: ['' , Validators.required],
       matKhau: ['' , Validators.required],
     });
-    const cookie= getCookie('userCookie')
+    const cookie= getCookie('userToken')
         if (cookie) {
-          this.router.navigate(['home']);
+          if (this.storedUserSession !== null) {
+            this.userSession = JSON.parse(this.storedUserSession);
+            if(this.userSession.user.role==='Bác sĩ'){
+              this.router.navigate(['doctor']);
+            }
+            else if(this.userSession.user.role==='Nhân viên kỹ thuật'){
+              this.router.navigate(['technical-staff']);
+            }
+            else{
+              this.router.navigate(['home']);
+            }
+          }
         }
   }
   
@@ -54,9 +66,22 @@ export class LoginComponent implements OnInit {
           const userSession = {
             user: result.user,
           };
+          const accessToken =result.token;
+          const refreshToken =result.refreshToken;
           localStorage.setItem('userSession', JSON.stringify(userSession));
-          setCookie('userCookie', result.token, 7); // Lưu token vào cookie với hạn sử dụng 7 ngày
-          this.router.navigate(['home']);
+          localStorage.setItem('accessToken', JSON.stringify(accessToken));
+          localStorage.setItem('refreshToken', JSON.stringify(refreshToken));
+          setCookie('userToken', result.token, 7); // Lưu token vào cookie với hạn sử dụng 7 ngày
+          if(userSession.user.role==='Bác sĩ'){
+            this.router.navigate(['doctor']);
+          }
+          else if(userSession.user.role==='Nhân viên kỹ thuật'){
+            this.router.navigate(['technical-staff']);
+          }
+          else{
+            this.router.navigate(['home']);
+          }
+          
         }
         else {
           this.errorMessage = result.mess;

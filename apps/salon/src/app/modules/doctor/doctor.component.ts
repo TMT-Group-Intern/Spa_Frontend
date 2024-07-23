@@ -101,8 +101,8 @@ export class DoctorComponent implements OnInit {
       this.appointmentList = data;
       this.reception = this.appointmentList.filter(
         (appointment: any) =>
-          appointment.Status === 'Chờ khám' ||
-          appointment.Status === 'Đang khám'
+          (appointment.Status === 'Chờ khám' ||
+          appointment.Status === 'Đang khám')
       );
     });
   }
@@ -124,8 +124,10 @@ export class DoctorComponent implements OnInit {
       this.appointmentList = data;
       this.reception = this.appointmentList.filter(
         (appointment: any) =>
-          appointment.Status === 'Chờ khám' ||
-          appointment.Status === 'Đang khám'
+          (appointment.Status === 'Chờ khám' ||
+          appointment.Status === 'Đang khám')
+          && (appointment.EmployeeCode===this.userSession.user.userCode
+            || this.userSession.user.role==='Admin')
       );
     });
   }
@@ -137,12 +139,12 @@ export class DoctorComponent implements OnInit {
       this.CustomerID = data.CustomerID;
       this.form.patchValue({
         phone: data.Customer.Phone,
-        name: `${data.Customer.FirstName} ${data.Customer.LastName}`,
+        name: `${data.Customer.LastName} ${data.Customer.FirstName}`,
         appointmentDate: this.formatDate(data.AppointmentDate, 'HH:mm'),
         customerID: data.Customer.CustomerID,
         status: data.Status,
         service: data.ChooseServices.map((item: any) => item.ServiceID),
-        doctor: `${data.Assignments[0].Employees.FirstName} ${data.Assignments[0].Employees.LastName}`,
+        doctor: `${data.Assignments[0].Employees.LastName} ${data.Assignments[0].Employees.FirstName}`,
         note: data.Notes,
       });
     });

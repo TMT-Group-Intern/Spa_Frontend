@@ -151,7 +151,6 @@ export class AppointmentModalComponent implements OnInit {
           id: item.employeeID,
           name: `${item.lastName} ${item.firstName}`
         }))]
-        console.log(this.doctorOptions);
       })
   }
 
@@ -190,7 +189,6 @@ export class AppointmentModalComponent implements OnInit {
       val.assignments = [{ employerID: doctor }];
     }
 
-    console.log(val);
     if (this.id) {
       this.updateAppointment(this.id, val);
     } else {

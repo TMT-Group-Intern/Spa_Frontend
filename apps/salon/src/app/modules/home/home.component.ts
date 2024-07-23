@@ -191,9 +191,7 @@ export class HomeComponent implements OnInit {
   // Update Status
   updateStatus(id: number, status: string) {
     this.sharedService.UpdateStatus(id, status).subscribe(() => {
-      this.sharedService.getAppointment(id).subscribe((res: any) => {
-        console.log(res);
-      });
+      this.sharedService.getAppointment(id).subscribe();
       this.initAppointmentList();
     });
   }
@@ -203,7 +201,6 @@ export class HomeComponent implements OnInit {
     this.sharedService.getAppointment(id).subscribe((res: any) => {
       const emp: any[] = res.Assignments;
       if (emp.length == 0) {
-        //|| (res.Assignments.lenght > 0 && res.Assignments[1].)
         const appointmentDate = res.AppointmentDate;
         const modal = this.tModalSvc.create({
           title: 'Choose Doctor',

@@ -66,12 +66,10 @@ export class TechnicalStaffComponent {
       })
     ).subscribe((x: any[]) => {
       this.listSpaServiceQueue = x;
-      console.log(this.listSpaServiceQueue)
       this.auth
         .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ làm')
         .subscribe((x: any[]) => {
           this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...x];
-          console.log(this.listSpaServiceQueue)
         });
     });
   }
@@ -83,20 +81,16 @@ export class TechnicalStaffComponent {
   ) { }
 
   renderCustomerInQueue() {
-    console.log(this.userSession.user.branchID)
     this.auth
       .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Đang làm')
       .subscribe((x: any[]) => {
         this.listSpaServiceQueue = x;
-        console.log(this.listSpaServiceQueue)
         this.auth
           .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ làm')
           .subscribe((x: any[]) => {
             this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...x];
-            console.log(this.listSpaServiceQueue)
           });
       });
-      console.log(this.userSession.user.branchID)
   }
 
   renderCustomerDetail(data: any) {
@@ -106,12 +100,10 @@ export class TechnicalStaffComponent {
         this.checkboxStatess = {};
         this.loadData()
         this.appointmentAllInfo = data;
-        console.log(this.appointmentAllInfo)
         this.customerDetail = data.ChooseServices.map(
           (chooseService: any) => chooseService.service
         );
         const appointmentData = this.dataTemp.find((item: any) => item.data.AppointmentID === this.appointmentAllInfo.AppointmentID);
-        console.log(appointmentData)
         if (appointmentData) {
           Object.keys(appointmentData.checkBox).forEach(key => {
             const numKey = +key;
