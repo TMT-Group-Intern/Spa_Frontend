@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, switchMap } from 'rxjs';
 import { TDSBreadCrumbModule } from 'tds-ui/breadcrumb';
 import { AuthService } from '../../../shared.service';
+import { TDSListModule } from 'tds-ui/list';
+import { TDSDataTableModule } from 'tds-ui/data-table';
+import { TDSColumnSettingsModule } from 'tds-ui/column-settings';
 import { TDSTabsModule } from 'tds-ui/tabs';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { TDSEmptyModule } from 'tds-ui/empty';
@@ -23,6 +26,9 @@ import { TDSTagModule } from 'tds-ui/tag';
     ReactiveFormsModule,
     TDSBreadCrumbModule,
     RouterLink,
+    TDSListModule,
+    TDSDataTableModule,
+    TDSColumnSettingsModule,
     TDSTabsModule,
     UserProfileComponent,
     TDSEmptyModule,
@@ -38,12 +44,19 @@ export class CustomerDetailComponent implements OnInit {
   customer: any;
   serviceHistory: any;
   listOfData: any;
+  billsOfCus: any
 
-  constructor(private route: ActivatedRoute, private shared: AuthService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private shared: AuthService,
+  ) { }
 
   ngOnInit(): void {
-    this.routeSub = this.route.params.subscribe((params) => {
-      this.id = params['id']; // the value of id
+    this.routeSub = this.route.params.pipe(
+      switchMap(params => this.shared.getCustomer(params['id']))
+    ).subscribe(
+      (data) => {
+      this.customer = data
     });
 
     this.shared.getCustomer(this.id).subscribe((data: any) => {

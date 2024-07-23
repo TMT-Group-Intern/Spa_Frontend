@@ -51,7 +51,7 @@ export class AppointmentModalComponent implements OnInit {
   searchPhone$ = new BehaviorSubject<string>('')
   public doctorOptions: any[] = [];
   public statusOptions = [
-    'Hẹn',
+    'Đã hẹn',
     'Hủy hẹn',
   ]
   private readonly tModalSvc = inject(TDSModalService)
@@ -59,7 +59,6 @@ export class AppointmentModalComponent implements OnInit {
   @Input() id?: number;
   @Input() formatTime?: string;
 
-  createAppointmentForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
     name: [''],
@@ -68,7 +67,7 @@ export class AppointmentModalComponent implements OnInit {
     assignments: [],
     doctor: [],
     appointmentDate: [new Date()] ||null,
-    status: ['Hẹn'],
+    status: ['Đã hẹn'],
     customer: [null]
   });
   // isExist = false;
@@ -118,7 +117,7 @@ export class AppointmentModalComponent implements OnInit {
       this.shared.getAppointment(this.id).subscribe(
         (data: any) => {
 
-          this.shared.getBranchName(data.BranchID).subscribe(
+          this.shared.getBranchName(data.branchID).subscribe(
             (res: any) => {
               this.form.patchValue({
                 branch: res.getBranchNameByID
@@ -129,22 +128,22 @@ export class AppointmentModalComponent implements OnInit {
           if(this.formatTime){
             timeNew = this.formatTime
           }else{
-            timeNew = data.AppointmentDate
+            timeNew = data.appointmentDate
           }
           console.log(timeNew);
           this.form.patchValue({
-            phone: data.Customer.Phone,
-            name: data.Customer.LastName + ' ' + data.Customer.FirstName,
-            appointmentDate: data.AppointmentDate,
-            customerID: data.Customer.CustomerID,
-            status: data.Status,
+            phone: data.customer.phone,
+            name: data.customer.lastName + ' ' + data.customer.firstName,
+            appointmentDate: data.appointmentDate,
+            customerID: data.customer.customerID,
+            status: data.status,
           });
 
-          this.assign = data.Assignments
-          const foundDoctor = this.assign.find(item => item.Employees.JobTypeID === 2);
+          this.assign = data.assignments
+          const foundDoctor = this.assign.find(item => item.employees.jobTypeID === 2);
           if(foundDoctor) {
             this.form.patchValue({
-              doctor: foundDoctor.Employees.EmployeeID
+              doctor: foundDoctor.employees.employeeID
             });
           }
 

@@ -83,7 +83,10 @@ export class HeaderComponent implements OnInit {
   };
   onLogOut() {
     localStorage.removeItem('userSession');
-    deleteCookie('userCookie')
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('appointmentDetail');
+    deleteCookie('userToken')
     this.router.navigate(['']);
   };
 }

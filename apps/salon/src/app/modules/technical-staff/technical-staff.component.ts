@@ -31,7 +31,7 @@ export class TechnicalStaffComponent {
   checkboxStatess: { [key: number]: boolean } = {};
   dataTemp: any;
   urls = [];
-  userSession:any
+  userSession: any
   checkActive?: boolean = false;
   public statusOptions = [
     'Hẹn',
@@ -56,22 +56,20 @@ export class TechnicalStaffComponent {
     if (storedUserSession !== null) {
       this.userSession = JSON.parse(storedUserSession);
     }
-    const branchID = this.userSession.user.branchID 
+    const branchID = this.userSession.user.branchID
     this.renderCustomerInQueue();
 
     this.companySvc._companyIdCur$.pipe(
-      filter(companyId=> !!companyId),
-      concatMap((branchID)=> {
-      return  this.auth.getCustomerInQueueForTechnicalStaff(branchID as number, 'Đang làm')
+      filter(companyId => !!companyId),
+      concatMap((branchID) => {
+        return this.auth.getCustomerInQueueForTechnicalStaff(branchID as number, 'Đang chăm sóc')
       })
     ).subscribe((x: any[]) => {
       this.listSpaServiceQueue = x;
-      console.log(this.listSpaServiceQueue)
       this.auth
-        .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ làm')
+        .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ chăm sóc')
         .subscribe((x: any[]) => {
           this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...x];
-          console.log(this.listSpaServiceQueue)
         });
     });
   }
@@ -83,20 +81,16 @@ export class TechnicalStaffComponent {
   ) { }
 
   renderCustomerInQueue() {
-    console.log(this.userSession.user.branchID)
     this.auth
-      .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Đang làm')
+      .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Đang chăm sóc')
       .subscribe((x: any[]) => {
         this.listSpaServiceQueue = x;
-        console.log(this.listSpaServiceQueue)
         this.auth
-          .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ làm')
+          .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ chăm sóc')
           .subscribe((x: any[]) => {
             this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...x];
-            console.log(this.listSpaServiceQueue)
           });
       });
-      console.log(this.userSession.user.branchID)
   }
 
   renderCustomerDetail(data: any) {
@@ -106,11 +100,10 @@ export class TechnicalStaffComponent {
         this.checkboxStatess = {};
         this.loadData()
         this.appointmentAllInfo = data;
-        console.log(this.appointmentAllInfo)
-        this.customerDetail = data.ChooseServices.map(
+        this.customerDetail = data.chooseServices.map(
           (chooseService: any) => chooseService.service
         );
-        const appointmentData = this.dataTemp.find((item: any) => item.data.AppointmentID === this.appointmentAllInfo.AppointmentID);
+        const appointmentData = this.dataTemp.find((item: any) => item.data.appointmentID === this.appointmentAllInfo.appointmentID);
         console.log(appointmentData)
         if (appointmentData) {
           Object.keys(appointmentData.checkBox).forEach(key => {
@@ -125,7 +118,7 @@ export class TechnicalStaffComponent {
       complete: () => console.log('Observer got a complete notification'),
     };
 
-    this.auth.getAppointment(data.AppointmentID).subscribe(observer);
+    this.auth.getAppointment(data.appointmentID).subscribe(observer);
   }
 
   uploadImage(id: number) {
@@ -178,7 +171,7 @@ export class TechnicalStaffComponent {
       footer: null,
       size: 'lg',
       componentParams: {
-        customerId: this.appointmentAllInfo.CustomerID
+        customerId: this.appointmentAllInfo.customerID
       }
     })
   }
@@ -199,7 +192,7 @@ export class TechnicalStaffComponent {
 
   onSave(data: any, checkBox: any) {
     const appointmentDetailList = JSON.parse(localStorage.getItem('appointmentDetail') || '[]');
-    const existingIndex = appointmentDetailList.findIndex((item: any) => item.data.AppointmentID === data.AppointmentID);
+    const existingIndex = appointmentDetailList.findIndex((item: any) => item.data.appointmentID === data.appointmentID);
     const checkboxTemp: { [key: number]: boolean } = {};
     if (existingIndex !== -1) {
       const existingCheckBox = appointmentDetailList[existingIndex].checkBox;
@@ -250,7 +243,7 @@ export class TechnicalStaffComponent {
 
   onDelete(appointmentID: number) {
     const appointmentDetailList = JSON.parse(localStorage.getItem('appointmentDetail') || '[]');
-    const updatedList = appointmentDetailList.filter((item: any) => item.data.AppointmentID !== appointmentID);
+    const updatedList = appointmentDetailList.filter((item: any) => item.data.appointmentID !== appointmentID);
     localStorage.setItem('appointmentDetail', JSON.stringify(updatedList));
     this.loadData();
   }
