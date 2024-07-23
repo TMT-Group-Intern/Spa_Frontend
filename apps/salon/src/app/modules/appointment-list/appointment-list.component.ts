@@ -1,12 +1,17 @@
-import {
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { BehaviorSubject, filter, tap } from 'rxjs';
+import { Component, inject, OnInit } from '@angular/core';
 import { addDays, endOfMonth, format, startOfMonth } from 'date-fns';
 import { DATE_CONFIG } from '../../core/enums/date-format.enum';
 import { AuthService } from '../../shared.service';
-
+import { TDSSafeAny } from 'tds-ui/shared/utility';
+import { CompanyService } from '../../core/services/company.service';
+export type TTypeState =
+  | 'Hẹn'
+  | 'Chờ khám'
+  | 'Không sử dụng dịch vụ'
+  | 'Đã khám'
+  | 'Chờ làm'
+  | 'Đã hoàn thành';
 @Component({
   selector: 'frontend-appointment-list',
   templateUrl: './appointment-list.component.html',
@@ -14,13 +19,15 @@ import { AuthService } from '../../shared.service';
 })
 export class AppointmentListComponent implements OnInit {
   private readonly shareApi = inject(AuthService);
-  constructor(){
-    this.selectedIndex,
-    this.startDate,
-    this.endDate,
-    this.branchId
+  private readonly company = inject(CompanyService);
+  constructor() {
+    (this.selectedIndex = 0),
+      this.startDate,
+      this.endDate,
+      this.branchId,
+      (this.search = '');
   }
-  tabs = [
+  readonly tabs:TTypeState[] = [
     'Hẹn',
     'Chờ khám',
     'Không sử dụng dịch vụ',
@@ -28,8 +35,8 @@ export class AppointmentListComponent implements OnInit {
     'Chờ làm',
     'Đã hoàn thành',
   ];
-  selectedIndex?: number = 0;
-
+  selectedIndex = 0;
+  search?: string = ' ';
   today = new Date();
   lastMonth = new Date(this.today.getFullYear(), this.today.getMonth() - 1, 1);
   rangeDate = {
@@ -44,31 +51,37 @@ export class AppointmentListComponent implements OnInit {
   branchId: any;
   userSession: any;
   storedUserSession = localStorage.getItem('userSession');
+  inputValue?: string;
+  options: TDSSafeAny;
 
   thisTime = this.rangeDate['Hôm nay'];
   startDate = format(this.thisTime[0], DATE_CONFIG.DATE_BASE_FROM);
   endDate = format(this.thisTime[1], DATE_CONFIG.DATE_BASE_TO);
+
+  onInput(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.search = value;
+    this.listOfData.filter((item: any) =>
+      item.customer.phone.includes(value.toLowerCase())
+    );
+    this.company._search$.next(value);
+  }
   onChange(result: any): void {
     const fromDate = format(result[0], DATE_CONFIG.DATE_BASE);
     const toDate = format(result[1], DATE_CONFIG.DATE_BASE);
     this.startDate = fromDate;
     this.endDate = toDate;
-    this.initAppointmentbyDays(fromDate, toDate);
   }
   ngOnInit() {
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
       this.branchId = this.userSession.user.branchID;
-      this.initAppointmentbyDays(this.startDate, this.endDate);
     }
-  }
-  initAppointmentbyDays(fromDate: string, toDate: string): void {
-    this.shareApi
-      .getAppointmentByDays(this.branchId, fromDate, toDate)
-      .subscribe((data) => {
-        this.listOfData = data.filter(
-          (item: any) => item.status === this.tabs[this.selectedIndex as number]
-        );
-      });
+    this.company._companyIdCur$
+      .pipe(
+        filter((companyId) => !!companyId),
+        tap((company) => company)
+      )
+      .subscribe((data) => (this.branchId = data));
   }
 }

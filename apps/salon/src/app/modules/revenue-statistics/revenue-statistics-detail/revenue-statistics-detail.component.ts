@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { format } from 'date-fns';
 import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
 import { AuthService } from '../../../shared.service';
@@ -15,9 +15,9 @@ export class RevenueStatisticsDetailComponent implements OnChanges  {
 
   listOfDataDetail: any;
 
-  ngOnChanges(): void {
-    if(this.date){
-      this.onChangeShowDetail(this.date)
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['branchId']?.currentValue||changes['date']?.currentValue){
+      this.onChangeShowDetail(this.date as Date);
     }
   }
   // Hiển thị chi tiết danh sách giao dịch thanh toán của 1 ngày
