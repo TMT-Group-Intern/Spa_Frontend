@@ -20,6 +20,7 @@ import { da } from 'date-fns/locale';
 import { TDSModalService } from 'tds-ui/modal';
 import { AppointmentModalComponent } from '../home/appointment-modal/appointment-modal.component';
 import { DATE_CONFIG } from '../../core/enums/date-format.enum';
+import { TDSSegmentedModule } from 'tds-ui/segmented';
 
 @Component({
   selector: 'frontend-schedule',
@@ -32,6 +33,7 @@ import { DATE_CONFIG } from '../../core/enums/date-format.enum';
     TDSCalendarModule,
     TDSTagModule,
     TDSButtonModule,
+    // TDSSegmentedModule,
   ],
   changeDetection: ChangeDetectionStrategy.Default,
 })
@@ -48,6 +50,8 @@ export class SchedulesComponent implements OnInit {
   dataAppointments: any;
   public userSession: any;
   storedUserSession = localStorage.getItem('userSession');
+  // options = ['Chờ chăm sóc', 'Thanh toán'];
+
   ngOnInit(): void {
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
