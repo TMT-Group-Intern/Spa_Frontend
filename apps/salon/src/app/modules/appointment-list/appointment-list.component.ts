@@ -5,13 +5,22 @@ import { DATE_CONFIG } from '../../core/enums/date-format.enum';
 import { AuthService } from '../../shared.service';
 import { TDSSafeAny } from 'tds-ui/shared/utility';
 import { CompanyService } from '../../core/services/company.service';
+import { TDSModalService } from 'tds-ui/modal';
+import { AppointmentModalComponent } from '../home/appointment-modal/appointment-modal.component';
 export type TTypeState =
-  | 'Hẹn'
-  | 'Chờ khám'
-  | 'Không sử dụng dịch vụ'
-  | 'Đã khám'
-  | 'Chờ làm'
-  | 'Đã hoàn thành';
+|'Tất cả'
+|'Hẹn'
+|'Hủy hẹn'
+|'Chờ khám'
+|'Đang khám'
+|'Đã khám'
+|'Không sử dụng dịch vụ'
+|'Chờ chăm sóc'
+|'Đang chăm sóc'
+|'Hoàn thành'
+|'Chưa thanh toán'
+|'Thanh toán 1 phần'
+|'Hoàn tất thanh toán'
 @Component({
   selector: 'frontend-appointment-list',
   templateUrl: './appointment-list.component.html',
@@ -20,6 +29,7 @@ export type TTypeState =
 export class AppointmentListComponent implements OnInit {
   private readonly shareApi = inject(AuthService);
   private readonly company = inject(CompanyService);
+  private readonly modalSvc = inject(TDSModalService)
   constructor() {
     (this.selectedIndex = 0),
       this.startDate,
@@ -28,15 +38,22 @@ export class AppointmentListComponent implements OnInit {
       (this.search = '');
   }
   readonly tabs:TTypeState[] = [
+    'Tất cả',
     'Hẹn',
+    'Hủy hẹn',
     'Chờ khám',
-    'Không sử dụng dịch vụ',
+    'Đang khám',
     'Đã khám',
-    'Chờ làm',
-    'Đã hoàn thành',
+    'Không sử dụng dịch vụ',
+    'Chờ chăm sóc',
+    'Đang chăm sóc',
+    'Hoàn thành',
+    'Chưa thanh toán',
+    'Thanh toán 1 phần',
+    'Hoàn tất thanh toán',
   ];
   selectedIndex = 0;
-  search?: string = ' ';
+  search= '';
   today = new Date();
   lastMonth = new Date(this.today.getFullYear(), this.today.getMonth() - 1, 1);
   rangeDate = {
@@ -58,6 +75,18 @@ export class AppointmentListComponent implements OnInit {
   startDate = format(this.thisTime[0], DATE_CONFIG.DATE_BASE_FROM);
   endDate = format(this.thisTime[1], DATE_CONFIG.DATE_BASE_TO);
 
+  ngOnInit() {
+    if (this.storedUserSession !== null) {
+      this.userSession = JSON.parse(this.storedUserSession);
+      this.branchId = this.userSession.user.branchID;
+    }
+    this.company._companyIdCur$
+      .pipe(
+        filter((companyId) => !!companyId),
+        tap((company) => company)
+      )
+      .subscribe((data) => (this.branchId = data));
+  }
   onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.search = value;
@@ -72,16 +101,15 @@ export class AppointmentListComponent implements OnInit {
     this.startDate = fromDate;
     this.endDate = toDate;
   }
-  ngOnInit() {
-    if (this.storedUserSession !== null) {
-      this.userSession = JSON.parse(this.storedUserSession);
-      this.branchId = this.userSession.user.branchID;
-    }
-    this.company._companyIdCur$
-      .pipe(
-        filter((companyId) => !!companyId),
-        tap((company) => company)
-      )
-      .subscribe((data) => (this.branchId = data));
-  }
+  // callModalCreateAppointment(){
+  //   const modal= this.modalSvc.create({
+  //     title:'Tạo lịch hẹn',
+  //     content: AppointmentModalComponent,
+  //     footer: null,
+  //     size:'lg'
+  //   })
+  //   modal.afterClose.asObservable().subscribe(()=>{
+
+  //   })
+  // }
 }
