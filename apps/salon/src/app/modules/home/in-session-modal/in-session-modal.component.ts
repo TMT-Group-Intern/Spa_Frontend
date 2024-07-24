@@ -35,7 +35,7 @@ export class InSessionModalComponent implements OnInit {
   public spaTherapistOptions: any[] = []
   public statusOptions = [
     'Đã khám',
-    'Chờ làm',
+    'Chờ chăm sóc',
     'Đang chăm sóc',
     'Hoàn thành',
     'Không sử dụng dịch vụ',

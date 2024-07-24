@@ -84,9 +84,9 @@ export class UsersComponent implements OnInit{
         this.UserList
       }
       else if (this.selectedUserType === 'Admin') {
-        this.UserList = this.UserList.filter(user => user.Role === 'Quản lý');
+        this.UserList = this.UserList.filter(user => user.role === 'Quản lý');
       } else if (this.selectedUserType === 'Employee') {
-        this.UserList = this.UserList.filter(user => user.Role !== 'Quản lý');
+        this.UserList = this.UserList.filter(user => user.role !== 'Quản lý');
       }
     });
   }

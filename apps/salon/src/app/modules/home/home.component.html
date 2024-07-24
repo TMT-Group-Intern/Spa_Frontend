@@ -31,7 +31,7 @@
                       <i class="tdsi-edit-fill"></i>
                     </button>
                     <button *ngIf="event.data.status.name === 'Hoàn thành'" tds-button-flat-icon color="secondary"
-                      tds-tooltip tooltipTitle="Thanh toán">
+                      tds-tooltip tooltipTitle="Tạo hóa đơn" (click)="createBill(event.data.id)">
                       <i class="tdsi-accounting-line"></i>
                     </button>
                   </div>
@@ -50,7 +50,7 @@
                   </div>
                   <div class="flex items-center mt-3">
                     <span class="tdsi-call-fill text-xl leading-5 mr-2 text-neutral-1-500"></span>
-                    <span class="text-neutral-1-600 flex-auto">08673747889</span>
+                    <span class="text-neutral-1-600 flex-auto">{{event.data.phoneCus}}</span>
                   </div>
                   <div class="flex items-center mt-3">
                     <span class="tdsi-time-fill text-xl leading-5 mr-2 text-neutral-1-500"></span>
