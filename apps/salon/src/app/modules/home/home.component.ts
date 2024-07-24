@@ -26,6 +26,7 @@ import { format, isSameDay } from 'date-fns';
 import { TDSCalendarModule, WeekViewHourSegment } from 'tds-ui/calendar';
 import { DATE_CONFIG } from '../../core/enums/date-format.enum';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CustomerModalComponent } from '../customer-list/customer-modal/customer-modal.component';
 
 
 @Component({
@@ -84,34 +85,6 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // // const storedUserSession = localStorage.getItem('userSession');
-    // if (this.storedUserSession !== null) {
-    //   this.userSession = JSON.parse(this.storedUserSession);
-    //   this.initAppointmentList();
-    // }
-
-    // this.companySvc._companyIdCur$.pipe(
-    //   filter(companyId => !!companyId),
-    //   concatMap((branchID) => {
-    //     return this.sharedService.appointmentList(branchID as number)
-    //   })
-    // ).subscribe((data: any) => {
-    //   this.appointmentList = data;
-    //   this.todayBooking = this.appointmentList.filter(
-    //     (appointment: any) =>
-    //       appointment.Status === 'Đã hẹn' || appointment.Status === 'Hủy hẹn'
-    //   );
-    //   this.reception = this.appointmentList.filter(
-    //     (appointment: any) =>
-    //       appointment.Status === 'Chờ khám' ||
-    //       appointment.Status === 'Đang khám'
-    //   );
-    //   this.inSession = this.appointmentList.filter((appointment: any) =>
-    //     appointment.Status === "Đã khám" || appointment.Status === "Hoàn thành"
-    //   );
-    // });
-
-    //
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
       this.initAppointment();
@@ -121,7 +94,6 @@ export class HomeComponent implements OnInit {
       .pipe(
         filter((companyId) => !!companyId),
         concatMap((brachID) => {
-          console.log('id1: ', brachID);
           return this.shareApi.appointmentList(brachID as number);
         })
       )
@@ -144,7 +116,6 @@ export class HomeComponent implements OnInit {
   //
   dataAppointment(data: any) {
     this.dataAppointments = data
-    console.log(this.dataAppointments);
     this.lstData = this.dataAppointments.map((item: any) => ({
       start: new Date(item.appointmentDate),
       end: new Date(new Date(item.appointmentDate).getTime() + 60 * 60000),
@@ -207,14 +178,12 @@ export class HomeComponent implements OnInit {
     })
     modal.afterClose.asObservable().subscribe(
       (e: any) => {
-        console.log()
         this.initAppointment();
       }
     )
   }
 
   clickEvent(e: MouseEvent, event: TDSSafeAny) {
-    console.log(2);
     e.stopImmediatePropagation();
     e.preventDefault();
     this.lstData = this.lstData.filter((f) => f != event);
@@ -224,56 +193,9 @@ export class HomeComponent implements OnInit {
     this.mode = e;
   }
 
-  // onSelectDay(date: Date) {
-  //   console.log(3);
-  //   this.lstData = [
-  //     ...this.lstData,
-  //     {
-  //       start: setHours(date, 8),
-  //       end: setHours(date, 17),
-  //       data: {
-  //         name: this.getListName()[Math.floor(Math.random() * 22) + 0],
-  //         doctor: this.getListName()[Math.floor(Math.random() * 22) + 0],
-  //         status: this.getStatus()[Math.floor(Math.random() * 3)],
-  //       },
-  //     },
-  //   ];
-  // }
-
   getMonthData(date: Date, event: TDSSafeAny): boolean {
-    console.log(4);
     return isSameDay(date, event.start);
   }
-
-
-
-  //
-  // Display Appointment List
-  // initAppointmentList() {
-  //   const branchID = this.userSession.user.branchID
-
-  //   this.sharedService.appointmentList(branchID).subscribe((data: any) => {
-  //     this.appointmentList = data;
-  //     this.todayBooking = this.appointmentList.filter(
-  //       (appointment: any) =>
-  //         appointment.Status === 'Hẹn' || appointment.Status === 'Hủy hẹn'
-  //     );
-
-  //     this.reception = this.appointmentList.filter(
-  //       (appointment: any) =>
-  //         appointment.Status === 'Chờ khám' ||
-  //         appointment.Status === 'Đang khám'
-  //     );
-  //     this.inSession = this.appointmentList.filter((appointment: any) =>
-
-  //       appointment.Status === "Đã khám" ||
-  //       appointment.Status === "Không sử dụng dịch vụ" ||
-  //       appointment.Status === "Đang thực hiện" ||
-  //       appointment.Status === "Hoàn thành"
-
-  //     );
-  //   });
-  // }
 
   // Format Date & Time
   formatDate(date: string, format: string): string {
@@ -293,6 +215,19 @@ export class HomeComponent implements OnInit {
         this.initAppointment()
       }
     });
+  }
+  createCustomer(){
+    const modal = this.tModalSvc.create({
+      title:'Thêm khách hàng',
+      content: CustomerModalComponent,
+      footer:null,
+      size:'lg'
+    });
+    modal.afterClose.asObservable().subscribe(res=>{
+      if(res){
+        this.initAppointment()
+      }
+    })
   }
 
   // Open Edit Appointment Modal
@@ -333,20 +268,6 @@ export class HomeComponent implements OnInit {
 
   // Open Edit Payment Modal
   onEditPayment(id: number) {
-    // const modal = this.tModalSvc.create({
-    //   title: 'Edit Information',
-    //   content: PaymentModalComponent,
-    //   footer: null,
-    //   size: 'xl',
-    //   componentParams: {
-    //     id,
-    //   },
-    // });
-    // modal.afterClose.asObservable().subscribe((res) => {
-    //   if (res) {
-    //     this.initAppointmentList();
-    //   }
-    // });
 
     this.sharedService.getAppointment(id).subscribe(
       (data: any) => {
@@ -378,9 +299,9 @@ export class HomeComponent implements OnInit {
             this.sharedService.UpdateStatus(id, 'Đã thanh toán').subscribe()
             this.router.navigate(['bill/' + data.item]);
           },
-          () => {
-            console.log(Error)
-          }
+          // () => {
+          //   console.log(Error)
+          // }
         )
       }
     )
@@ -422,21 +343,4 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  // Open Service Appointment Modal
-  // callmodalServiceAppointment(id: number) {
-  //   const modal = this.tModalSvc.create({
-  //     title: 'Create service appointment',
-  //     content: ServiceAppointmentModalComponent,
-  //     footer: null,
-  //     size: 'lg',
-  //     componentParams: {
-  //       id,
-  //     },
-  //   });
-  //   modal.afterClose.asObservable().subscribe((res) => {
-  //     if (res) {
-  //       this.initAppointmentList();
-  //     }
-  //   });
-  // }
 }

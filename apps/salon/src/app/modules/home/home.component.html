@@ -4,7 +4,7 @@
       <button tds-button tds-tooltip tooltipTitle="Tạo lịch hẹn" color="success" (click)="createAppointment()">
         Thêm lịch hẹn
       </button>
-      <button tds-button color="success">Thêm khách hàng</button>
+      <button tds-button color="success" (click)="createCustomer()">Thêm khách hàng</button>
     </tds-calendar-header>
     <div class="h-[600px] overflow-y-auto">
       <tds-calendar *ngIf="lstData?.length" [tdsValue]="date" [tdsMode]="mode" (tdsSelectHour)="onClickSegment($event)">

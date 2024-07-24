@@ -2,6 +2,8 @@ import { Component, inject, Input, OnChanges, OnInit } from '@angular/core';
 import { format } from 'date-fns';
 import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
 import { AuthService } from '../../../shared.service';
+import { CompanyService } from '../../../core/services/company.service';
+import { concatMap, filter } from 'rxjs';
 
 @Component({
   selector: 'frontend-revenue-statistics-detail',
@@ -14,12 +16,19 @@ export class RevenueStatisticsDetailComponent implements OnChanges  {
   @Input() branchId?: number;
 
   listOfDataDetail: any;
+  private readonly company = inject(CompanyService);
+
+  constructor(
+    private sharedService: AuthService,
+    private companySvc: CompanyService,
+  ) { }
 
   ngOnChanges(): void {
     if(this.date){
       this.onChangeShowDetail(this.date)
     }
   }
+  
   // Hiển thị chi tiết danh sách giao dịch thanh toán của 1 ngày
   onChangeShowDetail(date: Date): void {
     const fromDay = format(date, DATE_CONFIG.DATE_BASE_FROM);
