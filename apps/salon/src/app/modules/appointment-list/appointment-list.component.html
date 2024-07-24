@@ -1,24 +1,29 @@
 <div class="bg-white h-full w-full">
-<div class="flex flex-row">
-  <div class="w-96 flex flex-col gap-3 bg-white p-4 rounded-lg mb-2">
-    <tds-range-picker [(ngModel)]="rangeDate['Hôm nay']" (ngModelChange)="onChange($event)">
-    </tds-range-picker>
+  <div class="flex flex-row">
+    <div class="w-96 flex flex-col gap-3 bg-white px-4 pt-2 rounded-lg mb-2">
+      <tds-range-picker [(ngModel)]="rangeDate['Hôm nay']" (ngModelChange)="onChange($event)">
+      </tds-range-picker>
+    </div>
+    <div class="w-96 flex flex-col gap-3 bg-white px-4 pt-2 rounded-lg mb-2">
+      <tds-form-field>
+        <input class="placeholder-neutral-1-400" placeholder="Search..." tdsInput [(ngModel)]="inputValue"
+          (input)="onInput($event) " [tdsAutocomplete]="auto" />
+        <span tdsPrefix><i class="text-neutral-1-500 tdsi-search-fill text-base"></i></span>
+      </tds-form-field>
+      <tds-autocomplete [dataSource]="options" backfill #auto></tds-autocomplete>
+    </div>
+    <div class="text-sm w-36 flex flex-col gap-3 bg-white px-4 pt-2 rounded-lg mb-2">
+      <button tds-button color="primary" class="text-slate-500 hover:text-secondary-1">
+        Tạo lịch hẹn
+      </button>
+    </div>
   </div>
-  <div class="w-96 flex flex-col gap-3 bg-white p-4 rounded-lg mb-2">
-    <tds-form-field>
-        <input class="placeholder-neutral-1-400" placeholder="Search..."
-            tdsInput [(ngModel)]="inputValue" (input)="onInput($event) "
-            [tdsAutocomplete]="auto"/>
-            <span tdsPrefix ><i class="text-neutral-1-500 tdsi-search-fill text-base"></i></span>
-    </tds-form-field>
-    <tds-autocomplete [dataSource]="options" backfill #auto></tds-autocomplete>
-</div>
-</div>
   <div class="bg-white w-full">
-    <tds-tabset [tdsSize]="'small'" [(selectedIndex)]="selectedIndex" >
+    <tds-tabset [tdsType]="'line'" [tdsSize]="'small'" [(selectedIndex)]="selectedIndex">
       <tds-tab *ngFor="let tab of tabs" [title]="tab">
       </tds-tab>
     </tds-tabset>
-    <frontend-appointment-table-list [branchId]="branchId" [tabCurStr]="tabs[selectedIndex]" [startDay]="startDate" [endDay]="endDate" [search]="search"></frontend-appointment-table-list>
+    <frontend-appointment-table-list [branchId]="branchId" [tabCurStr]="tabs[selectedIndex]" [startDay]="startDate"
+      [endDay]="endDate" [search]="search"></frontend-appointment-table-list>
   </div>
 </div>
