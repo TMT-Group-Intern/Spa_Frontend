@@ -116,7 +116,7 @@ export class SchedulesComponent implements OnInit {
       footer: null,
       size:'lg',
       componentParams:{
-        formatTime: format(new Date(date.date as Date),DATE_CONFIG.DATE_BASE )
+        // formatTime: format(new Date(date.date as Date),DATE_CONFIG.DATE_BASE )
       }
     })
     modal.afterClose.asObservable().subscribe(

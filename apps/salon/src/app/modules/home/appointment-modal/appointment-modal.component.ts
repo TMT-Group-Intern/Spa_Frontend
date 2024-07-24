@@ -57,7 +57,7 @@ export class AppointmentModalComponent implements OnInit {
   private readonly tModalSvc = inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
   @Input() id?: number;
-  @Input() formatTime?: string;
+  @Input() formatTime?: Date;
 
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
@@ -99,9 +99,6 @@ export class AppointmentModalComponent implements OnInit {
     this.isHide1 = false;
     this.isHide2 = true;
 
-    // this.form.patchValue({
-    //   branch:this.userSession.user.branch
-    // })
     this.shared.getBranchName(this.userSession.user.branchID).subscribe(
       (res: any) => {
         this.form.patchValue({
@@ -109,6 +106,12 @@ export class AppointmentModalComponent implements OnInit {
         });
       }
     )
+
+    if(this.formatTime && this.formatTime >= new Date()) {
+      this.form.patchValue({
+        appointmentDate: this.formatTime
+      });
+    }
 
     if (this.id) {
       this.form.get('phone')?.disable()
@@ -124,13 +127,6 @@ export class AppointmentModalComponent implements OnInit {
               });
             }
           )
-          let timeNew: any = ''
-          if(this.formatTime){
-            timeNew = this.formatTime
-          }else{
-            timeNew = data.appointmentDate
-          }
-          console.log(timeNew);
           this.form.patchValue({
             phone: data.customer.phone,
             name: data.customer.lastName + ' ' + data.customer.firstName,

@@ -49,11 +49,6 @@ export class BillComponent implements OnInit {
   service: any[] = [];
   total = 0;
 
-  isPercentageActive = true
-  isPercentageInactive = false
-  isVNDActive = false
-  isVNDInactive = true
-
   constructor(
     private route: ActivatedRoute,
     private shared: AuthService,
@@ -112,7 +107,7 @@ export class BillComponent implements OnInit {
 
   // Calculate the total after use discount
   totalAmountAfterDiscount() {
-    if (this.isPercentageActive) {
+    if (this.infoBill.KindofDiscount == '%') {
       this.infoBill.TotalAmount = this.total * (100 - this.infoBill.AmountDiscount) / 100;
       this.infoBill.AmountResidual = this.infoBill.TotalAmount - this.infoBill.AmountInvoiced
     } else {
