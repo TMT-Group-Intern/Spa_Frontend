@@ -9,7 +9,7 @@ import { TDSModalService } from 'tds-ui/modal';
 import { AppointmentModalComponent } from '../home/appointment-modal/appointment-modal.component';
 export type TTypeState =
 |'Tất cả'
-|'Hẹn'
+|'Đã hẹn'
 |'Hủy hẹn'
 |'Chờ khám'
 |'Đang khám'
@@ -39,7 +39,7 @@ export class AppointmentListComponent implements OnInit {
   }
   readonly tabs:TTypeState[] = [
     'Tất cả',
-    'Hẹn',
+    'Đã hẹn',
     'Hủy hẹn',
     'Chờ khám',
     'Đang khám',
@@ -87,6 +87,7 @@ export class AppointmentListComponent implements OnInit {
       )
       .subscribe((data) => (this.branchId = data));
   }
+  
   onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.search = value;
@@ -95,21 +96,21 @@ export class AppointmentListComponent implements OnInit {
     );
     this.company._search$.next(value);
   }
+
   onChange(result: any): void {
     const fromDate = format(result[0], DATE_CONFIG.DATE_BASE);
     const toDate = format(result[1], DATE_CONFIG.DATE_BASE);
     this.startDate = fromDate;
     this.endDate = toDate;
   }
-  // callModalCreateAppointment(){
-  //   const modal= this.modalSvc.create({
-  //     title:'Tạo lịch hẹn',
-  //     content: AppointmentModalComponent,
-  //     footer: null,
-  //     size:'lg'
-  //   })
-  //   modal.afterClose.asObservable().subscribe(()=>{
 
-  //   })
-  // }
+  createAppointment() {
+    const modal = this.modalSvc.create({
+      title: 'Tạo lịch hẹn',
+      content: AppointmentModalComponent,
+      footer: null,
+      size: 'lg',
+    });
+    modal.afterClose.asObservable().subscribe();
+  }
 }

@@ -358,6 +358,20 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  createCustomer(){
+    const modal = this.modalSvc.create({
+      title:'Thêm khách hàng',
+      content: CustomerModalComponent,
+      footer:null,
+      size:'lg'
+    });
+    modal.afterClose.asObservable().subscribe(res=>{
+      if(res){
+        this.initAppointment();
+      }
+    })
+  }
+
   //
   updateBill(id: number) {
     //
