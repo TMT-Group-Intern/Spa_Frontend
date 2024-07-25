@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSTableModule } from 'tds-ui/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -6,7 +6,7 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputNumberModule } from 'tds-ui/input-number';
-import { TDSModalModule } from 'tds-ui/modal';
+import { TDSModalModule, TDSModalRef } from 'tds-ui/modal';
 import { TDSDropDownModule } from 'tds-ui/dropdown';
 import { TDSPipesModule } from 'tds-ui/core/pipes';
 import { AuthService } from '../../../shared.service';
@@ -34,10 +34,11 @@ import * as moment from 'moment';
 })
 export class BillModalComponent {
   // private readonly tModalSvc = inject(TDSModalService);
+  private readonly modalRef = inject(TDSModalRef);
   // routeSub: Subscription | undefined
   // BillID: any;
   @Input() id?: any;
-  inforCus: any;
+  // inforCus: any;
   infoAppoint: any;
   service: any[] = [];
   kindofDiscount = '%'
@@ -57,12 +58,6 @@ export class BillModalComponent {
   ngOnInit(): void {
     this.shared.getAppointment(this.id).subscribe(
       (data: any) => {
-
-        this.shared.getCustomer(data.customerID).subscribe(
-          (dataCustomer: any) => {
-            this.inforCus = dataCustomer.item
-          }
-        )
 
         // this.BillID = data.BillID
         this.infoAppoint = data
@@ -103,7 +98,7 @@ export class BillModalComponent {
   totalAmountAfterDiscount() {
     if (this.kindofDiscount == '%') {
       this.totalAmount = this.total * (100 - this.amountDiscount) / 100;
-      this.totalAmount = this.totalAmount - this.amountInvoiced
+      this.amountResidual = this.totalAmount - this.amountInvoiced
     } else {
       this.totalAmount = this.total - this.amountDiscount;
       this.amountResidual = this.totalAmount - this.amountInvoiced
@@ -158,32 +153,44 @@ export class BillModalComponent {
     this.totalAmountAfterDiscount()
   }
 
-  //
-  save() {
-    // const val = {
-    //   customerID: this.infoBill.CustomerID,
-    //   appointmentID: this.infoBill.AppointmentID,
-    //   date: this.infoBill.Date,
-    //   billStatus: this.infoBill.BillStatus,
-    //   doctor: this.infoBill.Doctor,
-    //   technicalStaff: this.infoBill.TechnicalStaff,
-    //   totalAmount: this.infoBill.TotalAmount,
-    //   amountInvoiced: this.infoBill.AmountInvoiced,
-    //   amountResidual: this.infoBill.AmountResidual,
-    //   amountDiscount: this.infoBill.AmountDiscount,
-    //   kindofDiscount: this.infoBill.KindofDiscount,
-    //   note: this.infoBill.Note,
-    //   billItems: this.service
-    // }
+  updateStatus() {
+    console.log(this.id)
 
-    // this.shared.updateBill(this.BillID, val).subscribe(
-    //   () => {
-    //     this.createNotificationSuccess('');
-    //   },
-    //   (res) => {
-    //     this.createNotificationError(res.error.message);
-    //   }
-    // )
+  }
+
+  //
+  createBill() {
+    const val = {
+      customerID: this.infoAppoint.customerID,
+      appointmentID: this.id,
+      date: this.infoAppoint.appointmentDate,
+      // billStatus: "string",
+      doctor: this.infoAppoint.doctor,
+      technicalStaff: this.infoAppoint.teachnicalStaff,
+      totalAmount: this.totalAmount,
+      amountInvoiced: this.amountInvoiced,
+      amountResidual: this.amountResidual,
+      billItems: this.service
+    }
+
+    this.shared.createBill(val).subscribe(
+      () => {
+        if (this.amountInvoiced == 0) {
+          this.shared.UpdateStatus(this.id, 'Chưa thanh toán').subscribe()
+        } else {
+          if (this.amountResidual != 0) {
+            this.shared.UpdateStatus(this.id, 'Thanh toán 1 phần').subscribe()
+          } else {
+            this.shared.UpdateStatus(this.id, 'Thanh toán hoàn tất').subscribe()
+          }
+        }
+        this.createNotificationSuccess('');
+        this.modalRef.destroy(val);
+      },
+      (res) => {
+        this.createNotificationError(res.error.message);
+      }
+    )
   }
 
   // onEditPayment() {
