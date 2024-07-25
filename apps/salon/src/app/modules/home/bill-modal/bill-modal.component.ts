@@ -199,6 +199,9 @@ export class BillModalComponent {
       totalAmount: this.totalAmount,
       amountInvoiced: this.amountInvoiced,
       amountResidual: this.amountResidual,
+      amountDiscount: this.amountDiscount,
+      kindofDiscount: this.kindofDiscount,
+      note: this.note,
       billItems: this.service
     }
 
@@ -232,6 +235,7 @@ export class BillModalComponent {
           this.createNotificationError(res.error.message);
         }
       )
+      console.log(val)
     }
   }
 

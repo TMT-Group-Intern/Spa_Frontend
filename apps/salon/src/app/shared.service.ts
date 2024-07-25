@@ -238,7 +238,7 @@ export class AuthService {
 
   //
   getAllBillByAppointmentID(id: number): Observable<any[]> {
-    return this.http.get<any>(this.baseUrl + 'Bill/getBillByAppointmentID?appId=' + id);
+    return this.http.get<any>(this.baseUrl + 'Bill/GetBillByAppointmentID?appId='+id);
   }
 
   //
