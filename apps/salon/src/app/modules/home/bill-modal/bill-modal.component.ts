@@ -41,6 +41,7 @@ export class BillModalComponent {
   // inforCus: any;
   infoAppoint: any;
   service: any[] = [];
+  billID = null
   kindofDiscount = '%'
   amountDiscount = 0
   total = 0;
@@ -58,25 +59,54 @@ export class BillModalComponent {
   ngOnInit(): void {
     this.shared.getAppointment(this.id).subscribe(
       (data: any) => {
-
-        // this.BillID = data.BillID
         this.infoAppoint = data
 
-        this.service = [...(data.chooseServices as any[]).map(item => ({
-          serviceID: item.serviceID,
-          serviceName: item.service.serviceName,
-          quantity: 1,
-          unitPrice: item.service.price,
-          tempPrice: item.service.price,
-          totalPrice: item.service.price,
-          amountDiscount: 0,
-          kindofDiscount: '%',
-          note: '',
-        }))]
+        this.shared.getAllBillByAppointmentID(this.id).subscribe(
+          (dataBill: any) => {
+            if (dataBill == null) {
+              this.service = [...(data.chooseServices as any[]).map(item => ({
+                serviceID: item.serviceID,
+                serviceName: item.service.serviceName,
+                quantity: 1,
+                unitPrice: item.service.price,
+                tempPrice: item.service.price,
+                totalPrice: item.service.price,
+                amountDiscount: 0,
+                kindofDiscount: '%',
+                note: '',
+              }))]
 
-        // Calculate total of payment
-        this.resetTotal()
+              // Calculate total of payment
+              this.resetTotal()
+            } else {
+              this.billID = dataBill.billID
+              this.totalAmount = dataBill.totalAmount
+              this.amountInvoiced = dataBill.amountInvoiced
+              this.amountResidual = dataBill.amountResidual
+              this.amountDiscount = dataBill.amountDiscount == null ? 0 : dataBill.amountDiscount
+              this.kindofDiscount = dataBill.kindofDiscount == null ? '%' : dataBill.kindofDiscount
+              this.note = dataBill.note == null ? '' : dataBill.note
+
+              this.service = [...(dataBill.billItems as any[]).map(item => ({
+                serviceID: item.serviceID,
+                serviceName: item.serviceName,
+                quantity: item.quantity,
+                unitPrice: item.unitPrice,
+                tempPrice: item.unitPrice * item.quantity,
+                totalPrice: item.totalPrice,
+                amountDiscount: item.amountDiscount,
+                kindofDiscount: item.kindofDiscount,
+                note: item.note,
+              }))]
+
+              // Calculate total of payment
+              this.resetTotal()
+            }
+          }
+        )
       });
+
+
   }
 
   // Format Date & Time
@@ -158,7 +188,7 @@ export class BillModalComponent {
   }
 
   //
-  createBill() {
+  save() {
     const val = {
       customerID: this.infoAppoint.customerID,
       appointmentID: this.id,
@@ -172,24 +202,37 @@ export class BillModalComponent {
       billItems: this.service
     }
 
-    this.shared.createBill(val).subscribe(
-      () => {
-        if (this.amountInvoiced == 0) {
-          this.shared.UpdateStatus(this.id, 'Chưa thanh toán').subscribe()
-        } else {
-          if (this.amountResidual != 0) {
-            this.shared.UpdateStatus(this.id, 'Thanh toán 1 phần').subscribe()
-          } else {
-            this.shared.UpdateStatus(this.id, 'Thanh toán hoàn tất').subscribe()
-          }
-        }
-        this.createNotificationSuccess('');
-        this.modalRef.destroy(val);
-      },
-      (res) => {
-        this.createNotificationError(res.error.message);
+    if (this.amountInvoiced == 0) {
+      this.shared.UpdateStatus(this.id, 'Chưa thanh toán').subscribe()
+    } else {
+      if (this.amountResidual != 0) {
+        this.shared.UpdateStatus(this.id, 'Thanh toán 1 phần').subscribe()
+      } else {
+        this.shared.UpdateStatus(this.id, 'Thanh toán hoàn tất').subscribe()
       }
-    )
+    }
+
+    if (this.billID) {
+      this.shared.updateBill(this.billID, val).subscribe(
+        () => {
+          this.createNotificationSuccess('');
+          this.modalRef.destroy(val);
+        },
+        (res) => {
+          this.createNotificationError(res.error.message);
+        }
+      )
+    } else {
+      this.shared.createBill(val).subscribe(
+        () => {
+          this.createNotificationSuccess('');
+          this.modalRef.destroy(val);
+        },
+        (res) => {
+          this.createNotificationError(res.error.message);
+        }
+      )
+    }
   }
 
   // onEditPayment() {

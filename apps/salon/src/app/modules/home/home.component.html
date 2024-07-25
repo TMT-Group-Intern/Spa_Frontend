@@ -1,9 +1,9 @@
-<div class="h-screen px-4 pb-4">
+<div class="w-full px-4">
   <tds-calendar-header [(tdsViewDate)]="date" [tdsMode]="mode" (tdsModeChange)="onModelChange($event)">
-    <button tds-button tds-tooltip tooltipTitle="Tạo lịch hẹn" color="success" (click)="createAppointment()" class="mr-4">
+    <button class="mr-2" tds-button color="success" (click)="createAppointment()">
       Thêm lịch hẹn
     </button>
-    <button tds-button color="success" (click)="createCustomer()">Thêm khách hàng</button>
+    <button tds-button color="success">Thêm khách hàng</button>
   </tds-calendar-header>
   <div class="h-[600px] overflow-y-auto">
     <tds-calendar [tdsValue]="date" [tdsMode]="mode" (tdsSelectHour)="onClickSegment($event)">
@@ -12,9 +12,11 @@
           <div class="p-2 w-[250px]">
             <div class="border rounded-xl border-neutral-2-200 h-full w-full bg-white flex flex-col p-2">
               <div class="flex items-center justify-between">
-                <tds-tag class="rounded-full" [status]='event.data.status.status'>
-                  {{event.data.status.name}}
-                </tds-tag>
+                <div class="py-2">
+                  <tds-tag class="rounded-full" [status]='event.data.status.status'>
+                    {{event.data.status.name}}
+                  </tds-tag>
+                </div>
                 <div>
                   <button *ngIf="event.data.status.name === 'Đã hẹn' || event.data.status.name === 'Hủy hẹn'"
                     tds-button-flat-icon tds-tooltip tooltipTitle="Chỉnh sửa lịch hẹn" color="secondary"
@@ -35,9 +37,9 @@
                   </button>
                   <button
                     *ngIf="event.data.status.name === 'Chưa thanh toán' || event.data.status.name === 'Thanh toán 1 phần' || event.data.status.name === 'Thanh toán hoàn tất'"
-                    tds-button-flat-icon color="secondary" tds-tooltip tooltipTitle="Thanh toán"
+                    tds-button-flat-icon color="secondary" tds-tooltip tooltipTitle="Xem thanh toán"
                     (click)="updateBill(event.data.id)">
-                    <i class="tdsi-accounting-line"></i>
+                    <i class="tdsi-cash-fill"></i>
                   </button>
                 </div>
               </div>
