@@ -452,7 +452,20 @@ export class HomeComponent implements OnInit {
 
   //
   updateBill(id: number) {
-    //
+    const modal = this.modalSvc.create({
+      title: 'Xem hóa đơn',
+      content: BillModalComponent,
+      footer: null,
+      size: 'xl',
+      componentParams: {
+        id,
+      },
+    });
+    modal.afterClose.asObservable().subscribe((res) => {
+      if (res) {
+        this.initAppointment()
+      }
+    });
   }
 
   // Open Service Appointment Modal
