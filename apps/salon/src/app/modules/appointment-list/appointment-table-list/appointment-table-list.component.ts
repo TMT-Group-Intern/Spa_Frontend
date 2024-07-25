@@ -71,6 +71,7 @@ export class AppointmentTableListComponent implements OnChanges, OnInit{
         this.listOfData = [...this.temp.sort((a: any, b: any) => a.appointmentDate > b.appointmentDate? -1 : 1)];
       });
   }
+
 updateAppointmentStatus(idAppointment: number, statusAppointment: string): void {
   this.shareApi.UpdateStatus(idAppointment, statusAppointment).subscribe(
     () => {
