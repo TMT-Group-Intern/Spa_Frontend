@@ -103,14 +103,15 @@ export class AppointmentListComponent implements OnInit {
     this.startDate = fromDate;
     this.endDate = toDate;
   }
-
-  createAppointment() {
-    const modal = this.modalSvc.create({
-      title: 'Tạo lịch hẹn',
+  callModalCreateAppointment(){
+    const modal= this.modalSvc.create({
+      title:'Tạo lịch hẹn',
       content: AppointmentModalComponent,
       footer: null,
-      size: 'lg',
-    });
-    modal.afterClose.asObservable().subscribe();
+      size:'lg'
+    })
+    modal.afterClose.asObservable().subscribe(()=>{
+      this.search ='';
+    })
   }
 }
