@@ -6,12 +6,12 @@ import { AuthService } from '../../shared.service';
 import { TDSSafeAny } from 'tds-ui/shared/utility';
 import { CompanyService } from '../../core/services/company.service';
 export type TTypeState =
-  | 'Hẹn'
+  | 'Đã hẹn'
   | 'Chờ khám'
   | 'Không sử dụng dịch vụ'
   | 'Đã khám'
-  | 'Chờ làm'
-  | 'Đã hoàn thành';
+  | 'Chờ chăm sóc'
+  | 'Hoàn thành';
 @Component({
   selector: 'frontend-appointment-list',
   templateUrl: './appointment-list.component.html',
@@ -28,12 +28,12 @@ export class AppointmentListComponent implements OnInit {
       (this.search = '');
   }
   readonly tabs:TTypeState[] = [
-    'Hẹn',
+    'Đã hẹn',
     'Chờ khám',
     'Không sử dụng dịch vụ',
     'Đã khám',
-    'Chờ làm',
-    'Đã hoàn thành',
+    'Chờ chăm sóc',
+    'Hoàn thành',
   ];
   selectedIndex = 0;
   search?: string = ' ';

@@ -35,7 +35,7 @@ export class InSessionModalComponent implements OnInit {
   public spaTherapistOptions: any[] = []
   public statusOptions = [
     'Đã khám',
-    'Chờ làm',
+    'Chờ chăm sóc',
     'Đang chăm sóc',
     'Hoàn thành',
     'Không sử dụng dịch vụ',
@@ -84,7 +84,7 @@ export class InSessionModalComponent implements OnInit {
         (data: any) => {
 
           this.form.patchValue({
-            name: data.customer.firstName + ' ' + data.customer.lastName,
+            name: data.customer.lastName + ' ' + data.customer.firstName,
             customerID: data.customer.customerID,
             status: data.status,
           });

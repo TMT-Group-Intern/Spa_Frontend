@@ -6,6 +6,8 @@
         <th>Họ tên</th>
         <th>Ngày sinh</th>
         <th>Số điện thoại</th>
+        <th>Bác sĩ</th>
+        <th>Nhân viên kỹ thuật</th>
         <th>Trạng thái</th>
       </tr>
     </thead>
@@ -13,9 +15,11 @@
       <ng-container *ngFor="let data of table.data">
         <tr class="text-sm">
           <td>{{ data.appointmentDate | date : 'dd/MM/YYYY' }}</td>
-          <td>{{ data.customer.firstName +" "+data.customer.lastName}}</td>
-          <td>{{ !!data.customer.dateOfBirth ? data.customer.dateOfBirth:'---'}}</td>
+          <td>{{ data.customer.lastName +" "+data.customer.firstName}}</td>
+          <td>{{ data.customer.dateOfBirth | date:'dd/MM/YYYY'}}</td>
           <td>{{ data.customer.phone }}</td>
+          <td>{{ data.doctor }}</td>
+          <td>{{ data.teachnicalStaff}}</td>
           <td><tds-tag status='primary' type="outline">{{ data.status }}</tds-tag></td>
         </tr>
       </ng-container>

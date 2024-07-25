@@ -126,7 +126,7 @@ export class DoctorComponent implements OnInit {
         (appointment: any) =>
           (appointment.status === 'Chờ khám' ||
           appointment.status === 'Đang khám')
-          && (appointment.EmployeeCode===this.userSession.user.userCode
+          && (appointment.employeeCode===this.userSession.user.userCode
             || this.userSession.user.role==='Admin')
       );
     });

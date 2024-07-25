@@ -149,8 +149,8 @@ export class HomeComponent implements OnInit {
         appoint.data.status.status = 'warning'
         appoint.data.status.bg = 'bg-warning-100'
       } else if (appoint.data.status.name == 'Không sử dụng dịch vụ') {
-        appoint.data.status.status = 'warning'
-        appoint.data.status.bg = 'bg-warning-100'
+        appoint.data.status.status = 'error'
+        appoint.data.status.bg = 'bg-error-100'
       } else if (appoint.data.status.name == 'Chờ chăm sóc') {
         appoint.data.status.status = 'secondary'
         appoint.data.status.bg = 'bg-gray-50'
