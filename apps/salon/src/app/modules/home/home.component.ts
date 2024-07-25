@@ -190,6 +190,15 @@ export class HomeComponent implements OnInit {
       } else if (appoint.data.status.name == 'Hoàn thành') {
         appoint.data.status.status = 'warning'
         appoint.data.status.bg = 'bg-warning-100'
+      } else if (appoint.data.status.name == 'Chưa thanh toán') {
+        appoint.data.status.status = 'warning'
+        appoint.data.status.bg = 'bg-warning-100'
+      } else if (appoint.data.status.name == 'Thanh toán 1 phần') {
+        appoint.data.status.status = 'primary'
+        appoint.data.status.bg = 'bg-info-100'
+      } else if (appoint.data.status.name == 'Thanh toán hoàn tất') {
+        appoint.data.status.status = 'success'
+        appoint.data.status.bg = 'bg-success-100'
       }
     }
 
@@ -439,6 +448,11 @@ export class HomeComponent implements OnInit {
         this.initAppointment()
       }
     });
+  }
+
+  //
+  updateBill(id: number) {
+    //
   }
 
   // Open Service Appointment Modal
