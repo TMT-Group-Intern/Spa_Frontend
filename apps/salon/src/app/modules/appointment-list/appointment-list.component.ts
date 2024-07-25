@@ -35,6 +35,7 @@ export class AppointmentListComponent implements OnInit {
       this.startDate,
       this.endDate,
       this.branchId,
+      this.boolean$,
       (this.search = '');
   }
   readonly tabs:TTypeState[] = [
@@ -66,6 +67,7 @@ export class AppointmentListComponent implements OnInit {
   };
   listOfData: any | undefined;
   branchId: any;
+  boolean$?: boolean = true;
   userSession: any;
   storedUserSession = localStorage.getItem('userSession');
   inputValue?: string;
@@ -98,10 +100,8 @@ export class AppointmentListComponent implements OnInit {
   }
 
   onChange(result: any): void {
-    const fromDate = format(result[0], DATE_CONFIG.DATE_BASE);
-    const toDate = format(result[1], DATE_CONFIG.DATE_BASE);
-    this.startDate = fromDate;
-    this.endDate = toDate;
+    this.startDate = format(result[0], DATE_CONFIG.DATE_BASE_FROM);
+    this.endDate = format(result[1], DATE_CONFIG.DATE_BASE_TO);
   }
   callModalCreateAppointment(){
     const modal= this.modalSvc.create({
@@ -110,8 +110,17 @@ export class AppointmentListComponent implements OnInit {
       footer: null,
       size:'lg'
     })
-    modal.afterClose.asObservable().subscribe(()=>{
-      this.search ='';
+    modal.afterClose.asObservable().subscribe((data)=>{
+      if(data){
+        console.log(0,0)
+        if(this.boolean$ === false){
+          console.log(0)
+          this.boolean$ = true;
+        }else{
+          console.log(1)
+          this.boolean$ = false;
+        }
+      }
     })
   }
 }

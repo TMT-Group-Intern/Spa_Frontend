@@ -27,6 +27,9 @@ export class ChooseDoctorModalComponent implements OnInit {
   @Input() id?: number
   @Input() appointmentDate?: string
   public doctorOptions: any[] = []
+  userSession: any;
+  storedUserSession = localStorage.getItem('userSession');
+  branchId?: number;
   form = inject(FormBuilder).nonNullable.group({
     doctor: [undefined, Validators.required],
   });
@@ -37,9 +40,12 @@ export class ChooseDoctorModalComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    if (this.storedUserSession !== null) {
+      this.userSession = JSON.parse(this.storedUserSession);
+      this.branchId = this.userSession.user.branchID;
+    }
     // Get Doctor
-    this.shared.getEmployee(2, 2).subscribe(
+    this.shared.getEmployee(this.branchId as number, 2).subscribe(
       (data: any[]) => {
         this.doctorOptions = [...data.map(item => ({
           id: item.employeeID,
