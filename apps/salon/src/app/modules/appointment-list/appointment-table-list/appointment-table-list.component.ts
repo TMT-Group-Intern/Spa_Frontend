@@ -24,12 +24,18 @@ export class AppointmentTableListComponent implements OnChanges, OnInit{
   @Input() startDay: string | undefined;
   @Input() endDay: string | undefined;
   @Input() search?:string;
+  @Input() boolean$?:boolean;
   listOfData: any;
   listOfAllData: any;
   temp: any;
   persondisplayWith!: FormControl;
 
   ngOnChanges(changes: SimpleChanges): void {
+
+    if(changes['boolean$']?.currentValue === true || changes['boolean$']?.currentValue === false){
+      this.initAppointmentbyDays(this.startDay as string,this.endDay as string)
+    }
+
     if(changes['search']?.currentValue ||this.search === ''){
       if(this.search === '' ){
         this.listOfData = this.temp;
@@ -75,8 +81,10 @@ updateAppointmentStatus(idAppointment: number, statusAppointment: string): void 
 }
 
 callModalEditAppointment(id: number,status: string,date: string){
-  this.shareApi.getAppointmentByDays(this.branchId as number, this.startDay as string,this.endDay as string).subscribe((data: any)=>{
-    if(data.doctor === undefined){
+  this.shareApi.getAppointment(id).subscribe((data: any)=>{
+    console.log(data.doctor)
+    if(data.doctor === null){
+      console.log(0)
       const modal = this.modalSvc.create({
         title:'Cập nhật bác sĩ',
         content: ChooseDoctorModalComponent,
@@ -93,6 +101,7 @@ callModalEditAppointment(id: number,status: string,date: string){
         }
       })
     }else{
+      console.log(1)
       this.updateAppointmentStatus(id, status);
     }
   })
