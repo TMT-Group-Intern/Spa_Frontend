@@ -89,6 +89,7 @@ export class AppointmentListComponent implements OnInit {
       )
       .subscribe((data) => (this.branchId = data));
   }
+  
   onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.search = value;
@@ -97,6 +98,7 @@ export class AppointmentListComponent implements OnInit {
     );
     this.company._search$.next(value);
   }
+
   onChange(result: any): void {
     this.startDate = format(result[0], DATE_CONFIG.DATE_BASE_FROM);
     this.endDate = format(result[1], DATE_CONFIG.DATE_BASE_TO);

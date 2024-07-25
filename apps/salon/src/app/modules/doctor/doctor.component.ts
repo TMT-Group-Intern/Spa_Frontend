@@ -125,9 +125,9 @@ export class DoctorComponent implements OnInit {
       this.reception = this.appointmentList.filter(
         (appointment: any) =>
           (appointment.status === 'Chờ khám' ||
-            appointment.status === 'Đang khám')
-          && (appointment.EmployeeCode === this.userSession.user.userCode
-            || this.userSession.user.role === 'Admin')
+          appointment.status === 'Đang khám')
+          && (appointment.employeeCode===this.userSession.user.userCode
+            || this.userSession.user.role==='Admin')
       );
     });
   }
