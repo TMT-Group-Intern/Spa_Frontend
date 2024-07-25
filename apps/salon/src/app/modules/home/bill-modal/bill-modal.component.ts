@@ -61,7 +61,6 @@ export class BillModalComponent {
 
         // this.BillID = data.BillID
         this.infoAppoint = data
-        console.log(this.infoAppoint);
 
         this.service = [...(data.chooseServices as any[]).map(item => ({
           serviceID: item.serviceID,

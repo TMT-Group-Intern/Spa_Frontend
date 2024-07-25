@@ -62,18 +62,16 @@ export class SchedulesComponent implements OnInit {
       .pipe(
         filter((companyId) => !!companyId),
         concatMap((brachID) => {
-          console.log('id1: ', brachID);
           return this.shareApi.appointmentList(brachID as number);
         })
       )
       .subscribe((data: any) => {
         this.dataAppointments = data;
-        console.log(this.dataAppointments);
         this.lstData = this.dataAppointments.map((item: any) => ({
           start: new Date(item.AppointmentDate),
           end: new Date(new Date(item.AppointmentDate).getTime() + 60 * 60000),
           data: {
-            name: item.Customer.FirstName + ' ' + item.Customer.LastName,
+            name: item.Customer.firstName + ' ' + item.Customer.lastName,
             doctor: item.Doctor,
             status: {
               name: item.Status,
@@ -83,7 +81,6 @@ export class SchedulesComponent implements OnInit {
           },
         }));
       });
-    console.log(this.lstData);
   }
 
   // call get list of appoiment
@@ -91,12 +88,11 @@ export class SchedulesComponent implements OnInit {
     const branchID = this.userSession.user.branchID
     this.shareApi.appointmentList(branchID).subscribe((data: any) => {
       this.dataAppointments = data
-      console.log(this.dataAppointments);
       this.lstData = this.dataAppointments.map((item:any)=>({
         start: new Date(item.AppointmentDate),
         end: new Date(new Date(item.AppointmentDate).getTime() + 60 * 60000),
         data:{
-          name:item.Customer.FirstName +' '+ item.Customer.LastName,
+          name:item.Customer.firstName +' '+ item.Customer.lastName,
           doctor:item.Doctor,
           status: {
             name: item.Status,
@@ -121,14 +117,12 @@ export class SchedulesComponent implements OnInit {
     })
     modal.afterClose.asObservable().subscribe(
       (e: any) => {
-        console.log()
         this.initAppointment();
       }
     )
   }
 
   clickEvent(e: MouseEvent, event: TDSSafeAny) {
-    console.log(2);
     e.stopImmediatePropagation();
     e.preventDefault();
     this.lstData = this.lstData.filter((f) => f != event);
@@ -155,7 +149,6 @@ export class SchedulesComponent implements OnInit {
   // }
 
   getMonthData(date: Date, event: TDSSafeAny): boolean {
-    console.log(4);
     return isSameDay(date, event.start);
   }
 }

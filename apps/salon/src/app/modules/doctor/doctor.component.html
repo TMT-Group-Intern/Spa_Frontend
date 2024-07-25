@@ -9,12 +9,22 @@
             userFrofile(appoint.appointmentID); getHistory(appoint.customerID)
           ">
           <!-- Card Header -->
-          <tds-card-header class="bg-green-success-200 text-white rounded-t-md">
-            <div class="flex justify-between">
+          <tds-card-header *ngIf="appoint.status === 'Đang khám'" class="bg-green-success-200 text-white rounded-t-md">
+            <div class="flex justify-between text-gray-700">
               <p tds-typography tdsEllipsis>
               {{ appoint.customer.lastName }} {{ appoint.customer.firstName }}
               </p>
               <tds-tag status="custom" class="bg-success-400 rounded-md">{{
+                appoint.status
+                }}</tds-tag>
+            </div>
+          </tds-card-header>
+          <tds-card-header *ngIf="appoint.status === 'Chờ khám'"  class="bg-warning-100 text-white rounded-t-md">
+            <div class="flex justify-between text-gray-700">
+              <p tds-typography tdsEllipsis>
+              {{ appoint.customer.lastName }} {{ appoint.customer.firstName }}
+              </p>
+              <tds-tag status="custom" class="bg-warning-400 rounded-md">{{
                 appoint.status
                 }}</tds-tag>
             </div>

@@ -62,9 +62,9 @@
         <div class="font-medium mb-2">
           Họ và Tên:
           <span class="font-normal">{{
-            appointmentAllInfo.customer.firstName +
+            appointmentAllInfo.customer.lastName +
               ' ' +
-              appointmentAllInfo.customer.lastName
+              appointmentAllInfo.customer.firstName
           }}</span>
         </div>
         <div class="font-medium mb-4">
@@ -92,7 +92,7 @@
         <div class="font-medium mb-4">
           Nhân viên phụ trách:
           <span class="font-normal">
-            {{ appointmentAllInfo.spaTherapist }}
+            {{ appointmentAllInfo.teachnicalStaff }}
           </span>
         </div>
 
@@ -187,8 +187,7 @@
   </div>
   <ng-template
     #elseBlock
-    class="col-span-9 border p-4 rounded-10 bg-white ml-4"
-  >
+    class="col-span-9 border p-4 rounded-10 bg-white ml-4">
     <div class="col-span-9 w-full flex items-center justify-center">
       <p class="text-2xl">Vui lòng chọn khách hàng để thực hiện dịch vụ</p>
     </div>
