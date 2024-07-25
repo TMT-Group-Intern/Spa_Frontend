@@ -66,7 +66,7 @@ export class DoctorComponent implements OnInit {
   dataSvc: any = [];
   CustomerID: number | undefined;
   userSession: any;
-  companyId:number|null = null;
+  companyId: number | null = null;
 
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
@@ -93,9 +93,9 @@ export class DoctorComponent implements OnInit {
     this.initAppointmentList();
 
     this.companySvc._companyIdCur$.pipe(
-      filter(companyId=> !!companyId),
-      concatMap((branchID)=> {
-      return  this.sharedService.appointmentList(branchID as number)
+      filter(companyId => !!companyId),
+      concatMap((branchID) => {
+        return this.sharedService.appointmentList(branchID as number)
       })
     ).subscribe((data: any) => {
       this.appointmentList = data;
@@ -144,9 +144,14 @@ export class DoctorComponent implements OnInit {
         customerID: data.customer.customerID,
         status: data.status,
         service: data.chooseServices.map((item: any) => item.serviceID),
-        doctor: `${data.assignments[0].employees.lastName} ${data.assignments[0].employees.firstName}`,
         note: data.notes,
       });
+      const foundDoctor = (data.assignments as any[]).find(item => item.employees.jobTypeID === 2);
+      if (foundDoctor) {
+        this.form.patchValue({
+          doctor: `${foundDoctor.employees.lastName} ${foundDoctor.employees.firstName}`
+        });
+      }
     });
     this.initService();
   }

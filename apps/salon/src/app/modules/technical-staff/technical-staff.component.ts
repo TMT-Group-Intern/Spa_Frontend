@@ -34,10 +34,6 @@ export class TechnicalStaffComponent {
   urls = [];
   userSession: any
   checkActive?: boolean = false;
-  public statusOptions = [
-    'Hẹn',
-    'Hủy hẹn',
-  ]
   status!: FormControl;
 
 
