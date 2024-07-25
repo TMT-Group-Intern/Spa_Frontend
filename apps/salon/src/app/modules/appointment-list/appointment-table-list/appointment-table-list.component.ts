@@ -1,3 +1,4 @@
+import { observable } from 'rxjs';
 import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AuthService } from '../../../shared.service';
 import { CompanyService } from '../../../core/services/company.service';
@@ -5,6 +6,8 @@ import { TTypeState } from '../appointment-list.component';
 import { FormControl, Validators } from '@angular/forms';
 import { TDSModalService } from 'tds-ui/modal';
 import { AppointmentModalComponent } from '../../home/appointment-modal/appointment-modal.component';
+import { ChooseDoctorModalComponent } from '../../home/choose-doctor-modal/choose-doctor-modal.component';
+import { InSessionModalComponent } from '../../home/in-session-modal/in-session-modal.component';
 
 
 @Component({
@@ -71,15 +74,44 @@ updateAppointmentStatus(idAppointment: number, statusAppointment: string): void 
   )
 }
 
-callModalEditAppointment(id: number){
-  this.modalSvc.create({
-    title:'Sửa lịch hẹn',
-    content: AppointmentModalComponent,
-    footer: null,
-    size:'lg',
-    componentParams:{
-      id: id
+callModalEditAppointment(id: number,status: string,date: string){
+  this.shareApi.getAppointmentByDays(this.branchId as number, this.startDay as string,this.endDay as string).subscribe((data: any)=>{
+    if(data.doctor === undefined){
+      const modal = this.modalSvc.create({
+        title:'Cập nhật bác sĩ',
+        content: ChooseDoctorModalComponent,
+        footer: null,
+        size:'md',
+        componentParams:{
+          id: id,
+          appointmentDate: date
+        }
+      })
+      modal.afterClose.asObservable().subscribe((data)=>{
+        if(data){
+          this.updateAppointmentStatus(id, status);
+        }
+      })
+    }else{
+      this.updateAppointmentStatus(id, status);
     }
   })
 }
+
+  callModalUpdate(id: number){
+    const modal =  this.modalSvc.create({
+      title:'Thêm kỹ thuật viên',
+      content: InSessionModalComponent,
+      footer: null,
+      size:'md',
+      componentParams:{
+        id: id
+      }
+    })
+    modal.afterClose.asObservable().subscribe((data)=>{
+      if(data){
+        this.initAppointmentbyDays(this.startDay as string,this.endDay as string)
+      }
+    });
+  }
 }
