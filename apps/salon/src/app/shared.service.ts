@@ -237,6 +237,11 @@ export class AuthService {
   }
 
   //
+  getAllBillByAppointmentID(id: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Bill/getBillByAppointmentID?appId=' + id);
+  }
+
+  //
   login(email: string, password: string) {
     return this.http.post<{ flag: boolean, mess: string,userSession:object, token: string }>(this.baseUrl + 'Authentication/login', {
       email: email,
