@@ -314,6 +314,7 @@ export class HomeComponent implements OnInit {
 
   // Choose doctor
   chooseDoctor(id: number, status: string) {
+    console.log(id)
     this.sharedService.getAppointment(id).subscribe((res: any) => {
       const emp: any[] = res.assignments;
       if (emp?.length == 0) {
@@ -371,27 +372,8 @@ export class HomeComponent implements OnInit {
       }
     })
   }
-
-  //
+  
   updateBill(id: number) {
     //
   }
-
-  // Open Service Appointment Modal
-  // callmodalServiceAppointment(id: number) {
-  //   const modal = this.tModalSvc.create({
-  //     title: 'Create service appointment',
-  //     content: ServiceAppointmentModalComponent,
-  //     footer: null,
-  //     size: 'lg',
-  //     componentParams: {
-  //       id,
-  //     },
-  //   });
-  //   modal.afterClose.asObservable().subscribe((res) => {
-  //     if (res) {
-  //       this.initAppointmentList();
-  //     }
-  //   });
-  // }
 }

@@ -98,10 +98,9 @@ export class AppointmentListComponent implements OnInit {
   }
 
   onChange(result: any): void {
-    const fromDate = format(result[0], DATE_CONFIG.DATE_BASE);
-    const toDate = format(result[1], DATE_CONFIG.DATE_BASE);
-    this.startDate = fromDate;
-    this.endDate = toDate;
+    this.startDate = format(result[0], DATE_CONFIG.DATE_BASE_FROM);
+    this.endDate = format(result[1], DATE_CONFIG.DATE_BASE_TO);
+
   }
   callModalCreateAppointment(){
     const modal= this.modalSvc.create({
