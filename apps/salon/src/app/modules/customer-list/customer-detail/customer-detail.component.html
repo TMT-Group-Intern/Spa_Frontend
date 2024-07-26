@@ -1,19 +1,19 @@
 <div class="bg-gray-200 h-screen">
   <tds-breadcrumb class="bg-white p-4 rounded-lg mb-2">
     <tds-breadcrumb-item><a [routerLink]="['/customer-list']">Khách Hàng</a></tds-breadcrumb-item>
-    <tds-breadcrumb-item>{{customer.customerDTO.firstName}} {{customer.customerDTO.lastName}}</tds-breadcrumb-item>
+    <tds-breadcrumb-item>{{customer.lastName}} {{customer.firstName}}</tds-breadcrumb-item>
   </tds-breadcrumb>
 
   <div class="flex flex-row">
     <div class="flex-1 mr-2">
       <div class="bg-white p-4 mb-2 rounded-lg" style="max-height: 189px;">
-        <p class="text-4xl">{{customer.customerDTO.firstName}} {{customer.customerDTO.lastName}}</p>
+        <p class="text-4xl">{{customer.lastName}} {{customer.firstName}}</p>
         <div class="p-4">
-          <p><i class="tdsi-call-fill text-success-400"></i> {{customer.customerDTO.phone}}</p>
-          <p><i class="tdsi-birthday-fill text-success-400"></i> {{customer.customerDTO.dateOfBirth |
+          <p><i class="tdsi-call-fill text-success-400"></i> {{customer.phone}}</p>
+          <p><i class="tdsi-birthday-fill text-success-400"></i> {{customer.dateOfBirth |
             date:'dd/MM/YYYY'}}</p>
-          <p *ngIf="customer.customerDTO.gender === 'Nam'"><i class="tdsi-male-fill text-success-400"></i> Nam</p>
-          <p *ngIf="customer.customerDTO.gender === 'Nữ'"><i class="tdsi-female-fill text-success-400"></i> Nữ</p>
+          <p *ngIf="customer.gender === 'Nam'"><i class="tdsi-male-fill text-success-400"></i> Nam</p>
+          <p *ngIf="customer.gender === 'Nữ'"><i class="tdsi-female-fill text-success-400"></i> Nữ</p>
         </div>
       </div>
 

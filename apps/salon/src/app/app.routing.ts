@@ -17,7 +17,6 @@ import { AppointmentListModule } from './modules/appointment-list/appointment-li
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
-  //{ path: 'protected', canActivate: [AuthGuardService], component:  UsersComponent},
   {
     path: '',
     component: LayoutComponent,
@@ -41,7 +40,7 @@ const routes: Routes = [
         path: 'customer-list',
         children: [
           {
-            path: 'customer-detail/:id',
+            path: 'customer-detail',
             loadComponent: () => CustomerDetailComponent,
           },
         ],
