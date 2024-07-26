@@ -89,13 +89,13 @@ export class SchedulesComponent implements OnInit {
     this.shareApi.appointmentList(branchID).subscribe((data: any) => {
       this.dataAppointments = data
       this.lstData = this.dataAppointments.map((item:any)=>({
-        start: new Date(item.AppointmentDate),
-        end: new Date(new Date(item.AppointmentDate).getTime() + 60 * 60000),
+        start: new Date(item.appointmentDate),
+        end: new Date(new Date(item.appointmentDate).getTime() + 60 * 60000),
         data:{
-          name:item.Customer.firstName +' '+ item.Customer.lastName,
-          doctor:item.Doctor,
+          name:item.customer.firstName +' '+ item.customer.lastName,
+          doctor:item.soctor,
           status: {
-            name: item.Status,
+            name: item.status,
             "status": "info",
             "bg": "bg-error-100"
         }
