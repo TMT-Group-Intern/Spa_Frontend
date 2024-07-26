@@ -78,7 +78,6 @@ export class AppointmentModalComponent implements OnInit {
   today = startOfToday();
   empID: any[] = [];
   dataCustomer: any[] = [];
-  assign: any[] = [];
   userSession: any;
 
   constructor(
@@ -135,8 +134,7 @@ export class AppointmentModalComponent implements OnInit {
             status: data.status,
           });
 
-          this.assign = data.assignments
-          const foundDoctor = this.assign.find(item => item.employees.jobTypeID === 2);
+          const foundDoctor = (data.assignments as any[]).find(item => item.employees.jobTypeID === 2);
           if(foundDoctor) {
             this.form.patchValue({
               doctor: foundDoctor.employees.employeeID

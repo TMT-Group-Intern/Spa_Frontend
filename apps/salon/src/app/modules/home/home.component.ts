@@ -135,20 +135,20 @@ export class HomeComponent implements OnInit {
 
     for (const appoint of this.lstData) {
       if (appoint.data.status.name == 'Đã hẹn') {
-        appoint.data.status.status = 'primary'
+        appoint.data.status.status = 'info'
         appoint.data.status.bg = 'bg-info-100'
       } else if (appoint.data.status.name == 'Hủy hẹn') {
         appoint.data.status.status = 'error'
         appoint.data.status.bg = 'bg-error-100'
       } else if (appoint.data.status.name == 'Chờ khám') {
         appoint.data.status.status = 'secondary'
-        appoint.data.status.bg = 'bg-gray-50'
+        appoint.data.status.bg = 'bg-gray-100'
       } else if (appoint.data.status.name == 'Đang khám') {
-        appoint.data.status.status = 'info'
+        appoint.data.status.status = 'primary'
         appoint.data.status.bg = 'bg-info-100'
       } else if (appoint.data.status.name == 'Đã khám') {
-        appoint.data.status.status = 'success'
-        appoint.data.status.bg = 'bg-success-100'
+        appoint.data.status.status = 'warning'
+        appoint.data.status.bg = 'bg-warning-100'
       } else if (appoint.data.status.name == 'Không sử dụng dịch vụ') {
         appoint.data.status.status = 'error'
         appoint.data.status.bg = 'bg-error-100'
@@ -156,16 +156,16 @@ export class HomeComponent implements OnInit {
         appoint.data.status.status = 'secondary'
         appoint.data.status.bg = 'bg-gray-50'
       } else if (appoint.data.status.name == 'Đang chăm sóc') {
-        appoint.data.status.status = 'info'
+        appoint.data.status.status = 'primary'
         appoint.data.status.bg = 'bg-info-100'
       } else if (appoint.data.status.name == 'Hoàn thành') {
         appoint.data.status.status = 'warning'
         appoint.data.status.bg = 'bg-warning-100'
       } else if (appoint.data.status.name == 'Chưa thanh toán') {
-        appoint.data.status.status = 'warning'
-        appoint.data.status.bg = 'bg-warning-100'
-      } else if (appoint.data.status.name == 'Thanh toán 1 phần') {
         appoint.data.status.status = 'primary'
+        appoint.data.status.bg = 'bg-info-100'
+      } else if (appoint.data.status.name == 'Thanh toán 1 phần') {
+        appoint.data.status.status = 'info'
         appoint.data.status.bg = 'bg-info-100'
       } else if (appoint.data.status.name == 'Thanh toán hoàn tất') {
         appoint.data.status.status = 'success'
@@ -314,11 +314,9 @@ export class HomeComponent implements OnInit {
 
   // Choose doctor
   chooseDoctor(id: number, status: string) {
-    console.log(id)
     this.sharedService.getAppointment(id).subscribe((res: any) => {
-      const emp: any[] = res.assignments;
-      if (emp?.length == 0) {
-        //|| (res.Assignments.lenght > 0 && res.Assignments[1].)
+      const foundDoctor = (res.assignments as any[]).find(item => item.employees.jobTypeID === 2);
+      if (!foundDoctor) {
         const appointmentDate = res.appointmentDate;
         const modal = this.modalSvc.create({
           title: 'Choose Doctor',
@@ -372,7 +370,7 @@ export class HomeComponent implements OnInit {
       }
     })
   }
-  
+
   updateBill(id: number) {
     const modal = this.modalSvc.create({
       title: 'Xem hóa đơn',

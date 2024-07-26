@@ -5,8 +5,8 @@
     </button>
     <button tds-button color="success">Thêm khách hàng</button>
   </tds-calendar-header>
-  <div class="h-[600px] overflow-y-auto">
-    <tds-calendar [tdsValue]="date" [tdsMode]="mode" (tdsSelectHour)="onClickSegment($event)">
+  <div class="h-[570px] overflow-y-auto">
+    <tds-calendar *ngIf="lstData?.length" [tdsValue]="date" [tdsMode]="mode" (tdsSelectHour)="onClickSegment($event)">
       <ng-template ngFor [ngForOf]="lstData" let-event>
         <tds-calendar-event [tdsStartDate]="event.start" [tdsEndDate]="event.end" [tdsData]="event.data">
           <div class="p-2 w-[250px]">
