@@ -64,9 +64,19 @@ export class MenuComponent {
       "link": '/service-list'
     },
     {
-      "name": "Báo cáo doanh thu",
-      "icon": "tdsi-revenue-fill",
-      "link": '/revenue-statistics'
+      "name": "Báo cáo ",
+      "icon": "tdsi-bar-chart-fill",
+      "listChild": [
+        {
+            "name": "Báo cáo ngày",
+            "link": 'report/report-day'
+        },
+        {
+            "name": "Báo cáo doanh thu",
+            "link": 'report/revenue-statistics'
+        },
+    ]
+
     },
     {
       "name": "Lịch trình",

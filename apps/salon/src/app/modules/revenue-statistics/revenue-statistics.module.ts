@@ -9,10 +9,18 @@ import { TDSInputModule } from 'tds-ui/tds-input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RevenueStatisticsDetailComponent } from './revenue-statistics-detail/revenue-statistics-detail.component';
 
-const routes: Routes = [{ path: '', component: RevenueStatisticsComponent }];
+const routes: Routes = [
+  { path: 'revenue-statistics',
+    component:RevenueStatisticsComponent
+    }
+
+];
 
 @NgModule({
-  declarations: [RevenueStatisticsComponent, RevenueStatisticsDetailComponent],
+  declarations: [
+    RevenueStatisticsComponent,
+    RevenueStatisticsDetailComponent,
+  ],
   imports: [
     CommonModule,
     TDSTableModule,
