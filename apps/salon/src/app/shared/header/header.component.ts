@@ -86,6 +86,7 @@ export class HeaderComponent implements OnInit {
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('accessToken');
     localStorage.removeItem('appointmentDetail');
+    localStorage.removeItem('customerID');
     deleteCookie('userToken')
     this.router.navigate(['']);
   };
