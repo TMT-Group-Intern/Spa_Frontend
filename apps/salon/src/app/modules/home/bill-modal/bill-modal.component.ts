@@ -12,6 +12,8 @@ import { TDSPipesModule } from 'tds-ui/core/pipes';
 import { AuthService } from '../../../shared.service';
 import { TDSNotificationService } from 'tds-ui/notification';
 import * as moment from 'moment';
+import { TDSRadioModule } from 'tds-ui/radio';
+import { catchError, concatMap, tap } from 'rxjs';
 
 @Component({
   selector: 'frontend-bill-modal',
@@ -28,6 +30,7 @@ import * as moment from 'moment';
     TDSDropDownModule,
     FormsModule,
     TDSPipesModule,
+    TDSRadioModule,
   ],
   templateUrl: './bill-modal.component.html',
   styleUrls: ['./bill-modal.component.scss'],
@@ -49,6 +52,9 @@ export class BillModalComponent {
   amountResidual = 0
   amountInvoiced = 0
   note = ''
+  amountInvoicedContinue = 0
+  amountResidualContinue: any
+  paymentMethod = 'Tiền mặt'
 
   constructor(
     // private route: ActivatedRoute,
@@ -127,10 +133,10 @@ export class BillModalComponent {
   totalAmountAfterDiscount() {
     if (this.kindofDiscount == '%') {
       this.totalAmount = this.total * (100 - this.amountDiscount) / 100;
-      this.amountResidual = this.totalAmount - this.amountInvoiced
+      this.amountResidual = this.amountResidualContinue = this.totalAmount - this.amountInvoiced
     } else {
       this.totalAmount = this.total - this.amountDiscount;
-      this.amountResidual = this.totalAmount - this.amountInvoiced
+      this.amountResidual = this.amountResidualContinue = this.totalAmount - this.amountInvoiced
     }
   }
 
@@ -182,13 +188,38 @@ export class BillModalComponent {
     this.totalAmountAfterDiscount()
   }
 
-  updateStatus() {
-    console.log(this.id)
+  updateAmountResidual() {
+    this.amountResidualContinue = this.amountResidual - this.amountInvoicedContinue
+  }
 
+  createPayment$(billID: number) {
+    console.log(this.infoAppoint.status === 'Hoàn thành' ? this.amountInvoiced : this.amountInvoicedContinue);
+
+   return this.shared.createPayment({
+      billID: billID,
+      amount: this.infoAppoint.status === 'Hoàn thành' ? this.amountInvoiced : this.amountInvoicedContinue,
+      paymentDate: new Date(),
+      paymentMethod: this.paymentMethod
+    }).pipe(
+      tap((val)=> {
+        this.createNotificationSuccess('');
+        this.modalRef.destroy(val);
+      }),
+      catchError((res) => {
+        this.createNotificationError(res.error.message);
+        return res
+      })
+    )
   }
 
   //
   save() {
+    for (const ser of this.service) {
+      if(ser.kindofDiscount == 'VND' && ser.amountDiscount == 0) {
+        ser.kindofDiscount = '%'
+      }
+    }
+
     const val = {
       customerID: this.infoAppoint.customerID,
       appointmentID: this.id,
@@ -200,7 +231,7 @@ export class BillModalComponent {
       amountInvoiced: this.amountInvoiced,
       amountResidual: this.amountResidual,
       amountDiscount: this.amountDiscount,
-      kindofDiscount: this.kindofDiscount,
+      kindofDiscount: (this.kindofDiscount === 'VND' && this.amountDiscount === 0) ? '%' : this.kindofDiscount,
       note: this.note,
       billItems: this.service
     }
@@ -208,34 +239,20 @@ export class BillModalComponent {
     if (this.amountInvoiced == 0) {
       this.shared.UpdateStatus(this.id, 'Chưa thanh toán').subscribe()
     } else {
-      if (this.amountResidual != 0) {
-        this.shared.UpdateStatus(this.id, 'Thanh toán 1 phần').subscribe()
-      } else {
+      if (this.amountResidual == 0 || this.amountResidualContinue == 0) {
         this.shared.UpdateStatus(this.id, 'Thanh toán hoàn tất').subscribe()
+      } else {
+        this.shared.UpdateStatus(this.id, 'Thanh toán 1 phần').subscribe()
       }
     }
 
     if (this.billID) {
-      this.shared.updateBill(this.billID, val).subscribe(
-        () => {
-          this.createNotificationSuccess('');
-          this.modalRef.destroy(val);
-        },
-        (res) => {
-          this.createNotificationError(res.error.message);
-        }
-      )
+      this.createPayment$(this.billID).subscribe()
     } else {
-      this.shared.createBill(val).subscribe(
-        () => {
-          this.createNotificationSuccess('');
-          this.modalRef.destroy(val);
-        },
-        (res) => {
-          this.createNotificationError(res.error.message);
-        }
-      )
-      console.log(val)
+      this.shared.createBill({...val, amountInvoiced:0}).pipe(
+        concatMap(()  => this.shared.getAllBillByAppointmentID(this.id)),
+        concatMap((data) => this.createPayment$(data.billID))
+      ).subscribe()
     }
   }
 
