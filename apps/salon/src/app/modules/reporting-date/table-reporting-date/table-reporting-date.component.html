@@ -1,0 +1,30 @@
+<tds-table #table [listData]="listOfDataDetail" tableLayout="fixed">
+  <thead>
+    <tr>
+      <th>Kỹ thuật viên</th>
+      <th>Khách hàng</th>
+      <th>Bác sĩ</th>
+      <th>Thanh toán</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let data of listOfDataDetail">
+      <tr>
+        <td>
+          {{ data.teachnicalStaff }}<br />
+          <span class="text-slate-500 text-sm">{{
+            data.dateBill | date : 'dd/MM/YYYY'
+            }}</span>
+        </td>
+        <td>
+          {{ data.customerName }}<br />
+          <span class="text-slate-500 text-sm">{{
+            data.customerPhone
+            }}</span>
+        </td>
+        <td>{{ data.doctor }}</td>
+        <td>{{ data.totalAmount }}</td>
+      </tr>
+    </ng-container>
+  </tbody>
+</tds-table>
