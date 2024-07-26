@@ -53,7 +53,7 @@ export class BillModalComponent {
   amountInvoiced = 0
   note = ''
   amountInvoicedContinue = 0
-  amountResidualContinue: any
+  amountResidualContinue = 0
   paymentMethod = 'Tiền mặt'
 
   constructor(
@@ -236,7 +236,7 @@ export class BillModalComponent {
       billItems: this.service
     }
 
-    if (this.amountInvoiced == 0) {
+    if (this.amountInvoiced == 0 && this.amountInvoicedContinue == 0) {
       this.shared.UpdateStatus(this.id, 'Chưa thanh toán').subscribe()
     } else {
       if (this.amountResidual == 0 || this.amountResidualContinue == 0) {
