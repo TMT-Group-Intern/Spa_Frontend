@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription, switchMap } from 'rxjs';
 import { TDSBreadCrumbModule } from 'tds-ui/breadcrumb';
 import { AuthService } from '../../../shared.service';
@@ -41,30 +41,42 @@ import { TDSTagModule } from 'tds-ui/tag';
 export class CustomerDetailComponent implements OnInit {
   routeSub: Subscription | undefined;
   id: any;
-  customer: any;
+  customer: any={};
   serviceHistory: any;
   listOfData: any;
-  billsOfCus: any
+  billsOfCus: any;
+  customerID: any;
 
   constructor(
     private route: ActivatedRoute,
     private shared: AuthService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.routeSub = this.route.params.pipe(
-      switchMap(params => this.shared.getCustomer(params['id']))
-    ).subscribe(
-      (data) => {
-      this.customer = data
-    });
-
-    this.shared.getCustomer(this.id).subscribe((data: any) => {
-      this.customer = data;
-    });
-    this.treatmentHistory();
-    this.billHistory()
+    const storedCustomerID = localStorage.getItem('customerID');
+    // this.routeSub = this.route.params.subscribe(
+    //   (params) => {
+    //     this.id = params['id'];
+    //     this.getCustomerDetails();
+    //     this.treatmentHistory();
+    //     this.billHistory();
+    //   }
+    // );
+        this.id=storedCustomerID;
+        this.getCustomerDetails();
+        this.treatmentHistory();
+        this.billHistory();
   }
+
+  getCustomerDetails() {
+    this.shared.getCustomer(this.id).subscribe(
+      (data:any) => {
+        this.customer = data.customerDTO;
+      }
+    );
+  }
+
   treatmentHistory() {
     if (this.id) {
       this.shared.getHistoryCustomer(this.id).subscribe((data: any) => {
@@ -74,6 +86,7 @@ export class CustomerDetailComponent implements OnInit {
       });
     }
   }
+  
   billHistory(){
     if(this.id){
       this.shared.getBillHistory(this.id).subscribe((data: any)=>{
