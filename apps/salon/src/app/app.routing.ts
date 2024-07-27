@@ -4,7 +4,6 @@ import { ServiceListComponent } from './modules/service-list/service-list.compon
 import { LoginComponent } from './login/login.component';
 import { LayoutComponent } from './layout/layout.component';
 import { CustomerListComponent } from './modules/customer-list/customer-list.component';
-import { RevenueStaticsModule } from './modules/revenue-statistics/revenue-statistics.module';
 import { HomeComponent } from './modules/home/home.component';
 import { UsersComponent } from './modules/users/users.component';
 import { CustomerDetailComponent } from './modules/customer-list/customer-detail/customer-detail.component';
@@ -13,7 +12,6 @@ import { TreatmentDetailComponent } from './modules/technical-staff/treatment-de
 import { DoctorComponent } from './modules/doctor/doctor.component';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { SchedulesComponent } from './modules/schedule/schedule.component';
-import { AuthorizeService } from './auth/authorize.service';
 import { BillComponent } from './modules/bill/bill.component';
 import { AppointmentListModule } from './modules/appointment-list/appointment-list.module';
 
@@ -48,7 +46,13 @@ const routes: Routes = [
         ],
       },
       { path: 'doctor', loadComponent: () => DoctorComponent },
-      { path: 'revenue-statistics', loadChildren: () => RevenueStaticsModule },
+      { path: 'report', loadChildren: () => import("./modules/revenue-statistics/revenue-statistics.module").then(m => m.RevenueStaticsModule)},
+      { path: 'report/report-day',
+        loadComponent:()=>
+          import(
+            './modules/reporting-date/reporting-date.component'
+          ).then((m)=>m.ReportingDateComponent),
+          },
       {path: 'users', loadComponent: ()=> UsersComponent},
       {path: 'bill/:id', loadComponent: ()=> BillComponent},
       {path: 'appoitmentList', loadChildren: ()=> AppointmentListModule},

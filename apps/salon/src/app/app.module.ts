@@ -38,12 +38,11 @@ registerLocaleData(localeVi);
     TDSDataTableModule,
     RouterModule,
     AppRoutingModule,
-    AppointmentListModule
-
+    AppointmentListModule,
   ],
   providers: [
     { provide: TDS_I18N, useValue: vi_VN },
-      AuthGuardService,
+    AuthGuardService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeService, multi: true },
   ],
   bootstrap: [AppComponent],

@@ -28,7 +28,7 @@ export class RevenueStatisticsDetailComponent implements OnChanges  {
       this.onChangeShowDetail(this.date as Date);
     }
   }
-  
+
   // Hiển thị chi tiết danh sách giao dịch thanh toán của 1 ngày
   onChangeShowDetail(date: Date): void {
     const fromDay = format(date, DATE_CONFIG.DATE_BASE_FROM);
