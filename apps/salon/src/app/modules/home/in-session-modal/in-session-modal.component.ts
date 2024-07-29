@@ -35,8 +35,8 @@ export class InSessionModalComponent implements OnInit {
   public spaTherapistOptions: any[] = []
   public statusOptions = [
     'Đã khám',
-    'Chờ làm',
-    'Đang làm',
+    'Chờ chăm sóc',
+    'Đang chăm sóc',
     'Hoàn thành',
     'Không sử dụng dịch vụ',
   ]
@@ -84,18 +84,18 @@ export class InSessionModalComponent implements OnInit {
         (data: any) => {
 
           this.form.patchValue({
-            name: data.Customer.FirstName + ' ' + data.Customer.LastName,
-            customerID: data.Customer.CustomerID,
-            status: data.Status,
+            name: data.customer.lastName + ' ' + data.customer.firstName,
+            customerID: data.customer.customerID,
+            status: data.status,
           });
-          this.assignments = data.Assignments
-          const foundSpaTherapist = this.assignments.find(item => item.Employees.JobTypeID === 3);
+          this.assignments = data.assignments
+          const foundSpaTherapist = this.assignments.find(item => item.employees.jobTypeID === 3);
           if (foundSpaTherapist) {
             this.form.patchValue({
-              spaTherapist: foundSpaTherapist.Employees.EmployeeID
+              spaTherapist: foundSpaTherapist.employees.employeeID
             });
           }
-          console.log(this.form.get('spaTherapist')?.value)
+          // console.log(this.form.get('spaTherapist')?.value)
         }
       )
     }

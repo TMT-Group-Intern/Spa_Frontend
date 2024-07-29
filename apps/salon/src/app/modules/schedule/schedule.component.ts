@@ -20,6 +20,7 @@ import { da } from 'date-fns/locale';
 import { TDSModalService } from 'tds-ui/modal';
 import { AppointmentModalComponent } from '../home/appointment-modal/appointment-modal.component';
 import { DATE_CONFIG } from '../../core/enums/date-format.enum';
+import { TDSSegmentedModule } from 'tds-ui/segmented';
 
 @Component({
   selector: 'frontend-schedule',
@@ -32,6 +33,7 @@ import { DATE_CONFIG } from '../../core/enums/date-format.enum';
     TDSCalendarModule,
     TDSTagModule,
     TDSButtonModule,
+    // TDSSegmentedModule,
   ],
   changeDetection: ChangeDetectionStrategy.Default,
 })
@@ -48,6 +50,8 @@ export class SchedulesComponent implements OnInit {
   dataAppointments: any;
   public userSession: any;
   storedUserSession = localStorage.getItem('userSession');
+  // options = ['Chờ chăm sóc', 'Thanh toán'];
+
   ngOnInit(): void {
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
@@ -58,18 +62,16 @@ export class SchedulesComponent implements OnInit {
       .pipe(
         filter((companyId) => !!companyId),
         concatMap((brachID) => {
-          console.log('id1: ', brachID);
           return this.shareApi.appointmentList(brachID as number);
         })
       )
       .subscribe((data: any) => {
         this.dataAppointments = data;
-        console.log(this.dataAppointments);
         this.lstData = this.dataAppointments.map((item: any) => ({
           start: new Date(item.AppointmentDate),
           end: new Date(new Date(item.AppointmentDate).getTime() + 60 * 60000),
           data: {
-            name: item.Customer.FirstName + ' ' + item.Customer.LastName,
+            name: item.Customer.firstName + ' ' + item.Customer.lastName,
             doctor: item.Doctor,
             status: {
               name: item.Status,
@@ -79,7 +81,6 @@ export class SchedulesComponent implements OnInit {
           },
         }));
       });
-    console.log(this.lstData);
   }
 
   // call get list of appoiment
@@ -87,15 +88,14 @@ export class SchedulesComponent implements OnInit {
     const branchID = this.userSession.user.branchID
     this.shareApi.appointmentList(branchID).subscribe((data: any) => {
       this.dataAppointments = data
-      console.log(this.dataAppointments);
       this.lstData = this.dataAppointments.map((item:any)=>({
-        start: new Date(item.AppointmentDate),
-        end: new Date(new Date(item.AppointmentDate).getTime() + 60 * 60000),
+        start: new Date(item.appointmentDate),
+        end: new Date(new Date(item.appointmentDate).getTime() + 60 * 60000),
         data:{
-          name:item.Customer.FirstName +' '+ item.Customer.LastName,
-          doctor:item.Doctor,
+          name:item.customer.firstName +' '+ item.customer.lastName,
+          doctor:item.soctor,
           status: {
-            name: item.Status,
+            name: item.status,
             "status": "info",
             "bg": "bg-error-100"
         }
@@ -112,19 +112,17 @@ export class SchedulesComponent implements OnInit {
       footer: null,
       size:'lg',
       componentParams:{
-        formatTime: format(new Date(date.date as Date),DATE_CONFIG.DATE_BASE )
+        // formatTime: format(new Date(date.date as Date),DATE_CONFIG.DATE_BASE )
       }
     })
     modal.afterClose.asObservable().subscribe(
       (e: any) => {
-        console.log()
         this.initAppointment();
       }
     )
   }
 
   clickEvent(e: MouseEvent, event: TDSSafeAny) {
-    console.log(2);
     e.stopImmediatePropagation();
     e.preventDefault();
     this.lstData = this.lstData.filter((f) => f != event);
@@ -151,7 +149,6 @@ export class SchedulesComponent implements OnInit {
   // }
 
   getMonthData(date: Date, event: TDSSafeAny): boolean {
-    console.log(4);
     return isSameDay(date, event.start);
   }
 }

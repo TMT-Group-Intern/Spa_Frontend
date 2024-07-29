@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSBreadCrumbModule } from 'tds-ui/breadcrumb';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -11,11 +11,12 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputNumberModule } from 'tds-ui/input-number';
-import { TDSModalModule } from 'tds-ui/modal';
+import { TDSModalModule, TDSModalService } from 'tds-ui/modal';
 import { TDSDropDownModule } from 'tds-ui/dropdown';
 import { TDSPipesModule } from 'tds-ui/core/pipes';
 import * as moment from 'moment';
 import { TDSNotificationService } from 'tds-ui/notification';
+import { PaymentModalComponent } from './payment-modal/payment-modal.component';
 
 @Component({
   selector: 'frontend-bill',
@@ -40,19 +41,13 @@ import { TDSNotificationService } from 'tds-ui/notification';
 })
 export class BillComponent implements OnInit {
 
+  private readonly tModalSvc = inject(TDSModalService);
   routeSub: Subscription | undefined
   BillID: any;
   inforCus: any;
   infoBill: any;
   service: any[] = [];
   total = 0;
-
-  discountTotal = 0
-
-  isPercentageActive = true
-  isPercentageInactive = false
-  isVNDActive = false
-  isVNDInactive = true
 
   constructor(
     private route: ActivatedRoute,
@@ -74,23 +69,26 @@ export class BillComponent implements OnInit {
 
         this.BillID = data.BillID
         this.infoBill = data
-        console.log(data.BillItems);
+        console.log(this.infoBill);
+        this.infoBill.KindofDiscount = this.infoBill.KindofDiscount != null ? this.infoBill.KindofDiscount : '%'
+        this.infoBill.AmountDiscount = this.infoBill.AmountDiscount != null ? this.infoBill.AmountDiscount : 0
 
         this.service = [...(data.BillItems as any[]).map(item => ({
           ServiceID: item.ServiceID,
           ServiceName: item.ServiceName,
           Quantity: item.Quantity != null ? item.Quantity : 1,
           UnitPrice: item.UnitPrice,
+          TempPrice: item.TotalPrice,
           TotalPrice: item.TotalPrice,
           AmountDiscount: item.AmountDiscount != null ? item.AmountDiscount : 0,
           KindofDiscount: item.KindofDiscount != null ? item.KindofDiscount : '%',
-          FinalPrice: item.TotalPrice,
+          // FinalPrice: item.TotalPrice,
           Note: item.Note,
         }))]
 
         // Calculate total of payment
         this.resetTotal()
-    });
+      });
   }
 
   // Format Date & Time
@@ -102,24 +100,26 @@ export class BillComponent implements OnInit {
   resetTotal() {
     this.total = 0
     for (const num of this.service) {
-      this.total += num.FinalPrice;
+      this.total += num.TotalPrice;
     }
     this.totalAmountAfterDiscount()
   }
 
   // Calculate the total after use discount
   totalAmountAfterDiscount() {
-    if (this.isPercentageActive) {
-      this.infoBill.TotalAmount = this.infoBill.AmountResidual = this.total * (100 - this.discountTotal) / 100;
+    if (this.infoBill.KindofDiscount == '%') {
+      this.infoBill.TotalAmount = this.total * (100 - this.infoBill.AmountDiscount) / 100;
+      this.infoBill.AmountResidual = this.infoBill.TotalAmount - this.infoBill.AmountInvoiced
     } else {
-      this.infoBill.TotalAmount = this.infoBill.AmountResidual = this.total - this.discountTotal;
+      this.infoBill.TotalAmount = this.total - this.infoBill.AmountDiscount;
+      this.infoBill.AmountResidual = this.infoBill.TotalAmount - this.infoBill.AmountInvoiced
     }
   }
 
   // Calculate Total Price
   totalPrice(id: number) {
     const service = this.service.find(ser => ser.ServiceID === id);
-    service.TotalPrice = service.UnitPrice * service.Quantity
+    service.TempPrice = service.UnitPrice * service.Quantity
     this.priceAfterDiscount(id)
   }
 
@@ -127,9 +127,9 @@ export class BillComponent implements OnInit {
   priceAfterDiscount(id: number) {
     const service = this.service.find(ser => ser.ServiceID === id);
     if (service.KindofDiscount == '%') {
-      service.FinalPrice = service.TotalPrice * (100 - service.AmountDiscount) / 100;
+      service.TotalPrice = service.TempPrice * (100 - service.AmountDiscount) / 100;
     } else {
-      service.FinalPrice = service.TotalPrice - service.AmountDiscount;
+      service.TotalPrice = service.TempPrice - service.AmountDiscount;
     }
     this.resetTotal()
   }
@@ -139,7 +139,7 @@ export class BillComponent implements OnInit {
     const service = this.service.find(ser => ser.ServiceID === id);
     service.KindofDiscount = '%'
     service.AmountDiscount = 0
-    service.FinalPrice = service.TotalPrice
+    service.TotalPrice = service.TempPrice
     this.resetTotal()
   }
 
@@ -148,27 +148,20 @@ export class BillComponent implements OnInit {
     const service = this.service.find(ser => ser.ServiceID === id);
     service.KindofDiscount = 'VND'
     service.AmountDiscount = 0
-    service.FinalPrice = service.TotalPrice
+    service.TotalPrice = service.TempPrice
     this.resetTotal()
   }
 
   activeDiscountPercentage() {
-    this.isPercentageActive = true
-    this.isPercentageInactive = false
-    this.isVNDActive = false
-    this.isVNDInactive = true
-    this.discountTotal = 0
-    this.infoBill.TotalAmount = this.total
-
+    this.infoBill.KindofDiscount = '%'
+    this.infoBill.AmountDiscount = 0
+    this.totalAmountAfterDiscount()
   }
 
   activeDiscountVND() {
-    this.isPercentageActive = false
-    this.isPercentageInactive = true
-    this.isVNDActive = true
-    this.isVNDInactive = false
-    this.discountTotal = 0
-    this.infoBill.TotalAmount = this.total
+    this.infoBill.KindofDiscount = 'VND'
+    this.infoBill.AmountDiscount = 0
+    this.totalAmountAfterDiscount()
   }
 
   //
@@ -183,10 +176,11 @@ export class BillComponent implements OnInit {
       totalAmount: this.infoBill.TotalAmount,
       amountInvoiced: this.infoBill.AmountInvoiced,
       amountResidual: this.infoBill.AmountResidual,
+      amountDiscount: this.infoBill.AmountDiscount,
+      kindofDiscount: this.infoBill.KindofDiscount,
+      note: this.infoBill.Note,
       billItems: this.service
     }
-
-    console.log(this.service)
 
     this.shared.updateBill(this.BillID, val).subscribe(
       () => {
@@ -198,18 +192,38 @@ export class BillComponent implements OnInit {
     )
   }
 
-  //
-  submit() {
-    this.shared.createPayment(this.BillID, '').subscribe(
-      () => {
-        this.createNotificationSuccess('');
-        // this.modalRef.destroy(this.id);
+  onEditPayment() {
+    const modal = this.tModalSvc.create({
+      title: 'Thanh Toán',
+      content: PaymentModalComponent,
+      footer: null,
+      size: 'lg',
+      style: { outerHeight: 500 },
+      componentParams: {
+        billID: this.BillID,
+        infoBill: this.infoBill
       },
-      (res) => {
-        this.createNotificationError(res.error.message);
+    });
+    modal.afterClose.asObservable().subscribe((res) => {
+      if (res) {
+        this.ngOnInit();
       }
-    )
+    });
   }
+
+
+  // //
+  // submit() {
+  //   this.shared.createPayment(this.BillID, '').subscribe(
+  //     () => {
+  //       this.createNotificationSuccess('');
+  //       // this.modalRef.destroy(this.id);
+  //     },
+  //     (res) => {
+  //       this.createNotificationError(res.error.message);
+  //     }
+  //   )
+  // }
 
   // Success Notification
   createNotificationSuccess(content: any): void {

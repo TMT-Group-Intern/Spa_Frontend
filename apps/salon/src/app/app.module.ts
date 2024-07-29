@@ -12,10 +12,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSButtonMenuModule } from 'tds-ui/button-menu';
 import { LoginComponent } from './login/login.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TDSDataTableModule } from 'tds-ui/data-table';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
+import { AuthGuardService } from './auth/auth-guard.service';
+import { AuthorizeService } from './auth/authorize.service';
+import { AppointmentListModule } from './modules/appointment-list/appointment-list.module';
 
 registerLocaleData(localeVi);
 
@@ -35,8 +38,13 @@ registerLocaleData(localeVi);
     TDSDataTableModule,
     RouterModule,
     AppRoutingModule,
+    AppointmentListModule,
   ],
-  providers: [{ provide: TDS_I18N, useValue: vi_VN }],
+  providers: [
+    { provide: TDS_I18N, useValue: vi_VN },
+    AuthGuardService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthorizeService, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

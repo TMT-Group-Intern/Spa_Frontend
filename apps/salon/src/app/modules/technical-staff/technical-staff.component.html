@@ -17,21 +17,21 @@
           *ngFor="let data of listSpaServiceQueue"
           (click)="renderCustomerDetail(data)"
         >
-          <td>{{ data.Customer.LastName + ' ' + data.Customer.FirstName }}</td>
+          <td>{{ data.customer.lastName + ' ' + data.customer.firstName }}</td>
           <td>
             <select
               name="status"
               class=""
-              (change)="onStatusChange($event, data.AppointmentID)"
+              (change)="onStatusChange($event, data.appointmentID)"
             >
-              <option [selected]="data.Status === 'Chờ làm'" value="Chờ làm">
-                Chờ làm
+              <option [selected]="data.status === 'Chờ chăm sóc'" value="Chờ chăm sóc">
+                Chờ chăm sóc
               </option>
-              <option [selected]="data.Status === 'Đang làm'" value="Đang làm">
-                Đang làm
+              <option [selected]="data.status === 'Đang chăm sóc'" value="Đang chăm sóc">
+                Đang chăm sóc
               </option>
               <option
-                [selected]="data.Status === 'Hoàn thành'"
+                [selected]="data.status === 'Hoàn thành'"
                 value="Hoàn thành"
               >
                 Hoàn thành
@@ -62,15 +62,15 @@
         <div class="font-medium mb-2">
           Họ và Tên:
           <span class="font-normal">{{
-            appointmentAllInfo.Customer.FirstName +
+            appointmentAllInfo.customer.lastName +
               ' ' +
-              appointmentAllInfo.Customer.LastName
+              appointmentAllInfo.customer.firstName
           }}</span>
         </div>
         <div class="font-medium mb-4">
           Ngày giờ vào:
           <span class="font-normal">{{
-            appointmentAllInfo.AppointmentDate | date : 'dd/MM/yyyy HH:mm'
+            appointmentAllInfo.appointmentDate | date : 'dd/MM/yyyy HH:mm'
           }}</span>
         </div>
         <div class="font-medium mb-4">
@@ -79,20 +79,20 @@
             class="font-normal"
             *ngFor="let service of customerDetail; let first = first"
           >
-            {{ (first ? '' : ', ') + service.ServiceName }}
+            {{ (first ? '' : ', ') + service.serviceName }}
           </span>
         </div>
 
         <div class="font-medium mb-4">
           Bác sĩ khám:
           <span class="font-normal">
-            {{ appointmentAllInfo.Doctor }}
+            {{ appointmentAllInfo.doctor }}
           </span>
         </div>
         <div class="font-medium mb-4">
           Nhân viên phụ trách:
           <span class="font-normal">
-            {{ appointmentAllInfo.TeachnicalStaff }}
+            {{ appointmentAllInfo.teachnicalStaff }}
           </span>
         </div>
 
@@ -109,7 +109,7 @@
               />
               <button
                 class="rounded-full bg-green-300 py-1 px-2"
-                (click)="uploadImage(appointmentAllInfo.AppointmentID)"
+                (click)="uploadImage(appointmentAllInfo.appointmentID)"
               >
                 Tải ảnh
               </button>
@@ -156,13 +156,13 @@
       <tbody>
         <tr *ngFor="let service of customerDetail">
           <td class="border border-gray-400 px-4 py-2 text-center">
-            {{ service.ServiceName }}
+            {{ service.serviceName }}
           </td>
           <td class="border border-gray-400 px-4 py-2 text-center">
             <input
               type="checkbox"
-              [checked]="checkboxStatess[service.ServiceID]"
-              (change)="toggleCheckbox(service.ServiceID)"
+              [checked]="checkboxStatess[service.serviceID]"
+              (change)="toggleCheckbox(service.serviceID)"
               class="form-checkbox h-5 w-5 text-green-500"
             />
           </td>
@@ -187,8 +187,7 @@
   </div>
   <ng-template
     #elseBlock
-    class="col-span-9 border p-4 rounded-10 bg-white ml-4"
-  >
+    class="col-span-9 border p-4 rounded-10 bg-white ml-4">
     <div class="col-span-9 w-full flex items-center justify-center">
       <p class="text-2xl">Vui lòng chọn khách hàng để thực hiện dịch vụ</p>
     </div>

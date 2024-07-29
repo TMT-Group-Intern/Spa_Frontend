@@ -51,15 +51,14 @@ export class AppointmentModalComponent implements OnInit {
   searchPhone$ = new BehaviorSubject<string>('')
   public doctorOptions: any[] = [];
   public statusOptions = [
-    'Hẹn',
+    'Đã hẹn',
     'Hủy hẹn',
   ]
   private readonly tModalSvc = inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
   @Input() id?: number;
-  @Input() formatTime?: string;
+  @Input() formatTime?: Date;
 
-  createAppointmentForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
     name: [''],
@@ -68,7 +67,7 @@ export class AppointmentModalComponent implements OnInit {
     assignments: [],
     doctor: [],
     appointmentDate: [new Date()] || null,
-    status: ['Hẹn'],
+    status: ['Đã hẹn'],
     customer: [null]
   });
   // isExist = false;
@@ -79,7 +78,6 @@ export class AppointmentModalComponent implements OnInit {
   today = startOfToday();
   empID: any[] = [];
   dataCustomer: any[] = [];
-  assign: any[] = [];
   userSession: any;
 
   constructor(
@@ -100,9 +98,6 @@ export class AppointmentModalComponent implements OnInit {
     this.isHide1 = false;
     this.isHide2 = true;
 
-    // this.form.patchValue({
-    //   branch:this.userSession.user.branch
-    // })
     this.shared.getBranchName(this.userSession.user.branchID).subscribe(
       (res: any) => {
         this.form.patchValue({
@@ -111,6 +106,12 @@ export class AppointmentModalComponent implements OnInit {
       }
     )
 
+    if (this.formatTime && this.formatTime >= new Date()) {
+      this.form.patchValue({
+        appointmentDate: this.formatTime
+      });
+    }
+
     if (this.id) {
       this.form.get('phone')?.disable()
       this.isHide1 = true;
@@ -118,33 +119,25 @@ export class AppointmentModalComponent implements OnInit {
       this.shared.getAppointment(this.id).subscribe(
         (data: any) => {
 
-          this.shared.getBranchName(data.BranchID).subscribe(
+          this.shared.getBranchName(data.branchID).subscribe(
             (res: any) => {
               this.form.patchValue({
                 branch: res.getBranchNameByID
               });
             }
           )
-          let timeNew: any = ''
-          if (this.formatTime) {
-            timeNew = this.formatTime
-          } else {
-            timeNew = data.AppointmentDate
-          }
-          console.log(timeNew);
           this.form.patchValue({
-            phone: data.Customer.Phone,
-            name: data.Customer.LastName + ' ' + data.Customer.FirstName,
-            appointmentDate: data.AppointmentDate,
-            customerID: data.Customer.CustomerID,
-            status: data.Status,
+            phone: data.customer.phone,
+            name: data.customer.lastName + ' ' + data.customer.firstName,
+            appointmentDate: data.appointmentDate,
+            customerID: data.customer.customerID,
+            status: data.status,
           });
 
-          this.assign = data.Assignments
-          const foundDoctor = this.assign.find(item => item.Employees.JobTypeID === 2);
+          const foundDoctor = (data.assignments as any[]).find(item => item.employees.jobTypeID === 2);
           if (foundDoctor) {
             this.form.patchValue({
-              doctor: foundDoctor.Employees.EmployeeID
+              doctor: foundDoctor.employees.employeeID
             });
           }
 

@@ -163,7 +163,7 @@ export class PaymentModalComponent implements OnInit {
   }
 
   submit() {
-    this.shared.createPayment(this.id, '').subscribe(
+    this.shared.createPayment('').subscribe(
       () => {
         this.createNotificationSuccess('');
         this.modalRef.destroy(this.id);

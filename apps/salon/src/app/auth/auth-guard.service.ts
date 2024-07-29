@@ -1,3 +1,4 @@
+import { HttpInterceptor } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   CanActivate,
@@ -5,24 +6,20 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
 } from '@angular/router';
-//import { AuthService } from 'apps/salon/src/app/login/login.component'; // Giả sử bạn có một service xử lý việc đăng nhập
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuardService implements CanActivate {
-  constructor(private router: Router) {}
+  constructor(private router: Router,
+  ) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean | Promise<boolean> {
     // Kiểm tra xem có token trong localStorage hay không
-    if (
-      //localStorage.getItem('userToken')
-      getCookie('userCookie')
-    ) {
-      //console.log(getCookie('userCookie'))
+    if (getCookie('userToken')) {
       return true;
     } else {
       // Chuyển hướng người dùng đến trang đăng nhập

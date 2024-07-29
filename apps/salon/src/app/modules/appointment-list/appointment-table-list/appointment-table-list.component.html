@@ -1,0 +1,73 @@
+<div class="rounded-10">
+  <tds-table #table [listData]="listOfData" tableLayout="fixed">
+    <thead>
+      <tr>
+        <th>Ngày</th>
+        <th>Họ tên</th>
+        <th>Ngày sinh</th>
+        <th>Số điện thoại</th>
+        <th>Bác sĩ</th>
+        <th>Kỹ thuật viên</th>
+        <th>Trạng thái</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let data of table.data">
+        <tr class="text-sm">
+          <td>{{ data.appointmentDate | date : 'dd/MM/YYYY' }}, {{ data.appointmentDate | date : 'HH:mm' }} </td>
+          <td>{{ data.customer.firstName +" "+data.customer.lastName}}</td>
+          <td>{{ !!data.customer.dateOfBirth ? (data.customer.dateOfBirth| date:'dd/MM/YYYY'):'---'}}</td>
+          <td>{{ data.customer.phone }}</td>
+          <td>{{  !!data.doctor ? data.doctor:'---'}}</td>
+          <td>{{  !!data.teachnicalStaff ? data.teachnicalStaff:'---'}}</td>
+          <td>
+            <div class="pl-4">
+              <button tds-button [disabled]="data.status ==='Đã hẹn'?false:true" color="secondary" tds-dropdown trigger="click" [tdsDropdownMenu]="menu">
+                <span class="flex items-center">
+                  <tds-tag status='primary' type="outline">{{ data.status }}
+                  </tds-tag>
+                  <i class="tdsi-arrow-down-fill text-lg leading-none ml-2"></i>
+                </span>
+              </button>
+              <tds-dropdown-menu tds-dropdown #menu="tdsDropdownMenu">
+                <div class="w-full">
+                  <div (click)="updateAppointmentStatus(data.appointmentID, 'Đã hẹn')" tds-dropdown-item>
+                    <a> Đã hẹn </a>
+                  </div>
+                  <!-- <div (click)="updateAppointmentStatus(data.appointmentID, 'Chờ khám')" tds-dropdown-item>
+                    <a> Chờ khám </a>
+                  </div>
+                  <div (click)="updateAppointmentStatus(data.appointmentID, 'Không sử dụng dịch vụ')" tds-dropdown-item>
+                    <a> Không sử dụng dịch vụ </a>
+                  </div>
+                  <div (click)="updateAppointmentStatus(data.appointmentID, ' Chờ chăm sóc')" tds-dropdown-item>
+                    <a> Chờ chăm sóc </a>
+                  </div> -->
+                  <div (click)="updateAppointmentStatus(data.appointmentID, 'Hủy hẹn')" tds-dropdown-item>
+                    <a> Hủy hẹn </a>
+                  </div>
+                </div>
+              </tds-dropdown-menu>
+            </div>
+          </td>
+          <td>
+            <button tds-button-flat-icon tds-tooltip="Tiếp nhận" color="custom" class="text-slate-500 hover:text-red-500"
+            (click)="callModalEditAppointment(data.appointmentID,'Chờ khám', data.appointmentDate)"
+            [disabled]="data.doctor === undefined || data.status ==='Đã hẹn'? false: true">
+              <i class="tdsi-receive-fill"></i>
+            </button>
+            <button tds-button-flat-icon tds-tooltip="Chọn kỹ thuật viên" color="custom" class="text-slate-500 hover:text-red-500"
+            (click)="callModalUpdate(data.appointmentID)"
+            [disabled]="data.teachnicalStaff === undefined || data.status ==='Đã khám'? false: true">
+              <i class="tdsi-insurance-fill"></i>
+            </button>
+            <button tds-button-flat-icon tds-tooltip="Chi tiết hóa đơn" color="custom" class="text-slate-500 hover:text-red-500">
+              <i class="tdsi-treatment-slip-fill"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </tds-table>
+</div>

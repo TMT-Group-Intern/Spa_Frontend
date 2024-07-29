@@ -66,7 +66,7 @@ export class DoctorComponent implements OnInit {
   dataSvc: any = [];
   CustomerID: number | undefined;
   userSession: any;
-  companyId:number|null = null;
+  companyId: number | null = null;
 
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
@@ -93,16 +93,16 @@ export class DoctorComponent implements OnInit {
     this.initAppointmentList();
 
     this.companySvc._companyIdCur$.pipe(
-      filter(companyId=> !!companyId),
-      concatMap((branchID)=> {
-      return  this.sharedService.appointmentList(branchID as number)
+      filter(companyId => !!companyId),
+      concatMap((branchID) => {
+        return this.sharedService.appointmentList(branchID as number)
       })
     ).subscribe((data: any) => {
       this.appointmentList = data;
       this.reception = this.appointmentList.filter(
         (appointment: any) =>
-          appointment.Status === 'Chờ khám' ||
-          appointment.Status === 'Đang khám'
+          appointment.status === 'Chờ khám' ||
+          appointment.status === 'Đang khám'
       );
     });
   }
@@ -119,13 +119,15 @@ export class DoctorComponent implements OnInit {
 
   // Display Appointment List
   initAppointmentList() {
-    const branchID = this.userSession.user.branchID 
+    const branchID = this.userSession.user.branchID
     this.sharedService.appointmentList(branchID).subscribe((data: any) => {
       this.appointmentList = data;
       this.reception = this.appointmentList.filter(
         (appointment: any) =>
-          appointment.Status === 'Chờ khám' ||
-          appointment.Status === 'Đang khám'
+          (appointment.status === 'Chờ khám' ||
+          appointment.status === 'Đang khám')
+          && (appointment.employeeCode===this.userSession.user.userCode
+            || this.userSession.user.role==='Admin')
       );
     });
   }
@@ -134,17 +136,22 @@ export class DoctorComponent implements OnInit {
     this.sharedService.getAppointment(id).subscribe((data: any) => {
       this.dataAppointmentbyid = data;
       this.active = true;
-      this.CustomerID = data.CustomerID;
+      this.CustomerID = data.customerID;
       this.form.patchValue({
-        phone: data.Customer.Phone,
-        name: `${data.Customer.FirstName} ${data.Customer.LastName}`,
-        appointmentDate: this.formatDate(data.AppointmentDate, 'HH:mm'),
-        customerID: data.Customer.CustomerID,
-        status: data.Status,
-        service: data.ChooseServices.map((item: any) => item.ServiceID),
-        doctor: `${data.Assignments[0].Employees.FirstName} ${data.Assignments[0].Employees.LastName}`,
-        note: data.Notes,
+        phone: data.customer.phone,
+        name: `${data.customer.firstName} ${data.customer.lastName}`,
+        appointmentDate: this.formatDate(data.appointmentDate, 'HH:mm'),
+        customerID: data.customer.customerID,
+        status: data.status,
+        service: data.chooseServices.map((item: any) => item.serviceID),
+        note: data.notes,
       });
+      const foundDoctor = (data.assignments as any[]).find(item => item.employees.jobTypeID === 2);
+      if (foundDoctor) {
+        this.form.patchValue({
+          doctor: `${foundDoctor.employees.lastName} ${foundDoctor.employees.firstName}`
+        });
+      }
     });
     this.initService();
   }

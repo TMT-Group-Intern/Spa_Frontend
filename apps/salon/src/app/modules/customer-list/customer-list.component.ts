@@ -13,7 +13,7 @@ import { TDSButtonModule } from 'tds-ui/button';
 import { TDSPaginationModule } from 'tds-ui/pagination';
 import { TDSBreadCrumbModule } from 'tds-ui/breadcrumb';
 import { CustomerDetailComponent } from './customer-detail/customer-detail.component';
-import { Router, RouterLink } from '@angular/router';
+import { NavigationExtras, Router, RouterLink } from '@angular/router';
 
 
 
@@ -49,7 +49,8 @@ export class CustomerListComponent implements OnInit {
   constructor(
     private auth : AuthService,
     private router: Router,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.renderPageCustomers();
@@ -130,12 +131,11 @@ export class CustomerListComponent implements OnInit {
     ).subscribe()
   }
 
-  // Get to Customer Detail Page
+  //Get to Customer Detail Page
   customerDetail(event: any) {
     const customerID = event.dataRow.dataRow.customerID
-    this.router.navigate(['customer-list/customer-detail/' + customerID]);
+    localStorage.setItem('customerID', JSON.stringify(customerID));
+    this.router.navigate(['customer-list/customer-detail']);
   }
-
-
 }
 

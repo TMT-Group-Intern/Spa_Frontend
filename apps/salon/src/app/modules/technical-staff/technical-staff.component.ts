@@ -11,7 +11,7 @@ import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSSelectModule } from 'tds-ui/select';
 import { CompanyService } from '../../core/services/company.service';
-import { concatMap, filter } from 'rxjs';
+import { concatMap, filter, tap } from 'rxjs';
 
 @Component({
   selector: 'frontend-technical-staff',
@@ -23,6 +23,7 @@ import { concatMap, filter } from 'rxjs';
 export class TechnicalStaffComponent {
   private readonly modalSvc = inject(TDSModalService)
   listSpaServiceQueue: any[] = [];
+  reception: any[] = [];
   listWait: any[] = [];
   customerDetail?: any = [] || null;
   appointmentAllInfo: any | null = null;
@@ -33,12 +34,6 @@ export class TechnicalStaffComponent {
   urls = [];
   userSession: any
   checkActive?: boolean = false;
-  companyId: number | null = null;
-  //count:number = 0;
-  public statusOptions = [
-    'Hẹn',
-    'Hủy hẹn',
-  ]
   status!: FormControl;
   currentBranch: number | null = null;
 
@@ -63,22 +58,15 @@ export class TechnicalStaffComponent {
       this.currentBranch = this.userSession.user.branchID;
       this.renderCustomerInQueue();
     }
+    const branchID = this.userSession.user.branchID
+    this.renderCustomerInQueue();
+    //this.initAppointmentList()
 
     this.companySvc._companyIdCur$.pipe(
       filter(companyId => !!companyId),
-      concatMap((branchID) => {
-        this.currentBranch = branchID
-        return this.auth.getCustomerInQueueForTechnicalStaff(branchID as number, 'Đang làm')
-      })
-    ).subscribe((x: any[]) => {
-      this.listSpaServiceQueue = x;
-      console.log(this.listSpaServiceQueue)
-      this.auth
-        .getCustomerInQueueForTechnicalStaff(this.currentBranch as number, 'Chờ làm')
-        .subscribe((x: any[]) => {
-          this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...x];
-          console.log(this.listSpaServiceQueue)
-        });
+      tap((company) => company)
+    ).subscribe((id) => {
+      this.renderCustomerInQueueTemp(id)
     });
   }
 
@@ -88,18 +76,48 @@ export class TechnicalStaffComponent {
     private companySvc: CompanyService
   ) { }
 
+  // initAppointmentList() {
+  //   const branchID = this.userSession.user.branchID
+  //   const userCode=this.userSession.user.userCode
+  //   this.auth.appointmentList(branchID).subscribe((data: any) => {
+  //     this.listSpaServiceQueue = data;
+  //     this.reception = this.listSpaServiceQueue.filter(
+  //       (appointment: any) =>
+  //         (appointment.status === 'Đang chăm sóc' ||
+  //         appointment.status === 'Chờ chăm sóc')
+  //         && (appointment.spaTherapist===userCode
+  //           || this.userSession.user.role==='Admin')
+  //     );
+  //   });
+  // }
+
   renderCustomerInQueue() {
     this.auth
-      .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Đang làm')
+      .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Đang chăm sóc')
       .subscribe((x: any[]) => {
         this.listSpaServiceQueue = x;
         this.auth
-          .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ làm')
-          .subscribe((x: any[]) => {
-            this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...x];
+          .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ chăm sóc')
+          .subscribe((y: any[]) => {
+            this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...y];
+            this.reception = this.listSpaServiceQueue.filter(
+              (appointment: any) => (appointment.spaTherapist === this.userSession.user.userCode
+                || this.userSession.user.role === 'Admin'));
           });
       });
-    console.log(this.listSpaServiceQueue);
+  }
+
+  renderCustomerInQueueTemp(id: number | null) {
+    this.auth
+      .getCustomerInQueueForTechnicalStaff(id as number, 'Đang chăm sóc')
+      .subscribe((x: any[]) => {
+        this.listSpaServiceQueue = x;
+        this.auth
+          .getCustomerInQueueForTechnicalStaff(id as number, 'Chờ chăm sóc')
+          .subscribe((y: any[]) => {
+            this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...y];
+          });
+      });
   }
 
   renderCustomerDetail(data: any) {
@@ -110,12 +128,12 @@ export class TechnicalStaffComponent {
         this.loadData()
         this.appointmentAllInfo = data;
         console.log(this.appointmentAllInfo)
-        this.customerDetail = data.ChooseServices.map(
+        this.customerDetail = data.chooseServices.map(
           (chooseService: any) => chooseService.service
         );
-        console.log(this.listSpaServiceQueue);
-        console.log(this.dataTemp);
-        const appointmentData = this.dataTemp.find((item: any) => item.data.AppointmentID === this.appointmentAllInfo.AppointmentID);
+        const appointmentData = this.dataTemp
+          .find((item: any) => item.data.appointmentID === this.appointmentAllInfo.appointmentID);
+        console.log(appointmentData)
         if (appointmentData) {
           Object.keys(appointmentData.checkBox).forEach(key => {
             const numKey = +key;
@@ -125,11 +143,10 @@ export class TechnicalStaffComponent {
           });
         }
       },
-      error: (err: any) => console.error('Observer got an error: ' + err),
-      complete: () => console.log('Observer got a complete notification'),
+      // error: (err: any) => console.error('Observer got an error: ' + err),
+      // complete: () => console.log('Observer got a complete notification'),
     };
-
-    this.auth.getAppointment(data.AppointmentID).subscribe(observer);
+    this.auth.getAppointment(data.appointmentID).subscribe(observer);
   }
 
   uploadImage(id: number) {
@@ -183,7 +200,7 @@ export class TechnicalStaffComponent {
       footer: null,
       size: 'lg',
       componentParams: {
-        customerId: this.appointmentAllInfo.CustomerID
+        customerId: this.appointmentAllInfo.customerID
       }
     })
   }
@@ -205,7 +222,7 @@ export class TechnicalStaffComponent {
 
   onSave(data: any, checkBox: any) {
     const appointmentDetailList = JSON.parse(localStorage.getItem('appointmentDetail') || '[]');
-    const existingIndex = appointmentDetailList.findIndex((item: any) => item.data.AppointmentID === data.AppointmentID);
+    const existingIndex = appointmentDetailList.findIndex((item: any) => item.data.appointmentID === data.appointmentID);
     const checkboxTemp: { [key: number]: boolean } = {};
     if (existingIndex !== -1) {
       const existingCheckBox = appointmentDetailList[existingIndex].checkBox;
@@ -259,7 +276,7 @@ export class TechnicalStaffComponent {
 
   onDelete(appointmentID: number) {
     const appointmentDetailList = JSON.parse(localStorage.getItem('appointmentDetail') || '[]');
-    const updatedList = appointmentDetailList.filter((item: any) => item.data.AppointmentID !== appointmentID);
+    const updatedList = appointmentDetailList.filter((item: any) => item.data.appointmentID !== appointmentID);
     localStorage.setItem('appointmentDetail', JSON.stringify(updatedList));
     this.loadData();
   }

@@ -1,16 +1,97 @@
-<div class="bg-gray-200 h-full">
+<div class="bg-gray-200 h-screen">
   <tds-breadcrumb class="bg-white p-4 rounded-lg mb-2">
     <tds-breadcrumb-item><a [routerLink]="['/customer-list']">Khách Hàng</a></tds-breadcrumb-item>
-    <tds-breadcrumb-item>{{customer.customerDTO.lastName}} {{customer.customerDTO.firstName}}</tds-breadcrumb-item>
+    <tds-breadcrumb-item>{{customer.lastName}} {{customer.firstName}}</tds-breadcrumb-item>
   </tds-breadcrumb>
 
-  <div class="bg-white p-4 rounded-lg" style="min-height: 589px;">
-    <p class="text-4xl">{{customer.customerDTO.lastName}} {{customer.customerDTO.firstName}}</p>
-    <div class="p-4">
-      <p><i class="tdsi-call-fill text-success-400"></i> {{customer.customerDTO.phone}}</p>
-      <p><i class="tdsi-birthday-fill text-success-400"></i> {{customer.customerDTO.dateOfBirth | date:'dd/MM/YYYY'}}</p>
-      <p *ngIf="customer.customerDTO.gender === 'Nam'"><i class="tdsi-male-fill text-success-400"></i> Nam</p>
-      <p *ngIf="customer.customerDTO.gender === 'Nữ'"><i class="tdsi-female-fill text-success-400"></i> Nữ</p>
+  <div class="flex flex-row">
+    <div class="flex-1 mr-2">
+      <div class="bg-white p-4 mb-2 rounded-lg" style="max-height: 189px;">
+        <p class="text-4xl">{{customer.lastName}} {{customer.firstName}}</p>
+        <div class="p-4">
+          <p><i class="tdsi-call-fill text-success-400"></i> {{customer.phone}}</p>
+          <p><i class="tdsi-birthday-fill text-success-400"></i> {{customer.dateOfBirth |
+            date:'dd/MM/YYYY'}}</p>
+          <p *ngIf="customer.gender === 'Nam'"><i class="tdsi-male-fill text-success-400"></i> Nam</p>
+          <p *ngIf="customer.gender === 'Nữ'"><i class="tdsi-female-fill text-success-400"></i> Nữ</p>
+        </div>
+      </div>
+
+      <div class="bg-white w-full rounded-lg" style="min-height: 500px;">
+        <tds-tabset>
+          <tds-tab title="Lịch sử điều trị">
+            <div *ngIf="serviceHistory; else noHistory" class="overflow-y-auto max-h-[400px]">
+              <div id="id" *ngFor="let history of serviceHistory" class="flex border rounded-10 m-2">
+                <div class="flex items-center w-[600px] overflow-y-auto">
+                  <div class="flex m-4 rounded-10" *ngIf="history.photoCustomer.length > 0; else noImage">
+                    <img *ngFor="let image of history.photoCustomer" tds-image width="150px" height="150px"
+                      [tdsSrc]="'https://localhost:44305/photos/' + image" alt="Image" />
+                  </div>
+                  <ng-template #noImage>
+                    <span class="flex items-center justify-center h-full w-full text-gray-800">
+                      <tds-empty></tds-empty>
+                    </span>
+                  </ng-template>
+                </div>
+                <div class="w-[200px] flex-col float-right m-4">
+                  <tds-label>Ngày tạo:
+                    <div class="text-primary-1">
+                      {{ history.date | date : 'dd/MM/YYYY hh:mm' }}
+                    </div>
+                  </tds-label>
+                  <tds-label>Dịch vụ:
+                    <div *ngIf="history.serviceUsed.length > 0; else noservice">
+                      <tds-success *ngFor="let service of history.serviceUsed">{{
+                        service
+                        }}</tds-success>
+                    </div>
+                  </tds-label>
+                  <ng-template #noservice>
+                    <span>Chưa có</span>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <ng-template #noHistory class="flex justify-center items-center" style="height: 400px">
+              <tds-empty></tds-empty>
+            </ng-template>
+          </tds-tab>
+          <tds-tab title="Hóa đơn">
+            <div class="rounded-10" >
+              <tds-table #table [listData]="listOfData" tableLayout="fixed">
+                <thead>
+                  <tr>
+                    <th>Ngày</th>
+                    <th>Kỹ thuật viên</th>
+                    <th>Bác sĩ</th>
+                    <th>Thành tiền</th>
+                    <th>Thanh toán</th>
+                    <th>Còn lại</th>
+                    <th>Trạng thái</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let data of table.data">
+                    <tr class="text-sm">
+                      <td>{{ data.date | date : 'dd/MM/YYYY' }}</td>
+                      <td>{{ data.technicalStaff }}</td>
+                      <td>{{ data.doctor }}</td>
+                      <td>{{ data.totalAmount }}</td>
+                      <td>{{ data.amountInvoiced }}</td>
+                      <td>{{ data.amountResidual }}</td>
+                      <td><tds-tag status='primary' type="outline">{{ data.statusBill }}</tds-tag></td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </tds-table>
+            </div>
+          </tds-tab>
+        </tds-tabset>
+
+      </div>
+    </div>
+    <div class="flex-1 bg-white p-4 rounded-lg max-w-96">
+
     </div>
   </div>
 </div>
