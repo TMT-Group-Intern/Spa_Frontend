@@ -61,7 +61,8 @@
               <tds-table #table [listData]="listOfData" tableLayout="fixed">
                 <thead>
                   <tr>
-                    <th>Ngày</th>
+                    <th width="60px"></th>
+                    <th>Ngày tạo hóa đơn</th>
                     <th>Kỹ thuật viên</th>
                     <th>Bác sĩ</th>
                     <th>Thành tiền</th>
@@ -74,6 +75,10 @@
                 <tbody>
                   <ng-container *ngFor="let data of table.data">
                     <tr class="text-sm">
+                      <td
+                      [expand]="expandSet.has(data.billId)"
+                      (expandChange)="onExpandChange(data.billId, $event)"
+                    ></td>
                       <td>{{ data.date | date : 'dd/MM/YYYY' }}</td>
                       <td>{{ data.technicalStaff }}</td>
                       <td>{{ data.doctor }}</td>
@@ -94,6 +99,9 @@
                         </button>
                         </div>
                       </td>
+                    </tr>
+                    <tr class="w-full" [expand]="expandSet.has(data.billId)">
+                      <frontend-customer-detail-paymenthistory-table [billId]="data.billId" ></frontend-customer-detail-paymenthistory-table>
                     </tr>
                   </ng-container>
                 </tbody>
