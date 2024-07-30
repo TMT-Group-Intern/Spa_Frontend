@@ -1,5 +1,11 @@
-<div class="rounded-10">
-  <tds-table #table [listData]="listOfData" tableLayout="fixed">
+<div class="flex flex-col rounded-10 h-[540px] ">
+  <tds-table showSizeChanger [pageSize]="pageSize"
+  (pageIndexChange)="changeNumberPage($event)"
+  (pageSizeChange)="changeSizePage($event)"
+  [total]="totalItemsCustomers"
+  [showTotal]="rangeTemplate"
+  [frontPagination]="false"
+  [pageIndex]="pageNumber" (clickRefresh)="onRefresh($event)" [scroll]="{y:'auto'}" #table [listData]="listOfData" tableLayout="fixed">
     <thead>
       <tr>
         <th>Ngày</th>
@@ -12,7 +18,7 @@
         <th>Thao tác</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody >
       <ng-container *ngFor="let data of table.data">
         <tr class="text-sm">
           <td>{{ data.appointmentDate | date : 'dd/MM/YYYY' }}, {{ data.appointmentDate | date : 'HH:mm' }} </td>
@@ -35,15 +41,6 @@
                   <div (click)="updateAppointmentStatus(data.appointmentID, 'Đã hẹn')" tds-dropdown-item>
                     <a> Đã hẹn </a>
                   </div>
-                  <!-- <div (click)="updateAppointmentStatus(data.appointmentID, 'Chờ khám')" tds-dropdown-item>
-                    <a> Chờ khám </a>
-                  </div>
-                  <div (click)="updateAppointmentStatus(data.appointmentID, 'Không sử dụng dịch vụ')" tds-dropdown-item>
-                    <a> Không sử dụng dịch vụ </a>
-                  </div>
-                  <div (click)="updateAppointmentStatus(data.appointmentID, ' Chờ chăm sóc')" tds-dropdown-item>
-                    <a> Chờ chăm sóc </a>
-                  </div> -->
                   <div (click)="updateAppointmentStatus(data.appointmentID, 'Hủy hẹn')" tds-dropdown-item>
                     <a> Hủy hẹn </a>
                   </div>
@@ -70,4 +67,8 @@
       </ng-container>
     </tbody>
   </tds-table>
+  <ng-template #rangeTemplate let-range="range" let-total>
+    {{ range[0] }}-{{ range[1] }} của {{ total }} hàng
+  </ng-template>
 </div>
+

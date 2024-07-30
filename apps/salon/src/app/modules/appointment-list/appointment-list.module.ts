@@ -16,6 +16,8 @@ import { TDSSelectModule } from 'tds-ui/select';
 import { TDSDropDownModule } from 'tds-ui/dropdown';
 import { AppointmentModalComponent } from '../home/appointment-modal/appointment-modal.component';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
+import { TDSPaginationModule } from 'tds-ui/pagination';
+import { TDSDataTableModule } from 'tds-ui/data-table';
 
 const routes: Routes = [{ path: '', component: AppointmentListComponent }];
 @NgModule({
@@ -35,7 +37,8 @@ const routes: Routes = [{ path: '', component: AppointmentListComponent }];
     TDSButtonModule,
     TDSDropDownModule,
     TDSToolTipModule,
-    AppointmentModalComponent
+    TDSPaginationModule,
+    AppointmentModalComponent,
   ],
   exports: [AppointmentListComponent],
 })
