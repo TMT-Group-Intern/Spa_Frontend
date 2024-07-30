@@ -1,0 +1,97 @@
+<div class="grid grid-cols-3 gap-x-2 bg-gray-200 h-full">
+  <div class="bg-white overflow-y-auto rounded-lg h-full">
+
+    <tds-data-table class="p-2" [tdsRounded]="true" [tdsShowPagination]="false" [tdsFrontPagination]="false"
+      [tdsData]="jobType" [tdsShowSizeChanger]="true" [tdsPageSize]="50" (tdsClickRow)="getJob($event)">
+
+      <tds-data-table-column [tdsField]="'jobTypeName'" [tdsTitle]="'Tên'" tdsWidth="80%" [tdsDataType]="'text'">
+      </tds-data-table-column>
+
+      <tds-data-table-column tdsWidth="20%" [tdsContent]="commandTpl" [tdsColumnType]="'command'">
+        <ng-template #commandTpl let-dataRow>
+          <div class="flex justify-around">
+            <!-- <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-secondary-1">
+              <i class="tdsi-edit-fill"></i>
+            </button> -->
+            <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-red-500">
+              <i class="tdsi-trash-fill"></i>
+            </button>
+          </div>
+        </ng-template>
+      </tds-data-table-column>
+    </tds-data-table>
+  </div>
+
+  <div class="col-span-2">
+    <div *ngIf="!isClick" class="flex justify-center items-center h-full">
+      <tds-empty></tds-empty>
+    </div>
+    <div *ngIf="isClick" class="bg-white rounded-lg overflow-y-auto h-full">
+      <p>{{ jobName }}</p>
+
+      <!-- <tds-checkbox>
+        <button tds-button color="secondary" tds-dropdown trigger="click" [tdsDropdownMenu]="menu">
+          <span class="flex items-center">
+            click dropdown
+            <i class="tdsi-arrow-down-fill text-lg leading-none ml-2"></i>
+          </span>
+        </button>
+      </tds-checkbox>
+      <tds-dropdown-menu #menu="tdsDropdownMenu">
+        <div class="w-full">
+          <div tds-dropdown-item>
+            <tds-checkbox>default</tds-checkbox>
+          </div>
+          <div tds-dropdown-item>
+            <tds-checkbox>default</tds-checkbox>
+          </div>
+          <div tds-dropdown-item>
+            <tds-checkbox>default</tds-checkbox>
+          </div>
+          <div tds-dropdown-item>
+            <tds-checkbox>default</tds-checkbox>
+          </div>
+        </div>
+      </tds-dropdown-menu>
+
+      <tds-checkbox>
+        <button tds-button color="secondary" tds-dropdown trigger="click" [tdsDropdownMenu]="menu">
+          <span class="flex items-center">
+            click dropdown
+            <i class="tdsi-arrow-down-fill text-lg leading-none ml-2"></i>
+          </span>
+        </button>
+      </tds-checkbox>
+      <tds-dropdown-menu #menu="tdsDropdownMenu">
+        <div class="w-full">
+          <div tds-dropdown-item>
+            <tds-checkbox>default</tds-checkbox>
+          </div>
+          <div tds-dropdown-item>
+            <tds-checkbox>default</tds-checkbox>
+          </div>
+          <div tds-dropdown-item>
+            <tds-checkbox>default</tds-checkbox>
+          </div>
+          <div tds-dropdown-item>
+            <tds-checkbox>default</tds-checkbox>
+          </div>
+        </div>
+      </tds-dropdown-menu> -->
+
+
+      <tds-collapse [bordered]="false">
+        <div class="flex">
+          <tds-checkbox></tds-checkbox>
+          <tds-collapse-panel header="Khách hàng" [ariaChecked]="true" [active]="false" [disabled]=false>
+            <tds-checkbox>default</tds-checkbox>
+            <br>
+            <tds-checkbox>checked</tds-checkbox>
+            <br>
+            <tds-checkbox>indeterminate</tds-checkbox>
+          </tds-collapse-panel>
+        </div>
+      </tds-collapse>
+    </div>
+  </div>
+</div>

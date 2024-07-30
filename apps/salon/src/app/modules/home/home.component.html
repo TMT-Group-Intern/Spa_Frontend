@@ -36,9 +36,13 @@
                     <i class="tdsi-accounting-line"></i>
                   </button>
                   <button
-                    *ngIf="event.data.status.name === 'Chưa thanh toán' || event.data.status.name === 'Thanh toán 1 phần' || event.data.status.name === 'Thanh toán hoàn tất'"
-                    tds-button-flat-icon color="secondary" tds-tooltip tooltipTitle="Xem thanh toán"
+                    *ngIf="event.data.status.name === 'Chưa thanh toán' || event.data.status.name === 'Thanh toán 1 phần'"
+                    tds-button-flat-icon color="secondary" tds-tooltip tooltipTitle="Tiếp tục thanh toán"
                     (click)="updateBill(event.data.id)">
+                    <i class="tdsi-accounting-line"></i>
+                  </button>
+                  <button *ngIf="event.data.status.name === 'Thanh toán hoàn tất'" tds-button-flat-icon
+                    color="secondary" tds-tooltip tooltipTitle="Xem hóa đơn" (click)="getBill(event.data.id)">
                     <i class="tdsi-cash-fill"></i>
                   </button>
                 </div>
