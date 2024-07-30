@@ -3,10 +3,10 @@
     <button class="mr-2" tds-button color="success" (click)="createAppointment()">
       Thêm lịch hẹn
     </button>
-    <button tds-button color="success">Thêm khách hàng</button>
+    <button tds-button color="success" (click)="createCustomer()">Thêm khách hàng</button>
   </tds-calendar-header>
   <div class="h-[570px] overflow-y-auto">
-    <tds-calendar *ngIf="lstData?.length" [tdsValue]="date" [tdsMode]="mode" (tdsSelectHour)="onClickSegment($event)">
+    <tds-calendar [tdsValue]="date" [tdsMode]="mode" (tdsSelectHour)="onClickSegment($event)">
       <ng-template ngFor [ngForOf]="lstData" let-event>
         <tds-calendar-event [tdsStartDate]="event.start" [tdsEndDate]="event.end" [tdsData]="event.data">
           <div class="p-2 w-[250px]">
@@ -36,9 +36,13 @@
                     <i class="tdsi-accounting-line"></i>
                   </button>
                   <button
-                    *ngIf="event.data.status.name === 'Chưa thanh toán' || event.data.status.name === 'Thanh toán 1 phần' || event.data.status.name === 'Thanh toán hoàn tất'"
-                    tds-button-flat-icon color="secondary" tds-tooltip tooltipTitle="Xem thanh toán"
+                    *ngIf="event.data.status.name === 'Chưa thanh toán' || event.data.status.name === 'Thanh toán 1 phần'"
+                    tds-button-flat-icon color="secondary" tds-tooltip tooltipTitle="Tiếp tục thanh toán"
                     (click)="updateBill(event.data.id)">
+                    <i class="tdsi-accounting-line"></i>
+                  </button>
+                  <button *ngIf="event.data.status.name === 'Thanh toán hoàn tất'" tds-button-flat-icon
+                    color="secondary" tds-tooltip tooltipTitle="Xem hóa đơn" (click)="getBill(event.data.id)">
                     <i class="tdsi-cash-fill"></i>
                   </button>
                 </div>

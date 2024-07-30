@@ -28,6 +28,7 @@ import { DATE_CONFIG } from '../../core/enums/date-format.enum';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BillModalComponent } from './bill-modal/bill-modal.component';
 import { CustomerModalComponent } from '../customer-list/customer-modal/customer-modal.component';
+import { PaymentModalComponent } from './payment-modal/payment-modal.component';
 
 
 @Component({
@@ -373,8 +374,25 @@ export class HomeComponent implements OnInit {
 
   updateBill(id: number) {
     const modal = this.modalSvc.create({
+      title: 'Thanh toán',
+      content: PaymentModalComponent,
+      footer: null,
+      size: 'xl',
+      componentParams: {
+        id,
+      },
+    });
+    modal.afterClose.asObservable().subscribe((res) => {
+      if (res) {
+        this.initAppointment()
+      }
+    });
+  }
+
+  getBill(id: number) {
+    const modal = this.modalSvc.create({
       title: 'Xem hóa đơn',
-      content: BillModalComponent,
+      content: PaymentModalComponent,
       footer: null,
       size: 'xl',
       componentParams: {

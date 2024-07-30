@@ -6,7 +6,7 @@ import { TDSListModule } from 'tds-ui/list';
 import { AuthService } from '../../shared.service';
 import { TDSModalService } from 'tds-ui/modal';
 import { CustomerModalComponent } from './customer-modal/customer-modal.component';
-import { concatMap, filter, tap } from 'rxjs';
+import { BehaviorSubject, concatMap, debounceTime, filter, of, switchMap, tap } from 'rxjs';
 import { TDSTimelineModule } from 'tds-ui/timeline';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { TDSButtonModule } from 'tds-ui/button';
@@ -14,7 +14,9 @@ import { TDSPaginationModule } from 'tds-ui/pagination';
 import { TDSBreadCrumbModule } from 'tds-ui/breadcrumb';
 import { CustomerDetailComponent } from './customer-detail/customer-detail.component';
 import { NavigationExtras, Router, RouterLink } from '@angular/router';
-
+import { FormsModule } from '@angular/forms';
+import { TDSFormFieldModule } from 'tds-ui/form-field';
+import { TDSInputModule } from 'tds-ui/tds-input';
 
 
 @Component({
@@ -33,18 +35,24 @@ import { NavigationExtras, Router, RouterLink } from '@angular/router';
     TDSBreadCrumbModule,
     CustomerDetailComponent,
     RouterLink,
+    FormsModule,
+    TDSFormFieldModule,
+    TDSInputModule,
   ],
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],
 })
 export class CustomerListComponent implements OnInit {
-
+  _change$ = new BehaviorSubject<string>('');
   private readonly tModalSvc =inject(TDSModalService)
   CustomerList:any[] = [];
   customerOfPage: any
   pageNumber: any = 1
   pageSize: any = 10
   totalItemsCustomers: any
+  searchText='';
+  filteredCustomers: any;
+  fullName=''
 
   constructor(
     private auth : AuthService,
@@ -54,6 +62,19 @@ export class CustomerListComponent implements OnInit {
 
   ngOnInit(): void {
     this.renderPageCustomers();
+    this._change$.pipe(
+      debounceTime(100),
+      switchMap((search: string) => {
+        return search ? this.auth.searchCustomer(search) : of(null)
+      })
+    ).subscribe((data) => {
+      if (data?.customers !== undefined){
+        this.customerOfPage = data.customers;
+        console.log(0)
+      }else{
+        this.customerOfPage = this.filteredCustomers
+      }
+    })
   }
 
   /* get the list of customers by pageNumber and pageSize */
@@ -61,6 +82,7 @@ export class CustomerListComponent implements OnInit {
       this.auth.pageCustomers(this.pageNumber, this.pageSize).subscribe((data:any) => {
       this.customerOfPage = data.item;
       this.totalItemsCustomers = data.totalItems;
+      this.filteredCustomers = this.customerOfPage;
     })
   }
 

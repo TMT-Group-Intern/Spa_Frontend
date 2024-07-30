@@ -81,6 +81,10 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'Customers/' + id);
   }
 
+  getPaymentHistory(id: any): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Payment/GetPaymentsByBill?idBill=' + id);
+  }
+
   // Search Customer
   searchCustomer(val: any): Observable<{ customers: any[] }> {
     return this.http.get<any>(this.baseUrl + 'Customers/search?searchTerm=' + val);
@@ -261,12 +265,18 @@ export class AuthService {
   getByDays(branchId: number, fromDay: string, toDay: string){
     return this.http.get(this.baseUrl + 'Report/getbyday?idBrand=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay);
   }
+
   // danh sách các thanh toán trong ngày
   getDetails(branchId: number, fromDay: string, toDay: string){
     return this.http.get(this.baseUrl + 'Report/getdetail?idBrand=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay);
   }
+
   // lấy danh sách lịch sử của người dùng
   getBillHistory(customerId:number){
     return this.http.get(this.baseUrl + 'Bill/getbillhistory?customerId=' + customerId);
+  }
+
+  getPaymentsByBill(billID: number){
+    return this.http.get(this.baseUrl + 'Payment/GetPaymentsByBill?idBill=' + billID);
   }
 }

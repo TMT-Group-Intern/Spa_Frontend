@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription, switchMap } from 'rxjs';
 import { TDSBreadCrumbModule } from 'tds-ui/breadcrumb';
@@ -15,6 +15,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSTableModule } from 'tds-ui/table';
 import { TDSTagModule } from 'tds-ui/tag';
+import { BillModalComponent } from '../../home/bill-modal/bill-modal.component';
+import { TDSModalService } from 'tds-ui/modal';
+import { CustomerDetailPaymenthistoryTableComponent } from "./customer-detail-paymenthistory-table/customer-detail-paymenthistory-table.component";
 
 @Component({
   selector: 'frontend-customer-detail',
@@ -35,10 +38,12 @@ import { TDSTagModule } from 'tds-ui/tag';
     TDSImageModule,
     TDSFormFieldModule,
     TDSTableModule,
-    TDSTagModule
-  ],
+    TDSTagModule,
+    CustomerDetailPaymenthistoryTableComponent
+],
 })
 export class CustomerDetailComponent implements OnInit {
+  expandSet = new Set<number>();
   routeSub: Subscription | undefined;
   id: any;
   customer: any={};
@@ -46,6 +51,7 @@ export class CustomerDetailComponent implements OnInit {
   listOfData: any;
   billsOfCus: any;
   customerID: any;
+  private readonly modalSvc = inject(TDSModalService);
 
   constructor(
     private route: ActivatedRoute,
@@ -55,14 +61,6 @@ export class CustomerDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const storedCustomerID = localStorage.getItem('customerID');
-    // this.routeSub = this.route.params.subscribe(
-    //   (params) => {
-    //     this.id = params['id'];
-    //     this.getCustomerDetails();
-    //     this.treatmentHistory();
-    //     this.billHistory();
-    //   }
-    // );
         this.id=storedCustomerID;
         this.getCustomerDetails();
         this.treatmentHistory();
@@ -94,4 +92,29 @@ export class CustomerDetailComponent implements OnInit {
       })
     }
   }
+
+  updateBill(id: number) {
+    const modal = this.modalSvc.create({
+      title: 'Xem hóa đơn',
+      content: BillModalComponent,
+      footer: null,
+      size: 'xl',
+      componentParams: {
+        id,
+      },
+    });
+    modal.afterClose.asObservable().subscribe((res) => {
+      if (res) {
+        this.billHistory()
+      }
+    });
+  }
+
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+        this.expandSet.add(id);
+    } else {
+        this.expandSet.delete(id);
+    }
+}
 }
