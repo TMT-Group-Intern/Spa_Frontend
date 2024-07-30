@@ -170,7 +170,6 @@ export class AppointmentModalComponent implements OnInit {
       // Add employee to the array
       this.empID.push(doctor);
     }
-
     const val: any = {
       ...req,
       appointmentDate: format(

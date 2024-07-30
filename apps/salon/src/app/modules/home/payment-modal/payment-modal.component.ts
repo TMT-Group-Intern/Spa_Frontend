@@ -98,48 +98,10 @@ export class PaymentModalComponent implements OnInit {
       )),
       concatMap(() => this.shared.getPaymentsByBill(this.billID).pipe(
         tap((dataPayment) => {
-          console.log(dataPayment)
           this.paymentByBill = dataPayment
         })
       ))
     ).subscribe()
-
-    console.log(this.paymentByBill)
-
-    // this.shared.getAppointment(this.id).subscribe(
-    //   (data: any) => {
-    //     this.infoAppoint = data
-
-    //     this.shared.getAllBillByAppointmentID(this.id).subscribe(
-    //       (dataBill: any) => {
-    //           this.billID = dataBill.billID
-    //           this.totalAmount = dataBill.totalAmount
-    //           this.amountInvoiced = dataBill.amountInvoiced
-    //           this.amountResidual = this.amountResidualContinue = dataBill.amountResidual
-    //           this.amountDiscount = dataBill.amountDiscount == null ? 0 : dataBill.amountDiscount
-    //           this.kindofDiscount = dataBill.kindofDiscount == null ? '%' : dataBill.kindofDiscount
-    //           this.note = dataBill.note == null ? '' : dataBill.note
-
-    //           this.service = [...(dataBill.billItems as any[]).map(item => ({
-    //             serviceID: item.serviceID,
-    //             serviceName: item.serviceName,
-    //             quantity: item.quantity,
-    //             unitPrice: item.unitPrice,
-    //             tempPrice: item.unitPrice * item.quantity,
-    //             totalPrice: item.totalPrice,
-    //             amountDiscount: item.amountDiscount,
-    //             kindofDiscount: item.kindofDiscount,
-    //             note: item.note,
-    //           }))]
-
-    //           // Calculate total of payment
-    //           this.resetTotal()
-    //         }
-    //       // }
-    //     )
-    //   });
-
-
   }
 
   // Format Date & Time
