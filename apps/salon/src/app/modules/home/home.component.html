@@ -12,19 +12,16 @@
     >
       Thêm lịch hẹn
     </button>
-    <button tds-button color="success" (click)="createCustomer()">Thêm khách hàng</button>
+    <button tds-button color="success" (click)="createCustomer()">
+      Thêm khách hàng
+    </button>
   </tds-calendar-header>
   <div class="h-[570px] overflow-y-auto">
-<<<<<<< HEAD
     <tds-calendar
-      *ngIf="lstData?.length"
       [tdsValue]="date"
       [tdsMode]="mode"
       (tdsSelectHour)="onClickSegment($event)"
     >
-=======
-    <tds-calendar [tdsValue]="date" [tdsMode]="mode" (tdsSelectHour)="onClickSegment($event)">
->>>>>>> f0aa641e3da75bd5629d6759bc6b09af859029b6
       <ng-template ngFor [ngForOf]="lstData" let-event>
         <tds-calendar-event
           [tdsStartDate]="event.start"
