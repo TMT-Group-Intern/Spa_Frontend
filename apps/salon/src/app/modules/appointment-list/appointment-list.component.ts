@@ -8,19 +8,19 @@ import { CompanyService } from '../../core/services/company.service';
 import { TDSModalService } from 'tds-ui/modal';
 import { AppointmentModalComponent } from '../home/appointment-modal/appointment-modal.component';
 export type TTypeState =
-|'Tất cả'
-|'Đã hẹn'
-|'Hủy hẹn'
-|'Chờ khám'
-|'Đang khám'
-|'Đã khám'
-|'Không sử dụng dịch vụ'
-|'Chờ chăm sóc'
-|'Đang chăm sóc'
-|'Hoàn thành'
-|'Chưa thanh toán'
-|'Thanh toán 1 phần'
-|'Hoàn tất thanh toán'
+  | 'Tất cả'
+  | 'Đã hẹn'
+  | 'Hủy hẹn'
+  | 'Chờ khám'
+  | 'Đang khám'
+  | 'Đã khám'
+  | 'Không sử dụng dịch vụ'
+  | 'Chờ chăm sóc'
+  | 'Đang chăm sóc'
+  | 'Hoàn thành'
+  | 'Chưa thanh toán'
+  | 'Thanh toán 1 phần'
+  | 'Hoàn tất thanh toán';
 @Component({
   selector: 'frontend-appointment-list',
   templateUrl: './appointment-list.component.html',
@@ -29,16 +29,17 @@ export type TTypeState =
 export class AppointmentListComponent implements OnInit {
   private readonly shareApi = inject(AuthService);
   private readonly company = inject(CompanyService);
-  private readonly modalSvc = inject(TDSModalService)
+  private readonly modalSvc = inject(TDSModalService);
   constructor() {
     (this.selectedIndex = 0),
       this.startDate,
       this.endDate,
       this.branchId,
       this.boolean$,
+      this.listOfData,
       (this.search = '');
   }
-  readonly tabs:TTypeState[] = [
+  readonly tabs: TTypeState[] = [
     'Tất cả',
     'Đã hẹn',
     'Hủy hẹn',
@@ -54,7 +55,7 @@ export class AppointmentListComponent implements OnInit {
     'Hoàn tất thanh toán',
   ];
   selectedIndex = 0;
-  search= '';
+  search = '';
   today = new Date();
   lastMonth = new Date(this.today.getFullYear(), this.today.getMonth() - 1, 1);
   rangeDate = {
@@ -82,6 +83,7 @@ export class AppointmentListComponent implements OnInit {
       this.userSession = JSON.parse(this.storedUserSession);
       this.branchId = this.userSession.user.branchID;
     }
+
     this.company._companyIdCur$
       .pipe(
         filter((companyId) => !!companyId),
@@ -89,38 +91,31 @@ export class AppointmentListComponent implements OnInit {
       )
       .subscribe((data) => (this.branchId = data));
   }
-  
+
   onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.search = value;
-    this.listOfData.filter((item: any) =>
-      item.customer.phone.includes(value.toLowerCase())
-    );
-    this.company._search$.next(value);
   }
 
   onChange(result: any): void {
     this.startDate = format(result[0], DATE_CONFIG.DATE_BASE_FROM);
     this.endDate = format(result[1], DATE_CONFIG.DATE_BASE_TO);
   }
-  callModalCreateAppointment(){
-    const modal= this.modalSvc.create({
-      title:'Tạo lịch hẹn',
+  callModalCreateAppointment() {
+    const modal = this.modalSvc.create({
+      title: 'Tạo lịch hẹn',
       content: AppointmentModalComponent,
       footer: null,
-      size:'lg'
-    })
-    modal.afterClose.asObservable().subscribe((data)=>{
-      if(data){
-        console.log(0,0)
-        if(this.boolean$ === false){
-          console.log(0)
+      size: 'lg',
+    });
+    modal.afterClose.asObservable().subscribe((data) => {
+      if (data) {
+        if (this.boolean$ === false) {
           this.boolean$ = true;
-        }else{
-          console.log(1)
+        } else {
           this.boolean$ = false;
         }
       }
-    })
+    });
   }
 }
