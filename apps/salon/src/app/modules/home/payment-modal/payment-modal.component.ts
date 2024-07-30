@@ -14,6 +14,8 @@ import { TDSNotificationService } from 'tds-ui/notification';
 import { InvoiceComponent } from '../../invoice/invoice.component';
 import { TDSDropDownModule } from 'tds-ui/dropdown';
 import { TDSPipesModule } from 'tds-ui/core/pipes';
+import { TDSRadioModule } from 'tds-ui/radio';
+import { catchError, concatMap, tap } from 'rxjs';
 
 @Component({
   selector: 'frontend-payment-modal',
@@ -30,109 +32,114 @@ import { TDSPipesModule } from 'tds-ui/core/pipes';
     TDSDropDownModule,
     FormsModule,
     TDSPipesModule,
+    TDSRadioModule,
   ],
   templateUrl: './payment-modal.component.html',
   styleUrls: ['./payment-modal.component.scss'],
 })
 export class PaymentModalComponent implements OnInit {
-
+  // private readonly tModalSvc = inject(TDSModalService);
   private readonly modalRef = inject(TDSModalRef);
-  @Input() id?: number
-  inforCus: any;
+  // routeSub: Subscription | undefined
+  // BillID: any;
+  @Input() id?: any;
+  // inforCus: any;
+  infoAppoint: any;
   service: any[] = [];
-
+  billID: any
+  kindofDiscount = '%'
+  amountDiscount = 0
   total = 0;
-  totalAmount: any;
-
-  discountTotal = 0
-
-  isPercentageActive = true
-  isPercentageInactive = false
-  isVNDActive = false
-  isVNDInactive = true
+  totalAmount = 0
+  amountResidual = 0
+  amountInvoiced = 0
+  note = ''
+  amountInvoicedContinue = 0
+  amountResidualContinue = 0
+  paymentMethod = 'Tiền mặt'
+  paymentByBill: any
 
   constructor(
+    // private route: ActivatedRoute,
     private shared: AuthService,
     private notification: TDSNotificationService,
-    private invoiceSvc: InvoiceService
   ) { }
 
   ngOnInit(): void {
+    this.shared.getAppointment(this.id).pipe(
+      tap((dataAppoint) => {
+        this.infoAppoint = dataAppoint
+      }),
+      concatMap(() => this.shared.getAllBillByAppointmentID(this.id).pipe(
+        tap((dataBill: any) => {
+          this.billID = dataBill.billID
+          this.totalAmount = dataBill.totalAmount
+          this.amountInvoiced = dataBill.amountInvoiced
+          this.amountResidual = this.amountResidualContinue = dataBill.amountResidual
+          this.amountDiscount = dataBill.amountDiscount == null ? 0 : dataBill.amountDiscount
+          this.kindofDiscount = dataBill.kindofDiscount == null ? '%' : dataBill.kindofDiscount
+          this.note = dataBill.note == null ? '' : dataBill.note
 
-    if (this.id) {
-      this.shared.getAppointment(this.id).subscribe(
-        (data: any) => {
-          console.log(data)
-
-          this.inforCus = data;
-          this.service = [...(data.ChooseServices as any[]).map(item => ({
-            id: item.service.ServiceID,
-            code: item.service.ServiceCode,
-            name: item.service.ServiceName,
-            price: item.service.Price,
-            discount: 0,
-            finalPrice: item.service.Price,
-            isPercentagePriceActive: true,
-            isPercentagePriceInactive: false,
-            isVNDPriceActive: false,
-            isVNDPriceInactive: true,
+          this.service = [...(dataBill.billItems as any[]).map(item => ({
+            serviceID: item.serviceID,
+            serviceName: item.serviceName,
+            quantity: item.quantity,
+            unitPrice: item.unitPrice,
+            tempPrice: item.unitPrice * item.quantity,
+            totalPrice: item.totalPrice,
+            amountDiscount: item.amountDiscount,
+            kindofDiscount: item.kindofDiscount,
+            note: item.note,
           }))]
 
           // Calculate total of payment
           this.resetTotal()
-        }
-      )
-    }
+        })
+      )),
+      concatMap(() => this.shared.getPaymentsByBill(this.billID).pipe(
+        tap((dataPayment) => {
+          console.log(dataPayment)
+          this.paymentByBill = dataPayment
+        })
+      ))
+    ).subscribe()
 
-  }
+    console.log(this.paymentByBill)
 
-  //
-  resetTotal() {
-    this.total = 0
-    for (const num of this.service) {
-      this.total += num.finalPrice;
-    }
-    this.totalAmountAfterDiscount()
-  }
+    // this.shared.getAppointment(this.id).subscribe(
+    //   (data: any) => {
+    //     this.infoAppoint = data
 
-  activeDiscountPercentage() {
-    this.isPercentageActive = true
-    this.isPercentageInactive = false
-    this.isVNDActive = false
-    this.isVNDInactive = true
-    this.discountTotal = 0
-    this.totalAmount = this.total
-  }
+    //     this.shared.getAllBillByAppointmentID(this.id).subscribe(
+    //       (dataBill: any) => {
+    //           this.billID = dataBill.billID
+    //           this.totalAmount = dataBill.totalAmount
+    //           this.amountInvoiced = dataBill.amountInvoiced
+    //           this.amountResidual = this.amountResidualContinue = dataBill.amountResidual
+    //           this.amountDiscount = dataBill.amountDiscount == null ? 0 : dataBill.amountDiscount
+    //           this.kindofDiscount = dataBill.kindofDiscount == null ? '%' : dataBill.kindofDiscount
+    //           this.note = dataBill.note == null ? '' : dataBill.note
 
-  activeDiscountVND() {
-    this.isPercentageActive = false
-    this.isPercentageInactive = true
-    this.isVNDActive = true
-    this.isVNDInactive = false
-    this.discountTotal = 0
-    this.totalAmount = this.total
-  }
+    //           this.service = [...(dataBill.billItems as any[]).map(item => ({
+    //             serviceID: item.serviceID,
+    //             serviceName: item.serviceName,
+    //             quantity: item.quantity,
+    //             unitPrice: item.unitPrice,
+    //             tempPrice: item.unitPrice * item.quantity,
+    //             totalPrice: item.totalPrice,
+    //             amountDiscount: item.amountDiscount,
+    //             kindofDiscount: item.kindofDiscount,
+    //             note: item.note,
+    //           }))]
 
-  activeDiscountPercentagePrice(id: number) {
-    const service = this.service.find(ser => ser.id === id);
-    service.isPercentagePriceActive = true
-    service.isPercentagePriceInactive = false
-    service.isVNDPriceActive = false
-    service.isVNDPriceInactive = true
-    service.discount = 0
-    service.finalPrice = service.price
-    this.resetTotal()
-  }
+    //           // Calculate total of payment
+    //           this.resetTotal()
+    //         }
+    //       // }
+    //     )
+    //   });
 
-  activeDiscountVNDPrice(id: number) {
-    const service = this.service.find(ser => ser.id === id);
-    service.isPercentagePriceActive = false
-    service.isPercentagePriceInactive = true
-    service.isVNDPriceActive = true
-    service.isVNDPriceInactive = false
-    service.discount = 0
-    service.finalPrice = service.price
-    this.resetTotal()
+
   }
 
   // Format Date & Time
@@ -140,46 +147,78 @@ export class PaymentModalComponent implements OnInit {
     return moment(date).format(format);
   }
 
-  // Calculate the price after use discount
-  priceAfterDiscount(id: number) {
-    const service = this.service.find(ser => ser.id === id);
-    if (service.isPercentagePriceActive) {
-      // service.discount = this.discountPrice.value.discountPercentage
-      service.finalPrice = service.price * (100 - service.discount) / 100;
-    } else {
-      // service.discount = this.discountPrice.value.discountVND
-      service.finalPrice = service.price - service.discount;
+  //
+  resetTotal() {
+    this.total = 0
+    for (const num of this.service) {
+      this.total += num.totalPrice;
     }
-    this.resetTotal()
+    // this.totalAmountAfterDiscount()
   }
 
-  // Calculate the total after use discount
-  totalAmountAfterDiscount() {
-    if (this.isPercentageActive) {
-      this.totalAmount = this.total * (100 - this.discountTotal) / 100;
-    } else {
-      this.totalAmount = this.total - this.discountTotal;
-    }
+  //
+  updateAmountResidual() {
+    this.amountResidualContinue = this.amountResidual - this.amountInvoicedContinue
   }
 
-  submit() {
-    this.shared.createPayment('').subscribe(
-      () => {
+  createPayment$(billID: number) {
+
+    return this.shared.createPayment({
+      billID: billID,
+      amount: this.amountInvoicedContinue,
+      paymentDate: new Date(),
+      paymentMethod: this.paymentMethod
+    }).pipe(
+      tap((val) => {
         this.createNotificationSuccess('');
-        this.modalRef.destroy(this.id);
-      },
-      (res) => {
+        this.modalRef.destroy(val);
+      }),
+      catchError((res) => {
         this.createNotificationError(res.error.message);
-      }
+        return res
+      })
     )
   }
 
-  invoice() {
-    console.log(1)
-    // this.invoiceComponent.printInvoice();
-    this.invoiceSvc.dataShare.next({
-      print: true
-    })
+  //
+  exit() {
+    this.modalRef.destroy();
+  }
+
+  //
+  save() {
+    for (const ser of this.service) {
+      if (ser.kindofDiscount == 'VND' && ser.amountDiscount == 0) {
+        ser.kindofDiscount = '%'
+      }
+    }
+
+    const val = {
+      customerID: this.infoAppoint.customerID,
+      appointmentID: this.id,
+      date: this.infoAppoint.appointmentDate,
+      // billStatus: "string",
+      doctor: this.infoAppoint.doctor,
+      technicalStaff: this.infoAppoint.teachnicalStaff,
+      totalAmount: this.totalAmount,
+      amountInvoiced: this.amountInvoiced,
+      amountResidual: this.amountResidual,
+      amountDiscount: this.amountDiscount,
+      kindofDiscount: (this.kindofDiscount === 'VND' && this.amountDiscount === 0) ? '%' : this.kindofDiscount,
+      note: this.note,
+      billItems: this.service
+    }
+
+    if (this.amountInvoicedContinue == 0) {
+      this.modalRef.destroy(val);
+    } else {
+      if (this.amountResidualContinue == 0) {
+        this.shared.UpdateStatus(this.id, 'Thanh toán hoàn tất').subscribe()
+      } else {
+        this.shared.UpdateStatus(this.id, 'Thanh toán 1 phần').subscribe()
+      }
+      this.createPayment$(this.billID).subscribe()
+    }
   }
 
   // Success Notification
