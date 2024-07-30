@@ -230,7 +230,7 @@
           *ngIf="infoAppoint?.status !== 'Hoàn thành' && infoAppoint?.status !== 'Thanh toán hoàn tất'">
           <p class="col-span-3"><strong>Khách hàng tiếp tục TT:</strong></p>
           <tds-form-field class="col-span-2">
-            <tds-input-number class="pr-2" [min]="0" [max]="totalAmount" [step]="1" [tdsTextAlign]="'right'"
+            <tds-input-number class="pr-2" [min]="0" [max]="amountResidual" [step]="1" [tdsTextAlign]="'right'"
               [hiddenIcon]="true" [(ngModel)]="amountInvoicedContinue" (ngModelChange)="updateAmountResidual()">
             </tds-input-number>
           </tds-form-field>
