@@ -1,5 +1,11 @@
 <div class="flex flex-col h-full">
-  <div class="flex justify-end">
+  <div class="flex justify-between items-center">
+    <div class="flex items-center">
+      <tds-form-field class="ml-10 w-[200px]">
+        <input tdsInput type="text" [(ngModel)]="searchText" (ngModelChange)="_change$.next($event)"
+        placeholder="Tìm kiếm bằng số điện thoại"/>
+      </tds-form-field>
+    </div>
     <button
       tds-button-icon
       (click)="createCustomer()"
@@ -49,6 +55,13 @@
     ></tds-data-table-column>
 
     <tds-data-table-column
+      [tdsField]="'phone'"
+      [tdsTitle]="'Số điện thoại'"
+      tdsWidth="15%"
+      [tdsDataType]="'text'"
+    ></tds-data-table-column>
+
+    <tds-data-table-column
       [tdsField]="'gender'"
       [tdsTitle]="'Giới tính'"
       tdsWidth="10%"
@@ -66,6 +79,7 @@
 
     <tds-data-table-column
       tdsWidth="9%"
+      [tdsTitle]="'Tùy chọn'"
       [tdsContent]="commandTpl"
       [tdsColumnType]="'command'"
     >

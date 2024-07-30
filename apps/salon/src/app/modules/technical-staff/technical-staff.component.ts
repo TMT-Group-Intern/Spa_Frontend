@@ -21,6 +21,11 @@ import { concatMap, filter, tap } from 'rxjs';
   imports: [CommonModule, ReactiveFormsModule, TDSTableModule, RouterLink, TDSFormFieldModule, TDSSelectModule],
 })
 export class TechnicalStaffComponent {
+  // public options = [
+  //   { id: 'Chờ chăm sóc', name: 'Chờ chăm sóc' },
+  //   { id: 'Đang chăm sóc', name: 'Đang chăm sóc' },
+  //   { id: 'Hoàn thành', name: 'Hoàn thành' },
+  // ]
   private readonly modalSvc = inject(TDSModalService)
   listSpaServiceQueue: any[]=[];
   reception:any[]=[];
@@ -71,21 +76,6 @@ export class TechnicalStaffComponent {
     private companySvc: CompanyService,
   ) { }
 
-  // initAppointmentList() {
-  //   const branchID = this.userSession.user.branchID
-  //   const userCode=this.userSession.user.userCode
-  //   this.auth.appointmentList(branchID).subscribe((data: any) => {
-  //     this.listSpaServiceQueue = data;
-  //     this.reception = this.listSpaServiceQueue.filter(
-  //       (appointment: any) =>
-  //         (appointment.status === 'Đang chăm sóc' ||
-  //         appointment.status === 'Chờ chăm sóc')
-  //         && (appointment.spaTherapist===userCode
-  //           || this.userSession.user.role==='Admin')
-  //     );
-  //   });
-  // }
-
   renderCustomerInQueue() {
     this.auth
       .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Đang chăm sóc')
@@ -122,13 +112,11 @@ export class TechnicalStaffComponent {
         this.checkboxStatess = {};
         this.loadData()
         this.appointmentAllInfo = data;
-        console.log(this.appointmentAllInfo)
         this.customerDetail = data.chooseServices.map(
           (chooseService: any) => chooseService.service
         );
         const appointmentData = this.dataTemp
         .find((item: any) => item.data.appointmentID === this.appointmentAllInfo.appointmentID);
-        console.log(appointmentData)
         if (appointmentData) {
           Object.keys(appointmentData.checkBox).forEach(key => {
             const numKey = +key;
