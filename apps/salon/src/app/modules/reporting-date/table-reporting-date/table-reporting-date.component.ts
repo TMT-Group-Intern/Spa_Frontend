@@ -21,13 +21,11 @@ export class TableReportingDateComponent implements OnInit, OnChanges {
   @Input() date?: Date;
   listOfDataDetail: any
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.date)
     if(changes['branchId']?.currentValue || changes['date']?.currentValue){
       this.listBillOfDay(this.date as Date)
     }
   }
   ngOnInit(): void {
-    console.log(this.date)
     this.listBillOfDay(this.date as Date)
   }
   listBillOfDay(date: Date): void {

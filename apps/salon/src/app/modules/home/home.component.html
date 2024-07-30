@@ -3,7 +3,7 @@
     <button class="mr-2" tds-button color="success" (click)="createAppointment()">
       Thêm lịch hẹn
     </button>
-    <button tds-button color="success">Thêm khách hàng</button>
+    <button tds-button color="success" (click)="createCustomer()">Thêm khách hàng</button>
   </tds-calendar-header>
   <div class="h-[570px] overflow-y-auto">
     <tds-calendar [tdsValue]="date" [tdsMode]="mode" (tdsSelectHour)="onClickSegment($event)">
