@@ -62,13 +62,16 @@ export class AppointmentTableListComponent implements OnChanges, OnInit{
       .getAppointmentByDays(this.branchId as number, fromDate, toDate)
       .subscribe((data) => {
         if(this.tabCurStr === 'Tất cả'){
-          this.temp = data
+          this.temp = data.items
+          this.listOfData = [...this.temp.sort((a: any, b: any) => a.appointmentDate > b.appointmentDate? -1 : 1)];
+          console.log(this.listOfData)
         }else{
           this.temp = data.filter(
             (item: any) => item.status === this.tabCurStr
           );
+          this.listOfData = [...this.temp.sort((a: any, b: any) => a.appointmentDate > b.appointmentDate? -1 : 1)];
         }
-        this.listOfData = [...this.temp.sort((a: any, b: any) => a.appointmentDate > b.appointmentDate? -1 : 1)];
+        
       });
   }
 
