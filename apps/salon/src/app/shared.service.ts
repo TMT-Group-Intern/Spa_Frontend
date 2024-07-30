@@ -81,6 +81,10 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'Customers/' + id);
   }
 
+  getPaymentHistory(id: any): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Payment/GetPaymentsByBill?idBill=' + id);
+  }
+
   // Search Customer
   searchCustomer(val: any): Observable<{ customers: any[] }> {
     return this.http.get<any>(this.baseUrl + 'Customers/search?searchTerm=' + val);

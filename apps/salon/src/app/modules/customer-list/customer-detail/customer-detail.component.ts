@@ -17,6 +17,7 @@ import { TDSTableModule } from 'tds-ui/table';
 import { TDSTagModule } from 'tds-ui/tag';
 import { BillModalComponent } from '../../home/bill-modal/bill-modal.component';
 import { TDSModalService } from 'tds-ui/modal';
+import { CustomerDetailPaymenthistoryTableComponent } from "./customer-detail-paymenthistory-table/customer-detail-paymenthistory-table.component";
 
 @Component({
   selector: 'frontend-customer-detail',
@@ -37,10 +38,12 @@ import { TDSModalService } from 'tds-ui/modal';
     TDSImageModule,
     TDSFormFieldModule,
     TDSTableModule,
-    TDSTagModule
-  ],
+    TDSTagModule,
+    CustomerDetailPaymenthistoryTableComponent
+],
 })
 export class CustomerDetailComponent implements OnInit {
+  expandSet = new Set<number>();
   routeSub: Subscription | undefined;
   id: any;
   customer: any={};
@@ -58,14 +61,6 @@ export class CustomerDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const storedCustomerID = localStorage.getItem('customerID');
-    // this.routeSub = this.route.params.subscribe(
-    //   (params) => {
-    //     this.id = params['id'];
-    //     this.getCustomerDetails();
-    //     this.treatmentHistory();
-    //     this.billHistory();
-    //   }
-    // );
         this.id=storedCustomerID;
         this.getCustomerDetails();
         this.treatmentHistory();
@@ -113,6 +108,13 @@ export class CustomerDetailComponent implements OnInit {
         this.billHistory()
       }
     });
-    console.log(id)
   }
+
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+        this.expandSet.add(id);
+    } else {
+        this.expandSet.delete(id);
+    }
+}
 }
