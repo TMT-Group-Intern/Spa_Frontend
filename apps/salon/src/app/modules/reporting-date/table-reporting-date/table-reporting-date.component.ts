@@ -20,15 +20,16 @@ export class TableReportingDateComponent implements OnInit, OnChanges {
   @Input() branchId?: number;
   @Input() date?: Date;
   listOfDataDetail: any
+  totalMoney?: number;
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.date)
     if(changes['branchId']?.currentValue || changes['date']?.currentValue){
       this.listBillOfDay(this.date as Date)
+      this.getReportDataByDate(this.date as Date)
     }
   }
   ngOnInit(): void {
-    console.log(this.date)
     this.listBillOfDay(this.date as Date)
+    this.getReportDataByDate(this.date as Date)
   }
   listBillOfDay(date: Date): void {
     const fromDay = format(date, DATE_CONFIG.DATE_BASE_FROM);
@@ -44,4 +45,20 @@ export class TableReportingDateComponent implements OnInit, OnChanges {
       });
   }
 
+  getReportDataByDate(date: Date) {
+    const fromDay = format(date, DATE_CONFIG.DATE_BASE_FROM);
+    const fromTo = format(date, DATE_CONFIG.DATE_BASE_TO);
+    this.sharedApi
+      .getByDays(
+        this.branchId as number,
+        fromDay as unknown as string,
+        fromTo as unknown as string
+      )
+      .subscribe((data: any) => {
+        const temp = data.map((item: any) => (
+          item.totalRevenue
+        ))
+        this.totalMoney =  temp.length >0? temp: 0;
+      });
+      }
 }
