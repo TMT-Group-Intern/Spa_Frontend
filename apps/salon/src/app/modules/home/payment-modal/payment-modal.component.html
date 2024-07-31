@@ -103,6 +103,7 @@
     <thead>
       <tr>
         <th>Ngày thanh toán</th>
+        <th>Thời gian thanh toán</th>
         <th>Khách hàng đã thanh toán</th>
         <th>Phương thức thanh toán</th>
       </tr>
@@ -111,7 +112,8 @@
     <tbody>
       <ng-template ngFor let-data [ngForOf]="paymentTable.data">
         <tr>
-          <td>{{ data.date | date:'dd/MM/YYYY hh:mm' }}</td>
+          <td>{{ data.date | date:'dd/MM/YYYY' }}</td>
+          <td>{{ data.date | date:'hh:mm' }}</td>
           <td>
             {{ data.amount | tdsFormatNumber }}
           </td>
