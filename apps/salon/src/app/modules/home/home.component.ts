@@ -29,6 +29,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BillModalComponent } from './bill-modal/bill-modal.component';
 import { CustomerModalComponent } from '../customer-list/customer-modal/customer-modal.component';
 import { PaymentModalComponent } from './payment-modal/payment-modal.component';
+import { TDSTabsModule } from 'tds-ui/tabs';
+import { AppointmentListModule } from "../appointment-list/appointment-list.module";
+import { TDSTableModule } from 'tds-ui/table';
 
 
 @Component({
@@ -47,7 +50,10 @@ import { PaymentModalComponent } from './payment-modal/payment-modal.component';
     ReactiveFormsModule,
     TDSCalendarModule,
     TDSToolTipModule,
-  ],
+    TDSTabsModule,
+    AppointmentListModule,
+    TDSTableModule
+],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
@@ -70,8 +76,8 @@ export class HomeComponent implements OnInit {
   private readonly company = inject(CompanyService);
   private readonly modalSvc = inject(TDSModalService);
   private cdr = inject(ChangeDetectorRef);
-  dayStartHour = 8;
-  dayEndHour = 17;
+  dayStartHour = 7;
+  dayEndHour = 18;
   date = new Date();
   mode: TDSCalendarMode = 'date';
   lstData: Array<{ start: Date; end: Date; data: TDSSafeAny }> = [];
@@ -116,8 +122,8 @@ export class HomeComponent implements OnInit {
       (data: any) => {
         this.dataAppointment(data)
       });
-    
-    
+
+
   }
 
   //
