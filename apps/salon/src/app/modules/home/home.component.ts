@@ -1,3 +1,4 @@
+import { TDSTabsModule } from 'tds-ui/tabs';
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSButtonModule } from 'tds-ui/button';
@@ -29,9 +30,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BillModalComponent } from './bill-modal/bill-modal.component';
 import { CustomerModalComponent } from '../customer-list/customer-modal/customer-modal.component';
 import { PaymentModalComponent } from './payment-modal/payment-modal.component';
-import { TDSTabsModule } from 'tds-ui/tabs';
 import { AppointmentListModule } from "../appointment-list/appointment-list.module";
-import { TDSTableModule } from 'tds-ui/table';
 
 
 @Component({
@@ -51,8 +50,7 @@ import { TDSTableModule } from 'tds-ui/table';
     TDSCalendarModule,
     TDSToolTipModule,
     TDSTabsModule,
-    AppointmentListModule,
-    TDSTableModule
+    AppointmentListModule
 ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],

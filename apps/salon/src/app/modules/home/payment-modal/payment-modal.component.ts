@@ -16,6 +16,7 @@ import { TDSDropDownModule } from 'tds-ui/dropdown';
 import { TDSPipesModule } from 'tds-ui/core/pipes';
 import { TDSRadioModule } from 'tds-ui/radio';
 import { catchError, concatMap, tap } from 'rxjs';
+import { TDSTagModule } from 'tds-ui/tag';
 
 @Component({
   selector: 'frontend-payment-modal',
@@ -33,6 +34,7 @@ import { catchError, concatMap, tap } from 'rxjs';
     FormsModule,
     TDSPipesModule,
     TDSRadioModule,
+    TDSTagModule,
   ],
   templateUrl: './payment-modal.component.html',
   styleUrls: ['./payment-modal.component.scss'],
@@ -43,10 +45,12 @@ export class PaymentModalComponent implements OnInit {
   // routeSub: Subscription | undefined
   // BillID: any;
   @Input() id?: any;
+  @Input() billID?: any;
   // inforCus: any;
   infoAppoint: any;
   service: any[] = [];
-  billID: any
+  // billID: any
+  billStatus: any
   kindofDiscount = '%'
   amountDiscount = 0
   total = 0;
@@ -72,7 +76,8 @@ export class PaymentModalComponent implements OnInit {
       }),
       concatMap(() => this.shared.getAllBillByAppointmentID(this.id).pipe(
         tap((dataBill: any) => {
-          this.billID = dataBill.billID
+          // this.billID = dataBill.billID
+          this.billStatus = dataBill.billStatus
           this.totalAmount = dataBill.totalAmount
           this.amountInvoiced = dataBill.amountInvoiced
           this.amountResidual = this.amountResidualContinue = dataBill.amountResidual
@@ -159,7 +164,7 @@ export class PaymentModalComponent implements OnInit {
       customerID: this.infoAppoint.customerID,
       appointmentID: this.id,
       date: this.infoAppoint.appointmentDate,
-      // billStatus: "string",
+      billStatus: "Thanh toán 1 phần",
       doctor: this.infoAppoint.doctor,
       technicalStaff: this.infoAppoint.teachnicalStaff,
       totalAmount: this.totalAmount,
@@ -175,11 +180,19 @@ export class PaymentModalComponent implements OnInit {
       this.modalRef.destroy(val);
     } else {
       if (this.amountResidualContinue == 0) {
-        this.shared.UpdateStatus(this.id, 'Thanh toán hoàn tất').subscribe()
+        console.log(this.billID, 1)
+        // this.shared.UpdateStatus(this.id, 'Thanh toán hoàn tất').subscribe()
+        this.shared.updateBill(this.billID, { ...val, billStatus: "Thanh toán hoàn tất" }).pipe(
+          concatMap(() => this.createPayment$(this.billID))
+        ).subscribe()
       } else {
-        this.shared.UpdateStatus(this.id, 'Thanh toán 1 phần').subscribe()
+        console.log(this.billID, 2)
+        // this.shared.UpdateStatus(this.id, 'Thanh toán 1 phần').subscribe()
+        this.shared.updateBill(this.billID, { ...val, billStatus: "Thanh toán 1 phần" }).pipe(
+          concatMap(() => this.createPayment$(this.billID))
+        ).subscribe()
       }
-      this.createPayment$(this.billID).subscribe()
+      // this.createPayment$(this.billID).subscribe()
     }
   }
 
