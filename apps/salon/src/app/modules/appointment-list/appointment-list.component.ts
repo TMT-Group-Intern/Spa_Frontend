@@ -20,7 +20,7 @@ export type TTypeState =
   | 'Hoàn thành'
   | 'Chưa thanh toán'
   | 'Thanh toán 1 phần'
-  | 'Hoàn tất thanh toán';
+  | 'Thanh toán hoàn tất';
 @Component({
   selector: 'frontend-appointment-list',
   templateUrl: './appointment-list.component.html',
@@ -52,7 +52,7 @@ export class AppointmentListComponent implements OnInit {
     'Hoàn thành',
     'Chưa thanh toán',
     'Thanh toán 1 phần',
-    'Hoàn tất thanh toán',
+    'Thanh toán hoàn tất',
   ];
   selectedIndex = 0;
   search = '';
@@ -106,7 +106,7 @@ export class AppointmentListComponent implements OnInit {
       title: 'Tạo lịch hẹn',
       content: AppointmentModalComponent,
       footer: null,
-      size: 'lg',
+      size: 'xl',
     });
     modal.afterClose.asObservable().subscribe((data) => {
       if (data) {

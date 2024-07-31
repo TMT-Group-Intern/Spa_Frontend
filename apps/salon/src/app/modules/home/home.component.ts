@@ -1,3 +1,4 @@
+import { TDSTabsModule } from 'tds-ui/tabs';
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TDSButtonModule } from 'tds-ui/button';
@@ -29,7 +30,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BillModalComponent } from './bill-modal/bill-modal.component';
 import { CustomerModalComponent } from '../customer-list/customer-modal/customer-modal.component';
 import { PaymentModalComponent } from './payment-modal/payment-modal.component';
-import { TDSBadgeModule } from 'tds-ui/badges';
+import { AppointmentListModule } from "../appointment-list/appointment-list.module";
 
 
 @Component({
@@ -48,8 +49,9 @@ import { TDSBadgeModule } from 'tds-ui/badges';
     ReactiveFormsModule,
     TDSCalendarModule,
     TDSToolTipModule,
-    TDSBadgeModule,
-  ],
+    TDSTabsModule,
+    AppointmentListModule
+],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
@@ -72,8 +74,8 @@ export class HomeComponent implements OnInit {
   private readonly company = inject(CompanyService);
   private readonly modalSvc = inject(TDSModalService);
   private cdr = inject(ChangeDetectorRef);
-  dayStartHour = 8;
-  dayEndHour = 17;
+  dayStartHour = 7;
+  dayEndHour = 18;
   date = new Date();
   mode: TDSCalendarMode = 'date';
   lstData: Array<{ start: Date; end: Date; data: TDSSafeAny }> = [];
@@ -118,8 +120,8 @@ export class HomeComponent implements OnInit {
       (data: any) => {
         this.dataAppointment(data)
       });
-    
-    
+
+
   }
 
   //
@@ -139,22 +141,8 @@ export class HomeComponent implements OnInit {
           status: '',
           bg: '',
         },
-        billStatus: null
       },
     }));
-
-    const foundCompletedAppointment = this.lstData.filter(item => item.data.status.name === 'Hoàn thành');
-    for (const bill of foundCompletedAppointment) {
-      this.shareApi.getAllBillByAppointmentID(bill.data.id).subscribe(
-        (dataBill: any) => {
-          if(dataBill) {
-            bill.data.billStatus = dataBill.billStatus
-          } else {
-            bill.data.billStatus = 'Chưa tạo hóa đơn thanh toán'
-          }
-        }
-      )
-    }
 
     for (const appoint of this.lstData) {
       if (appoint.data.status.name == 'Đã hẹn') {
@@ -184,17 +172,16 @@ export class HomeComponent implements OnInit {
       } else if (appoint.data.status.name == 'Hoàn thành') {
         appoint.data.status.status = 'warning'
         appoint.data.status.bg = 'bg-warning-100'
+      } else if (appoint.data.status.name == 'Chưa thanh toán') {
+        appoint.data.status.status = 'primary'
+        appoint.data.status.bg = 'bg-info-100'
+      } else if (appoint.data.status.name == 'Thanh toán 1 phần') {
+        appoint.data.status.status = 'info'
+        appoint.data.status.bg = 'bg-info-100'
+      } else if (appoint.data.status.name == 'Thanh toán hoàn tất') {
+        appoint.data.status.status = 'success'
+        appoint.data.status.bg = 'bg-success-100'
       }
-      // else if (appoint.data.status.name == 'Chưa thanh toán') {
-      //   appoint.data.status.status = 'primary'
-      //   appoint.data.status.bg = 'bg-info-100'
-      // } else if (appoint.data.status.name == 'Thanh toán 1 phần') {
-      //   appoint.data.status.status = 'info'
-      //   appoint.data.status.bg = 'bg-info-100'
-      // } else if (appoint.data.status.name == 'Thanh toán hoàn tất') {
-      //   appoint.data.status.status = 'success'
-      //   appoint.data.status.bg = 'bg-success-100'
-      // }
     }
 
   }
@@ -364,91 +351,68 @@ export class HomeComponent implements OnInit {
   }
 
   // Open Create Appointment Modal
-  payment(id: number) {
-    this.shareApi.getAllBillByAppointmentID(id).subscribe(
-      (data) => {
-        if (data) {
-          const billID = data.billID
-          const modal = this.modalSvc.create({
-            title: 'Thanh toán',
-            content: PaymentModalComponent,
-            footer: null,
-            size: 'xl',
-            componentParams: {
-              id,
-              billID
-            },
-          });
-          modal.afterClose.asObservable().subscribe((res) => {
-            if (res) {
-              this.initAppointment()
-            }
-          });
-        } else {
-          const modal = this.modalSvc.create({
-            title: 'Tạo hóa đơn',
-            content: BillModalComponent,
-            footer: null,
-            size: 'xl',
-            componentParams: {
-              id,
-            },
-          });
-          modal.afterClose.asObservable().subscribe((res) => {
-            if (res) {
-              this.initAppointment()
-            }
-          });
-        }
+  createBill(id: number) {
+    const modal = this.modalSvc.create({
+      title: 'Tạo hóa đơn',
+      content: BillModalComponent,
+      footer: null,
+      size: 'xl',
+      componentParams: {
+        id,
+      },
+    });
+    modal.afterClose.asObservable().subscribe((res) => {
+      if (res) {
+        this.initAppointment()
       }
-    )
+    });
   }
 
-  createCustomer() {
+  createCustomer(){
     const modal = this.modalSvc.create({
-      title: 'Thêm khách hàng',
+      title:'Thêm khách hàng',
       content: CustomerModalComponent,
-      footer: null,
-      size: 'lg'
+      footer:null,
+      size:'lg'
     });
-    modal.afterClose.asObservable().subscribe(res => {
-      if (res) {
+    modal.afterClose.asObservable().subscribe(res=>{
+      if(res){
         this.initAppointment();
       }
     })
   }
 
-  // updateBill(id: number) {
-  //   const modal = this.modalSvc.create({
-  //     title: 'Thanh toán',
-  //     content: PaymentModalComponent,
-  //     footer: null,
-  //     size: 'xl',
-  //     componentParams: {
-  //       id,
-  //     },
-  //   });
-  //   modal.afterClose.asObservable().subscribe((res) => {
-  //     if (res) {
-  //       this.initAppointment()
-  //     }
-  //   });
-  // }
+  updateBill(id: number) {
+    const modal = this.modalSvc.create({
+      title: 'Thanh toán',
+      content: PaymentModalComponent,
+      footer: null,
+      size: 'xl',
+      componentParams: {
+        id,
+      },
+    });
+    modal.afterClose.asObservable().subscribe((res) => {
+      if (res) {
+        this.initAppointment()
+      }
+    });
+  }
 
-  // getBill(id: number) {
-  //   const modal = this.modalSvc.create({
-  //     title: 'Xem hóa đơn',
-  //     content: PaymentModalComponent,
-  //     footer: null,
-  //     size: 'xl',
-  //     componentParams: {
-  //       id,
-  //     },
-  //   });
-  //   modal.afterClose.asObservable().subscribe((res) => {
-  //     if (res) {
-  //       this.initAppointment()
-  //     }
-  //   });
-  // }
+  getBill(id: number) {
+    const modal = this.modalSvc.create({
+      title: 'Xem hóa đơn',
+      content: PaymentModalComponent,
+      footer: null,
+      size: 'xl',
+      componentParams: {
+        id,
+      },
+    });
+    modal.afterClose.asObservable().subscribe((res) => {
+      if (res) {
+        this.initAppointment()
+      }
+    });
+  }
 }
