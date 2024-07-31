@@ -31,6 +31,7 @@ import { BillModalComponent } from './bill-modal/bill-modal.component';
 import { CustomerModalComponent } from '../customer-list/customer-modal/customer-modal.component';
 import { PaymentModalComponent } from './payment-modal/payment-modal.component';
 import { AppointmentListModule } from "../appointment-list/appointment-list.module";
+import { TDSBadgeModule } from 'tds-ui/badges';
 
 
 @Component({
@@ -49,6 +50,7 @@ import { AppointmentListModule } from "../appointment-list/appointment-list.modu
     ReactiveFormsModule,
     TDSCalendarModule,
     TDSToolTipModule,
+    TDSBadgeModule,
     TDSTabsModule,
     AppointmentListModule
 ],
