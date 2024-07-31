@@ -13,9 +13,17 @@
             <div class="border rounded-xl border-neutral-2-200 h-full w-full bg-white flex flex-col p-2">
               <div class="flex items-center justify-between">
                 <div class="py-2">
-                  <tds-tag class="rounded-full" [status]='event.data.status.status'>
+                  <tds-tag class="rounded-full mr-3" [status]='event.data.status.status'>
                     {{event.data.status.name}}
                   </tds-tag>
+                  <tds-badge *ngIf="event.data.billStatus === 'Chưa tạo hóa đơn thanh toán'" status="error" tds-tooltip
+                    tooltipTitle="Chưa tạo hóa đơn thanh toán"></tds-badge>
+                  <tds-badge *ngIf="event.data.billStatus === 'Chưa thanh toán'" status='custom'
+                    [tdsStyle]="{background:'#7f2ed1'}" tds-tooltip tooltipTitle="Chưa thanh toán"></tds-badge>
+                  <tds-badge *ngIf="event.data.billStatus === 'Thanh toán 1 phần'" status="primary" tds-tooltip
+                    tooltipTitle="Thanh toán 1 phần"></tds-badge>
+                  <tds-badge *ngIf="event.data.billStatus === 'Thanh toán hoàn tất'" status="success" tds-tooltip
+                    tooltipTitle="Thanh toán hoàn tất"></tds-badge>
                 </div>
                 <div>
                   <button *ngIf="event.data.status.name === 'Đã hẹn' || event.data.status.name === 'Hủy hẹn'"
@@ -32,10 +40,10 @@
                     <i class="tdsi-edit-fill"></i>
                   </button>
                   <button *ngIf="event.data.status.name === 'Hoàn thành'" tds-button-flat-icon color="secondary"
-                    tds-tooltip tooltipTitle="Thanh toán" (click)="createBill(event.data.id)">
+                    tds-tooltip tooltipTitle="Thanh toán" (click)="payment(event.data.id)">
                     <i class="tdsi-accounting-line"></i>
                   </button>
-                  <button
+                  <!-- <button
                     *ngIf="event.data.status.name === 'Chưa thanh toán' || event.data.status.name === 'Thanh toán 1 phần'"
                     tds-button-flat-icon color="secondary" tds-tooltip tooltipTitle="Tiếp tục thanh toán"
                     (click)="updateBill(event.data.id)">
@@ -44,7 +52,7 @@
                   <button *ngIf="event.data.status.name === 'Thanh toán hoàn tất'" tds-button-flat-icon
                     color="secondary" tds-tooltip tooltipTitle="Xem hóa đơn" (click)="getBill(event.data.id)">
                     <i class="tdsi-cash-fill"></i>
-                  </button>
+                </button> -->
                 </div>
               </div>
               <div class="w-full mt-2 rounded-xl p-3 flex-auto text-sm" [ngClass]="event.data.status.bg">
