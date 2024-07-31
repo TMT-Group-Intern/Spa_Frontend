@@ -52,8 +52,9 @@ import { TDSBadgeModule } from 'tds-ui/badges';
     TDSToolTipModule,
     TDSBadgeModule,
     TDSTabsModule,
+    TDSBadgeModule,
     AppointmentListModule
-],
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
@@ -114,9 +115,9 @@ export class HomeComponent implements OnInit {
   // call get list of appoiment
   initAppointment() {
     this.companySvc._companyIdCur$.pipe(
-      filter(branchID=> !!branchID),
-      switchMap((branchID)=> {
-       return branchID?this.shareApi.appointmentList(branchID):of(null)
+      filter(branchID => !!branchID),
+      switchMap((branchID) => {
+        return branchID ? this.shareApi.appointmentList(branchID) : of(null)
       })
     ).subscribe(
       (data: any) => {
@@ -143,8 +144,22 @@ export class HomeComponent implements OnInit {
           status: '',
           bg: '',
         },
+        billStatus: null
       },
     }));
+
+    const foundCompletedAppointment = this.lstData.filter(item => item.data.status.name === 'Hoàn thành');
+    for (const bill of foundCompletedAppointment) {
+      this.shareApi.getAllBillByAppointmentID(bill.data.id).subscribe(
+        (dataBill: any) => {
+          if (dataBill) {
+            bill.data.billStatus = dataBill.billStatus
+          } else {
+            bill.data.billStatus = 'Chưa tạo hóa đơn thanh toán'
+          }
+        }
+      )
+    }
 
     for (const appoint of this.lstData) {
       if (appoint.data.status.name == 'Đã hẹn') {
@@ -174,16 +189,17 @@ export class HomeComponent implements OnInit {
       } else if (appoint.data.status.name == 'Hoàn thành') {
         appoint.data.status.status = 'warning'
         appoint.data.status.bg = 'bg-warning-100'
-      } else if (appoint.data.status.name == 'Chưa thanh toán') {
-        appoint.data.status.status = 'primary'
-        appoint.data.status.bg = 'bg-info-100'
-      } else if (appoint.data.status.name == 'Thanh toán 1 phần') {
-        appoint.data.status.status = 'info'
-        appoint.data.status.bg = 'bg-info-100'
-      } else if (appoint.data.status.name == 'Thanh toán hoàn tất') {
-        appoint.data.status.status = 'success'
-        appoint.data.status.bg = 'bg-success-100'
       }
+      // else if (appoint.data.status.name == 'Chưa thanh toán') {
+      //   appoint.data.status.status = 'primary'
+      //   appoint.data.status.bg = 'bg-info-100'
+      // } else if (appoint.data.status.name == 'Thanh toán 1 phần') {
+      //   appoint.data.status.status = 'info'
+      //   appoint.data.status.bg = 'bg-info-100'
+      // } else if (appoint.data.status.name == 'Thanh toán hoàn tất') {
+      //   appoint.data.status.status = 'success'
+      //   appoint.data.status.bg = 'bg-success-100'
+      // }
     }
 
   }
@@ -353,32 +369,55 @@ export class HomeComponent implements OnInit {
   }
 
   // Open Create Appointment Modal
-  createBill(id: number) {
-    const modal = this.modalSvc.create({
-      title: 'Tạo hóa đơn',
-      content: BillModalComponent,
-      footer: null,
-      size: 'xl',
-      componentParams: {
-        id,
-      },
-    });
-    modal.afterClose.asObservable().subscribe((res) => {
-      if (res) {
-        this.initAppointment()
+  payment(id: number) {
+    this.shareApi.getAllBillByAppointmentID(id).subscribe(
+      (data) => {
+        if (data) {
+          const billID = data.billID
+          const modal = this.modalSvc.create({
+            title: 'Thanh toán',
+            content: PaymentModalComponent,
+            footer: null,
+            size: 'xl',
+            componentParams: {
+              id,
+              billID
+            },
+          });
+          modal.afterClose.asObservable().subscribe((res) => {
+            if (res) {
+              this.initAppointment()
+            }
+          });
+        } else {
+          const modal = this.modalSvc.create({
+            title: 'Tạo hóa đơn',
+            content: BillModalComponent,
+            footer: null,
+            size: 'xl',
+            componentParams: {
+              id,
+            },
+          });
+          modal.afterClose.asObservable().subscribe((res) => {
+            if (res) {
+              this.initAppointment()
+            }
+          });
+        }
       }
-    });
+    );
   }
 
-  createCustomer(){
+  createCustomer() {
     const modal = this.modalSvc.create({
-      title:'Thêm khách hàng',
+      title: 'Thêm khách hàng',
       content: CustomerModalComponent,
-      footer:null,
-      size:'lg'
+      footer: null,
+      size: 'lg'
     });
-    modal.afterClose.asObservable().subscribe(res=>{
-      if(res){
+    modal.afterClose.asObservable().subscribe(res => {
+      if (res) {
         this.initAppointment();
       }
     })
