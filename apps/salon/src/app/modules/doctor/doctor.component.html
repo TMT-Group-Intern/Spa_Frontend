@@ -71,7 +71,7 @@
     <!-- && active == true thì  -->
     <div class=" bg-gray-200 flex flex-col h-full" *ngIf="dataAppointmentbyid && active === true; else nodata">
 
-      <div class="basis-1/4 border p-4 rounded-10 bg-white h-[1000px]">
+      <div class="basis-1/4 border p-4 rounded-10 bg-white h-[600px]">
         <div class="p-2 flex flex-col">
           <div class="flex justify-between bg-white rounded-lg">
             <div class="border bg-white p-4 rounded-lg shadow-md w-[340px] flex flex-col gap-4">
@@ -165,7 +165,7 @@
       </div>
       <div class="basis-3/4 border p-2 rounded-10 bg-white mt-2">
         <span class="m-2 text-heading-3">Lịch sử điều trị </span>
-        <div *ngIf="serviceHistory; else noHistory" class="overflow-y-auto max-h-[400px]">
+        <div *ngIf="serviceHistory; else noHistory" class="overflow-y-auto max-h-[290px]">
           <div id="id" *ngFor="let history of serviceHistory" class="flex border rounded-10 m-2">
             <div class="flex items-center w-[600px] overflow-y-auto">
               <div class="flex m-4 rounded-10" *ngIf="history.photoCustomer.length > 0; else noImage">
@@ -203,10 +203,10 @@
       </div>
     </div>
     <ng-template #nodata>
-      <div class="flex flex-col justify-center items-center" style="height: 650px">
+      <div class="flex flex-col justify-center items-center h-full">
         <tds-empty>
         </tds-empty>
-        <span class="text-sm font-bold">Vui lòng chọn khách hàng thăm khám!</span>
+        <span class="text-sm font-bold">Vui lòng chọn khách hàng để thăm khám!</span>
       </div>
     </ng-template>
   </div>
