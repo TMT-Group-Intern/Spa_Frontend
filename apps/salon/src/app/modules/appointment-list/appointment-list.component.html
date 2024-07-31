@@ -1,4 +1,4 @@
-<div class="bg-white h-full w-full">
+<div class="bg-white">
   <div class="flex flex-row">
     <div class="w-96 flex flex-col gap-3 bg-white px-4 pt-2 rounded-lg mb-2">
       <tds-range-picker [(ngModel)]="rangeDate['Hôm nay']" (ngModelChange)="onChange($event)">
@@ -23,7 +23,7 @@
       <tds-tab *ngFor="let tab of tabs" [title]="tab">
       </tds-tab>
     </tds-tabset>
-    <frontend-appointment-table-list [branchId]="branchId" [tabCurStr]="tabs[selectedIndex]" [startDay]="startDate"
-      [endDay]="endDate" [search]="search" [boolean$]="boolean$"></frontend-appointment-table-list>
+      <frontend-appointment-table-list [branchId]="branchId" [tabCurStr]="tabs[selectedIndex]" [startDay]="startDate"
+      [endDay]="endDate" [search]="search" [boolean$]="boolean$" ></frontend-appointment-table-list>
   </div>
 </div>

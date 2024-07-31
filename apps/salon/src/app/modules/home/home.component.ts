@@ -18,7 +18,7 @@ import { InvoiceService } from '../invoice/invoice.service';
 import { error } from 'console';
 import { TDSMapperPipeModule } from 'tds-ui/cdk/pipes/mapper';
 import { CompanyService } from '../../core/services/company.service';
-import { concatMap, filter } from 'rxjs';
+import { concatMap, filter, of, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { TDSCalendarMode } from 'tds-ui/date-picker';
 import { TDSSafeAny } from 'tds-ui/shared/utility';
@@ -109,11 +109,17 @@ export class HomeComponent implements OnInit {
 
   // call get list of appoiment
   initAppointment() {
-    const branchID = this.userSession.user.branchID
-    this.shareApi.appointmentList(branchID).subscribe(
+    this.companySvc._companyIdCur$.pipe(
+      filter(branchID=> !!branchID),
+      switchMap((branchID)=> {
+       return branchID?this.shareApi.appointmentList(branchID):of(null)
+      })
+    ).subscribe(
       (data: any) => {
         this.dataAppointment(data)
       });
+    
+    
   }
 
   //

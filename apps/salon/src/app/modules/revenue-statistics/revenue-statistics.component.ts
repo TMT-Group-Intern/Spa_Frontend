@@ -71,6 +71,9 @@ export class RevenueStatisticsComponent implements OnInit {
   startOfMonthDate = format(this.thisMonth[0], DATE_CONFIG.DATE_BASE_FROM);
   endOfMonthDate = format(this.thisMonth[1], DATE_CONFIG.DATE_BASE_TO);
 
+  constructor(
+    private companySvc: CompanyService,
+  ) { }
   // tạo mảng từ 1 start đến 1 end
   arrayFromRange(start: number, end: number): number[] {
     const array: number[] = [];
