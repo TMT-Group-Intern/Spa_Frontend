@@ -63,7 +63,7 @@ export class AppointmentModalComponent implements OnInit {
     doctor: [],
     appointmentDate: [new Date()],
     status: ['Đã hẹn'],
-    customer: [null]
+    // customer: [null]
   });
   // isExist = false;
   // Hide search Phone Number
@@ -201,7 +201,7 @@ export class AppointmentModalComponent implements OnInit {
         this.dataCustomer = data.customers;
     })
 
-    this.form.get('customer')?.valueChanges.subscribe((data: any) => {
+    this.form.get('phone')?.valueChanges.subscribe((data: any) => {
       this.form.patchValue({
         ...data as any,
         name: data.lastName + ' ' + data.firstName
