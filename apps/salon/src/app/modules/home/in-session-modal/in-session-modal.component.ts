@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TDSModalModule, TDSModalRef } from 'tds-ui/modal';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSRadioModule } from 'tds-ui/radio';
@@ -33,13 +33,13 @@ export class InSessionModalComponent implements OnInit {
   @Input() id?: number
   private readonly modalRef = inject(TDSModalRef);
   public spaTherapistOptions: any[] = []
-  public statusOptions = [
-    'Đã khám',
-    'Chờ chăm sóc',
-    'Đang chăm sóc',
-    'Hoàn thành',
-    'Không sử dụng dịch vụ',
-  ]
+  // public statusOptions = [
+  //   'Đã khám',
+  //   'Chờ chăm sóc',
+  //   'Đang chăm sóc',
+  //   'Hoàn thành',
+  //   'Không sử dụng dịch vụ',
+  // ]
   companyId:number|null = null;
   userSession:any
   createAppointmentForm!: FormGroup;
@@ -47,8 +47,8 @@ export class InSessionModalComponent implements OnInit {
     customerID: [],
     name: [''],
     assignments: [],
-    spaTherapist: [],
-    status: ['Đang chuẩn bị'],
+    spaTherapist: ['', Validators.required],
+    status: ['Chờ chăm sóc'],
   });
   assignments: any[] = []
 
@@ -86,7 +86,7 @@ export class InSessionModalComponent implements OnInit {
           this.form.patchValue({
             name: data.customer.lastName + ' ' + data.customer.firstName,
             customerID: data.customer.customerID,
-            status: data.status,
+            // status: data.status,
           });
           this.assignments = data.assignments
           const foundSpaTherapist = this.assignments.find(item => item.employees.jobTypeID === 3);

@@ -162,8 +162,8 @@ export class HomeComponent implements OnInit {
 
     for (const appoint of this.lstData) {
       if (appoint.data.status.name == 'Đã hẹn') {
-        appoint.data.status.status = 'info'
-        appoint.data.status.bg = 'bg-info-100'
+        appoint.data.status.status = 'primary'
+        appoint.data.status.bg = 'bg-blue-100'
       } else if (appoint.data.status.name == 'Hủy hẹn') {
         appoint.data.status.status = 'error'
         appoint.data.status.bg = 'bg-error-100'
@@ -171,19 +171,19 @@ export class HomeComponent implements OnInit {
         appoint.data.status.status = 'secondary'
         appoint.data.status.bg = 'bg-gray-100'
       } else if (appoint.data.status.name == 'Đang khám') {
-        appoint.data.status.status = 'primary'
+        appoint.data.status.status = 'info'
         appoint.data.status.bg = 'bg-info-100'
       } else if (appoint.data.status.name == 'Đã khám') {
+        appoint.data.status.status = 'success'
+        appoint.data.status.bg = 'bg-success-100'
+      } else if (appoint.data.status.name == 'Không sử dụng dịch vụ') {
         appoint.data.status.status = 'warning'
         appoint.data.status.bg = 'bg-warning-100'
-      } else if (appoint.data.status.name == 'Không sử dụng dịch vụ') {
-        appoint.data.status.status = 'error'
-        appoint.data.status.bg = 'bg-error-100'
       } else if (appoint.data.status.name == 'Chờ chăm sóc') {
         appoint.data.status.status = 'secondary'
         appoint.data.status.bg = 'bg-gray-50'
       } else if (appoint.data.status.name == 'Đang chăm sóc') {
-        appoint.data.status.status = 'primary'
+        appoint.data.status.status = 'info'
         appoint.data.status.bg = 'bg-info-100'
       } else if (appoint.data.status.name == 'Hoàn thành') {
         appoint.data.status.status = 'warning'
@@ -276,7 +276,7 @@ export class HomeComponent implements OnInit {
   // Open Edit In Session Modal
   onEditInSession(id: number) {
     const modal = this.modalSvc.create({
-      title: 'Edit Information',
+      title: 'Chuyển tiếp chăm sóc',
       content: InSessionModalComponent,
       footer: null,
       size: 'lg',

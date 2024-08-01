@@ -269,56 +269,56 @@ export class TechnicalStaffComponent {
   }
 
 
-  start(): void {
-    this.timer = true;
-    this.stopWatch();
-  }
+  // start(): void {
+  //   this.timer = true;
+  //   this.stopWatch();
+  // }
 
-  stop(): void {
-    this.timer = false;
-  }
+  // stop(): void {
+  //   this.timer = false;
+  // }
 
-  reset(): void {
-    this.timer = false;
-    this.hour = 0;
-    this.minute = 0;
-    this.second = 0;
-    this.count = 0;
-    this.updateDisplay();
-  }
+  // reset(): void {
+  //   this.timer = false;
+  //   this.hour = 0;
+  //   this.minute = 0;
+  //   this.second = 0;
+  //   this.count = 0;
+  //   this.updateDisplay();
+  // }
 
-  stopWatch(): void {
-    if (this.timer) {
-      this.count++;
+  // stopWatch(): void {
+  //   if (this.timer) {
+  //     this.count++;
 
-      if (this.count == 100) {
-        this.second++;
-        this.count = 0;
-      }
+  //     if (this.count == 100) {
+  //       this.second++;
+  //       this.count = 0;
+  //     }
 
-      if (this.second == 60) {
-        this.minute++;
-        this.second = 0;
-      }
+  //     if (this.second == 60) {
+  //       this.minute++;
+  //       this.second = 0;
+  //     }
 
-      if (this.minute == 60) {
-        this.hour++;
-        this.minute = 0;
-        this.second = 0;
-      }
+  //     if (this.minute == 60) {
+  //       this.hour++;
+  //       this.minute = 0;
+  //       this.second = 0;
+  //     }
 
-      this.updateDisplay();
+  //     this.updateDisplay();
 
-      setTimeout(() => this.stopWatch(), 10);
-    }
-  }
+  //     setTimeout(() => this.stopWatch(), 10);
+  //   }
+  // }
 
-  updateDisplay(): void {
-    this.hrString = this.hour < 10 ? '0' + this.hour : this.hour.toString();
-    this.minString = this.minute < 10 ? '0' + this.minute : this.minute.toString();
-    this.secString = this.second < 10 ? '0' + this.second : this.second.toString();
-    this.countString = this.count < 10 ? '0' + this.count : this.count.toString();
-  }
+  // updateDisplay(): void {
+  //   this.hrString = this.hour < 10 ? '0' + this.hour : this.hour.toString();
+  //   this.minString = this.minute < 10 ? '0' + this.minute : this.minute.toString();
+  //   this.secString = this.second < 10 ? '0' + this.second : this.second.toString();
+  //   this.countString = this.count < 10 ? '0' + this.count : this.count.toString();
+  // }
 
 
 }
