@@ -40,8 +40,8 @@ export class InSessionModalComponent implements OnInit {
     'Hoàn thành',
     'Không sử dụng dịch vụ',
   ]
-  companyId:number|null = null;
-  userSession:any
+  companyId: number | null = null;
+  userSession: any
   createAppointmentForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
@@ -90,7 +90,7 @@ export class InSessionModalComponent implements OnInit {
           });
           this.assignments = data.assignments
           const foundSpaTherapist = this.assignments.find(item => item.employees.jobTypeID === 3);
-          if(foundSpaTherapist) {
+          if (foundSpaTherapist) {
             this.form.patchValue({
               spaTherapist: foundSpaTherapist.employees.employeeID
             });

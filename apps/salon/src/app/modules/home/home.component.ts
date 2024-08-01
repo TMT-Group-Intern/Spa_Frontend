@@ -71,7 +71,6 @@ export class HomeComponent implements OnInit {
   storedUserSession = localStorage.getItem('userSession');
   oldBranch: any;
   companyId: number | null = null;
-
   private readonly shareApi = inject(AuthService);
   private readonly company = inject(CompanyService);
   private readonly modalSvc = inject(TDSModalService);
@@ -80,8 +79,8 @@ export class HomeComponent implements OnInit {
   dayEndHour = 18;
   date = new Date();
   mode: TDSCalendarMode = 'date';
-  startDate ='' ;
-  endDate='' ;
+  startDate = '';
+  endDate = '';
   lstData: Array<{ start: Date; end: Date; data: TDSSafeAny }> = [];
   dataAppointments: any;
   // options = ['Chờ chăm sóc', 'Thanh toán'];
@@ -93,10 +92,12 @@ export class HomeComponent implements OnInit {
     private router: Router
   ) {
     this.startDate,
-    this.endDate
+      this.endDate
   }
 
   ngOnInit(): void {
+    this.sharedService.DataListenerDoctorChagneStatus(this.onReceiveAppointments.bind(this))
+
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
       this.initAppointment();
@@ -114,6 +115,12 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  onReceiveAppointments(): void {
+    console.log(1)
+    this.initAppointment();
+  }
+
+
   // call get list of appoiment
   initAppointment() {
     this.companySvc._companyIdCur$
@@ -130,7 +137,7 @@ export class HomeComponent implements OnInit {
 
   //
   dataAppointment(data: any) {
-    this.dataAppointments = data;
+    this.dataAppointments = [...data]
     this.lstData = this.dataAppointments.map((item: any) => ({
       start: new Date(item.appointmentDate),
       end: new Date(new Date(item.appointmentDate).getTime() + 60 * 60000),
@@ -233,11 +240,11 @@ export class HomeComponent implements OnInit {
   renderDataTabSearch() {
     this.checkCreateAppointment();
   }
-  checkCreateAppointment(){
-    if(this._checkcreate === true){
+  checkCreateAppointment() {
+    if (this._checkcreate === true) {
       this._checkcreate = false;
       this.company._check_create$.next(false);
-    }else{
+    } else {
 
       this._checkcreate = true;
       this.company._check_create$.next(true);
@@ -252,27 +259,27 @@ export class HomeComponent implements OnInit {
 
   onModelChange(e: TDSSafeAny) {
     this.mode = e;
-    if(e==='date'){
+    if (e === 'date') {
       this.startDate = format(this.date, DATE_CONFIG.DATE_BASE_FROM);
       this.endDate = format(this.date, DATE_CONFIG.DATE_BASE_TO);
-    }else if(e==='week'){
-      this.startDate = format(startOfWeek(this.date,{weekStartsOn:1}), DATE_CONFIG.DATE_BASE_FROM);
-      this.endDate = format( endOfWeek(this.date,{weekStartsOn: 1}), DATE_CONFIG.DATE_BASE_TO);
-    }else if(e ==='month'){
-      this.startDate = format( startOfMonth(this.date), DATE_CONFIG.DATE_BASE_FROM);
-      this.endDate = format( endOfMonth(this.date), DATE_CONFIG.DATE_BASE_TO);
+    } else if (e === 'week') {
+      this.startDate = format(startOfWeek(this.date, { weekStartsOn: 1 }), DATE_CONFIG.DATE_BASE_FROM);
+      this.endDate = format(endOfWeek(this.date, { weekStartsOn: 1 }), DATE_CONFIG.DATE_BASE_TO);
+    } else if (e === 'month') {
+      this.startDate = format(startOfMonth(this.date), DATE_CONFIG.DATE_BASE_FROM);
+      this.endDate = format(endOfMonth(this.date), DATE_CONFIG.DATE_BASE_TO);
     }
   }
   onChangeTimeWithMode(dateTime: Date) {
-    if(this.mode==='date'){
+    if (this.mode === 'date') {
       this.startDate = format(dateTime, DATE_CONFIG.DATE_BASE_FROM);
       this.endDate = format(dateTime, DATE_CONFIG.DATE_BASE_TO);
-    }else if(this.mode==='week'){
-      this.startDate = format(startOfWeek(dateTime,{weekStartsOn:1}), DATE_CONFIG.DATE_BASE_FROM);
-      this.endDate = format( endOfWeek(dateTime,{weekStartsOn: 1}), DATE_CONFIG.DATE_BASE_TO);
-    }else if(this.mode ==='month'){
-      this.startDate = format( startOfMonth(dateTime), DATE_CONFIG.DATE_BASE_FROM);
-      this.endDate = format( endOfMonth(dateTime), DATE_CONFIG.DATE_BASE_TO);
+    } else if (this.mode === 'week') {
+      this.startDate = format(startOfWeek(dateTime, { weekStartsOn: 1 }), DATE_CONFIG.DATE_BASE_FROM);
+      this.endDate = format(endOfWeek(dateTime, { weekStartsOn: 1 }), DATE_CONFIG.DATE_BASE_TO);
+    } else if (this.mode === 'month') {
+      this.startDate = format(startOfMonth(dateTime), DATE_CONFIG.DATE_BASE_FROM);
+      this.endDate = format(endOfMonth(dateTime), DATE_CONFIG.DATE_BASE_TO);
     }
   }
 
@@ -414,10 +421,12 @@ export class HomeComponent implements OnInit {
         modal.afterClose.asObservable().subscribe((res) => {
           if (res) {
             this.updateStatus(id, status);
+            // this.sharedService.sendChangStatusByReciption();
           }
         });
       } else {
         this.updateStatus(id, status);
+        // this.sharedService.sendChangStatusByReciption();
       }
     });
   }
