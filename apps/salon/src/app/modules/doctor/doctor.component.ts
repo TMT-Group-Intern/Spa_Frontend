@@ -47,8 +47,8 @@ import { concatMap, filter, tap } from 'rxjs';
 
 export class DoctorComponent implements OnInit {
   public statusOptions = [
-    'Chờ khám',
-    'Đang khám',
+    // 'Chờ khám',
+    // 'Đang khám',
     'Đã khám',
     'Không sử dụng dịch vụ',
   ];
@@ -78,7 +78,7 @@ export class DoctorComponent implements OnInit {
     assignments: [[]],
     doctor: [''],
     appointmentDate: ['', Validators.required],
-    status: [''],
+    status: ['Đã khám'],
     service: [[]],
     note: [''],
   });
@@ -145,7 +145,7 @@ export class DoctorComponent implements OnInit {
           name: `${data.customer.firstName} ${data.customer.lastName}`,
           appointmentDate: this.formatDate(data.appointmentDate, 'HH:mm'),
           customerID: data.customer.customerID,
-          status: data.status,
+          // status: data.status,
           service: data.chooseServices.map((item: any) => item.serviceID),
           note: data.notes,
         });
@@ -164,9 +164,12 @@ export class DoctorComponent implements OnInit {
           }
         })
       )),
-      concatMap(() => this.sharedService.UpdateStatus(id, 'Đang khám'))
+      concatMap(() => this.sharedService.UpdateStatus(id, 'Đang khám').pipe(
+        tap(() => {
+          this.initAppointmentList();
+        })
+      ))
     ).subscribe();
-    this.initAppointmentList();
     this.initService();
   }
 
@@ -185,8 +188,10 @@ export class DoctorComponent implements OnInit {
       ...this.form.value,
     };
 
-    if (id) {
+    if (id && this.form.value.status != 'Không sử dụng dịch vụ') {
       this.updateServiceAppointment(id, val.status, val.service, val.note);
+    } else {
+      this.updateServiceAppointment(id, val.status, null, val.note);
     }
   }
 
