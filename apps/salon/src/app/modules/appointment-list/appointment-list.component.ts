@@ -1,5 +1,5 @@
 import { BehaviorSubject, filter, tap } from 'rxjs';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { addDays, endOfMonth, format, startOfMonth } from 'date-fns';
 import { DATE_CONFIG } from '../../core/enums/date-format.enum';
 import { AuthService } from '../../shared.service';
@@ -26,7 +26,7 @@ export type TTypeState =
   templateUrl: './appointment-list.component.html',
   styleUrls: ['./appointment-list.component.scss'],
 })
-export class AppointmentListComponent implements OnInit {
+export class AppointmentListComponent implements OnInit, OnChanges {
   private readonly shareApi = inject(AuthService);
   private readonly company = inject(CompanyService);
   private readonly modalSvc = inject(TDSModalService);
@@ -39,6 +39,7 @@ export class AppointmentListComponent implements OnInit {
       this.listOfData,
       (this.search = '');
   }
+
   readonly tabs: TTypeState[] = [
     'Tất cả',
     'Đã hẹn',
@@ -75,9 +76,18 @@ export class AppointmentListComponent implements OnInit {
   options: TDSSafeAny;
 
   thisTime = this.rangeDate['Hôm nay'];
+  @Input() _startDate = format(this.thisTime[0], DATE_CONFIG.DATE_BASE_FROM);
+  @Input() _endDate = format(this.thisTime[1], DATE_CONFIG.DATE_BASE_TO);
   startDate = format(this.thisTime[0], DATE_CONFIG.DATE_BASE_FROM);
   endDate = format(this.thisTime[1], DATE_CONFIG.DATE_BASE_TO);
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['_startDate']?.currentValue || changes['_endDate'].currentValue){
+      this.startDate = this._startDate;
+      this.endDate = this._endDate;
+      this.thisTime = [this.startDate as unknown as Date, this.endDate as unknown as Date]
+    }
+  }
   ngOnInit() {
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
@@ -90,6 +100,11 @@ export class AppointmentListComponent implements OnInit {
         tap((company) => company)
       )
       .subscribe((data) => (this.branchId = data));
+
+    this.company._check_create$.pipe(
+    ).subscribe(data =>{
+        this.boolean$ = data
+    })
   }
 
   onInput(event: Event): void {
