@@ -68,14 +68,14 @@ export class MenuComponent {
       "icon": "tdsi-bar-chart-fill",
       "listChild": [
         {
-            "name": "Báo cáo ngày",
-            "link": 'report/report-day'
+          "name": "Báo cáo ngày",
+          "link": 'report/report-day'
         },
         {
-            "name": "Báo cáo doanh thu",
-            "link": 'report/revenue-statistics'
+          "name": "Báo cáo doanh thu",
+          "link": 'report/revenue-statistics'
         },
-    ]
+      ]
 
     },
     // {
@@ -92,6 +92,11 @@ export class MenuComponent {
       "name": "Nhóm quyền",
       "icon": "tdsi-id-card-fill",
       "link": '/role'
+    },
+    {
+      "name": "Chat box",
+      "icon": "tdsi-chat-buble-fill",
+      "link": '/chat-box'
     },
   ]
 

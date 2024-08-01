@@ -72,6 +72,8 @@ export class DoctorComponent implements OnInit {
   branchID: any
   // isCheck = false
 
+  appointments: any[] = [];
+
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
     name: [''],
@@ -90,6 +92,11 @@ export class DoctorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log(1)
+    //  this.sharedService.addAppointmentDataListener(this.onReceiveAppointments.bind(this));
+    this.sharedService.DataListenerDoctorChagneStatus(this.onReceiveAppointments.bind(this));
+    // console.log(this.appointments);
+
     const storedUserSession = localStorage.getItem('userSession');
     if (storedUserSession !== null) {
       this.userSession = JSON.parse(storedUserSession);
@@ -130,6 +137,11 @@ export class DoctorComponent implements OnInit {
   }
 
   //
+  onReceiveAppointments(): void {
+    this.initAppointmentList();
+
+  }
+
   initService(): void {
     //Display Service List
     this.sharedService.renderListService().subscribe((data: any) => {
