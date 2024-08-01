@@ -20,6 +20,7 @@ import { TDSNotificationService } from 'tds-ui/notification';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { CompanyService } from '../../core/services/company.service';
 import { concatMap, filter, tap } from 'rxjs';
+import { TDSCheckBoxModule } from 'tds-ui/tds-checkbox';
 
 @Component({
   selector: 'frontend-doctor',
@@ -42,6 +43,7 @@ import { concatMap, filter, tap } from 'rxjs';
     TDSToolTipModule,
     TDSSelectModule,
     TDSInputModule,
+    TDSCheckBoxModule,
   ],
 })
 
@@ -68,6 +70,7 @@ export class DoctorComponent implements OnInit {
   userSession: any;
   companyId: number | null = null;
   branchID: any
+  // isCheck = false
 
   appointments: any[] = [];
 
@@ -81,8 +84,8 @@ export class DoctorComponent implements OnInit {
     doctor: [''],
     appointmentDate: ['', Validators.required],
     status: ['Đã khám'],
-    service: [[]],
-    note: [''],
+    service: [null, Validators.required],
+    note: ['', Validators.required],
   });
   constructor(
     private companySvc: CompanyService
@@ -115,6 +118,25 @@ export class DoctorComponent implements OnInit {
       );
     });
   }
+
+  //
+  isCheck(event: any) {
+    console.log(event)
+    if (event.checked) {
+      this.form.patchValue({
+        status: 'Không sử dụng dịch vụ',
+        service: null
+      });
+      this.form.get('service')?.disable();
+    } else {
+      this.form.patchValue({
+        status: 'Đã khám'
+      });
+      this.form.get('service')?.enable();
+    }
+  }
+
+  //
   onReceiveAppointments(): void {
     this.initAppointmentList();
 
@@ -126,6 +148,7 @@ export class DoctorComponent implements OnInit {
       this.dataSvc = data.serviceDTO;
     });
   }
+
   // Format Date & Time
   formatDate(date: string, format: string): string {
     return moment(date).format(format);
@@ -170,15 +193,16 @@ export class DoctorComponent implements OnInit {
       }),
       concatMap(() => this.sharedService.appointmentList(this.branchID).pipe(
         tap((dataAllAppoint) => {
-          const foundExamingAppoint = (dataAllAppoint as any[]).find(item => item.branchID === this.branchID && item.status === 'Đang khám');
+          const foundExamingAppoint = (dataAllAppoint as any[]).find(item => item.branchID == this.branchID && item.appointmentID != id && item.status == 'Đang khám');
           if (foundExamingAppoint) {
-            this.sharedService.UpdateStatus(foundExamingAppoint.appointmentID, 'Chờ khám').subscribe()
+            this.sharedService.UpdateStatus(foundExamingAppoint.appointmentID, 'Chờ khám').pipe(
+              concatMap(() => this.sharedService.UpdateStatus(id, 'Đang khám').pipe(
+                tap(() => {
+                  this.initAppointmentList();
+                })
+              ))
+            ).subscribe()
           }
-        })
-      )),
-      concatMap(() => this.sharedService.UpdateStatus(id, 'Đang khám').pipe(
-        tap(() => {
-          this.initAppointmentList();
         })
       ))
     ).subscribe();
@@ -194,6 +218,9 @@ export class DoctorComponent implements OnInit {
   }
 
   submitUpdateServiceAppointment(id: number) {
+    // if (this.form.value.status == 'Đã khám') {
+    //   if (this.form.invalid) return;
+    // }
     if (this.form.invalid) return;
 
     const val = {
@@ -203,7 +230,7 @@ export class DoctorComponent implements OnInit {
     if (id && this.form.value.status != 'Không sử dụng dịch vụ') {
       this.updateServiceAppointment(id, val.status, val.service, val.note);
     } else {
-      this.updateServiceAppointment(id, val.status, null, val.note);
+      this.updateServiceAppointment(id, val.status, val.service, val.note);
     }
   }
 
