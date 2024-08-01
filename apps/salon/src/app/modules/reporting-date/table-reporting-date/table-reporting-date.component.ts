@@ -4,6 +4,8 @@ import { TDSTableModule } from 'tds-ui/table';
 import { AuthService } from '../../../shared.service';
 import { format } from 'date-fns';
 import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
+import { TDSPipesModule } from 'tds-ui/core/pipes';
+import { TDSInputModule } from 'tds-ui/tds-input';
 
 @Component({
   selector: 'frontend-table-reporting-date',
@@ -12,7 +14,9 @@ import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
   standalone: true,
   imports:[
     CommonModule,
-    TDSTableModule
+    TDSTableModule,
+    TDSPipesModule,
+    TDSInputModule
   ],
 })
 export class TableReportingDateComponent implements OnInit, OnChanges {
@@ -20,7 +24,7 @@ export class TableReportingDateComponent implements OnInit, OnChanges {
   @Input() branchId?: number;
   @Input() date?: Date;
   listOfDataDetail: any
-  totalMoney?: number;
+  totalMoney = 0;
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['branchId']?.currentValue || changes['date']?.currentValue){
       this.listBillOfDay(this.date as Date)

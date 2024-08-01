@@ -12,13 +12,22 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSSelectModule } from 'tds-ui/select';
 import { CompanyService } from '../../core/services/company.service';
 import { concatMap, filter, tap } from 'rxjs';
+import { TDSEmptyModule } from 'tds-ui/empty';
 
 @Component({
   selector: 'frontend-technical-staff',
   templateUrl: './technical-staff.component.html',
   styleUrls: ['./technical-staff.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TDSTableModule, RouterLink, TDSFormFieldModule, TDSSelectModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TDSTableModule,
+    RouterLink,
+    TDSFormFieldModule,
+    TDSSelectModule,
+    TDSEmptyModule,
+  ],
 })
 export class TechnicalStaffComponent {
   // public options = [

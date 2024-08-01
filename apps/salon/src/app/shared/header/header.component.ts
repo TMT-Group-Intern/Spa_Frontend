@@ -49,9 +49,11 @@ export class HeaderComponent implements OnInit {
     branch: [''],
   });
   ngOnInit() {
+    
     const storedUserSession = localStorage.getItem('userSession');
     if (storedUserSession !== null) {
       this.userSession = JSON.parse(storedUserSession);
+      this.companySvc._companyIdCur$.next(this.userSession.user.branchID);
     }
     if(this.userSession.user.role ==='Admin'){
       this.branchID = this.userSession.user.branchID
@@ -65,6 +67,7 @@ export class HeaderComponent implements OnInit {
           id: item.branchID,
           name: item.branchName,
         }))]
+        
       })
   }
   constructor(

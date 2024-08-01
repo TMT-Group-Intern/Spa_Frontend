@@ -1,11 +1,6 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TDSModalModule, TDSModalRef, TDSModalService } from 'tds-ui/modal';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSInputModule } from 'tds-ui/tds-input';
@@ -66,9 +61,9 @@ export class AppointmentModalComponent implements OnInit {
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
     assignments: [],
     doctor: [],
-    appointmentDate: [new Date()] || null,
+    appointmentDate: [new Date()],
     status: ['Đã hẹn'],
-    customer: [null]
+    // customer: [null]
   });
   // isExist = false;
   // Hide search Phone Number
@@ -175,7 +170,6 @@ export class AppointmentModalComponent implements OnInit {
       // Add employee to the array
       this.empID.push(doctor);
     }
-
     const val: any = {
       ...req,
       appointmentDate: format(
@@ -207,7 +201,7 @@ export class AppointmentModalComponent implements OnInit {
         this.dataCustomer = data.customers;
     })
 
-    this.form.get('customer')?.valueChanges.subscribe((data: any) => {
+    this.form.get('phone')?.valueChanges.subscribe((data: any) => {
       this.form.patchValue({
         ...data as any,
         name: data.lastName + ' ' + data.firstName

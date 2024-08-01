@@ -19,7 +19,7 @@ import { TDSSelectModule } from 'tds-ui/select';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { CompanyService } from '../../core/services/company.service';
-import { concatMap, filter } from 'rxjs';
+import { concatMap, filter, tap } from 'rxjs';
 
 @Component({
   selector: 'frontend-doctor',
@@ -47,8 +47,8 @@ import { concatMap, filter } from 'rxjs';
 
 export class DoctorComponent implements OnInit {
   public statusOptions = [
-    'Chờ khám',
-    'Đang khám',
+    // 'Chờ khám',
+    // 'Đang khám',
     'Đã khám',
     'Không sử dụng dịch vụ',
   ];
@@ -67,6 +67,7 @@ export class DoctorComponent implements OnInit {
   CustomerID: number | undefined;
   userSession: any;
   companyId: number | null = null;
+  branchID: any
 
   appointments: any[] = [];
 
@@ -79,7 +80,7 @@ export class DoctorComponent implements OnInit {
     assignments: [[]],
     doctor: [''],
     appointmentDate: ['', Validators.required],
-    status: [''],
+    status: ['Đã khám'],
     service: [[]],
     note: [''],
   });
@@ -106,6 +107,7 @@ export class DoctorComponent implements OnInit {
       })
     ).subscribe((data: any) => {
       this.appointmentList = data;
+      this.branchID = data[0].branchID
       this.reception = this.appointmentList.filter(
         (appointment: any) =>
           appointment.status === 'Chờ khám' ||
@@ -145,26 +147,41 @@ export class DoctorComponent implements OnInit {
   }
 
   userFrofile(id: number) {
-    this.sharedService.getAppointment(id).subscribe((data: any) => {
-      this.dataAppointmentbyid = data;
-      this.active = true;
-      this.CustomerID = data.customerID;
-      this.form.patchValue({
-        phone: data.customer.phone,
-        name: `${data.customer.firstName} ${data.customer.lastName}`,
-        appointmentDate: this.formatDate(data.appointmentDate, 'HH:mm'),
-        customerID: data.customer.customerID,
-        status: data.status,
-        service: data.chooseServices.map((item: any) => item.serviceID),
-        note: data.notes,
-      });
-      const foundDoctor = (data.assignments as any[]).find(item => item.employees.jobTypeID === 2);
-      if (foundDoctor) {
+    this.sharedService.getAppointment(id).pipe(
+      tap((data: any) => {
+        this.dataAppointmentbyid = data;
+        this.active = true;
+        this.CustomerID = data.customerID;
         this.form.patchValue({
-          doctor: `${foundDoctor.employees.lastName} ${foundDoctor.employees.firstName}`
+          phone: data.customer.phone,
+          name: `${data.customer.firstName} ${data.customer.lastName}`,
+          appointmentDate: this.formatDate(data.appointmentDate, 'HH:mm'),
+          customerID: data.customer.customerID,
+          // status: data.status,
+          service: data.chooseServices.map((item: any) => item.serviceID),
+          note: data.notes,
         });
-      }
-    });
+        const foundDoctor = (data.assignments as any[]).find(item => item.employees.jobTypeID === 2);
+        if (foundDoctor) {
+          this.form.patchValue({
+            doctor: `${foundDoctor.employees.lastName} ${foundDoctor.employees.firstName}`
+          });
+        }
+      }),
+      concatMap(() => this.sharedService.appointmentList(this.branchID).pipe(
+        tap((dataAllAppoint) => {
+          const foundExamingAppoint = (dataAllAppoint as any[]).find(item => item.branchID === this.branchID && item.status === 'Đang khám');
+          if (foundExamingAppoint) {
+            this.sharedService.UpdateStatus(foundExamingAppoint.appointmentID, 'Chờ khám').subscribe()
+          }
+        })
+      )),
+      concatMap(() => this.sharedService.UpdateStatus(id, 'Đang khám').pipe(
+        tap(() => {
+          this.initAppointmentList();
+        })
+      ))
+    ).subscribe();
     this.initService();
   }
 
@@ -183,8 +200,10 @@ export class DoctorComponent implements OnInit {
       ...this.form.value,
     };
 
-    if (id) {
+    if (id && this.form.value.status != 'Không sử dụng dịch vụ') {
       this.updateServiceAppointment(id, val.status, val.service, val.note);
+    } else {
+      this.updateServiceAppointment(id, val.status, null, val.note);
     }
   }
 

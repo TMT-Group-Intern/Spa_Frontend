@@ -120,6 +120,10 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'Customers/' + id);
   }
 
+  getPaymentHistory(id: any): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Payment/GetPaymentsByBill?idBill=' + id);
+  }
+
   // Search Customer
   searchCustomer(val: any): Observable<{ customers: any[] }> {
     return this.http.get<any>(this.baseUrl + 'Customers/search?searchTerm=' + val);
@@ -184,11 +188,19 @@ export class AuthService {
   getAppointment(id: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Appointment/' + id);
   }
-  // lấy danh sách lịch hẹn theo thời gian
-  getAppointmentByDays(branchId: number, fromDay: string, toDay: string) {
-    return this.http.get<any>(this.baseUrl + 'Appointment/getbyday?branchID=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay);
-  }
 
+  // lấy danh sách lịch hẹn theo thời gian
+  searchAppointmentByDays(fromDay: string, toDay: string, branchId: number, search: string, limit: number, offset: number, status: string) {
+    return this.http.get<any>(this.baseUrl + 'Appointment/searchAppointment?fromDate=' + fromDay + '&toDate=' + toDay + '&branchID=' + branchId + '&searchItem=' + search + '&limit=' + limit + '&offset=' + offset + '&status=' + status);
+  }
+  // lấy danh sách lịch hẹn theo thời gian
+  getAppointmentByDays(branchId: number, fromDay: string, toDay: string, pageNumber: number, pageSize: number) {
+    return this.http.get<any>(this.baseUrl + 'Appointment/getbyday?branchID=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay + '&pageNumber=' + pageNumber + '&pageSize=' + pageSize);
+  }
+  // lấy danh sách lịch hẹn theo thời gian với trạng thái lịch hẹn
+  getAppointmentByDaysWithStatus(branchId: number, fromDay: string, toDay: string, pageNumber: number, pageSize: number, status: string) {
+    return this.http.get<any>(this.baseUrl + 'Appointment/GetByStatusWithPaging?branchID=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay + '&pageNumber=' + pageNumber + '&pageSize=' + pageSize + '&status=' + status);
+  }
   //
   signUp(lastName: string, firstName: string, gender: string, phone: string, email: string, password: string, confirmPassword: string, dateOfBirth: string, hireDate: string, jobTypeID: number, branchID: number, role: string) {
     return this.http.post<{ status: object }>(this.baseUrl + 'Authentication/register', {
@@ -292,12 +304,18 @@ export class AuthService {
   getByDays(branchId: number, fromDay: string, toDay: string) {
     return this.http.get(this.baseUrl + 'Report/getbyday?idBrand=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay);
   }
+
   // danh sách các thanh toán trong ngày
   getDetails(branchId: number, fromDay: string, toDay: string) {
     return this.http.get(this.baseUrl + 'Report/getdetail?idBrand=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay);
   }
+
   // lấy danh sách lịch sử của người dùng
   getBillHistory(customerId: number) {
     return this.http.get(this.baseUrl + 'Bill/getbillhistory?customerId=' + customerId);
+  }
+
+  getPaymentsByBill(billID: number) {
+    return this.http.get(this.baseUrl + 'Payment/GetPaymentsByBill?idBill=' + billID);
   }
 }

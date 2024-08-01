@@ -1,8 +1,9 @@
-<div class="w-full px-4">
+<div class="flex flex-col w-full">
   <tds-calendar-header
     [(tdsViewDate)]="date"
     [tdsMode]="mode"
     (tdsModeChange)="onModelChange($event)"
+    (tdsViewDateChange)="onChangeTime($event)"
   >
     <button
       class="mr-2"
@@ -16,159 +17,231 @@
       Thêm khách hàng
     </button>
   </tds-calendar-header>
-  <div class="h-[570px] overflow-y-auto">
-    <tds-calendar
-      [tdsValue]="date"
-      [tdsMode]="mode"
-      (tdsSelectHour)="onClickSegment($event)"
+  <tds-tabset
+    [tdsHideBar]="false"
+    [tdsSize]="'small'"
+    [tdsType]="'pill'"
+    [clsTab]="'flex-1'"
+  >
+    <tds-tab
+      (tabClick)="renderDataTabBook()"
+      [title]="titleCustomer"
+      [clsContent]="'flex flex-col'"
     >
-      <ng-template ngFor [ngForOf]="lstData" let-event>
-        <tds-calendar-event
-          [tdsStartDate]="event.start"
-          [tdsEndDate]="event.end"
-          [tdsData]="event.data"
+      <ng-template #titleCustomer let-active="active">
+        <div
+          class="flex items-center justify-center font-semibold cursor-pointer text-body-2 relative group"
         >
-          <div class="p-2 w-[250px]">
-            <div
-              class="border rounded-xl border-neutral-2-200 h-full w-full bg-white flex flex-col p-2"
-            >
-              <div class="flex items-center justify-between">
-                <div class="py-2">
-                  <tds-tag
-                    class="rounded-full"
-                    [status]="event.data.status.status"
-                  >
-                    {{ event.data.status.name }}
-                  </tds-tag>
-                </div>
-                <div>
-                  <button
-                    *ngIf="
-                      event.data.status.name === 'Đã hẹn' ||
-                      event.data.status.name === 'Hủy hẹn'
-                    "
-                    tds-button-flat-icon
-                    tds-tooltip
-                    tooltipTitle="Chỉnh sửa lịch hẹn"
-                    color="secondary"
-                    (click)="onEditAppointment(event.data.id)"
-                  >
-                    <i class="tdsi-edit-fill"></i>
-                  </button>
-                  <button
-                    *ngIf="event.data.status.name === 'Đã hẹn'"
-                    tds-button-flat-icon
-                    color="secondary"
-                    tds-tooltip
-                    tooltipTitle="Chuyển tiếp"
-                    (click)="chooseDoctor(event.data.id, 'Chờ khám')"
-                  >
-                    <i class="tdsi-receive-fill"></i>
-                  </button>
-                  <button
-                    *ngIf="event.data.status.name === 'Đã khám'"
-                    tds-button-flat-icon
-                    color="secondary"
-                    tds-tooltip
-                    tooltipTitle="Chỉnh sửa thông tin"
-                    (click)="onEditInSession(event.data.id)"
-                  >
-                    <i class="tdsi-edit-fill"></i>
-                  </button>
-                  <button
-                    *ngIf="event.data.status.name === 'Hoàn thành'"
-                    tds-button-flat-icon
-                    color="secondary"
-                    tds-tooltip
-                    tooltipTitle="Thanh toán"
-                    (click)="createBill(event.data.id)"
-                  >
-                    <i class="tdsi-accounting-line"></i>
-                  </button>
-                  <button
-                    *ngIf="
-                      event.data.status.name === 'Chưa thanh toán' ||
-                      event.data.status.name === 'Thanh toán 1 phần' ||
-                      event.data.status.name === 'Thanh toán hoàn tất'
-                    "
-                    tds-button-flat-icon
-                    color="secondary"
-                    tds-tooltip
-                    tooltipTitle="Xem thanh toán"
-                    (click)="updateBill(event.data.id)"
-                  >
-                    <i class="tdsi-cash-fill"></i>
-                  </button>
-                </div>
-              </div>
-              <div
-                class="w-full mt-2 rounded-xl p-3 flex-auto text-sm"
-                [ngClass]="event.data.status.bg"
-              >
-                <div class="flex items-center">
-                  <span class="text-neutral-1-700 font-bold flex-auto">{{
-                    event.data.name
-                  }}</span>
-                </div>
-                <div class="flex items-center mt-3">
-                  <span
-                    class="tdsi-doctor-fill text-xl leading-5 mr-2 text-neutral-1-500"
-                  ></span>
-                  <span class="text-neutral-1-600 flex-auto">{{
-                    event.data.doctor
-                  }}</span>
-                </div>
-                <div class="flex items-center mt-3">
-                  <span
-                    class="tdsi-auto-fix-fill text-xl leading-5 mr-2 text-neutral-1-500"
-                  ></span>
-                  <span class="text-neutral-1-600 flex-auto">{{
-                    event.data.spaTherapist
-                  }}</span>
-                </div>
-                <div class="flex items-center mt-3">
-                  <span
-                    class="tdsi-call-fill text-xl leading-5 mr-2 text-neutral-1-500"
-                  ></span>
-                  <span class="text-neutral-1-600 flex-auto">{{
-                    event.data.phoneCus
-                  }}</span>
-                </div>
-                <div class="flex items-center mt-3">
-                  <span
-                    class="tdsi-time-fill text-xl leading-5 mr-2 text-neutral-1-500"
-                  ></span>
-                  <span class="text-neutral-1-600 flex-auto"
-                    >{{ event.start | date : 'hh:mm a' }} -
-                    {{ event.end | date : 'hh:mm a' }}</span
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-        </tds-calendar-event>
+          <span>Đặt lịch</span>
+        </div>
       </ng-template>
-      <ng-container *tdsMonthFullCell="let month">
-        <div class="w-full h-full absolute inset-0 flex flex-col">
-          <div class="w-full text-right p-3">
-            <span>
-              {{ month | date : 'dd' }}
-            </span>
-          </div>
-          <div
-            class="w-full flex-auto relative overflow-auto tds-custom-scroll"
-          >
-            <ng-template ngFor [ngForOf]="lstData" let-event>
-              <div
-                *ngIf="getMonthData(month, event) as monthData"
-                class="text-xs text-base-red-400"
-              >
-                <section>{{ event.data.name }}</section>
-              </div>
-            </ng-template>
+      <div class="w-full mt-2 h-0 bg-white dark:bg-d-neutral-3-200">
+        <div class="w-full px-4">
+          <div class="h-[570px] overflow-y-auto">
+            <tds-calendar
+              [tdsValue]="date"
+              [tdsMode]="mode"
+              (tdsSelectHour)="onClickSegment($event)"
+            >
+              <ng-template ngFor [ngForOf]="lstData" let-event>
+                <tds-calendar-event
+                  [tdsStartDate]="event.start"
+                  [tdsEndDate]="event.end"
+                  [tdsData]="event.data"
+                >
+                  <div class="p-2 w-[250px]">
+                    <div
+                      class="border rounded-xl border-neutral-2-200 h-full w-full bg-white flex flex-col p-2"
+                    >
+                      <div class="flex items-center justify-between">
+                        <div class="py-2">
+                          <tds-tag
+                            class="rounded-full mr-3"
+                            [status]="event.data.status.status"
+                          >
+                            {{ event.data.status.name }}
+                          </tds-tag>
+                          <tds-badge
+                            *ngIf="
+                              event.data.billStatus ===
+                              'Chưa tạo hóa đơn thanh toán'
+                            "
+                            status="error"
+                            tds-tooltip
+                            tooltipTitle="Chưa tạo hóa đơn thanh toán"
+                          ></tds-badge>
+                          <tds-badge
+                            *ngIf="event.data.billStatus === 'Chưa thanh toán'"
+                            status="custom"
+                            [tdsStyle]="{ background: '#7f2ed1' }"
+                            tds-tooltip
+                            tooltipTitle="Chưa thanh toán"
+                          ></tds-badge>
+                          <tds-badge
+                            *ngIf="
+                              event.data.billStatus === 'Thanh toán 1 phần'
+                            "
+                            status="primary"
+                            tds-tooltip
+                            tooltipTitle="Thanh toán 1 phần"
+                          ></tds-badge>
+                          <tds-badge
+                            *ngIf="
+                              event.data.billStatus === 'Thanh toán hoàn tất'
+                            "
+                            status="success"
+                            tds-tooltip
+                            tooltipTitle="Thanh toán hoàn tất"
+                          ></tds-badge>
+                        </div>
+                        <div>
+                          <button
+                            *ngIf="
+                              event.data.status.name === 'Đã hẹn' ||
+                              event.data.status.name === 'Hủy hẹn'
+                            "
+                            tds-button-flat-icon
+                            tds-tooltip
+                            tooltipTitle="Chỉnh sửa lịch hẹn"
+                            color="secondary"
+                            (click)="onEditAppointment(event.data.id)"
+                          >
+                            <i class="tdsi-edit-fill"></i>
+                          </button>
+                          <button
+                            *ngIf="event.data.status.name === 'Đã hẹn'"
+                            tds-button-flat-icon
+                            color="secondary"
+                            tds-tooltip
+                            tooltipTitle="Chuyển tiếp"
+                            (click)="chooseDoctor(event.data.id, 'Chờ khám')"
+                          >
+                            <i class="tdsi-receive-fill"></i>
+                          </button>
+                          <button
+                            *ngIf="event.data.status.name === 'Đã khám'"
+                            tds-button-flat-icon
+                            color="secondary"
+                            tds-tooltip
+                            tooltipTitle="Chỉnh sửa thông tin"
+                            (click)="onEditInSession(event.data.id)"
+                          >
+                            <i class="tdsi-edit-fill"></i>
+                          </button>
+                          <button
+                            *ngIf="event.data.status.name === 'Hoàn thành'"
+                            tds-button-flat-icon
+                            color="secondary"
+                            tds-tooltip
+                            tooltipTitle="Thanh toán"
+                            (click)="payment(event.data.id)"
+                          >
+                            <i class="tdsi-accounting-line"></i>
+                          </button>
+                          <!-- <button
+                            *ngIf="event.data.status.name === 'Chưa thanh toán' || event.data.status.name === 'Thanh toán 1 phần'"
+                            tds-button-flat-icon color="secondary" tds-tooltip tooltipTitle="Tiếp tục thanh toán"
+                            (click)="updateBill(event.data.id)">
+                            <i class="tdsi-accounting-line"></i>
+                          </button>
+                          <button *ngIf="event.data.status.name === 'Thanh toán hoàn tất'" tds-button-flat-icon
+                            color="secondary" tds-tooltip tooltipTitle="Xem hóa đơn" (click)="getBill(event.data.id)">
+                            <i class="tdsi-cash-fill"></i>
+                        </button> -->
+                        </div>
+                      </div>
+                      <div
+                        class="w-full mt-2 rounded-xl p-3 flex-auto text-sm"
+                        [ngClass]="event.data.status.bg"
+                      >
+                        <div class="flex items-center">
+                          <span
+                            class="text-neutral-1-700 font-bold flex-auto"
+                            >{{ event.data.name }}</span
+                          >
+                        </div>
+                        <div class="flex items-center mt-3">
+                          <span
+                            class="tdsi-doctor-fill text-xl leading-5 mr-2 text-neutral-1-500"
+                          ></span>
+                          <span class="text-neutral-1-600 flex-auto">{{
+                            event.data.doctor
+                          }}</span>
+                        </div>
+                        <div class="flex items-center mt-3">
+                          <span
+                            class="tdsi-auto-fix-fill text-xl leading-5 mr-2 text-neutral-1-500"
+                          ></span>
+                          <span class="text-neutral-1-600 flex-auto">{{
+                            event.data.spaTherapist
+                          }}</span>
+                        </div>
+                        <div class="flex items-center mt-3">
+                          <span
+                            class="tdsi-call-fill text-xl leading-5 mr-2 text-neutral-1-500"
+                          ></span>
+                          <span class="text-neutral-1-600 flex-auto">{{
+                            event.data.phoneCus
+                          }}</span>
+                        </div>
+                        <div class="flex items-center mt-3">
+                          <span
+                            class="tdsi-time-fill text-xl leading-5 mr-2 text-neutral-1-500"
+                          ></span>
+                          <span class="text-neutral-1-600 flex-auto"
+                            >{{ event.start | date : 'hh:mm a' }} -
+                            {{ event.end | date : 'hh:mm a' }}</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </tds-calendar-event>
+              </ng-template>
+              <ng-container *tdsMonthFullCell="let month">
+                <div class="w-full h-full absolute inset-0 flex flex-col">
+                  <div class="w-full text-right p-3">
+                    <span>
+                      {{ month | date : 'dd' }}
+                    </span>
+                  </div>
+                  <div
+                    class="w-full flex-auto relative overflow-auto tds-custom-scroll"
+                  >
+                    <ng-template ngFor [ngForOf]="lstData" let-event>
+                      <div
+                        *ngIf="getMonthData(month, event) as monthData"
+                        class="text-xs text-base-red-400"
+                      >
+                        <section>{{ event.data.name }}</section>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </ng-container>
+            </tds-calendar>
           </div>
         </div>
-      </ng-container>
-    </tds-calendar>
-  </div>
+      </div>
+    </tds-tab>
+    <tds-tab
+      (tabClick)="renderDataTabSearch()"
+      [title]="titleOrder"
+      clsContent="flex flex-col"
+    >
+      <ng-template #titleOrder let-active="active">
+        <div
+          class="flex items-center font-semibold justify-center text-body-2 relative group cursor-pointer"
+        >
+          <span class="flex items-center">Tra lịch hẹn</span>
+        </div>
+      </ng-template>
+      <div class="h-[480px]">
+        <frontend-appointment-list
+          [_startDate]="startDate"
+          [_endDate]="endDate"
+        ></frontend-appointment-list>
+      </div>
+    </tds-tab>
+  </tds-tabset>
 </div>
