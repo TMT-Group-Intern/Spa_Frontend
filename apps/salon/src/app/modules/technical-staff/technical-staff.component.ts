@@ -11,7 +11,7 @@ import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSSelectModule } from 'tds-ui/select';
 import { CompanyService } from '../../core/services/company.service';
-import { concatMap, filter, tap } from 'rxjs';
+import { concatMap, filter, forkJoin, tap } from 'rxjs';
 import { TDSEmptyModule } from 'tds-ui/empty';
 
 @Component({
@@ -73,10 +73,6 @@ export class TechnicalStaffComponent {
       this.currentBranch = this.userSession.user.branchID;
       this.renderCustomerInQueue();
     }
-    // const branchID = this.userSession.user.branchID
-    // this.renderCustomerInQueue();
-    //this.initAppointmentList()
-
     this.companySvc._companyIdCur$.pipe(
       filter(companyId => !!companyId),
       tap((company) => company)
@@ -96,19 +92,20 @@ export class TechnicalStaffComponent {
   }
 
   renderCustomerInQueue() {
-    this.auth
-      .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Đang chăm sóc')
-      .subscribe((x: any[]) => {
-        this.listSpaServiceQueue = x;
-        this.auth
-          .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ chăm sóc')
-          .subscribe((y: any[]) => {
-            this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...y];
-            this.reception = this.listSpaServiceQueue.filter(
-              (appointment: any) => (appointment.spaTherapist === this.userSession.user.userCode
-                || this.userSession.user.role === 'Admin'));
-          });
-      });
+    forkJoin([
+      this.auth.getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Đang chăm sóc'),
+      this.auth.getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ chăm sóc')
+    ]).subscribe(([x, y]: [any[], any[]]) => {
+      // Kết hợp tất cả phần tử từ hai API
+      this.listSpaServiceQueue = [...x, ...y];
+
+      // Lọc danh sách theo điều kiện 'spaTherapist' và 'Admin'
+      this.reception = this.listSpaServiceQueue.filter(
+        (appointment: any) =>
+          appointment.spaTherapist === this.userSession.user.userCode ||
+          this.userSession.user.role === 'Admin'
+      );
+    });
   }
 
   renderCustomerInQueueTemp(id: number | null) {
@@ -130,7 +127,6 @@ export class TechnicalStaffComponent {
         this.checkActive = true;
         this.appointmentAllInfo = data;
       },
-
     };
     this.auth.getAppointment(data.appointmentID).subscribe(observer);
   }
@@ -201,34 +197,6 @@ export class TechnicalStaffComponent {
     this.notification.error('Error', content);
   }
 
-  toggleCheckbox(serviceId: number) {
-    this.checkboxStatess[serviceId] = !this.checkboxStatess[serviceId];
-    console.log(this.checkboxStatess);
-  }
-
-  onSave(data: any, checkBox: any) {
-    const appointmentDetailList = JSON.parse(localStorage.getItem('appointmentDetail') || '[]');
-    const existingIndex = appointmentDetailList.findIndex((item: any) => item.data.appointmentID === data.appointmentID);
-    const checkboxTemp: { [key: number]: boolean } = {};
-    if (existingIndex !== -1) {
-      const existingCheckBox = appointmentDetailList[existingIndex].checkBox;
-
-      for (const key in existingCheckBox) {
-        checkboxTemp[Number(key)] = existingCheckBox[key];
-      }
-      for (const key in checkBox) {
-        checkboxTemp[Number(key)] = checkBox[key];
-      }
-      appointmentDetailList[existingIndex].checkBox = checkboxTemp;
-    } else {
-      appointmentDetailList.push({ data, checkBox });
-    }
-    localStorage.setItem('appointmentDetail', JSON.stringify(appointmentDetailList));
-    this.createNotificationSuccess('Upload successful');
-
-  }
-
-
   onStatusChange(event: any, id: number) {
     const status = event.target.value;
     if (status === 'Hoàn thành') {
@@ -247,7 +215,6 @@ export class TechnicalStaffComponent {
       (error) => {
         console.error('Error updating status:', error);
         // Handle error (if needed)
-        this.renderCustomerInQueue();
       }
     );
   }
