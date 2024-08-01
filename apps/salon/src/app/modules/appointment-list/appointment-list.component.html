@@ -6,11 +6,23 @@
     </div> -->
     <div class="w-96 flex flex-col gap-3 bg-white px-4 pt-2 rounded-lg mb-2">
       <tds-form-field>
-        <input class="placeholder-neutral-1-400" placeholder="Search..." tdsInput [(ngModel)]="inputValue"
-          (input)="onInput($event) " [tdsAutocomplete]="auto" />
-        <span tdsPrefix><i class="text-neutral-1-500 tdsi-search-fill text-base"></i></span>
+        <input
+          class="placeholder-neutral-1-400"
+          placeholder="Search..."
+          tdsInput
+          [(ngModel)]="inputValue"
+          (input)="onInput($event)"
+          [tdsAutocomplete]="auto"
+        />
+        <span tdsPrefix
+          ><i class="text-neutral-1-500 tdsi-search-fill text-base"></i
+        ></span>
       </tds-form-field>
-      <tds-autocomplete [dataSource]="options" backfill #auto></tds-autocomplete>
+      <tds-autocomplete
+        [dataSource]="options"
+        backfill
+        #auto
+      ></tds-autocomplete>
     </div>
     <!-- <div class="text-sm w-36 flex flex-col gap-3 bg-white px-4 pt-2 rounded-lg mb-2">
       <button tds-button color="primary" class="text-slate-500 hover:text-secondary-1" (click)="callModalCreateAppointment()">
@@ -19,11 +31,22 @@
     </div> -->
   </div>
   <div class="bg-white">
-    <tds-tabset [tdsHideBar]="false" [tdsType]="'pill'" [tdsSize]="'small'" [(selectedIndex)]="selectedIndex">
+    <tds-tabset
+      [tdsHideBar]="false"
+      [tdsType]="'pill'"
+      [tdsSize]="'small'"
+      [(selectedIndex)]="selectedIndex"
+    >
       <tds-tab *ngFor="let tab of tabs" [title]="tab" [clsContent]="'w-full'">
       </tds-tab>
     </tds-tabset>
-      <frontend-appointment-table-list [branchId]="branchId" [tabCurStr]="tabs[selectedIndex]" [startDay]="startDate"
-      [endDay]="endDate" [search]="search" [boolean$]="boolean$"></frontend-appointment-table-list>
+    <frontend-appointment-table-list
+      [branchId]="branchId"
+      [tabCurStr]="tabs[selectedIndex]"
+      [startDay]="startDate"
+      [endDay]="endDate"
+      [search]="search"
+      [boolean$]="boolean$"
+    ></frontend-appointment-table-list>
   </div>
 </div>
