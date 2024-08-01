@@ -57,14 +57,15 @@ export class TechnicalStaffComponent {
 
 
   ngOnInit(): void {
+    this.auth.DataListenerDoctorChagneStatus(this.onReceiveAppointments.bind(this));
     const storedUserSession = localStorage.getItem('userSession');
     if (storedUserSession !== null) {
       this.userSession = JSON.parse(storedUserSession);
       this.currentBranch = this.userSession.user.branchID;
       this.renderCustomerInQueue();
     }
-    const branchID = this.userSession.user.branchID
-    this.renderCustomerInQueue();
+    // const branchID = this.userSession.user.branchID
+    // this.renderCustomerInQueue();
     //this.initAppointmentList()
 
     this.companySvc._companyIdCur$.pipe(
@@ -80,6 +81,10 @@ export class TechnicalStaffComponent {
     private notification: TDSNotificationService,
     private companySvc: CompanyService
   ) { }
+
+  onReceiveAppointments(): void {
+    this.renderCustomerInQueue();
+  }
 
   renderCustomerInQueue() {
     this.auth
@@ -114,25 +119,9 @@ export class TechnicalStaffComponent {
     const observer = {
       next: (data: any) => {
         this.checkActive = true;
-        this.checkboxStatess = {};
-        this.loadData()
         this.appointmentAllInfo = data;
-        this.customerDetail = data.chooseServices.map(
-          (chooseService: any) => chooseService.service
-        );
-        const appointmentData = this.dataTemp
-          .find((item: any) => item.data.appointmentID === this.appointmentAllInfo.appointmentID);
-        if (appointmentData) {
-          Object.keys(appointmentData.checkBox).forEach(key => {
-            const numKey = +key;
-            if (!isNaN(numKey)) {
-              this.checkboxStatess[numKey] = appointmentData.checkBox[numKey] || false;
-            }
-          });
-        }
       },
-      // error: (err: any) => console.error('Observer got an error: ' + err),
-      // complete: () => console.log('Observer got a complete notification'),
+
     };
     this.auth.getAppointment(data.appointmentID).subscribe(observer);
   }
@@ -227,21 +216,13 @@ export class TechnicalStaffComponent {
     }
     localStorage.setItem('appointmentDetail', JSON.stringify(appointmentDetailList));
     this.createNotificationSuccess('Upload successful');
-    this.loadData();
 
   }
 
-  loadData() {
-    const data: any = localStorage.getItem('appointmentDetail');
-    this.dataTemp = JSON.parse(data);
-    console.log(this.dataTemp);
-
-  }
 
   onStatusChange(event: any, id: number) {
     const status = event.target.value;
     if (status === 'Hoàn thành') {
-      this.onDelete(id);
       this.checkActive = false;
 
     }
@@ -251,8 +232,8 @@ export class TechnicalStaffComponent {
   updateStatus(id: number, status: string) {
     this.auth.UpdateStatus(id, status).subscribe(
       () => {
-        this.listSpaServiceQueue = [];
-        this.renderCustomerInQueue();
+        //  this.listSpaServiceQueue = [];
+        // this.renderCustomerInQueue();
       },
       (error) => {
         console.error('Error updating status:', error);
@@ -261,65 +242,5 @@ export class TechnicalStaffComponent {
       }
     );
   }
-
-  onDelete(appointmentID: number) {
-    const appointmentDetailList = JSON.parse(localStorage.getItem('appointmentDetail') || '[]');
-    const updatedList = appointmentDetailList.filter((item: any) => item.data.appointmentID !== appointmentID);
-    localStorage.setItem('appointmentDetail', JSON.stringify(updatedList));
-    this.loadData();
-  }
-
-
-  start(): void {
-    this.timer = true;
-    this.stopWatch();
-  }
-
-  stop(): void {
-    this.timer = false;
-  }
-
-  reset(): void {
-    this.timer = false;
-    this.hour = 0;
-    this.minute = 0;
-    this.second = 0;
-    this.count = 0;
-    this.updateDisplay();
-  }
-
-  stopWatch(): void {
-    if (this.timer) {
-      this.count++;
-
-      if (this.count == 100) {
-        this.second++;
-        this.count = 0;
-      }
-
-      if (this.second == 60) {
-        this.minute++;
-        this.second = 0;
-      }
-
-      if (this.minute == 60) {
-        this.hour++;
-        this.minute = 0;
-        this.second = 0;
-      }
-
-      this.updateDisplay();
-
-      setTimeout(() => this.stopWatch(), 10);
-    }
-  }
-
-  updateDisplay(): void {
-    this.hrString = this.hour < 10 ? '0' + this.hour : this.hour.toString();
-    this.minString = this.minute < 10 ? '0' + this.minute : this.minute.toString();
-    this.secString = this.second < 10 ? '0' + this.second : this.second.toString();
-    this.countString = this.count < 10 ? '0' + this.count : this.count.toString();
-  }
-
 
 }

@@ -1,0 +1,22 @@
+<div class="chat-container w-full h-full p-4 bg-gray-100 rounded-lg shadow-md">
+  <div class="chat-messages h-4/5 overflow-y-auto mb-4 p-4 bg-white rounded-lg">
+    <div *ngFor="let msg of messages" class="mb-2">
+      <strong class="text-blue-500">{{ msg.user }}:</strong>
+      <span class="text-gray-700">{{ msg.message }}</span>
+    </div>
+  </div>
+  <div class="chat-input flex space-x-2">
+    <input
+      [(ngModel)]="message"
+      (keyup.enter)="sendMessage()"
+      placeholder="Type a message"
+      class="flex-1 p-2 border border-gray-300 rounded-lg"
+    />
+    <button
+      (click)="sendMessage()"
+      class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+    >
+      Send
+    </button>
+  </div>
+</div>

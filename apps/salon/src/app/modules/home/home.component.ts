@@ -64,7 +64,6 @@ export class HomeComponent implements OnInit {
   storedUserSession = localStorage.getItem('userSession');
   oldBranch: any;
   companyId: number | null = null;
-
   private readonly shareApi = inject(AuthService);
   private readonly company = inject(CompanyService);
   private readonly modalSvc = inject(TDSModalService);
@@ -85,6 +84,8 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.sharedService.DataListenerDoctorChagneStatus(this.onReceiveAppointments.bind(this))
+
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
       this.initAppointment();
@@ -104,18 +105,25 @@ export class HomeComponent implements OnInit {
       )
   }
 
+  onReceiveAppointments(): void {
+    console.log(1)
+    this.initAppointment();
+  }
+
+
   // call get list of appoiment
   initAppointment() {
     const branchID = this.userSession.user.branchID
     this.shareApi.appointmentList(branchID).subscribe(
       (data: any) => {
         this.dataAppointment(data)
+        console.log(data)
       });
   }
 
   //
   dataAppointment(data: any) {
-    this.dataAppointments = data
+    this.dataAppointments = [...data]
     this.lstData = this.dataAppointments.map((item: any) => ({
       start: new Date(item.appointmentDate),
       end: new Date(new Date(item.appointmentDate).getTime() + 60 * 60000),
@@ -172,7 +180,7 @@ export class HomeComponent implements OnInit {
         appoint.data.status.bg = 'bg-success-100'
       }
     }
-
+    this.cdr.markForCheck();
   }
 
 
@@ -331,10 +339,12 @@ export class HomeComponent implements OnInit {
         modal.afterClose.asObservable().subscribe((res) => {
           if (res) {
             this.updateStatus(id, status);
+            // this.sharedService.sendChangStatusByReciption();
           }
         });
       } else {
         this.updateStatus(id, status);
+        // this.sharedService.sendChangStatusByReciption();
       }
     });
   }

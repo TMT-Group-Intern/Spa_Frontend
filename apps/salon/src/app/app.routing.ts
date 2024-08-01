@@ -14,6 +14,7 @@ import { AuthGuardService } from './auth/auth-guard.service';
 import { SchedulesComponent } from './modules/schedule/schedule.component';
 import { BillComponent } from './modules/bill/bill.component';
 import { AppointmentListModule } from './modules/appointment-list/appointment-list.module';
+import { ChatboxComponent } from './modules/chatbox/chatbox.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -26,6 +27,7 @@ const routes: Routes = [
       { path: 'schedule', loadComponent: () => SchedulesComponent },
       { path: 'service-list', loadComponent: () => ServiceListComponent },
       { path: 'customer-list', loadComponent: () => CustomerListComponent },
+      { path: 'chat-box', loadComponent: () => ChatboxComponent },
       { path: 'technical-staff', loadComponent: () => TechnicalStaffComponent },
       {
         path: 'technical-staff',
@@ -46,16 +48,19 @@ const routes: Routes = [
         ],
       },
       { path: 'doctor', loadComponent: () => DoctorComponent },
-      { path: 'report', loadChildren: () => import("./modules/revenue-statistics/revenue-statistics.module").then(m => m.RevenueStaticsModule)},
-      { path: 'report/report-day',
-        loadComponent:()=>
+      { path: 'report', loadChildren: () => import("./modules/revenue-statistics/revenue-statistics.module").then(m => m.RevenueStaticsModule) },
+      {
+        path: 'report/report-day',
+        loadComponent: () =>
           import(
             './modules/reporting-date/reporting-date.component'
-          ).then((m)=>m.ReportingDateComponent),
-          },
-      {path: 'users', loadComponent: ()=> UsersComponent},
-      {path: 'bill/:id', loadComponent: ()=> BillComponent},
-      {path: 'appoitmentList', loadChildren: ()=> AppointmentListModule},
+          ).then((m) => m.ReportingDateComponent),
+      },
+      { path: 'users', loadComponent: () => UsersComponent },
+      { path: 'bill/:id', loadComponent: () => BillComponent },
+      { path: 'appoitmentList', loadChildren: () => AppointmentListModule },
+
+
     ],
   },
 ];
@@ -64,4 +69,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

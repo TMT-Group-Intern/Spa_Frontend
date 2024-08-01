@@ -89,37 +89,6 @@
           class="text-slate-500 hover:text-green-500"
           tds-tooltip
           tooltipTitle="Tạo tài khoản cho nhân viên"
-          (click)="createAccountForEmployee(dataRow.Email)"
-          *ngIf="dataRow.haveAccount === false"
-        >
-          <i class="tdsi-plus-fill"></i>
-        </button>
-        <button
-          tds-button-flat-icon
-          color="custom"
-          class="text-slate-500 hover:text-secondary-1"
-          tds-tooltip
-          tooltipTitle="Cập nhật thông tin tài khoản"
-          (click)="onEditUser(dataRow.Email, dataRow.Role, dataRow.isActive)"
-        >
-          <i class="tdsi-edit-fill"></i>
-        </button>
-        <button
-          tds-button-flat-icon
-          color="custom"
-          [disabled]="this.userSession.user.email === dataRow.Email"
-          class="text-slate-500 hover:text-red-500 tdsi-trash-fill"
-          tds-tooltip
-          tooltipTitle="Xóa tài khoản"
-          (click)="deleteUser(dataRow.Email)"
-        ></button>
-
-        <button
-          tds-button-flat-icon
-          color="custom"
-          class="text-slate-500 hover:text-green-500"
-          tds-tooltip
-          tooltipTitle="Tạo tài khoản cho nhân viên"
           (click)="createAccountForEmployee(dataRow.email)"
           *ngIf="dataRow.haveAccount === false"
         >

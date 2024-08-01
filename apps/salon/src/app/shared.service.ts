@@ -3,16 +3,55 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { HttpHeaders } from '@angular/common/http';
+import * as signalR from '@microsoft/signalr';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private baseUrl: string | undefined;
+  private baseUrl: string | undefined = environment.BASE_URI
+  private hubConnection: signalR.HubConnection | undefined;
+  private isConnected = false;
 
   constructor(private http: HttpClient) {
-    this.baseUrl = environment.BASE_URI
+    this.hubConnection = new signalR.HubConnectionBuilder()
+      .withUrl("https://localhost:44305/chatHub")
+      .build();
+    this.hubConnection
+      .start()
+      .then(() => {
+        console.log('SignalR Connection started');
+        this.isConnected = true;
+      })
+      .catch(err => console.error('Error while starting connection: ' + err));
+    this.hubConnection.onclose(() => {
+      this.isConnected = false;
+      console.log('SignalR Connection closed');
+    });
 
+  }
+
+
+  public addTransferChatDataListener(callback: (user: string, message: string) => void): void {
+    if (this.hubConnection) {
+      this.hubConnection.on('ReceiveMessage', callback);
+      console.log(callback)
+    }
+  }
+
+
+  public DataListenerDoctorChagneStatus(callback: () => void): void { //thay đổi trang thái nếu có thay đổi status từ bác sĩ
+    if (this.hubConnection) {
+      this.hubConnection.on('ChangeStatus', callback);
+    }
+  }
+
+
+  public sendMessage(user: string, message: string): void {
+    if (this.hubConnection) {
+      this.hubConnection.invoke('SendMessage', user, message)
+        .catch(err => console.error(err));
+    }
   }
 
   // get by id service
@@ -147,7 +186,7 @@ export class AuthService {
   }
   // lấy danh sách lịch hẹn theo thời gian
   getAppointmentByDays(branchId: number, fromDay: string, toDay: string) {
-    return this.http.get<any>(this.baseUrl + 'Appointment/getbyday?branchID='+ branchId + '&fromDate='+ fromDay +'&toDate='+ toDay);
+    return this.http.get<any>(this.baseUrl + 'Appointment/getbyday?branchID=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay);
   }
 
   //
@@ -238,7 +277,7 @@ export class AuthService {
 
   //
   getAllBillByAppointmentID(id: number): Observable<any> {
-    return this.http.get<any>(this.baseUrl + 'Bill/GetBillByAppointmentID?appId='+id);
+    return this.http.get<any>(this.baseUrl + 'Bill/GetBillByAppointmentID?appId=' + id);
   }
 
   //
@@ -250,15 +289,15 @@ export class AuthService {
   }
 
   // báo cáo theo ngày
-  getByDays(branchId: number, fromDay: string, toDay: string){
+  getByDays(branchId: number, fromDay: string, toDay: string) {
     return this.http.get(this.baseUrl + 'Report/getbyday?idBrand=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay);
   }
   // danh sách các thanh toán trong ngày
-  getDetails(branchId: number, fromDay: string, toDay: string){
+  getDetails(branchId: number, fromDay: string, toDay: string) {
     return this.http.get(this.baseUrl + 'Report/getdetail?idBrand=' + branchId + '&fromDate=' + fromDay + '&toDate=' + toDay);
   }
   // lấy danh sách lịch sử của người dùng
-  getBillHistory(customerId:number){
+  getBillHistory(customerId: number) {
     return this.http.get(this.baseUrl + 'Bill/getbillhistory?customerId=' + customerId);
   }
 }
