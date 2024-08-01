@@ -73,10 +73,6 @@ export class TechnicalStaffComponent {
       this.currentBranch = this.userSession.user.branchID;
       this.renderCustomerInQueue();
     }
-    // const branchID = this.userSession.user.branchID
-    // this.renderCustomerInQueue();
-    //this.initAppointmentList()
-
     this.companySvc._companyIdCur$.pipe(
       filter(companyId => !!companyId),
       tap((company) => company)
@@ -103,7 +99,10 @@ export class TechnicalStaffComponent {
         this.auth
           .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ chăm sóc')
           .subscribe((y: any[]) => {
-            this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...y];
+            const filteredY = y.filter(yItem =>
+              !this.listSpaServiceQueue.some(xItem => xItem.appointmentID === yItem.appointmentID)
+            );
+            this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...filteredY];
             this.reception = this.listSpaServiceQueue.filter(
               (appointment: any) => (appointment.spaTherapist === this.userSession.user.userCode
                 || this.userSession.user.role === 'Admin'));
@@ -130,7 +129,6 @@ export class TechnicalStaffComponent {
         this.checkActive = true;
         this.appointmentAllInfo = data;
       },
-
     };
     this.auth.getAppointment(data.appointmentID).subscribe(observer);
   }
@@ -201,34 +199,6 @@ export class TechnicalStaffComponent {
     this.notification.error('Error', content);
   }
 
-  toggleCheckbox(serviceId: number) {
-    this.checkboxStatess[serviceId] = !this.checkboxStatess[serviceId];
-    console.log(this.checkboxStatess);
-  }
-
-  onSave(data: any, checkBox: any) {
-    const appointmentDetailList = JSON.parse(localStorage.getItem('appointmentDetail') || '[]');
-    const existingIndex = appointmentDetailList.findIndex((item: any) => item.data.appointmentID === data.appointmentID);
-    const checkboxTemp: { [key: number]: boolean } = {};
-    if (existingIndex !== -1) {
-      const existingCheckBox = appointmentDetailList[existingIndex].checkBox;
-
-      for (const key in existingCheckBox) {
-        checkboxTemp[Number(key)] = existingCheckBox[key];
-      }
-      for (const key in checkBox) {
-        checkboxTemp[Number(key)] = checkBox[key];
-      }
-      appointmentDetailList[existingIndex].checkBox = checkboxTemp;
-    } else {
-      appointmentDetailList.push({ data, checkBox });
-    }
-    localStorage.setItem('appointmentDetail', JSON.stringify(appointmentDetailList));
-    this.createNotificationSuccess('Upload successful');
-
-  }
-
-
   onStatusChange(event: any, id: number) {
     const status = event.target.value;
     if (status === 'Hoàn thành') {
@@ -247,7 +217,6 @@ export class TechnicalStaffComponent {
       (error) => {
         console.error('Error updating status:', error);
         // Handle error (if needed)
-        this.renderCustomerInQueue();
       }
     );
   }
