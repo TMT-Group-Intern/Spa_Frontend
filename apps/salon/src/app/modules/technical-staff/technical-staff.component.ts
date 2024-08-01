@@ -11,7 +11,7 @@ import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSSelectModule } from 'tds-ui/select';
 import { CompanyService } from '../../core/services/company.service';
-import { concatMap, filter, tap } from 'rxjs';
+import { concatMap, filter, forkJoin, tap } from 'rxjs';
 import { TDSEmptyModule } from 'tds-ui/empty';
 
 @Component({
@@ -92,22 +92,20 @@ export class TechnicalStaffComponent {
   }
 
   renderCustomerInQueue() {
-    this.auth
-      .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Đang chăm sóc')
-      .subscribe((x: any[]) => {
-        this.listSpaServiceQueue = x;
-        this.auth
-          .getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ chăm sóc')
-          .subscribe((y: any[]) => {
-            const filteredY = y.filter(yItem =>
-              !this.listSpaServiceQueue.some(xItem => xItem.appointmentID === yItem.appointmentID)
-            );
-            this.listSpaServiceQueue = [...this.listSpaServiceQueue, ...filteredY];
-            this.reception = this.listSpaServiceQueue.filter(
-              (appointment: any) => (appointment.spaTherapist === this.userSession.user.userCode
-                || this.userSession.user.role === 'Admin'));
-          });
-      });
+    forkJoin([
+      this.auth.getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Đang chăm sóc'),
+      this.auth.getCustomerInQueueForTechnicalStaff(this.userSession.user.branchID, 'Chờ chăm sóc')
+    ]).subscribe(([x, y]: [any[], any[]]) => {
+      // Kết hợp tất cả phần tử từ hai API
+      this.listSpaServiceQueue = [...x, ...y];
+
+      // Lọc danh sách theo điều kiện 'spaTherapist' và 'Admin'
+      this.reception = this.listSpaServiceQueue.filter(
+        (appointment: any) =>
+          appointment.spaTherapist === this.userSession.user.userCode ||
+          this.userSession.user.role === 'Admin'
+      );
+    });
   }
 
   renderCustomerInQueueTemp(id: number | null) {
