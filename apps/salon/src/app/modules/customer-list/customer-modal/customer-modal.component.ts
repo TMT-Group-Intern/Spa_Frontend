@@ -13,7 +13,15 @@ import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSDatePickerModule } from 'tds-ui/date-picker';
 import { CustomerListComponent } from '../customer-list.component';
 import { AuthService } from '../../../shared.service';
-import { BehaviorSubject, catchError, debounceTime, filter, of, switchMap, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  debounceTime,
+  filter,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSSelectModule } from 'tds-ui/select';
@@ -40,7 +48,7 @@ import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
   styleUrls: ['./customer-modal.component.scss'],
 })
 export class CustomerModalComponent implements OnInit {
-  searchPhone$ = new BehaviorSubject<string>('')
+  searchPhone$ = new BehaviorSubject<string>('');
   private readonly modalRef = inject(TDSModalRef);
   private readonly modalService = inject(TDSModalService);
   @Input() id?: number;
@@ -48,13 +56,13 @@ export class CustomerModalComponent implements OnInit {
   createCustomerForm!: FormGroup;
   dataCustomer: any;
   today = startOfToday();
-  checkPhone?:boolean = false
+  checkPhone?: boolean = false;
   form = inject(FormBuilder).nonNullable.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     email: ['', Validators.email],
     phone: ['', [Validators.required, Validators.pattern(/^[0]{1}[0-9]{9}$/)]],
-    dateOfBirth: [''],
+    dateOfBirth: [],
     gender: ['Nam'],
   });
 
@@ -64,36 +72,46 @@ export class CustomerModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.checkNumberPhone()
     if (this.id) {
       this.auth.getCustomer(this.id).subscribe((data: any) => {
-        const { firstName, lastName, email, phone, dateOfBirth, gender } = data.customerDTO;
+        const { firstName, lastName, email, phone, dateOfBirth, gender } =
+          data.customerDTO;
+        this.dataCustomer = data.customerDTO;
         this.form.patchValue({
           firstName,
           lastName,
           email,
           phone,
           dateOfBirth,
-          gender
+          gender,
         });
       });
+      // this.checkNumberPhone();
+      // if(this.form.value.phone != this.dataCustomer.phone) {
+      //   this.checkNumberPhone();
+      // }
+    } else {
+      this.checkNumberPhone();
     }
   }
 
-  checkNumberPhone(){
-    this.form.get("phone")?.valueChanges.pipe(
-      debounceTime(100),
-      filter((phone) =>(phone !== null && phone.length == 10)),
-      switchMap((search: string) => {
-        return search ? this.auth.searchCustomer(search) : of(null)
-      })
-    ).subscribe((data:any) => {
-      if (data.customers.phone !== null && data.customers.length > 0){
-        this.checkPhone = true;
-      }else{
-        this.checkPhone = false;
-      }
-    })
+  checkNumberPhone() {
+    this.form
+      .get('phone')
+      ?.valueChanges.pipe(
+        debounceTime(100),
+        filter((phone) => phone !== null && phone.length == 10),
+        switchMap((search: string) => {
+          return search ? this.auth.searchCustomer(search) : of(null);
+        })
+      )
+      .subscribe((data: any) => {
+        if (data.customers.phone !== null && data.customers.length > 0) {
+          this.checkPhone = true;
+        } else {
+          this.checkPhone = false;
+        }
+      });
   }
 
   // Disabled Date in the future
@@ -109,7 +127,7 @@ export class CustomerModalComponent implements OnInit {
 
   // Submit button
   submit() {
-    if (this.form.invalid) return;
+    if (this.form.invalid || this.checkPhone) return;
 
     const val = {
       ...this.form.value,
