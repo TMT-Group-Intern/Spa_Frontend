@@ -1,15 +1,17 @@
 <tds-header [tdsTheme]="'light'" class="flex w-full rounded-bl-lg">
 
   <div class="inline-flex tds-header-toolbar-right items-center px-4">
-    <p class="mr-4" *ngIf="this.userSession.user.role !== 'Admin'"><i class="tdsi-pin-fill"></i> {{this.userSession.user.branch}}</p>
-    <tds-select *ngIf="this.userSession.user.role === 'Admin'" class='w-40' valueField="id" textField="name" classIcon="tdsi-arrow-down-fill text-d-neutral-1-300"
-    [(ngModel)]="branchID" (ngModelChange)="onBranchChanges($event)" [border]='true' [data]="branchOptions" placeholder="Chọn Chi Nhánh">
+    <p class="mr-4" *ngIf="this.userSession.user.role !== 'Admin'"><i class="tdsi-pin-fill"></i>
+      {{this.userSession.user.branch}}</p>
+    <tds-select *ngIf="this.userSession.user.role === 'Admin'" class='w-40' valueField="id" textField="name"
+      classIcon="tdsi-arrow-down-fill text-d-neutral-1-300" [(ngModel)]="branchID"
+      (ngModelChange)="onBranchChanges($event)" [border]='true' [data]="branchOptions" placeholder="Chọn Chi Nhánh">
     </tds-select>
 
-    <button tds-button-flat-icon color="red" class="rounded-full" tds-tooltip tooltipTitle="Log out"
+    <!-- <button tds-button-flat-icon color="red" class="rounded-full" tds-tooltip tooltipTitle="Log out"
       (click)="onLogOut()">
       <i class="tdsi-log-out-line text-primary-1"></i>
-    </button>
+    </button> -->
     <button tds-button-flat-icon size="md" class="mr-2">
       <span class="flex items-center">
         <i class="tdsi-info-line text-primary-1"></i>
@@ -19,11 +21,30 @@
       <span class="flex items-center">
         <i class="tdsi-notification-line text-primary-1"></i>
       </span>
-    </button> 
-    <div class="flex" >
-      <span class="flex items-center">
+    </button>
+    <div class="flex">
+      <!-- <span class="flex items-center">
         <strong>{{this.userSession.user.name}}</strong>
-      </span>
+        <i tds-dropdown [tdsDropdownMenu]="menu1" class="tdsi-arrow-down-fill text-lg leading-none ml-2"></i>
+      </span> -->
+
+      <button tds-button color="secondary" tds-dropdown [tdsDropdownMenu]="menu1">
+        <span class="flex items-center">
+          {{this.userSession.user.name}}
+          <i class="tdsi-arrow-down-fill text-lg leading-none ml-2"></i>
+        </span>
+      </button>
+      <tds-dropdown-menu #menu1="tdsDropdownMenu">
+        <div class="">
+          <div tds-dropdown-item>
+            <a> <i class="tdsi-edit-fill text-primary-1"></i> Đổi mật khẩu </a>
+          </div>
+          <div (click)="onLogOut()" tds-dropdown-item>
+            <a> <i class="tdsi-log-out-line text-primary-1"></i> Đăng xuất </a>
+          </div>
+        </div>
+      </tds-dropdown-menu>
+
     </div>
   </div>
   <tds-form-field class="w-full" tdsClass="dark:!border-transpanent">

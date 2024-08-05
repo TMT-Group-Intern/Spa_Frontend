@@ -13,6 +13,8 @@ import { TDSSelectModule } from 'tds-ui/select';
 import { CompanyService } from '../../core/services/company.service';
 import { concatMap, filter, forkJoin, tap } from 'rxjs';
 import { TDSEmptyModule } from 'tds-ui/empty';
+import { TDSTagModule } from 'tds-ui/tag';
+import { TDSCardModule } from 'tds-ui/card';
 
 @Component({
   selector: 'frontend-technical-staff',
@@ -27,6 +29,8 @@ import { TDSEmptyModule } from 'tds-ui/empty';
     TDSFormFieldModule,
     TDSSelectModule,
     TDSEmptyModule,
+    TDSTagModule,
+    TDSCardModule,
   ],
 })
 export class TechnicalStaffComponent {
