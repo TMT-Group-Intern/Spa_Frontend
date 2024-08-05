@@ -192,19 +192,20 @@ export class DoctorComponent implements OnInit {
         }
       }),
       concatMap(() => this.sharedService.appointmentList(this.branchID).pipe(
-        tap((dataAllAppoint) => {
-          const foundExamingAppoint = (dataAllAppoint as any[]).find(item => item.branchID == this.branchID && item.appointmentID != id && item.status == 'Đang khám');
+        tap((dataAllAppoint: any[]) => {
+          const foundExamingAppoint = dataAllAppoint.find(item => item.status == 'Đang khám');
           if (foundExamingAppoint) {
-            console.log(1)
-            this.sharedService.UpdateStatus(foundExamingAppoint.appointmentID, 'Chờ khám').pipe(
-              concatMap(() => this.sharedService.UpdateStatus(id, 'Đang khám').pipe(
-                tap(() => {
-                  this.initAppointmentList();
-                })
-              ))
-            ).subscribe()
+            if(foundExamingAppoint.appointmentID != id) {
+              this.sharedService.UpdateStatus(foundExamingAppoint.appointmentID, 'Chờ khám').pipe(
+                concatMap(() => this.sharedService.UpdateStatus(id, 'Đang khám').pipe(
+                  tap(() => {
+                    this.initAppointmentList();
+                  })
+                ))
+              ).subscribe()
+            }
           } else {
-            console.log(2)
+            this.sharedService.UpdateStatus(id, 'Đang khám').subscribe()
           }
         })
       ))
