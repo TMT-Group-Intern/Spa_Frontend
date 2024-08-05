@@ -195,6 +195,7 @@ export class DoctorComponent implements OnInit {
         tap((dataAllAppoint) => {
           const foundExamingAppoint = (dataAllAppoint as any[]).find(item => item.branchID == this.branchID && item.appointmentID != id && item.status == 'Đang khám');
           if (foundExamingAppoint) {
+            console.log(1)
             this.sharedService.UpdateStatus(foundExamingAppoint.appointmentID, 'Chờ khám').pipe(
               concatMap(() => this.sharedService.UpdateStatus(id, 'Đang khám').pipe(
                 tap(() => {
@@ -202,6 +203,8 @@ export class DoctorComponent implements OnInit {
                 })
               ))
             ).subscribe()
+          } else {
+            console.log(2)
           }
         })
       ))
