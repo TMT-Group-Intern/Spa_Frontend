@@ -21,6 +21,10 @@ import { TDSInputModule } from 'tds-ui/tds-input';
 import { CompanyService } from '../../core/services/company.service';
 import { concatMap, filter, tap } from 'rxjs';
 import { TDSCheckBoxModule } from 'tds-ui/tds-checkbox';
+import { UserProfileComponent } from "../user-profile/user-profile.component";
+import { TDSTabsModule } from 'tds-ui/tabs';
+import { TreatmentPlanComponent } from '../treatment-plan/treatment-plan.component';
+import { TreatmentPlanModule } from '../treatment-plan/treatment-plan.module';
 
 @Component({
   selector: 'frontend-doctor',
@@ -44,7 +48,10 @@ import { TDSCheckBoxModule } from 'tds-ui/tds-checkbox';
     TDSSelectModule,
     TDSInputModule,
     TDSCheckBoxModule,
-  ],
+    UserProfileComponent,
+    TDSTabsModule,
+    TreatmentPlanModule
+],
 })
 
 export class DoctorComponent implements OnInit {
@@ -209,13 +216,6 @@ export class DoctorComponent implements OnInit {
     this.initService();
   }
 
-  getHistory(id: number) {
-    this.sharedService.getHistoryCustomer(id).subscribe((data: any) => {
-      this.serviceHistory = data.listHistoryForCus.sort((a: any, b: any) =>
-        b.date < a.date ? -1 : 1
-      );
-    });
-  }
 
   submitUpdateServiceAppointment(id: number) {
     // if (this.form.value.status == 'Đã khám') {

@@ -78,16 +78,16 @@ export class MenuComponent {
       ]
 
     },
-    // {
-    //   "name": "Lịch trình",
-    //   "icon": "tdsi-calendar-fill",
-    //   "link": '/schedule'
-    // },
-    // {
-    //   "name": "Tra lịch hẹn",
-    //   "icon": "tdsi-paper-fill",
-    //   "link": '/appoitmentList'
-    // },
+    {
+      "name": "Lịch trình",
+      "icon": "tdsi-calendar-fill",
+      "link": '/schedule'
+    },
+    {
+      "name": "Test",
+      "icon": "tdsi-paper-fill",
+      "link": '/test'
+    },
     {
       "name": "Nhóm quyền",
       "icon": "tdsi-id-card-fill",

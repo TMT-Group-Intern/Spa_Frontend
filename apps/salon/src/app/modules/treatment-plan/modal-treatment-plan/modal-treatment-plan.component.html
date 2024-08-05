@@ -1,0 +1,59 @@
+<form id="idform" [formGroup]="form" autocomplete="off" class="w-full">
+  <div class="flex flex-row">
+    <div class="flex flex-col w-[80%]">
+      <div class="flex-1">
+        <tds-form-field class="py-2">
+          <tds-label>Lựa chọn dịch vụ</tds-label>
+          <tds-select valueField="serviceID" formControlName="serviceID" textField="serviceName"
+            placeholder="Chọn dịch vụ"
+            >
+          </tds-select>
+          <tds-error><span>Vui lòng chọn <strong>dịch vụ</strong>!</span></tds-error>
+        </tds-form-field>
+      </div>
+      <div class="flex-1">
+        <tds-form-field class="py-2">
+          <tds-label>Lộ trình</tds-label>
+          <input tdsInput placeholder="Tên lộ trình" formControlName="treatmentName">
+        </tds-form-field>
+      </div>
+    </div>
+    <div class="flex flex-col w-[20%]">
+      <div class="flex-1">
+        <tds-form-field class="p-2">
+          <tds-label>Số buổi</tds-label>
+          <tds-select valueField="id" textField="name" [data]="sessionOptions" formControlName="totalSessions" [(ngModel)]="selectSessionOptions"
+            >
+          </tds-select>
+        </tds-form-field>
+      </div>
+      <div class="flex-1">
+        <tds-form-field class="p-2">
+          <tds-label>Tần suất</tds-label>
+          <tds-select valueField="id" textField="name" [data]="frequencyOptions" formControlName="interval" [(ngModel)]="selectFrequencyOptions">
+            <ng-template tds-option-tmp tds-label-tmp let-item="item"
+            let-value='value' >
+            <span>
+                {{item.valueField}} {{item.id}} {{item.textField === 'day'?'ngày':item.textField === 'week'?'tuần':'tháng'}} 1 lần
+            </span>
+        </ng-template>
+          </tds-select>
+        </tds-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="w-full">
+    <tds-form-field class="pt-2">
+      <tds-label>Ghi chú</tds-label>
+      <textarea tdsInput [tdsAutosize]="{ minRows: 3,  maxRows: 20}" formControlName="note"
+        placeholder='Ghi chú'>
+      </textarea>
+    </tds-form-field>
+  </div>
+  <div class="flex flex-row-reverse p-4">
+    <button tds-button form="idform"
+ color="success" class="w-[100px] px-4 py-2 text-white rounded">
+      Lưu
+    </button>
+  </div>
+</form>

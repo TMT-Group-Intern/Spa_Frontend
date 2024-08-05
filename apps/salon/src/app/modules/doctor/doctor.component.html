@@ -6,7 +6,7 @@
       <div class="overflow-y-auto mt-3" style="max-height: 570px">
         <tds-card *ngFor="let appoint of reception" class="border rounded-20 mb-2 hover:bg-neutral-200 cursor-pointer"
           (click)="
-            userFrofile(appoint.appointmentID); getHistory(appoint.customerID)
+            userFrofile(appoint.appointmentID)
           ">
           <!-- Card Header -->
           <tds-card-header *ngIf="appoint.status === 'Đang khám'" class="bg-green-success-200 text-white rounded-t-md">
@@ -118,7 +118,7 @@
                 </span>
               </div>
             </div>
-            <div class="border w-[680px] bg-white p-4 rounded-lg shadow-md">
+            <div class="border w-[680px] overflow-y-auto h-[210px] bg-white p-4 rounded-lg shadow-md">
               <form id="idform" [formGroup]="form" autocomplete="off">
                 <!-- Status -->
                 <div class="grid grid-cols-2 gap-2">
@@ -166,43 +166,17 @@
           </div>
         </div>
       </div>
-      <div class="basis-3/4 border p-2 rounded-10 bg-white mt-2">
-        <span class="m-2 text-heading-3">Lịch sử điều trị </span>
-        <div *ngIf="serviceHistory; else noHistory" class="overflow-y-auto max-h-[290px]">
-          <div id="id" *ngFor="let history of serviceHistory" class="flex border rounded-10 m-2">
-            <div class="flex items-center w-[600px] overflow-y-auto">
-              <div class="flex m-4 rounded-10" *ngIf="history.photoCustomer.length > 0; else noImage">
-                <img *ngFor="let image of history.photoCustomer" tds-image width="150px" height="150px"
-                  [tdsSrc]="'https://localhost:44305/photos/' + image" alt="Image" />
-              </div>
-              <ng-template #noImage>
-                <span class="flex items-center justify-center h-full w-full text-gray-800">
-                  <tds-empty></tds-empty>
-                </span>
-              </ng-template>
-            </div>
-            <div class="w-[200px] flex-col float-right m-4">
-              <tds-label>Ngày tạo:
-                <div class="text-primary-1">
-                  {{ history.date | date : 'dd/MM/YYYY hh:mm' }}
-                </div>
-              </tds-label>
-              <tds-label>Dịch vụ:
-                <div *ngIf="history.serviceUsed.length > 0; else noservice">
-                  <tds-success *ngFor="let service of history.serviceUsed">{{
-                    service
-                    }}</tds-success>
-                </div>
-              </tds-label>
-              <ng-template #noservice>
-                <span>Chưa có</span>
-              </ng-template>
-            </div>
-          </div>
+      <div class=" basis-3/4 border p-2 rounded-10 bg-white mt-2">
+        <div class="flex">
+            <tds-tabset tdsType="pill" [clsTab]="'p-0'">
+              <tds-tab [clsContent]="'p-0'" title="Lịch sử điều trị">
+                <frontend-user-profile [customerId]="dataAppointmentbyid.customerID"></frontend-user-profile>
+              </tds-tab>
+              <tds-tab [clsContent]="'p-0'" title="Lộ trình điều trị">
+                <frontend-treatment-plan></frontend-treatment-plan>
+              </tds-tab>
+          </tds-tabset>
         </div>
-        <ng-template #noHistory class="flex justify-center items-center" style="height: 400px">
-          <tds-empty></tds-empty>
-        </ng-template>
       </div>
     </div>
     <ng-template #nodata>
