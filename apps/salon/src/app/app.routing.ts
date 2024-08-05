@@ -59,6 +59,7 @@ const routes: Routes = [
       { path: 'users', loadComponent: () => UsersComponent },
       { path: 'appoitmentList', loadChildren: () => AppointmentListModule },
       { path: 'role', loadComponent: () => RoleComponent },
+      { path: '', loadChildren: () => import("./modules/treatment-plan/treatment-plan.module").then(m => m.TreatmentPlanModule) },
     ],
   },
 ];
