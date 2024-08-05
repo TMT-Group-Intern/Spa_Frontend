@@ -14,6 +14,7 @@ import { AuthService } from '../../shared.service';
 import { TDSCascaderModule, TDSCascaderOption } from 'tds-ui/cascader';
 import { HomeComponent } from '../../modules/home/home.component';
 import { CompanyService } from '../../core/services/company.service';
+import { TDSDropDownModule } from 'tds-ui/dropdown';
 
 
 @Component({
@@ -31,6 +32,7 @@ import { CompanyService } from '../../core/services/company.service';
     TDSToolTipModule,
     TDSModalModule,
     TDSCascaderModule,
+    TDSDropDownModule,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
@@ -49,7 +51,7 @@ export class HeaderComponent implements OnInit {
     branch: [''],
   });
   ngOnInit() {
-    
+
     const storedUserSession = localStorage.getItem('userSession');
     if (storedUserSession !== null) {
       this.userSession = JSON.parse(storedUserSession);
@@ -67,7 +69,7 @@ export class HeaderComponent implements OnInit {
           id: item.branchID,
           name: item.branchName,
         }))]
-        
+
       })
   }
   constructor(
