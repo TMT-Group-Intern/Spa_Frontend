@@ -318,4 +318,10 @@ export class AuthService {
   getPaymentsByBill(billID: number) {
     return this.http.get(this.baseUrl + 'Payment/GetPaymentsByBill?idBill=' + billID);
   }
+
+  // treatment Post
+  addTreatmentPlan(body:any){
+    return this.http.post(this.baseUrl + 'Treatment', body);
+  }
+
 }

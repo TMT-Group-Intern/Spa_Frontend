@@ -175,7 +175,7 @@
                 <frontend-user-profile [customerId]="dataAppointmentbyid.customerID"></frontend-user-profile>
               </tds-tab>
               <tds-tab [clsContent]="'p-0'" title="Lộ trình điều trị">
-                <frontend-treatment-plan></frontend-treatment-plan>
+                <frontend-treatment-plan [idCustomer]="dataAppointmentbyid.customerID"></frontend-treatment-plan>
               </tds-tab>
           </tds-tabset>
         </div>

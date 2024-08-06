@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { TDSModalService } from 'tds-ui/modal';
 import { ModalTreatmentPlanComponent } from './modal-treatment-plan/modal-treatment-plan.component';
 
@@ -8,6 +8,7 @@ import { ModalTreatmentPlanComponent } from './modal-treatment-plan/modal-treatm
   styleUrls: ['./treatment-plan.component.scss'],
 })
 export class TreatmentPlanComponent {
+  @Input() idCustomer?:number;
   private readonly modalSvc = inject(TDSModalService)
   // Sử dụng modal
   modalTreatmentPlan():void{
@@ -16,7 +17,10 @@ export class TreatmentPlanComponent {
       content:ModalTreatmentPlanComponent,
       okText:'Xác nhận',
       footer: null,
-      size:'lg'
+      size:'lg',
+      componentParams:{
+        customerId: this.idCustomer
+      }
     })
   }
 }
