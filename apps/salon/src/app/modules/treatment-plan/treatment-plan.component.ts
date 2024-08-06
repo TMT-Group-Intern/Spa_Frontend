@@ -1,14 +1,35 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input, OnInit, TemplateRef } from '@angular/core';
 import { TDSModalService } from 'tds-ui/modal';
 import { ModalTreatmentPlanComponent } from './modal-treatment-plan/modal-treatment-plan.component';
+import { AuthService } from '../../shared.service';
 
 @Component({
   selector: 'frontend-treatment-plan',
   templateUrl: './treatment-plan.component.html',
   styleUrls: ['./treatment-plan.component.scss'],
 })
-export class TreatmentPlanComponent {
+export class TreatmentPlanComponent implements OnInit {
+
+  @Input() customerId?: number;
   private readonly modalSvc = inject(TDSModalService)
+  listOfData: any[] = []
+  treatment: any[] = []
+
+  constructor (
+    private shared: AuthService
+  ) {}
+
+  ngOnInit(): void {
+    if(this.customerId) {
+      this.shared.getTreatmentOfCustomer(this.customerId).subscribe(
+        (data) => {
+          this.listOfData = data
+          console.log(this.listOfData)
+        }
+      )
+    }
+  }
+
   // Sử dụng modal
   modalTreatmentPlan():void{
     const modal = this.modalSvc.create({
@@ -19,4 +40,24 @@ export class TreatmentPlanComponent {
       size:'lg'
     })
   }
+
+  //
+  treatmentExpand(event: any) {
+    console.log(event)
+  }
+
+  //
+  treatmentDetail(event: any) {
+    console.log(event)
+    // console.log(event.expand)
+    // console.log(event.data.dataRow.treatmentID)
+    if(event.expand) {
+      this.shared.getTreatmentDetail(event.data.dataRow.treatmentID).subscribe(
+        (data: any) => {
+          this.treatment = data.treatmentSessions
+        }
+      )
+    }
+  }
+
 }

@@ -1,116 +1,119 @@
-<div class="bg-gray-200 h-screen">
-  <tds-breadcrumb class="bg-white p-4 rounded-lg mb-2">
+<div class="grid grid-rows-12 gap-2 bg-gray-200 h-full">
+  <tds-breadcrumb class="bg-white p-4 rounded-lg">
     <tds-breadcrumb-item><a [routerLink]="['/customer-list']">Khách Hàng</a></tds-breadcrumb-item>
     <tds-breadcrumb-item>{{customer.lastName}} {{customer.firstName}}</tds-breadcrumb-item>
   </tds-breadcrumb>
 
-  <div class="flex flex-row">
-    <div class="flex-1 mr-2">
-      <div class="bg-white p-4 mb-2 rounded-lg" style="max-height: 189px;">
-        <p class="text-4xl">{{customer.lastName}} {{customer.firstName}}</p>
-        <div class="p-4">
-          <p><i class="tdsi-call-fill text-success-400"></i> {{customer.phone}}</p>
-          <p><i class="tdsi-birthday-fill text-success-400"></i> {{customer.dateOfBirth |
+
+  <div class="row-span-3 bg-white p-2 rounded-lg flex">
+    <img src="../../../../assets/img/user.png" alt="User Avatar" />
+    <div class="flex items-center px-10">
+      <div>
+        <p class="text-3xl mb-2">{{customer.lastName}} {{customer.firstName}}</p>
+        <div>
+          <!-- <p><i class="tdsi-call-fill text-success-400"></i> {{customer.phone}}</p> -->
+          <p><i class="tdsi-birthday-fill mb-2 text-success-400"></i> {{customer.dateOfBirth |
             date:'dd/MM/YYYY'}}</p>
           <p *ngIf="customer.gender === 'Nam'"><i class="tdsi-male-fill text-success-400"></i> Nam</p>
           <p *ngIf="customer.gender === 'Nữ'"><i class="tdsi-female-fill text-success-400"></i> Nữ</p>
         </div>
       </div>
-
-      <div class="bg-white w-full rounded-lg" style="min-height: 500px;">
-        <tds-tabset>
-          <tds-tab title="Lịch sử điều trị">
-            <div *ngIf="serviceHistory; else noHistory" class="overflow-y-auto max-h-[400px]">
-              <div id="id" *ngFor="let history of serviceHistory" class="flex border rounded-10 m-2">
-                <div class="flex items-center w-[600px] overflow-y-auto">
-                  <div class="flex m-4 rounded-10" *ngIf="history.photoCustomer.length > 0; else noImage">
-                    <img *ngFor="let image of history.photoCustomer" tds-image width="150px" height="150px"
-                      [tdsSrc]="'https://localhost:44305/photos/' + image" alt="Image" />
-                  </div>
-                  <ng-template #noImage>
-                    <span class="flex items-center justify-center h-full w-full text-gray-800">
-                      <tds-empty></tds-empty>
-                    </span>
-                  </ng-template>
-                </div>
-                <div class="w-[200px] flex-col float-right m-4">
-                  <tds-label>Ngày tạo:
-                    <div class="text-primary-1">
-                      {{ history.date | date : 'dd/MM/YYYY hh:mm' }}
-                    </div>
-                  </tds-label>
-                  <tds-label>Dịch vụ:
-                    <div *ngIf="history.serviceUsed.length > 0; else noservice">
-                      <tds-success *ngFor="let service of history.serviceUsed">{{
-                        service
-                        }}</tds-success>
-                    </div>
-                  </tds-label>
-                  <ng-template #noservice>
-                    <span>Chưa có</span>
-                  </ng-template>
-                </div>
-              </div>
-            </div>
-            <ng-template #noHistory class="flex justify-center items-center" style="height: 400px">
-              <tds-empty></tds-empty>
-            </ng-template>
-          </tds-tab>
-          <tds-tab title="Hóa đơn">
-            <div class="rounded-10" >
-              <tds-table #table [listData]="listOfData" tableLayout="fixed">
-                <thead>
-                  <tr>
-                    <th width="60px"></th>
-                    <th>Ngày tạo hóa đơn</th>
-                    <th>Kỹ thuật viên</th>
-                    <th>Bác sĩ</th>
-                    <th>Thành tiền</th>
-                    <th>Thanh toán</th>
-                    <th>Còn lại</th>
-                    <th>Trạng thái</th>
-                    <th>Chi tiết hóa đơn</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <ng-container *ngFor="let data of table.data">
-                    <tr class="text-sm">
-                      <td
-                      [expand]="expandSet.has(data.billId)"
-                      (expandChange)="onExpandChange(data.billId, $event)"
-                    ></td>
-                      <td>{{ data.date | date : 'dd/MM/YYYY' }}</td>
-                      <td>{{ data.technicalStaff }}</td>
-                      <td>{{ data.doctor }}</td>
-                      <td>{{ data.totalAmount }}</td>
-                      <td>{{ data.amountInvoiced }}</td>
-                      <td>{{ data.amountResidual }}</td>
-                      <td><tds-tag status='primary' type="outline">{{ data.statusBill }}</tds-tag></td>
-                      <td>
-                        <div class="flex justify-around">
-                          <button
-                          tds-tooltip tooltipTitle="Xem chi tiết hóa đơn"
-                          tds-button-flat-icon
-                          color="custom"
-                          class="text-slate-500 hover:text-secondary-1 px-4 py-3"
-                          (click)="updateBill(data.appointmentId)"
-                        >
-                          <i class="tdsi-cash-fill text-lg"></i>
-                        </button>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr class="w-full" [expand]="expandSet.has(data.billId)">
-                      <frontend-customer-detail-paymenthistory-table [billId]="data.billId" ></frontend-customer-detail-paymenthistory-table>
-                    </tr>
-                  </ng-container>
-                </tbody>
-              </tds-table>
-            </div>
-          </tds-tab>
-        </tds-tabset>
-
-      </div>
     </div>
+  </div>
+
+  <div class="row-span-8 bg-white w-full rounded-lg">
+    <tds-tabset>
+      <tds-tab title="Lịch sử điều trị">
+        <div *ngIf="serviceHistory; else noHistory" class="overflow-y-auto max-h-[350px]">
+          <div id="id" *ngFor="let history of serviceHistory" class="flex border rounded-10 m-2">
+            <div class="flex items-center w-[600px] overflow-y-auto">
+              <div class="flex m-4 rounded-10" *ngIf="history.photoCustomer.length > 0; else noImage">
+                <img *ngFor="let image of history.photoCustomer" tds-image width="150px" height="150px"
+                  [tdsSrc]="'https://localhost:44305/photos/' + image" alt="Image" />
+              </div>
+              <ng-template #noImage>
+                <span class="flex items-center justify-center h-full w-full text-gray-800">
+                  <tds-empty></tds-empty>
+                </span>
+              </ng-template>
+            </div>
+            <div class="w-[200px] flex-col float-right m-4">
+              <tds-label>Ngày tạo:
+                <div class="text-primary-1">
+                  {{ history.date | date : 'dd/MM/YYYY hh:mm' }}
+                </div>
+              </tds-label>
+              <tds-label>Dịch vụ:
+                <div *ngIf="history.serviceUsed.length > 0; else noservice">
+                  <tds-success *ngFor="let service of history.serviceUsed">{{
+                    service
+                    }}</tds-success>
+                </div>
+              </tds-label>
+              <ng-template #noservice>
+                <span>Chưa có</span>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <ng-template #noHistory class="flex justify-center items-center" style="height: 350px">
+          <tds-empty></tds-empty>
+        </ng-template>
+      </tds-tab>
+      <tds-tab title="Hóa đơn">
+        <div class="rounded-10">
+          <tds-table #table [listData]="listOfData" tableLayout="fixed" [scroll]="{ y: '275px' }">
+            <thead>
+              <tr>
+                <th width="60px"></th>
+                <th>Ngày tạo hóa đơn</th>
+                <th>Kỹ thuật viên</th>
+                <th>Bác sĩ</th>
+                <th>Thành tiền</th>
+                <th>Thanh toán</th>
+                <th>Còn lại</th>
+                <th>Trạng thái</th>
+                <th>Chi tiết hóa đơn</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let data of table.data">
+                <tr class="text-sm">
+                  <td [expand]="expandSet.has(data.billId)" (expandChange)="onExpandChange(data.billId, $event)"></td>
+                  <td>{{ data.date | date : 'dd/MM/YYYY' }}</td>
+                  <td>{{ data.technicalStaff }}</td>
+                  <td>{{ data.doctor }}</td>
+                  <td>{{ data.totalAmount }}</td>
+                  <td>{{ data.amountInvoiced }}</td>
+                  <td>{{ data.amountResidual }}</td>
+                  <td>
+                    <tds-tag status='error' type="outline" *ngIf="data.statusBill === 'Chưa thanh toán'">{{
+                      data.statusBill }}</tds-tag>
+                    <tds-tag status='primary' type="outline" *ngIf="data.statusBill === 'Thanh toán 1 phần'">{{
+                      data.statusBill }}</tds-tag>
+                    <tds-tag status='success' type="outline" *ngIf="data.statusBill === 'Thanh toán hoàn tất'">{{
+                      data.statusBill }}</tds-tag>
+                  </td>
+                  <td>
+                    <div class="flex justify-around">
+                      <button tds-tooltip tooltipTitle="Xem chi tiết hóa đơn" tds-button-flat-icon color="custom"
+                        class="text-slate-500 hover:text-secondary-1 px-4 py-3"
+                        (click)="updateBill(data.appointmentId)">
+                        <i class="tdsi-cash-fill text-lg"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="w-full h-[340px]" [expand]="expandSet.has(data.billId)">
+                  <frontend-customer-detail-paymenthistory-table
+                    [billId]="data.billId"></frontend-customer-detail-paymenthistory-table>
+                </tr>
+              </ng-container>
+            </tbody>
+          </tds-table>
+        </div>
+      </tds-tab>
+    </tds-tabset>
+
   </div>
 </div>
