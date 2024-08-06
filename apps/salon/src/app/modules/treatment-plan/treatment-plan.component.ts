@@ -9,6 +9,7 @@ import { AuthService } from '../../shared.service';
   styleUrls: ['./treatment-plan.component.scss'],
 })
 export class TreatmentPlanComponent implements OnInit {
+  @Input() idCustomer?:number;
 
   @Input() customerId?: number;
   private readonly modalSvc = inject(TDSModalService)
@@ -37,7 +38,10 @@ export class TreatmentPlanComponent implements OnInit {
       content:ModalTreatmentPlanComponent,
       okText:'Xác nhận',
       footer: null,
-      size:'lg'
+      size:'lg',
+      componentParams:{
+        customerId: this.idCustomer
+      }
     })
   }
 

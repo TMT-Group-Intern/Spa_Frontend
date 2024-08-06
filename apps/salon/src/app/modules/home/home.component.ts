@@ -64,10 +64,10 @@ export class HomeComponent implements OnInit {
   reception: any[] = [];
   inSession: any[] = [];
   status: any;
-  userSession: any;
   assign: any[] = [];
   _checkcreate = true;
 
+  userSession: any;
   storedUserSession = localStorage.getItem('userSession');
   oldBranch: any;
   companyId: number | null = null;
