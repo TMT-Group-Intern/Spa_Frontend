@@ -1,0 +1,92 @@
+<div class=" flex flex-col h-full">
+    <div class="flex justify-start items-center mt-2">
+      <span class="p-4 font-bold text-heading-5">Danh sách tài khoản</span>
+      <div class="flex w-1/6 mr-4 flex-col gap-2 pl-4">
+        <tds-cascader [tdsOptions]="tdsOptions" [(ngModel)]="values" (ngModelChange)="onChanges($event)"></tds-cascader>
+      </div>
+      <!-- <button tds-button-icon (click)="createAccount()" class="rounded-full mr-8 bg-green-1" color="success" tds-tooltip
+        tooltipTitle="Thêm tài khoản">
+        <span class="flex items-center">
+          <i class="tdsi-plus-fill text-white"></i>
+        </span>
+      </button> -->
+            <button tds-button-icon (click)="createAdmin()" class="rounded-full mr-8 bg-green-1" color="success" tds-tooltip
+        tooltipTitle="Thêm quản lý">
+        <span class="flex items-center">
+          <i class="tdsi-plus-fill text-white"></i>
+        </span>
+      </button>
+    </div>
+  
+    <tds-data-table 
+    class="p-2"
+    [tdsRounded]="true"
+    [tdsShowPagination]="false"
+    [tdsFrontPagination]="false"
+    [tdsData]="AccountList"
+    [tdsShowSizeChanger]="true"
+    [tdsPageSize]="20"
+    [tdsBordered]="true">
+      <tds-data-table-column [tdsField]="'code'" [tdsTitle]="'Mã tài khoản'" tdsWidth="8%"
+        [tdsDataType]="'text'"></tds-data-table-column>
+  
+      <tds-data-table-column [tdsField]="'lastName'" [tdsTitle]="'Họ'" tdsWidth="12%"
+        [tdsDataType]="'text'"></tds-data-table-column>
+
+        <tds-data-table-column [tdsField]="'firstName'" [tdsTitle]="'Tên'" tdsWidth="9%"
+        [tdsDataType]="'text'"></tds-data-table-column>
+  
+      <!-- <tds-data-table-column [tdsField]="'email'" [tdsTitle]="'Email'" tdsWidth="15%"
+        [tdsDataType]="'text'"></tds-data-table-column> -->
+
+        <tds-data-table-column [tdsField]="'userName'" [tdsTitle]="'Tài khoản'" tdsWidth="15%"
+        [tdsDataType]="'text'"></tds-data-table-column>
+  
+      <tds-data-table-column [tdsField]="'phoneNumber'" [tdsTitle]="'Số điện thoại'" tdsWidth="7%"
+        [tdsDataType]="'text'"></tds-data-table-column>
+  
+      <tds-data-table-column [tdsField]="'role'" [tdsTitle]="'Công việc'" tdsWidth="12%"
+        [tdsDataType]="'text'"></tds-data-table-column>
+        <tds-data-table-column [tdsField]="'isActiveAcount'" [tdsTitle]="'Trạng thái'" tdsWidth="12%"
+        [tdsDataType]="'text'"></tds-data-table-column>
+  
+      <tds-data-table-column [tdsContent]="commandTpl" [tdsTitle]="'Tùy chọn'" tdsWidth="8%" [tdsColumnType]="'command'"
+        tdsClass="flex justify-around">
+        <ng-template #commandTpl let-dataRow>
+          <span class="px-4" *ngIf="dataRow.haveAccount === true"></span>
+          <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-secondary-1" tds-tooltip
+            tooltipTitle="Cập nhật thông tin tài khoản" (click)="onEditAccount(dataRow.id,dataRow.role,dataRow.isActiveAcount,dataRow.lastName,dataRow.firstName)">
+            <i class="tdsi-edit-fill"></i>
+          </button>
+          <button tds-button-flat-icon color="custom" [disabled]="this.userSession.user.userName ===dataRow.userName"
+            class="text-slate-500 hover:text-red-500 tdsi-block-1-fill" tds-tooltip tooltipTitle="Vô hiệu hóa tài khoản"
+            (click)="changeStatusAccount(dataRow.userName)">
+          </button>
+          <button tds-button-flat-icon color="custom" [disabled]="this.userSession.user.userName ===dataRow.userName"
+            class="text-slate-500 hover:text-red-500 tdsi-trash-fill" tds-tooltip tooltipTitle="Xóa tài khoản"
+            (click)="deleteAccount(dataRow.userName)">
+          </button>
+        </ng-template>
+      </tds-data-table-column>
+    </tds-data-table>
+    <div class="w-full flex items-center p-2">
+      <tds-pagination
+        class="w-full"
+        [pageSize]="pageSize"
+        [pageIndex]="pageNumber"
+        [total]="totalItemsUsers"
+        [pageSizeOptions]="[10, 20, 30, 40]"
+        [showTotal]="rangeTemplate"
+        showSizeChanger
+        [showRefresh]="true"
+        (pageIndexChange)="changeNumberPage($event)"
+        (pageSizeChange)="changeSizePage($event)"
+        (clickRefresh)="onRefresh($event)"
+        [bordered]="true">
+      </tds-pagination>
+      <ng-template #rangeTemplate let-range="range" let-total>
+        {{ range[0] }}-{{ range[1] }} of {{ total }}
+      </ng-template>
+    </div>
+  </div>
+  

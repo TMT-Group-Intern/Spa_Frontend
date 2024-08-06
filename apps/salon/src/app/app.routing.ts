@@ -15,6 +15,7 @@ import { SchedulesComponent } from './modules/schedule/schedule.component';
 import { BillComponent } from './modules/bill/bill.component';
 import { AppointmentListModule } from './modules/appointment-list/appointment-list.module';
 import { RoleComponent } from './modules/role/role.component';
+import { AccountComponent } from './modules/account/account.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -58,6 +59,7 @@ const routes: Routes = [
       {path: 'bill/:id', loadComponent: ()=> BillComponent},
       {path: 'appoitmentList', loadChildren: ()=> AppointmentListModule},
       { path: 'role', loadComponent: () => RoleComponent },
+      { path: 'account', loadComponent: () => AccountComponent },
     ],
   },
 ];

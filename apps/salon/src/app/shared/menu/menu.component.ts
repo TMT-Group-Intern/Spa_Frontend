@@ -91,7 +91,16 @@ export class MenuComponent {
     {
       "name": "Nhóm quyền",
       "icon": "tdsi-id-card-fill",
-      "link": '/role'
+            "listChild": [
+        {
+            "name": "Tài khoản",
+            "link": '/account'
+        },
+        {
+            "name": "Nhóm quyền",
+            "link": '/role'
+        },
+    ]
     },
   ]
 
