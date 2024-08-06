@@ -51,7 +51,7 @@ import { TreatmentPlanModule } from '../treatment-plan/treatment-plan.module';
     UserProfileComponent,
     TDSTabsModule,
     TreatmentPlanModule
-],
+  ],
 })
 
 export class DoctorComponent implements OnInit {
@@ -66,7 +66,7 @@ export class DoctorComponent implements OnInit {
   private readonly sharedService = inject(AuthService);
   reception: any[] = [];
   active?: boolean;
-  appointmentList: any;
+  appointmentList: any[] = [];
   serviceHistory: any;
   fallback = './assets/img/default.svg';
   dataAppointmentbyid: any;
@@ -99,10 +99,7 @@ export class DoctorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(1)
-    //  this.sharedService.addAppointmentDataListener(this.onReceiveAppointments.bind(this));
     this.sharedService.DataListenerDoctorChagneStatus(this.onReceiveAppointments.bind(this));
-    // console.log(this.appointments);
 
     const storedUserSession = localStorage.getItem('userSession');
     if (storedUserSession !== null) {
@@ -123,6 +120,11 @@ export class DoctorComponent implements OnInit {
           appointment.status === 'Chờ khám' ||
           appointment.status === 'Đang khám'
       );
+
+      const foundExamingAppoint = this.appointmentList.find(item => item.status == 'Đang khám');
+      if (foundExamingAppoint) {
+        this.userFrofile(foundExamingAppoint.appointmentID)
+      }
     });
   }
 
@@ -202,7 +204,7 @@ export class DoctorComponent implements OnInit {
         tap((dataAllAppoint: any[]) => {
           const foundExamingAppoint = dataAllAppoint.find(item => item.status == 'Đang khám');
           if (foundExamingAppoint) {
-            if(foundExamingAppoint.appointmentID != id) {
+            if (foundExamingAppoint.appointmentID != id) {
               this.sharedService.UpdateStatus(foundExamingAppoint.appointmentID, 'Chờ khám').pipe(
                 concatMap(() => this.sharedService.UpdateStatus(id, 'Đang khám').pipe(
                   tap(() => {
