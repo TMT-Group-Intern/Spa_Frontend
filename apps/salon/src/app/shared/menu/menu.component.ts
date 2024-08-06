@@ -68,25 +68,25 @@ export class MenuComponent {
       "icon": "tdsi-bar-chart-fill",
       "listChild": [
         {
-            "name": "Báo cáo ngày",
-            "link": 'report/report-day'
+          "name": "Báo cáo ngày",
+          "link": 'report/report-day'
         },
         {
-            "name": "Báo cáo doanh thu",
-            "link": 'report/revenue-statistics'
+          "name": "Báo cáo doanh thu",
+          "link": 'report/revenue-statistics'
         },
-    ]
+      ]
 
     },
-    // {
-    //   "name": "Lịch trình",
-    //   "icon": "tdsi-calendar-fill",
-    //   "link": '/schedule'
-    // },
     {
-      "name": "Tra lịch hẹn",
+      "name": "Lịch trình",
+      "icon": "tdsi-calendar-fill",
+      "link": '/schedule'
+    },
+    {
+      "name": "Test",
       "icon": "tdsi-paper-fill",
-      "link": '/appoitmentList'
+      "link": '/test'
     },
     {
       "name": "Nhóm quyền",
@@ -101,6 +101,11 @@ export class MenuComponent {
             "link": '/role'
         },
     ]
+    },
+    {
+      "name": "Chat box",
+      "icon": "tdsi-chat-buble-fill",
+      "link": '/chat-box'
     },
   ]
 

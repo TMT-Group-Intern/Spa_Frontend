@@ -1,195 +1,154 @@
 <div class="grid grid-cols-12 gap-2 bg-gray-200 h-full">
   <div class="col-span-3 border p-4 rounded-10 bg-white left-content">
-    <tds-table
-      class="table-vertical-line table-cus"
-      [listData]="listSpaServiceQueue"
-      [showPagination]="false"
-    >
-      <thead>
-        <tr>
-          <th>Họ Tên Khách Hàng</th>
-          <th>Trạng Thái</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- <ng-template *ngFor="let data of listSpaServiceQueue"> -->
-        <tr
-          *ngFor="let data of listSpaServiceQueue"
-          (click)="renderCustomerDetail(data)"
-        >
-          <td>{{ data.customer.lastName + ' ' + data.customer.firstName }}</td>
-          <td>
-            <select
-              name="status"
-              class="custom-select"
-              (change)="onStatusChange($event, data.appointmentID)"
-            >
-              <option [selected]="data.status === 'Chờ chăm sóc'" value="Chờ chăm sóc">
-                Chờ chăm sóc
-              </option>
-              <option [selected]="data.status === 'Đang chăm sóc'" value="Đang chăm sóc">
-                Đang chăm sóc
-              </option>
-              <option
-                [selected]="data.status === 'Hoàn thành'"
-                value="Hoàn thành"
-              >
-                Hoàn thành
-              </option>
-            </select>
-          </td>
-        </tr>
-        <!-- </ng-template> -->
-      </tbody>
-    </tds-table>
+    <span class="p-4 text-heading-2">Tiếp nhận chăm sóc</span>
+    <div class="overflow-y-auto mt-3" style="max-height: 570px">
+      <!-- <tds-card *ngFor="let appoint of reception" class="border rounded-20 mb-2 hover:bg-neutral-200 cursor-pointer"
+        (click)="renderCustomerDetail(appoint); onStatusChange($event, appoint.appointmentID)"> -->
+      <tds-card *ngFor="let appoint of listSpaServiceQueue"
+        class="border rounded-20 mb-2 hover:bg-neutral-200 cursor-pointer" (click)="renderCustomerDetail(appoint)">
+        <!-- Card Header -->
+        <tds-card-header *ngIf="appoint.status === 'Đang khám'" class="bg-green-success-200 text-white rounded-t-md">
+          <div class="flex justify-between text-gray-700">
+            <p tds-typography tdsEllipsis>
+              {{ appoint.customer.lastName }} {{ appoint.customer.firstName }}
+            </p>
+            <tds-tag status="custom" class="bg-success-400 rounded-md">{{
+              appoint.status
+              }}</tds-tag>
+          </div>
+        </tds-card-header>
+        <tds-card-header *ngIf="appoint.status === 'Chờ khám'" class="bg-warning-100 text-white rounded-t-md">
+          <div class="flex justify-between text-gray-700">
+            <p tds-typography tdsEllipsis>
+              {{ appoint.customer.lastName }} {{ appoint.customer.firstName }}
+            </p>
+            <tds-tag status="custom" class="bg-warning-400 rounded-md">{{
+              appoint.status
+              }}</tds-tag>
+          </div>
+        </tds-card-header>
+        <!-- Card content -->
+        <tds-card-content class="px-3">
+          <p>
+            <i class="tdsi-earpiece-fill text-green-success-300"></i>
+            {{ appoint.doctor }}
+          </p>
+          <div class="flex justify-between">
+            <p>
+              <i class="tdsi-time-fill text-green-success-300"></i>
+              {{ appoint.appointmentDate | date : 'HH:mm' }}
+            </p>
+            <p>
+              <i class="tdsi-call-fill text-green-success-300"></i>
+              {{ appoint.customer.phone }}
+            </p>
+          </div>
+        </tds-card-content>
+        <hr />
+      </tds-card>
+    </div>
+
+
   </div>
   <!-- //////////bên phải /////////// -->
-  <div
-    class="col-span-9 border p-4 rounded-10 bg-white overflow-y-auto h-full"
-    *ngIf="appointmentAllInfo !== null && checkActive === true; else elseBlock"
-  >
+  <div class="col-span-9 border p-4 rounded-10 bg-white overflow-y-auto h-full"
+    *ngIf="appointmentAllInfo !== null && checkActive === true; else elseBlock">
     <div class="flex flex-row">
       <!-- Left section with image -->
       <div class="w-1/4">
-        <img
-          src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/d07bca98931623.5ee79b6a8fa55.jpg"
-          alt="Customer Image"
-          class="w-full rounded-lg"
-        />
+        <img tds-image tdsSrc="https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/d07bca98931623.5ee79b6a8fa55.jpg"
+          alt="Customer Image" height="200px" width="200px" class=" rounded-lg" />
       </div>
       <!-- Right section with customer details -->
-      <div class="w-3/4 ml-5 text-lg">
-        <div class="font-medium mb-2">
-          Họ và Tên:
-          <span class="font-normal">{{
-            appointmentAllInfo.customer.lastName +
+      <div class="w-3/4 ml-5 text-tds-font-size-4 flex flex-row">
+        <div class="w-1/2">
+          <div class="flex font-medium mb-2">
+            <span class="w-[130px]">Họ tên:</span>
+            <span class="font-normal">{{
+              appointmentAllInfo.customer.lastName +
               ' ' +
               appointmentAllInfo.customer.firstName
-          }}</span>
-        </div>
-        <div class="font-medium mb-4">
-          Ngày giờ vào:
-          <span class="font-normal">{{
-            appointmentAllInfo.appointmentDate | date : 'dd/MM/yyyy HH:mm'
-          }}</span>
-        </div>
-        <div class="font-medium mb-4">
-          Dịch vụ đã chọn:
-          <span
-            class="font-normal"
-            *ngFor="let service of customerDetail; let first = first"
-          >
-            {{ (first ? '' : ', ') + service.serviceName }}
-          </span>
-        </div>
+              }}</span>
+          </div>
+          <div class="flex font-medium mb-2">
+            <span class="w-[130px]">Ngày: </span>
+            <span class="font-normal">{{
+              appointmentAllInfo.appointmentDate | date : 'dd/MM/yyyy HH:mm'
+              }}</span>
+          </div>
 
-        <div class="font-medium mb-4">
-          Bác sĩ khám:
-          <span class="font-normal">
-            {{ appointmentAllInfo.doctor }}
-          </span>
-        </div>
-        <div class="font-medium mb-4">
-          Nhân viên phụ trách:
-          <span class="font-normal">
-            {{ appointmentAllInfo.teachnicalStaff }}
-          </span>
-        </div>
 
-        <!-- Bottom section with file upload and buttons -->
-        <div class="flex flex-row">
-          <!-- Left side with file upload and upload button -->
-          <div class="w-full">
-            <div class="flex flex-row items-center">
-              <input
-                type="file"
-                (change)="onFileSelected($event)"
-                class="mr-2 mb-5"
-                multiple
-              />
-              <button
-                class="rounded-full bg-green-300 py-1 px-2"
-                (click)="uploadImage(appointmentAllInfo.appointmentID)"
-              >
-                Tải ảnh
+          <div class="flex font-medium mb-2">
+            <span class="w-[130px]">Bác sĩ:</span>
+            <span class="font-normal">
+              {{ appointmentAllInfo.doctor }}
+            </span>
+          </div>
+          <div class="flex font-medium mb-2">
+            <span class="w-[130px]">Kỹ thuật viên:</span>
+            <span class="font-normal">
+              {{ appointmentAllInfo.teachnicalStaff }}
+            </span>
+          </div>
+
+          <!-- Bottom section with file upload and buttons -->
+          <div class="flex flex-row">
+            <!-- Left side with file upload and upload button -->
+             <tds-upload [multiple]="true" class="flex-1" [(fileList)]="fileList" [beforeUpload]="beforeUpload">
+              <button tds-button color="primary">
+                <span class="flex items-center">
+                <i class="tdsi-upload-fill text-lg leading-none mr-2"></i>Tải ảnh lên
+                </span>
               </button>
-            </div>
-          </div>
-        </div>
+             </tds-upload>
+             <div class="w-[200px] flex-1">
+              <button
+              tds-button color="primary"
+              [disabled]="fileList.length === 0"
+              (click)="uploadImage(appointmentAllInfo.appointmentID)">
+              <span class="flex items-center">
+                <i class="tdsi-save-fill text-lg leading-none mr-2"></i>{{ isLoad ? 'Đang tải' : 'Lưu ảnh' }}
+                </span>
+              </button>
+             </div>
 
-        <!-- Right side with history button -->
-        <div class="w-1/2">
-          <button
-            (click)="callModalHistory()"
-            class="rounded-full bg-green-300 py-1 px-2"
-          >
-            History Customer
-          </button>
-        </div>
-        <div class="container">
-          <div id="time">
-            <span class="digit">{{ hrString }}</span>
-            <span class="txt">Hr</span>
-            <span class="digit">{{ minString }}</span>
-            <span class="txt">Min</span>
-            <span class="digit">{{ secString }}</span>
-            <span class="txt">Sec</span>
-            <span class="digit">{{ countString }}</span>
+            <!-- <div class="w-full">
+              <div class="flex flex-col items-center">
+                <input type="file" (change)="onFileSelected($event)" class="mr-2 mb-5" multiple />
+                <button class="rounded-full bg-green-300 py-1 px-2"
+                  (click)="uploadImage(appointmentAllInfo.appointmentID)">
+                  Tải ảnh
+                </button>
+              </div>
+            </div> -->
           </div>
-          <div id="buttons">
-            <button class="btn" id="start" (click)="start()">Start</button>
-            <button class="btn" id="stop" (click)="stop()">Stop</button>
-            <button class="btn" id="reset" (click)="reset()">Reset</button>
+
+        </div>
+        <div class="1/2">
+          <div class="font-medium mb-4">
+            Thực hiện
+          </div>
+          <div class="pl-4">
+            <tds-timeline>
+              <tds-timeline-item *ngFor="let data of service">{{data}}</tds-timeline-item>
+            </tds-timeline>
           </div>
         </div>
       </div>
+
     </div>
 
     <!-- Table section -->
-    <table class="table-fixed border-collapse w-full mt-4">
-      <thead>
-        <tr>
-          <th class="border border-gray-400 px-4 py-2">Service</th>
-          <th class="border border-gray-400 px-4 py-2">Complete</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let service of customerDetail">
-          <td class="border border-gray-400 px-4 py-2 text-center">
-            {{ service.serviceName }}
-          </td>
-          <td class="border border-gray-400 px-4 py-2 text-center">
-            <input
-              type="checkbox"
-              [checked]="checkboxStatess[service.serviceID]"
-              (change)="toggleCheckbox(service.serviceID)"
-              class="form-checkbox h-5 w-5 text-green-500"
-            />
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Footer buttons -->
-    <div class="flex gap-4 justify-center mt-4">
-      <button
-        class="rounded-full bg-blue-500 text-white py-2 px-4 hover:bg-blue-600"
-        (click)="onSave(appointmentAllInfo, checkboxStatess)"
-      >
-        Lưu
-      </button>
-      <button
-        class="rounded-full bg-gray-300 text-gray-800 py-2 px-4 hover:bg-gray-400"
-      >
-        Hủy
-      </button>
+    <div class="flex flex-col">
+      <span class="flex py-2 text-heading-4">Lịch sử điều trị</span>
+      <frontend-user-profile [checkChange]="checkReloadHistory" [customerId]="appointmentAllInfo.customerID"></frontend-user-profile>
     </div>
+    <!-- Footer buttons -->
   </div>
-  <ng-template
-    #elseBlock
-    class="col-span-9 border p-4 rounded-10 bg-white ml-4">
-    <div class="col-span-9 w-full flex items-center justify-center">
-      <p class="text-2xl">Vui lòng chọn khách hàng để thực hiện dịch vụ</p>
+  <ng-template #elseBlock>
+    <div class="col-span-9 flex flex-col justify-center items-center h-full">
+      <tds-empty></tds-empty>
+      <span class="text-sm font-bold">Vui lòng chọn khách hàng để chăm sóc!</span>
     </div>
   </ng-template>
 </div>

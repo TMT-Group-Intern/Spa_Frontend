@@ -194,11 +194,11 @@ export class BillModalComponent {
       customerID: this.infoAppoint.customerID,
       appointmentID: this.id,
       date: this.infoAppoint.appointmentDate,
-      // billStatus: "string",
+      billStatus: "Chưa thanh toán",
       doctor: this.infoAppoint.doctor,
       technicalStaff: this.infoAppoint.teachnicalStaff,
       totalAmount: this.totalAmount,
-      amountInvoiced: this.amountInvoiced,
+      amountInvoiced: 0,
       amountResidual: this.amountResidual,
       amountDiscount: this.amountDiscount,
       kindofDiscount: (this.kindofDiscount === 'VND' && this.amountDiscount === 0) ? '%' : this.kindofDiscount,
@@ -207,19 +207,23 @@ export class BillModalComponent {
     }
 
     if (this.amountInvoiced == 0) {
-      this.shared.UpdateStatus(this.id, 'Chưa thanh toán').subscribe()
-      this.shared.createBill({ ...val, amountInvoiced: 0 }).subscribe()
+      // this.shared.UpdateStatus(this.id, 'Chưa thanh toán').subscribe()
+      this.shared.createBill(val).subscribe()
       this.modalRef.destroy(val);
     } else {
       if (this.amountResidual == 0) {
-        this.shared.UpdateStatus(this.id, 'Thanh toán hoàn tất').subscribe()
+        // this.shared.UpdateStatus(this.id, 'Thanh toán hoàn tất').subscribe()
+        this.shared.createBill({ ...val, billStatus: "Thanh toán hoàn tất" }).pipe(
+          concatMap(() => this.shared.getAllBillByAppointmentID(this.id)),
+          concatMap((data) => this.createPayment$(data.billID))
+        ).subscribe()
       } else {
-        this.shared.UpdateStatus(this.id, 'Thanh toán 1 phần').subscribe()
+        // this.shared.UpdateStatus(this.id, 'Thanh toán 1 phần').subscribe()
+        this.shared.createBill({ ...val, billStatus: "Thanh toán 1 phần" }).pipe(
+          concatMap(() => this.shared.getAllBillByAppointmentID(this.id)),
+          concatMap((data) => this.createPayment$(data.billID))
+        ).subscribe()
       }
-      this.shared.createBill({ ...val, amountInvoiced: 0 }).pipe(
-        concatMap(() => this.shared.getAllBillByAppointmentID(this.id)),
-        concatMap((data) => this.createPayment$(data.billID))
-      ).subscribe()
     }
   }
 

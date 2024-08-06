@@ -176,7 +176,7 @@
         </div>
 
         <p class="grid grid-cols-5 gap-3 py-2">
-          <strong class="col-span-3">Còn lại:</strong>
+          <strong class="col-span-3">Số tiền còn lại:</strong>
           <span class="col-span-2 flex justify-end">{{ amountResidual | tdsFormatNumber }}</span>
         </p>
 
@@ -190,12 +190,7 @@
       </div>
 
       <div>
-        <div class="flex justify-center">
-          <img *ngIf="infoAppoint?.status === 'Thanh toán hoàn tất'" src="../../../assets/img/paid.png" alt="Paid image"
-            width="150px">
-        </div>
-
-        <div class="flex justify-center">
+        <div class="flex">
           <img *ngIf="paymentMethod === 'Chuyển khoản'"
             src="../../../../assets/img/1721276662570.png" alt="QR Code" width="225px">
         </div>

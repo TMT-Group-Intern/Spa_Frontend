@@ -63,7 +63,7 @@ export class AppointmentModalComponent implements OnInit {
     doctor: [],
     appointmentDate: [new Date()],
     status: ['Đã hẹn'],
-    customer: [null]
+    // customer: [null]
   });
   // isExist = false;
   // Hide search Phone Number
@@ -101,7 +101,7 @@ export class AppointmentModalComponent implements OnInit {
       }
     )
 
-    if(this.formatTime && this.formatTime >= new Date()) {
+    if (this.formatTime && this.formatTime >= new Date()) {
       this.form.patchValue({
         appointmentDate: this.formatTime
       });
@@ -130,7 +130,7 @@ export class AppointmentModalComponent implements OnInit {
           });
 
           const foundDoctor = (data.assignments as any[]).find(item => item.employees.jobTypeID === 2);
-          if(foundDoctor) {
+          if (foundDoctor) {
             this.form.patchValue({
               doctor: foundDoctor.employees.employeeID
             });
@@ -176,7 +176,7 @@ export class AppointmentModalComponent implements OnInit {
         new Date(appointmentDate as Date), DATE_CONFIG.DATE_BASE
       ),
       employeeID: this.empID,
-      branchID:this.userSession.user.branchID
+      branchID: this.userSession.user.branchID
     };
 
     if (doctor != null) {
@@ -201,7 +201,7 @@ export class AppointmentModalComponent implements OnInit {
         this.dataCustomer = data.customers;
     })
 
-    this.form.get('customer')?.valueChanges.subscribe((data: any) => {
+    this.form.get('phone')?.valueChanges.subscribe((data: any) => {
       this.form.patchValue({
         ...data as any,
         name: data.lastName + ' ' + data.firstName

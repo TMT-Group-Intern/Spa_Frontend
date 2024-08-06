@@ -7,7 +7,7 @@
         <div class="col-span-2 grid grid-cols-6 gap-1">
           <tds-form-field class="col-span-5">
             <tds-select [serverSearch]="true" valueField="customerID" textField="phone" autocomplete="off"
-              placeholder="0123456789" class="appearance-none w-full" formControlName="customer" [data]="dataCustomer"
+              placeholder="0123456789" class="appearance-none w-full" formControlName="phone" [data]="dataCustomer"
               [allowClear]="true" [valuePrimitive]="false" [allowSearch]="true" (onSearch)="searchPhone$.next($event)">
               <ng-template tds-option-tmp let-label='label' let-item="item" let-value='value' let-selected="selected">
                 <span [ngClass]="{'text-primary-1':selected}">
@@ -17,8 +17,8 @@
             </tds-select>
             <!-- Display error -->
             <tds-error>
-              <span *ngIf="form.controls['phone'].hasError('required')"><strong>Số điện thoại</strong> không được để trống!</span>
-              <span *ngIf="form.controls['phone'].hasError('pattern')"><strong>Số điện thoại</strong> phải bắt đầu bằng số 0 và có 10 chữ số!</span>
+              <span *ngIf="form.controls['phone'].hasError('required')"><strong>SĐT</strong> không được để trống!</span>
+              <span *ngIf="form.controls['phone'].hasError('pattern')"><strong>SĐT</strong> phải bắt đầu bằng số 0 và có 10 chữ số!</span>
             </tds-error>
           </tds-form-field>
           <!-- New Customer -->

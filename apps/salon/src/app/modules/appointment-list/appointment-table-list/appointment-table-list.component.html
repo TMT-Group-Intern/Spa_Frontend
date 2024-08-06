@@ -1,32 +1,32 @@
-<div class="flex flex-col rounded-10 h-[540px] ">
+<div class="flex rounded-10 h-full w-full">
   <tds-table showSizeChanger [pageSize]="pageSize"
   (pageIndexChange)="changeNumberPage($event)"
   (pageSizeChange)="changeSizePage($event)"
   [total]="totalItemsCustomers"
   [showTotal]="rangeTemplate"
   [frontPagination]="false"
-  [pageIndex]="pageNumber" (clickRefresh)="onRefresh($event)" [scroll]="{y:'auto'}" #table [listData]="listOfData" tableLayout="fixed">
+  [pageIndex]="pageNumber" (clickRefresh)="onRefresh($event)" [scroll]="{y:'400px', x:'auto'}" #table [listData]="listOfData" tableLayout="fixed">
     <thead>
       <tr>
-        <th>Ngày</th>
-        <th>Họ tên</th>
-        <th>Ngày sinh</th>
-        <th>Số điện thoại</th>
-        <th>Bác sĩ</th>
-        <th>Kỹ thuật viên</th>
-        <th>Trạng thái</th>
-        <th>Thao tác</th>
+        <th [width]="'150px'" [tdsLeft]="true">Ngày</th>
+        <th [width]="'150px'" [tdsLeft]="true">Họ tên</th>
+        <th [width]="'150px'">Ngày sinh</th>
+        <th [width]="'150px'">Số điện thoại</th>
+        <th [width]="'150px'">Bác sĩ</th>
+        <th [width]="'150px'">Kỹ thuật viên</th>
+        <th [width]="'200px'">Trạng thái</th>
+        <th [width]="'150px'"[tdsRight]="true">Thao tác</th>
       </tr>
     </thead>
     <tbody >
       <ng-container *ngFor="let data of table.data">
         <tr class="text-sm">
-          <td>{{ data.appointmentDate | date : 'dd/MM/YYYY' }}, {{ data.appointmentDate | date : 'HH:mm' }} </td>
-          <td>{{ data.customer.lastName +" "+data.customer.firstName}}</td>
+          <td [tdsLeft]="true">{{ data.appointmentDate | date : 'dd/MM/YYYY' }}, {{ data.appointmentDate | date : 'HH:mm' }} </td>
+          <td [tdsLeft]="true"  ><button (click)="onClickGetCustomerId(data.customerID)"><a class="hover:underline font-semibold text-cyan-500 hover:decoration-cyan-500" href="http://localhost:4200/customer-list/customer-detail">{{ data.customer.lastName +" "+data.customer.firstName}}</a> </button></td>
           <td>{{ !!data.customer.dateOfBirth ? (data.customer.dateOfBirth| date:'dd/MM/YYYY'):'---'}}</td>
           <td>{{ data.customer.phone }}</td>
           <td>{{  !!data.doctor ? data.doctor:'---'}}</td>
-          <td>{{  !!data.teachnicalStaff ? data.teachnicalStaff:'---'}}</td>
+          <td >{{  !!data.teachnicalStaff ? data.teachnicalStaff:'---'}}</td>
           <td>
             <div class="pl-4">
               <button tds-button [disabled]="data.status ==='Đã hẹn'?false:true" color="secondary" tds-dropdown trigger="click" [tdsDropdownMenu]="menu">
@@ -48,7 +48,7 @@
               </tds-dropdown-menu>
             </div>
           </td>
-          <td>
+          <td [tdsRight]="true">
             <button tds-button-flat-icon tds-tooltip="Tiếp nhận" color="custom" class="text-slate-500 hover:text-red-500"
             (click)="callModalEditAppointment(data.appointmentID,'Chờ khám', data.appointmentDate)"
             [disabled]="data.doctor === undefined || data.status ==='Đã hẹn'? false: true">
@@ -59,7 +59,9 @@
             [disabled]="data.teachnicalStaff === undefined || data.status ==='Đã khám'? false: true">
               <i class="tdsi-insurance-fill"></i>
             </button>
-            <button tds-button-flat-icon tds-tooltip="Chi tiết hóa đơn" color="custom" class="text-slate-500 hover:text-red-500">
+            <button tds-button-flat-icon tds-tooltip="Chi tiết hóa đơn" color="custom" class="text-slate-500 hover:text-red-500"
+            (click)="callModalDetailBillComplete(data.appointmentID)"
+            [disabled]="data.status ==='Thanh toán hoàn tất'? false: true">
               <i class="tdsi-treatment-slip-fill"></i>
             </button>
           </td>
