@@ -1,9 +1,18 @@
 <div class="flex flex-col h-full">
-  <div class="flex justify-between items-center">
+  <div class="flex items-center pt-2">
     <div class="flex items-center">
-      <tds-form-field class="ml-10 w-[200px]">
-        <input tdsInput type="text" [(ngModel)]="searchText" (ngModelChange)="_change$.next($event)"
-        placeholder="Tìm kiếm bằng số điện thoại"/>
+      <tds-form-field class="ml-2 w-[250px]">
+        <input
+          tdsInput
+          class="text-neutral-1-600"
+          placeholder="search.."
+          autocomplete="off"
+          [(ngModel)]="searchText"
+          (ngModelChange)="_change$.next($event)"
+        />
+        <span tdsPrefix
+          ><i class="text-neutral-1-600 tdsi-search-fill"></i
+        ></span>
       </tds-form-field>
     </div>
     <button
@@ -31,7 +40,6 @@
     [tdsBordered]="true"
     (tdsClickRow)="customerDetail($event)"
   >
-
     <tds-data-table-column
       [tdsField]="'customerCode'"
       [tdsTitle]="'Mã số'"

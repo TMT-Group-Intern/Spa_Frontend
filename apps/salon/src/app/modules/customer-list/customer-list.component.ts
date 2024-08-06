@@ -70,7 +70,6 @@ export class CustomerListComponent implements OnInit {
     ).subscribe((data) => {
       if (data?.customers !== undefined){
         this.customerOfPage = data.customers;
-        console.log(0)
       }else{
         this.customerOfPage = this.filteredCustomers
       }

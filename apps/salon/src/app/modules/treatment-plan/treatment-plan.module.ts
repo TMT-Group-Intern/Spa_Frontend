@@ -10,6 +10,8 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TDSSelectModule } from 'tds-ui/select';
+import { TDSDataTableModule } from 'tds-ui/data-table';
+import { TDSTimelineModule } from 'tds-ui/timeline';
 const routes = [{ path: 'test', component: TreatmentPlanComponent }];
 @NgModule({
   declarations: [TreatmentPlanComponent, ModalTreatmentPlanComponent],
@@ -22,7 +24,10 @@ const routes = [{ path: 'test', component: TreatmentPlanComponent }];
     TDSInputModule,
     ReactiveFormsModule,
     TDSSelectModule,
-    FormsModule
+    FormsModule,
+    TDSDataTableModule,
+    TDSTimelineModule,
+    TDSToolTipModule,
   ],
   exports: [TreatmentPlanComponent],
 })
