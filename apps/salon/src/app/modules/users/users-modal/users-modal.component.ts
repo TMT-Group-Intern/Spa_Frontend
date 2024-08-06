@@ -74,9 +74,8 @@ export class UsersModalComponent implements OnInit {
     branchID: [0],
   });
 
-  readonly roleOptions = [{
-    id: "Admin", name: 'Quản lý'
-  },
+  readonly roleOptions = [
+  //{ id: "Admin", name: 'Quản lý'},
   { id: "Employee", name: 'Nhân viên' },]
 
   readonly genderOptions = [{
@@ -125,26 +124,27 @@ export class UsersModalComponent implements OnInit {
         }))]
       })
 
-    if (this.email) {
-      this.checkDislay = false
-      if (this.role === 'Quản lý') {
-        this.shared.getAdminByEmail(this.email).subscribe(
-          (data: any) => {
-            this.createUser.patchValue({
-              role: 'Admin',
-              lastName: data.adminDTO.lastName,
-              firstName: data.adminDTO.firstName,
-              email: data.adminDTO.email,
-              password: data.adminDTO.password,
-              confirmPassword: data.adminDTO.confirmPassword,
-              phone: data.adminDTO.phone,
-              gender: data.adminDTO.gender,
-              dateOfBirth: data.adminDTO.dateOfBirth,
-            })
-          }
-        )
-      }
-      else if (this.role !== 'Quản lý') {
+      if(this.email) {
+        this.checkDislay = false
+        if(this.role==='Quản lý'){
+          this.shared.getAdminByEmail(this.email).subscribe(
+            (data: any) => {
+              this.createUser.patchValue({
+               role: 'Admin',
+               lastName: data.adminDTO.lastName,
+               firstName: data.adminDTO.firstName,
+               email: data.adminDTO.email,
+               phone: data.adminDTO.phone,
+               gender: data.adminDTO.gender,
+               dateOfBirth: data.adminDTO.dateOfBirth,
+               hireDate: new Date().toISOString(),
+               jobTypeID:data.adminDTO.jobTypeID,
+               branchID: 0,
+              })
+            }
+          )
+        }
+      else if(this.role !=='Quản lý'){
         this.shared.getEmployeeByEmail(this.email).subscribe(
           (data: any) => {
             this.createUser.patchValue({
@@ -181,6 +181,7 @@ export class UsersModalComponent implements OnInit {
       ...this.createUser.value,
     };
     if (this.email) {
+      console.log(val)
       this.updateUser(this.email, val);
     } else {
       this.onSignUp();

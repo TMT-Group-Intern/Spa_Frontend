@@ -4,7 +4,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TDSTableModule } from 'tds-ui/table';
 import { AuthService } from '../../shared.service';
 import { RouterLink } from '@angular/router';
-import { TDSModalService } from 'tds-ui/modal';
+import { TDSModalModule, TDSModalService } from 'tds-ui/modal';
 import { TreatmentDetailComponent } from './treatment-detail/treatment-detail.component';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
@@ -15,6 +15,11 @@ import { concatMap, filter, forkJoin, tap } from 'rxjs';
 import { TDSEmptyModule } from 'tds-ui/empty';
 import { TDSTagModule } from 'tds-ui/tag';
 import { TDSCardModule } from 'tds-ui/card';
+import { TDSUploadFile, TDSUploadModule } from 'tds-ui/upload';
+import { TDSTimelineModule } from 'tds-ui/timeline';
+import { error } from 'console';
+import { TDSButtonModule } from 'tds-ui/button';
+import { TDSImageModule } from 'tds-ui/image';
 
 @Component({
   selector: 'frontend-technical-staff',
@@ -31,7 +36,14 @@ import { TDSCardModule } from 'tds-ui/card';
     TDSEmptyModule,
     TDSTagModule,
     TDSCardModule,
-  ],
+    TDSUploadModule,
+    UserProfileComponent,
+    TDSTimelineModule,
+    TDSUploadModule,
+    TDSButtonModule,
+    TDSModalModule,
+    TDSImageModule
+],
 })
 export class TechnicalStaffComponent {
   // public options = [
@@ -54,6 +66,13 @@ export class TechnicalStaffComponent {
   checkActive?: boolean = false;
   status!: FormControl;
   currentBranch: number | null = null;
+  service: any;
+  isLoad?: boolean = false;
+  fileList: TDSUploadFile[] = [];
+  previewImage: string | undefined = '';
+  previewVisible = false;
+  checkReloadHistory : any;
+  tempId?:number;
 
 
   timer = false;
@@ -89,7 +108,15 @@ export class TechnicalStaffComponent {
     private auth: AuthService,
     private notification: TDSNotificationService,
     private companySvc: CompanyService
-  ) { }
+  ) {
+    this.checkReloadHistory = '';
+   }
+
+  beforeUpload = (file: TDSUploadFile): boolean => {
+    this.fileList = this.fileList.concat(file);
+    this.selectedFiles = this.fileList as unknown as File[]
+    return false;
+};
 
   onReceiveAppointments(): void {
     this.renderCustomerInQueue();
@@ -130,6 +157,8 @@ export class TechnicalStaffComponent {
       next: (data: any) => {
         this.checkActive = true;
         this.appointmentAllInfo = data;
+        this.service = data.chooseServices.map((item: any) =>item.service.serviceName)
+        this.checkReloadHistory = true;
       },
     };
     this.auth.getAppointment(data.appointmentID).subscribe(observer);
@@ -145,15 +174,18 @@ export class TechnicalStaffComponent {
       //formData.append('id', this.listSpaServiceQueue.toString());
 
       this.auth.UploadImageCustomer(id, formData).subscribe(
-        () => {
-          this.createNotificationSuccess('Upload successful');
-        },
-        (res) => {
-          this.createNotificationError(res.error.message);
-        }
+     {
+      next:() => {
+        this.checkReloadHistory = this.selectedFiles.map(file => file.name)
+        this.createNotificationSuccess('Lưu ảnh thành công');
+      },
+      error:(res) => {
+        this.createNotificationError(res.error.message);
+      }
+    }
       );
     } else {
-      this.createNotificationError('No file selected');
+      this.createNotificationError('Bạn chưa chọn ảnh?');
     }
   }
 

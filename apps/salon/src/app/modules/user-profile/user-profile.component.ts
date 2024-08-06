@@ -36,12 +36,16 @@ import { TDSEmptyModule } from 'tds-ui/empty';
 })
 export class UserProfileComponent implements OnInit, OnChanges {
   @Input() customerId?: number;
+  @Input() checkChange: any;
   private readonly shared = inject(AuthService);
   serviceHistory: any;
   fallback = './assets/img/default.svg';
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['customerId']?.currentValue){
+      this.getHistory(this.customerId as number);
+    }
+    if(changes['checkChange']?.currentValue ){
       this.getHistory(this.customerId as number);
     }
   }

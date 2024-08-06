@@ -58,9 +58,9 @@ export class LoginComponent implements OnInit {
   }
   
   onLogin(){
-    const email=this.loginForm.value.taiKhoan;
+    const userName=this.loginForm.value.taiKhoan;
     const password = this.loginForm.value.matKhau;
-    this.auth.login(email,password).subscribe((result:any) => {
+    this.auth.login(userName,password).subscribe((result:any) => {
       if(result.token!= null&&result.flag != false)
         {
           const userSession = {
