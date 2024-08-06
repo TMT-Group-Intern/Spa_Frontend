@@ -90,8 +90,18 @@ export class AuthService {
   deleteUser(Email: string) {
     return this.http.delete(this.baseUrl + 'User/deleteUser?email=' + Email);
   }
+  deleteAccount(UserName: string) {
+    return this.http.delete(this.baseUrl + 'User/deleteAccount?userName=' + UserName);
+  }
+  changeStatusAccount(UserName: string) {
+    return this.http.post(`${this.baseUrl}User/changeStatusAccount?userName=${UserName}`, {});
+  }
   createUser(val: any) {
     return this.http.post(this.baseUrl + 'Authentication/register', val);
+  }
+  createAccount(userName:string,password:string,confirmPassword:string) {
+    return this.http.post<{ status: object }>(this.baseUrl + 'Authentication/createAccount',
+       {userName,password,confirmPassword});
   }
   createAccountForEmployee(Email: string) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -100,6 +110,15 @@ export class AuthService {
   }
   editUser(email: string, val: any) {
     return this.http.put(this.baseUrl + 'User/updateUser?email=' + email, val);
+  }
+  editAccount(id: string, val: any) {
+    return this.http.put(this.baseUrl + 'User/updateAccount?id='+id, val);
+  }
+  getUserByUserName(userName: string): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'User/getUserByUserName?userName=' + userName)
+  }
+  getUserByUserID(id: string): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'User/getUserByUserID?id=' + id)
   }
   getAdminByEmail(email: string): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/getUserByAdmin?email=' + email)
@@ -129,6 +148,18 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'Customers/search?searchTerm=' + val);
   }
 
+  searchUser(val: any): Observable<{ users: any[] }> {
+    return this.http.get<any>(this.baseUrl + 'Users/searchUser?searchTerm=' + val);
+  }
+
+  searchAccount(val: any): Observable<{ accounts: any[] }> {
+    return this.http.get<any>(this.baseUrl + 'Users/searchAccount?searchTerm=' + val);
+  }
+
+  searchEmployee(val: any): Observable<{ employees: any[] }> {
+    return this.http.get<any>(this.baseUrl + 'Users/searchEmployee?searchTerm=' + val);
+  }
+
   // Create a new Customer
   CreateNewCustomer(val: any) {
     return this.http.post(this.baseUrl + 'Customers', val);
@@ -147,6 +178,30 @@ export class AuthService {
   //page of customers
   pageCustomers(pageNumber: number, pageSize: number) {
     return this.http.get(this.baseUrl + 'Customers/Page?pageNumber=' + pageNumber + '&pageSize=' + pageSize);
+  }
+
+  pageUsers(pageNumber: number, pageSize: number) {
+    return this.http.get(this.baseUrl + 'User/AllUserPage?pageNumber=' + pageNumber + '&pageSize=' + pageSize);
+  }
+
+  pageAdminByPages(pageNumber: number, pageSize: number) {
+    return this.http.get(this.baseUrl + 'User/AllAdminPage?pageNumber=' + pageNumber + '&pageSize=' + pageSize);
+  }
+
+  pageAccountByPages(pageNumber: number, pageSize: number) {
+    return this.http.get(this.baseUrl + 'User/AllAccountPage?pageNumber=' + pageNumber + '&pageSize=' + pageSize);
+  }
+
+  pageActiveAccountByPages(pageNumber: number, pageSize: number) {
+    return this.http.get(this.baseUrl + 'User/AllAccountActivePage?pageNumber=' + pageNumber + '&pageSize=' + pageSize);
+  }
+
+  pageNotActiveAccountByPages(pageNumber: number, pageSize: number) {
+    return this.http.get(this.baseUrl + 'User/AllAccountNotActivePage?pageNumber=' + pageNumber + '&pageSize=' + pageSize);
+  }
+
+  pageEmpByPages(jobtypeID: number,pageNumber: number, pageSize: number) {
+    return this.http.get(this.baseUrl + 'User/AllEmpPage?jobTypeId=' + jobtypeID + '&pageNumber=' + pageNumber + '&pageSize=' + pageSize);
   }
 
   //Delete a customer
@@ -218,6 +273,19 @@ export class AuthService {
       role: role
     })
   }
+  createAdmin(lastName: string, firstName: string, gender: string, phone: string, email: string,userName:string, password: string, confirmPassword: string, dateOfBirth: string) {
+    return this.http.post<{ status: object }>(this.baseUrl + 'Authentication/createAdmin', {
+      lastName: lastName,
+      firstName: firstName,
+      phone: phone,
+      email: email,
+      userName:userName,
+      password: password,
+      confirmPassword: confirmPassword,
+      dateOfBirth: dateOfBirth,
+      gender: gender,
+    })
+  }
 
   // Update Discount
   updateDiscount(id: any, discount: any, val: any) {
@@ -247,7 +315,9 @@ export class AuthService {
   getEmployee(branch: number, job: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/EmployeeByBranchAndJob?branchID=' + branch + '&jobTypeID=' + job);
   }
-
+  getAllEmployee(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'User/allEmployee');
+  }
   // Get User by Email
   getUser(email: string): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/getUserByEmail?email=' + email);
@@ -293,9 +363,9 @@ export class AuthService {
   }
 
   //
-  login(email: string, password: string) {
-    return this.http.post<{ flag: boolean, mess: string, userSession: object, token: string }>(this.baseUrl + 'Authentication/login', {
-      email: email,
+  login(userName: string, password: string) {
+    return this.http.post<{ flag: boolean, mess: string,userSession:object, token: string }>(this.baseUrl + 'Authentication/login', {
+      userName: userName,
       password: password
     })
   }

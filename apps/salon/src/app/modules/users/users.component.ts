@@ -8,13 +8,14 @@ import { TDSTimelineModule } from 'tds-ui/timeline';
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { TDSModalService } from 'tds-ui/modal';
 import { AuthService } from '../../shared.service';
-import { concatMap, filter, forkJoin, tap } from 'rxjs';
+import { BehaviorSubject, concatMap, debounceTime, filter, forkJoin, of, switchMap, tap } from 'rxjs';
 import { TDSButtonModule } from 'tds-ui/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSSelectModule } from 'tds-ui/select';
 import { TDSCascaderModule, TDSCascaderOption } from 'tds-ui/cascader';
 import * as moment from 'moment';
+import { TDSPaginationModule } from 'tds-ui/pagination';
 
 const roleOptions = [
   {
@@ -23,13 +24,30 @@ const roleOptions = [
     isLeaf: true
 },
   {
-      value: 'Admin',
+      value: '5',
       label: 'Quản lý',
       isLeaf: true
   },
   {
-      value: 'Employee',
-      label: 'Nhân viên',
+      value: '2',
+      label: 'Bác sĩ',
+      isLeaf: true
+  }
+  ,
+  {
+      value: '1',
+      label: 'Tiếp tân',
+      isLeaf: true
+  }
+  ,
+  {
+      value: '3',
+      label: 'Nhân viên kỹ thuật',
+      isLeaf: true
+  },
+  {
+      value: '4',
+      label: 'Bảo vệ',
       isLeaf: true
   }
 ];
@@ -51,16 +69,23 @@ const roleOptions = [
     TDSFormFieldModule,
     TDSSelectModule,
     FormsModule,
-    TDSCascaderModule
+    TDSCascaderModule,
+    TDSPaginationModule,
   ],
 })
 export class UsersComponent implements OnInit{
   tdsOptions: TDSCascaderOption[] = roleOptions;
   values: string[] = ['All'];
+  _change$ = new BehaviorSubject<string>('');
   private readonly tModalSvc =inject(TDSModalService)
-  UserList:any[] = [];
+  UserList:any;
   selectedUserType = this.values.toString();
   userSession:any;
+  pageNumber: any = 1
+  pageSize: any = 10
+  totalItemsUsers: any
+  searchText='';
+  filteredUsers: any;
 
   constructor(
     private auth : AuthService,
@@ -69,24 +94,47 @@ export class UsersComponent implements OnInit{
     this.selectedUserType=this.values.toString()
     this.initUserList();
 }
-  ngOnInit(): void {
-    this.initUserList();
+  ngOnInit(): void {  
     const storedUserSession = localStorage.getItem('userSession');
     if (storedUserSession !== null) {
       this.userSession = JSON.parse(storedUserSession);
     }
+    this.initUserList();
+    this._change$.pipe(
+      debounceTime(100),
+      switchMap((search: string) => {
+        return search ? this.auth.searchUser(search) : of(null)
+      })
+    ).subscribe((data) => {
+      if (data?.users !== undefined){
+        this.UserList = data.users;
+      }else{
+        this.UserList = this.filteredUsers
+      }
+    })
   }
 
   initUserList() {
-    this.auth.UserList().subscribe(data => {
-      this.UserList = data;
+    this.auth.pageUsers(this.pageNumber, this.pageSize).subscribe((data:any) => {
+      this.UserList = data.item;
+      this.totalItemsUsers = data.totalItems;
       if(this.selectedUserType==='All'){
-        this.UserList
+        this.UserList;
+        this.filteredUsers = this.UserList;
       }
-      else if (this.selectedUserType === 'Admin') {
-        this.UserList = this.UserList.filter(user => user.role === 'Quản lý');
-      } else if (this.selectedUserType === 'Employee') {
-        this.UserList = this.UserList.filter(user => user.role !== 'Quản lý');
+      else if (this.selectedUserType === '5') {
+        this.auth.pageAdminByPages(this.pageNumber, this.pageSize)
+        .subscribe((data:any) => {
+          this.UserList = data.item;
+          this.totalItemsUsers = data.totalItems;
+          this.filteredUsers = this.UserList;})   
+      }
+      else{       
+        this.auth.pageEmpByPages(parseInt(this.selectedUserType),this.pageNumber, this.pageSize)
+        .subscribe((data:any) => {
+          this.UserList = data.item;
+          this.totalItemsUsers = data.totalItems;
+          this.filteredUsers = this.UserList;})     
       }
     });
   }
@@ -95,9 +143,24 @@ export class UsersComponent implements OnInit{
     return moment(date).format(format);
   }
 
+    /*get back pageNumber*/
+    changeNumberPage(event: number): void {
+      this.pageNumber = event;
+      this.initUserList();
+    }
+    // get back changeSizePage
+    changeSizePage(event: number): void {
+      this.pageSize = event;
+      this.initUserList();
+    }
+  
+    onRefresh(event: MouseEvent): void {
+      this.pageNumber = 1;
+      this.initUserList();
+    }
   createUser(){
     const modal = this.tModalSvc.create({
-      title:'Tạo tài khoản',
+      title:'Thêm nhân viên',
       content: UsersModalComponent,
       footer:null,
       size:'xl'
