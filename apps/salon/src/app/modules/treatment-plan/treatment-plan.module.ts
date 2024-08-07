@@ -15,6 +15,7 @@ import { TDSTimelineModule } from 'tds-ui/timeline';
 import { TableTreatmentPlanComponent } from './table-treatment-plan/table-treatment-plan.component';
 import { TDSTableModule } from 'tds-ui/table';
 import { TDSTagModule } from 'tds-ui/tag';
+import { TDSDropDownModule } from 'tds-ui/dropdown';
 const routes = [{ path: 'test', component: TreatmentPlanComponent }];
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ const routes = [{ path: 'test', component: TreatmentPlanComponent }];
     TDSTimelineModule,
     TDSToolTipModule,
     TDSTableModule,
-    TDSTagModule
+    TDSTagModule,
+    TDSDropDownModule
   ],
   exports: [TreatmentPlanComponent],
 })
