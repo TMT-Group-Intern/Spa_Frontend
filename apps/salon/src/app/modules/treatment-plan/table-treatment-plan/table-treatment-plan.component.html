@@ -3,8 +3,8 @@
     <thead>
       <tr>
         <th>Buổi thứ</th>
-        <th>Khách hàng</th>
-        <th>Bác sĩ</th>
+        <th>Dịch vụ</th>
+        <th></th>
         <th>Trạng thái</th>
       </tr>
     </thead>
@@ -15,13 +15,14 @@
             {{ data.sessionNumber }}
           </td>
           <td>
-            {{ data.customerName }}<br />
-            <span class="text-slate-500 text-sm">{{
-              data.customerPhone
-            }}</span>
+            <span *ngFor="let service of data.treatmendSessionDetail; let first = first">{{ (first ? '' : ', ') +
+              service.serviceID }}</span>
           </td>
-          <td>{{ data.doctor }}</td>
-          <td> <tds-tag [status]="'primary'" [type]="'outline'"> {{data.isDone === true?'Đã làm':'Chưa làm' }}</tds-tag></td>
+          <td>
+
+          </td>
+          <td> <tds-tag [status]="data.isDone === true ? 'success' : 'primary'" [type]="'outline'"> {{data.isDone ===
+              true ? 'Đã làm' : 'Chưa làm' }}</tds-tag></td>
         </tr>
       </ng-container>
     </tbody>
