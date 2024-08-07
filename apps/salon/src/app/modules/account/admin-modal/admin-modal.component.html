@@ -140,29 +140,6 @@
               <label tds-radio value="Nữ">Nữ</label>
             </div>
           </tds-radio-group>
-          <!-- <tds-form-field class="col-span-2">
-            <tds-select
-              valueField="id"
-              textField="name"
-              placeholder="Lựa chọn giới tính"
-              disabledField="isActive"
-              formControlName="gender"
-              [required]="true"
-              [data]="genderOptions"
-              [allowClear]="true"
-              class="appearance-none"
-            >
-            </tds-select>
-            <tds-error>
-              <span
-                *ngIf="
-                  createUser.controls['gender'].touched &&
-                  createUser.controls['gender'].hasError('required')
-                "
-                >Vui lòng chọn giới tính</span
-              >
-            </tds-error>
-          </tds-form-field> -->
         </div>
   
         <!--  -->
@@ -227,9 +204,6 @@
               type="password"
             />
             <tds-error>
-              <!-- <span *ngIf="createAccount.controls['confirmPassword'].touched"
-                  >Vui lòng nhập mật khẩu</span
-                > -->
               <span
                 *ngIf="createAdmin.get('confirmPassword')?.errors?.['mustMatch']"
                 >Mật khẩu không khớp</span
@@ -245,9 +219,9 @@
   
   <ng-container *tdsModalFooter>
     <div class="p-4">
-      <div class="w-full flex flex-col justify-center mt-8">
+      <div class="w-full flex flex-col justify-center">
         <button
-          class="w-full mt-4"
+          class="w-full"
           size="lg"
           tds-button
           type="submit"
