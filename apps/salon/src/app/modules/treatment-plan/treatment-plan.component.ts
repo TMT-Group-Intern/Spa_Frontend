@@ -15,6 +15,7 @@ export class TreatmentPlanComponent implements OnInit {
   private readonly modalSvc = inject(TDSModalService)
   listOfData: any[] = []
   treatment: any[] = []
+  expandSet = new Set<number>();
 
   constructor (
     private shared: AuthService
@@ -45,6 +46,14 @@ export class TreatmentPlanComponent implements OnInit {
     })
   }
 
+  onExpandChange(id: number, checked: boolean): void {
+
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
   //
   treatmentExpand(event: any) {
     console.log(event)

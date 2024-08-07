@@ -12,192 +12,34 @@
     </button>
   </div>
 
-  <tds-data-table
-    [tdsData]="listOfData"
-    [tdsPageSize]="10"
-    style="height: 300px"
-  >
-    <tds-data-table-expand-row
-      [tdsContent]="expandTpl"
-      [tdsExpandField]="'treatmentID'"
-      (tdsExpandChange)="treatmentDetail($event)"
-      (tdsExpandedKeysChange)="treatmentExpand($event)"
-    >
-      <ng-template #expandTpl let-dataRow let-expand="expand">
-        <div class="p-4">
-          <tds-data-table
-            [tdsData]="treatment"
-            [tdsPageSize]="50"
-            [tdsShowPagination]="false"
-            [tdsRounded]="true"
-            [tdsOuterBordered]="true"
-            style="height: 150px"
-          >
-            <tds-data-table-column
-              [tdsField]="'sessionNumber'"
-              [tdsTitle]="'Buổi'"
-              tdsWidth="5%"
-              [tdsDataType]="'numeric'"
-              [tdsLeft]="true"
-            >
-            </tds-data-table-column>
-
-            <tds-data-table-column
-              [tdsField]="'treatmentName'"
-              [tdsTitle]="'Tên dịch vụ'"
-              tdsWidth="55%"
-              [tdsLeft]="true"
-              [tdsContent]="nameContentTpl"
-            >
-              <ng-template #nameContentTpl let-dataRow>
-                <span
-                  *ngFor="
-                    let service of dataRow.treatmendSessionDetail;
-                    let first = first
-                  "
-                  >{{ (first ? '' : ', ') + service.serviceID }}</span
-                >
-                <!-- <div *ngFor="let service of dataRow.treatmendSessionDetail">
-                    {{ service.serviceID }}
-                  </div> -->
-              </ng-template>
-            </tds-data-table-column>
-
-            <!-- <tds-data-table-column
-              [tdsField]="'startDate'"
-              [tdsTitle]="'Ngày bắt đầu'"
-              tdsWidth="15%"
-              [tdsDataType]="'date'"
-              [tdsFormat]="'dd/MM/yyyy'"
-            >
-            </tds-data-table-column> -->
-
-            <tds-data-table-column
-              [tdsField]="'totalSessions'"
-              [tdsTitle]="'Tổng số buổi'"
-              tdsWidth="20%"
-              [tdsDataType]="'numeric'"
-            >
-            </tds-data-table-column>
-
-            <!-- <tds-data-table-column
-              [tdsField]="'notes'"
-              [tdsTitle]="'Ghi chú'"
-              tdsWidth="25%"
-              [tdsRight]="true"
-            >
-            </tds-data-table-column> -->
-
-            <tds-data-table-column
-              [tdsField]="'createBy'"
-              [tdsTitle]="'Người tạo'"
-              tdsWidth="20%"
-              [tdsRight]="true"
-            >
-            </tds-data-table-column>
-
-            <!-- <tds-data-table-column
-              [tdsField]="'status'"
-              [tdsTitle]="'Trạng thái'"
-              tdsWidth="15%"
-              [tdsRight]="true"
-            >
-            </tds-data-table-column> -->
-
-            <!-- <tds-data-table-column
-          [tdsTitle]="'Thao tác'"
-          [tdsContent]="commandTpl"
-          tdsWidth="110px"
-          [tdsColumnType]="'command'"
-          [tdsRight]="true"
-        >
-          <ng-template #commandTpl let-dataRow>
-            <button tds-button-flat-icon size="sm" class="mr-2" color="primary">
-              <i class="tdsi-edit-fill"></i>
-            </button>
-            <button tds-button-flat-icon size="sm" color="secondary">
-              <i class="tdsi-edit-fill"></i>
-            </button>
-          </ng-template>
-        </tds-data-table-column> -->
-          </tds-data-table>
-        </div>
-      </ng-template>
-    </tds-data-table-expand-row>
-
-    <!-- <tds-data-table-column
-      [tdsField]="'treatmentID'"
-      [tdsTitle]="'ID'"
-      tdsWidth="5%"
-      [tdsDataType]="'numeric'"
-      [tdsLeft]="true"
-    >
-    </tds-data-table-column> -->
-
-    <tds-data-table-column
-      [tdsField]="'treatmentName'"
-      [tdsTitle]="'Tên'"
-      tdsWidth="25%"
-      [tdsLeft]="true"
-    >
-    </tds-data-table-column>
-
-    <tds-data-table-column
-      [tdsField]="'startDate'"
-      [tdsTitle]="'Ngày bắt đầu'"
-      tdsWidth="15%"
-      [tdsDataType]="'date'"
-      [tdsFormat]="'dd/MM/yyyy'"
-    >
-    </tds-data-table-column>
-
-    <tds-data-table-column
-      [tdsField]="'totalSessions'"
-      [tdsTitle]="'Tổng số buổi'"
-      tdsWidth="10%"
-      [tdsDataType]="'numeric'"
-    >
-    </tds-data-table-column>
-
-    <tds-data-table-column
-      [tdsField]="'notes'"
-      [tdsTitle]="'Ghi chú'"
-      tdsWidth="25%"
-      [tdsRight]="true"
-    >
-    </tds-data-table-column>
-
-    <tds-data-table-column
-      [tdsField]="'createBy'"
-      [tdsTitle]="'Người tạo'"
-      tdsWidth="10%"
-      [tdsRight]="true"
-    >
-    </tds-data-table-column>
-
-    <tds-data-table-column
-      [tdsField]="'status'"
-      [tdsTitle]="'Trạng thái'"
-      tdsWidth="15%"
-      [tdsRight]="true"
-    >
-    </tds-data-table-column>
-
-    <!-- <tds-data-table-column
-      [tdsTitle]="'Thao tác'"
-      [tdsContent]="commandTpl"
-      tdsWidth="110px"
-      [tdsColumnType]="'command'"
-      [tdsRight]="true"
-    >
-      <ng-template #commandTpl let-dataRow>
-        <button tds-button-flat-icon size="sm" class="mr-2" color="primary">
-          <i class="tdsi-edit-fill"></i>
-        </button>
-        <button tds-button-flat-icon size="sm" color="secondary">
-          <i class="tdsi-edit-fill"></i>
-        </button>
-      </ng-template>
-    </tds-data-table-column> -->
-  </tds-data-table>
+  <tds-table #table [listData]="listOfData" tableLayout="fixed">
+    <thead>
+      <tr>
+        <th width="60px"></th>
+        <th>Số buổi</th>
+        <th>Tên lộ trình</th>
+        <th>Số buổi</th>
+        <th>Người tạo</th>
+        <th>Trạng thái</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let data of table.data">
+        <tr>
+          <td
+            [expand]="expandSet.has(data.treatmentID)"
+            (expandChange)="onExpandChange(data.treatmentID, $event)"
+          ></td>
+          <td>{{ data.startDate | date : 'dd/MM/YYYY' }}</td>
+          <td>{{ data.treatmentName }}</td>
+          <td>{{ data.totalSessions }}</td>
+          <td>{{ data.createBy }}</td>
+          <td>{{ data.status }}</td>
+        </tr>
+        <tr class="w-full" [expand]="expandSet.has(data.treatmentID)">
+          <frontend-table-treatment-plan [id]="data.treatmentID"></frontend-table-treatment-plan>
+        </tr>
+      </ng-container>
+    </tbody>
+  </tds-table>
 </div>
