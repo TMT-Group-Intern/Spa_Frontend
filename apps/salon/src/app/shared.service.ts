@@ -273,6 +273,16 @@ export class AuthService {
       role: role
     })
   }
+
+  changePassword(userName:string, oldPassword:string,password: string, confirmPassword: string) {
+    return this.http.post<{ flag: boolean, message: string,}>(this.baseUrl + 'Authentication/changePassword', {
+      userName: userName,
+      oldPassword: oldPassword,
+      password: password,
+      confirmPassword: confirmPassword,
+    })
+  }
+
   createAdmin(lastName: string, firstName: string, gender: string, phone: string, email: string,userName:string, password: string, confirmPassword: string, dateOfBirth: string) {
     return this.http.post<{ status: object }>(this.baseUrl + 'Authentication/createAdmin', {
       lastName: lastName,

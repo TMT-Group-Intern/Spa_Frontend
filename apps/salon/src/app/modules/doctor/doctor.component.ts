@@ -99,7 +99,6 @@ export class DoctorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(1)
     //  this.sharedService.addAppointmentDataListener(this.onReceiveAppointments.bind(this));
     this.sharedService.DataListenerDoctorChagneStatus(this.onReceiveAppointments.bind(this));
     // console.log(this.appointments);

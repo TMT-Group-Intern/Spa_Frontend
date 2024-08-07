@@ -8,12 +8,6 @@
         (ngModelChange)="onChanges($event)"
       ></tds-cascader>
     </div>
-    <!-- <div class="flex items-center">
-      <tds-form-field class="ml-10 w-[200px]">
-        <input tdsInput type="text" [(ngModel)]="searchText" (ngModelChange)="_change$.next($event)"
-        placeholder="Tìm kiếm"/>
-      </tds-form-field>
-    </div> -->
     <button tds-button-icon (click)="createUser()" class="rounded-full mr-8 bg-green-1" color="success" tds-tooltip
       tooltipTitle="Thêm nhân viên">
       <span class="flex items-center">
@@ -30,31 +24,33 @@
   [tdsShowSizeChanger]="true"
   [tdsPageSize]="20"
   [tdsBordered]="true">
-    <tds-data-table-column [tdsField]="'userCode'" [tdsTitle]="'Mã tài khoản'" tdsWidth="8%"
+    <tds-data-table-column [tdsField]="'userCode'" [tdsTitle]="'Mã tài khoản'" tdsWidth="4%"
       [tdsDataType]="'text'"></tds-data-table-column>
 
     <tds-data-table-column
       [tdsField]="'name'"
       [tdsTitle]="'Họ tên'"
-      tdsWidth="20%"
+      tdsWidth="15%"
       [tdsDataType]="'text'"
     ></tds-data-table-column>
 
-    <tds-data-table-column [tdsField]="'email'" [tdsTitle]="'Email'" tdsWidth="15%"
+    <tds-data-table-column [tdsField]="'email'" [tdsTitle]="'Email'" tdsWidth="12%"
       [tdsDataType]="'text'"></tds-data-table-column>
 
     <tds-data-table-column
       [tdsField]="'phone'"
       [tdsTitle]="'Số điện thoại'"
-      tdsWidth="7%"
+      tdsWidth="6%"
       [tdsDataType]="'text'"
     ></tds-data-table-column>
 
-    <tds-data-table-column [tdsField]="'gender'" [tdsTitle]="'Giới tính'" tdsWidth="5%"
+    <tds-data-table-column [tdsField]="'gender'" [tdsTitle]="'Giới tính'" tdsWidth="3%"
       [tdsDataType]="'text'"></tds-data-table-column>
-    <tds-data-table-column [tdsField]="'dateOfBirth'" [tdsTitle]="'Ngày sinh'" tdsWidth="8%"
+    <tds-data-table-column [tdsField]="'dateOfBirth'" [tdsTitle]="'Ngày sinh'" tdsWidth="6%"
       [tdsDataType]="'date'"></tds-data-table-column>
     <tds-data-table-column [tdsField]="'role'" [tdsTitle]="'Công việc'" tdsWidth="12%"
+      [tdsDataType]="'text'"></tds-data-table-column>
+      <tds-data-table-column [tdsField]="'status'" [tdsTitle]="'Trạng thái'" tdsWidth="12%"
       [tdsDataType]="'text'"></tds-data-table-column>
 
     <tds-data-table-column [tdsContent]="commandTpl" [tdsTitle]="'Tùy chọn'" tdsWidth="8%" [tdsColumnType]="'command'"
@@ -77,7 +73,7 @@
           <i class="tdsi-edit-fill"></i>
         </button>
         <button tds-button-flat-icon color="custom" [disabled]="this.userSession.user.email ===dataRow.email"
-          class="text-slate-500 hover:text-red-500 tdsi-trash-fill" tds-tooltip tooltipTitle="Xóa nhân viên"
+          class="text-slate-500 hover:text-red-500 tdsi-trash-fill" tds-tooltip tooltipTitle="Đổi trạng thái nhân viên"
           (click)="deleteUser(dataRow.email)">
         </button>
       </ng-template>
