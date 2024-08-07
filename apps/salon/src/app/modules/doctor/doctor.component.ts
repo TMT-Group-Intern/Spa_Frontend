@@ -214,7 +214,11 @@ export class DoctorComponent implements OnInit {
               ).subscribe()
             }
           } else {
-            this.sharedService.UpdateStatus(id, 'Đang khám').subscribe()
+            this.sharedService.UpdateStatus(id, 'Đang khám').pipe(
+              tap(() => {
+                this.initAppointmentList();
+              })
+            ).subscribe()
           }
         })
       ))
