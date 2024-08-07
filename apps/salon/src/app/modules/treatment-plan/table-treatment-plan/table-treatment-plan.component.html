@@ -1,0 +1,29 @@
+<div class="m-4 border rounded-md">
+  <tds-table #table [listData]="treatment" tableLayout="fixed">
+    <thead>
+      <tr>
+        <th>Số buổi</th>
+        <th>Khách hàng</th>
+        <th>Bác sĩ</th>
+        <th>Trạng thái</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let data of treatment">
+        <tr>
+          <td>
+            {{ data.sessionNumber }}
+          </td>
+          <td>
+            {{ data.customerName }}<br />
+            <span class="text-slate-500 text-sm">{{
+              data.customerPhone
+            }}</span>
+          </td>
+          <td>{{ data.doctor }}</td>
+          <td>{{ data.isDone }}</td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </tds-table>
+</div>
