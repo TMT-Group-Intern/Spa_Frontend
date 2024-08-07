@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit, TemplateRef } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit, SimpleChanges, TemplateRef } from '@angular/core';
 import { TDSModalService } from 'tds-ui/modal';
 import { ModalTreatmentPlanComponent } from './modal-treatment-plan/modal-treatment-plan.component';
 import { AuthService } from '../../shared.service';
@@ -8,9 +8,7 @@ import { AuthService } from '../../shared.service';
   templateUrl: './treatment-plan.component.html',
   styleUrls: ['./treatment-plan.component.scss'],
 })
-export class TreatmentPlanComponent implements OnInit {
-  @Input() idCustomer?:number;
-
+export class TreatmentPlanComponent implements OnInit, OnChanges {
   @Input() customerId?: number;
   private readonly modalSvc = inject(TDSModalService)
   listOfData: any[] = []
@@ -20,13 +18,19 @@ export class TreatmentPlanComponent implements OnInit {
   constructor (
     private shared: AuthService
   ) {}
-
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['customerId']?.currentValue){
+       this.getTreatmentByCustomerId(this.customerId as number);
+    }
+  }
   ngOnInit(): void {
-    if(this.customerId) {
-      this.shared.getTreatmentOfCustomer(this.customerId).subscribe(
+    this.getTreatmentByCustomerId(this.customerId as number);
+  }
+  getTreatmentByCustomerId(customerId: number):void{
+    if(customerId) {
+      this.shared.getTreatmentOfCustomer(customerId).subscribe(
         (data) => {
           this.listOfData = data
-          console.log(this.listOfData)
         }
       )
     }
@@ -41,7 +45,7 @@ export class TreatmentPlanComponent implements OnInit {
       footer: null,
       size:'lg',
       componentParams:{
-        customerId: this.idCustomer
+        customerId: this.customerId
       }
     })
   }

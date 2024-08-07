@@ -76,8 +76,8 @@ export class DoctorComponent implements OnInit {
   CustomerID: number | undefined;
   userSession: any;
   companyId: number | null = null;
-  branchID: any
-  // isCheck = false
+  branchID: any;
+  getServiceId: any;
 
   appointments: any[] = [];
 
@@ -91,7 +91,7 @@ export class DoctorComponent implements OnInit {
     doctor: [''],
     appointmentDate: ['', Validators.required],
     status: ['Đã khám'],
-    service: [null, Validators.required],
+    service: [null,Validators.required],
     note: ['', Validators.required],
   });
   constructor(
@@ -125,6 +125,14 @@ export class DoctorComponent implements OnInit {
       if (foundExamingAppoint) {
         this.userFrofile(foundExamingAppoint.appointmentID)
       }
+    });
+
+    // theo dõi thay đổi serviceId
+    this.companySvc._change_service$.pipe(
+    ).subscribe(data => {
+      this.form.patchValue({
+        service: data as null
+      })
     });
   }
 

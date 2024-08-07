@@ -1,8 +1,8 @@
 <div class="m-4 border rounded-md">
-  <tds-table #table [listData]="treatment" tableLayout="fixed">
+  <tds-table [hideOnSinglePage]="true" #table [listData]="treatment" tableLayout="fixed">
     <thead>
       <tr>
-        <th>Số buổi</th>
+        <th>Buổi thứ</th>
         <th>Khách hàng</th>
         <th>Bác sĩ</th>
         <th>Trạng thái</th>
@@ -10,7 +10,7 @@
     </thead>
     <tbody>
       <ng-container *ngFor="let data of treatment">
-        <tr>
+        <tr (click)="onClickRow(data)">
           <td>
             {{ data.sessionNumber }}
           </td>
@@ -21,7 +21,7 @@
             }}</span>
           </td>
           <td>{{ data.doctor }}</td>
-          <td>{{ data.isDone }}</td>
+          <td> <tds-tag [status]="'primary'" [type]="'outline'"> {{data.isDone === true?'Đã làm':'Chưa làm' }}</tds-tag></td>
         </tr>
       </ng-container>
     </tbody>
