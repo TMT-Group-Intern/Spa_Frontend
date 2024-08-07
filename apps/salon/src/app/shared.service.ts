@@ -398,4 +398,19 @@ export class AuthService {
   getPaymentsByBill(billID: number) {
     return this.http.get(this.baseUrl + 'Payment/GetPaymentsByBill?idBill=' + billID);
   }
+
+  // treatment Post
+  addTreatmentPlan(body:any){
+    return this.http.post(this.baseUrl + 'Treatment', body);
+  }
+
+  //
+  getTreatmentOfCustomer(idCus: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Treatment?customerId=' + idCus);
+  }
+
+  //
+  getTreatmentDetail(idTreatment: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Treatment/' + idTreatment);
+  }
 }

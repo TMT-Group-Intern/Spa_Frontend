@@ -1,0 +1,41 @@
+<div class="m-4 border rounded-md">
+  <tds-table [hideOnSinglePage]="true" #table [listData]="treatment" tableLayout="fixed">
+    <thead>
+      <tr>
+        <th>Buổi thứ</th>
+        <th>Dịch vụ</th>
+        <th>Trạng thái</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let data of treatment">
+        <tr (click)="onClickRow(data)">
+          <td>
+            {{ data.sessionNumber }}
+          </td>
+          <td>
+            {{ data.serviceName }}<br />
+          </td>
+          <td>
+            <div tds-button [disabled]="data.status === true" color="secondary"  tds-dropdown trigger="click" [tdsDropdownMenu]="menu" class="pl-4 cursor-pointer">
+              <span class="flex items-center">
+                <tds-tag [status]="'primary'" [type]="'outline'"> {{data.isDone === true?'Đã làm':'Chưa làm' }}</tds-tag>
+                <i class="tdsi-chevron-down-fill text-lg leading-none ml-2"></i>
+              </span>
+              <tds-dropdown-menu tds-dropdown #menu="tdsDropdownMenu">
+                <div class="w-full">
+                  <div tds-dropdown-item>
+                    <a>Chưa làm</a>
+                  </div>
+                  <div tds-dropdown-item>
+                    <a>Đã làm</a>
+                  </div>
+                </div>
+              </tds-dropdown-menu>
+            </div>
+            </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </tds-table>
+</div>

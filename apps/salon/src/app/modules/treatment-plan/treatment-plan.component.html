@@ -1,10 +1,45 @@
-<div class="flex w-full h-full">
-  <div class="flex-1">
-    <button tds-button [tds-tooltip]="'Tạo lộ trình'" (click)="modalTreatmentPlan()">
+<div class="w-full h-full">
+  <div class="flex-1 mb-2">
+    <button
+      tds-button
+      [tds-tooltip]="'Tạo lộ trình'"
+      (click)="modalTreatmentPlan()"
+    >
       <span class="flex items-center">
         <i class="tdsi-plus-circle-fill text-lg leading-none mr-2"></i>
         Tạo lộ trình
       </span>
     </button>
   </div>
+
+  <tds-table class="text-sm" #table [listData]="listOfData" tableLayout="fixed">
+    <thead>
+      <tr>
+        <th width="60px"></th>
+        <th>Ngày</th>
+        <th>Tên lộ trình</th>
+        <th>Tổng buổi</th>
+        <th>Người tạo</th>
+        <th>Trạng thái</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let data of table.data">
+        <tr>
+          <td
+            [expand]="expandSet.has(data.treatmentID)"
+            (expandChange)="onExpandChange(data.treatmentID, $event)"
+          ></td>
+          <td>{{ data.startDate | date : 'dd/MM/YYYY' }}</td>
+          <td>{{ data.treatmentName }}</td>
+          <td>{{ data.totalSessions }}</td>
+          <td>{{ data.createBy }}</td>
+          <td><tds-tag [status]="'primary'" [type]="'outline'"> {{data.status }}</tds-tag></td>
+        </tr>
+        <tr class="w-full" [expand]="expandSet.has(data.treatmentID)">
+          <frontend-table-treatment-plan [id]="data.treatmentID"></frontend-table-treatment-plan>
+        </tr>
+      </ng-container>
+    </tbody>
+  </tds-table>
 </div>

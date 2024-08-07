@@ -10,9 +10,19 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TDSSelectModule } from 'tds-ui/select';
+import { TDSDataTableModule } from 'tds-ui/data-table';
+import { TDSTimelineModule } from 'tds-ui/timeline';
+import { TableTreatmentPlanComponent } from './table-treatment-plan/table-treatment-plan.component';
+import { TDSTableModule } from 'tds-ui/table';
+import { TDSTagModule } from 'tds-ui/tag';
+import { TDSDropDownModule } from 'tds-ui/dropdown';
 const routes = [{ path: 'test', component: TreatmentPlanComponent }];
 @NgModule({
-  declarations: [TreatmentPlanComponent, ModalTreatmentPlanComponent],
+  declarations: [
+    TreatmentPlanComponent,
+    ModalTreatmentPlanComponent,
+    TableTreatmentPlanComponent,
+  ],
   imports: [
     CommonModule,
     TDSButtonModule,
@@ -22,7 +32,13 @@ const routes = [{ path: 'test', component: TreatmentPlanComponent }];
     TDSInputModule,
     ReactiveFormsModule,
     TDSSelectModule,
-    FormsModule
+    FormsModule,
+    TDSDataTableModule,
+    TDSTimelineModule,
+    TDSToolTipModule,
+    TDSTableModule,
+    TDSTagModule,
+    TDSDropDownModule
   ],
   exports: [TreatmentPlanComponent],
 })
