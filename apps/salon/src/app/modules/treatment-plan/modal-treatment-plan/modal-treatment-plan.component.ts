@@ -60,7 +60,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
       this.byName = this.userSession.user.name;
-      console.log(this.byName);
+      // console.log(this.byName);
     }// kiểm tra lấy tên tài khoản
 
    this.form.get('totalSessions')?.valueChanges.subscribe(data => {
@@ -114,7 +114,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
         createBy: this.userSession.user.name,
         customerID: this.customerId,
       }
-      console.log(body);
+      // console.log(body);
       this.add(body);
     }
   }
