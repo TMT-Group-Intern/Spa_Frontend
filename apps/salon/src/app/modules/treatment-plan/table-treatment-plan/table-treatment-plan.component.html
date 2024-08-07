@@ -1,26 +1,56 @@
-<div class="m-4 border rounded-md">
+<div class="m-8 border rounded-md">
   <tds-table [hideOnSinglePage]="true" #table [listData]="treatment" tableLayout="fixed">
     <thead>
       <tr>
         <th>Buổi thứ</th>
         <th>Dịch vụ</th>
-        <th></th>
+        <th>Chọn dịch vụ</th>
         <th>Trạng thái</th>
       </tr>
     </thead>
     <tbody>
       <ng-container *ngFor="let data of treatment">
-        <tr (click)="onClickRow(data)">
+        <tr>
           <td>
             {{ data.sessionNumber }}
           </td>
           <td>
-            {{ data.serviceName }}<br />
+            <p *ngFor="let service of data.treatmendSessionDetail">{{ service.service.serviceName }}</p>
           </td>
           <td>
-            <div tds-button [disabled]="data.status === true" color="secondary"  tds-dropdown trigger="click" [tdsDropdownMenu]="menu" class="pl-4 cursor-pointer">
+            <a color="secondary" (click)="onClickRow(data)" *ngIf="!data.isDone">
+              <span class="hover:underline font-semibold text-green-d-secondary-1 hover:decoration-green-d-secondary-1">
+                Thực hiện
+              </span>
+            </a>
+          </td>
+          <td>
+            <tds-tag [status]="data.isDone ? 'success' : 'error'" [type]="'outline'" class="!rounded-full">
+              {{ data.isDone ? 'Đã làm' : 'Chưa làm' }}</tds-tag>
+
+            <!-- <button tds-button [size]="'xs'" [color]="'custom'" class="rounded-full" [ngClass]="data.isDone ? 'bg-success-100' : 'bg-error-100'"
+              tds-dropdown [tdsDropdownMenu]="menu1">
+              <span class="flex items-center justify-between" [ngClass]="data.isDone ? 'text-success-500' : 'text-error-500'">
+                <span *ngIf="data.isDone">Đã làm</span><span *ngIf="!data.isDone">Chưa làm</span>
+                <i class="tdsi-arrow-down-line text-lg leading-none ml-2"></i>
+              </span>
+            </button>
+            <tds-dropdown-menu #menu1="tdsDropdownMenu">
+              <div class="">
+                <div tds-dropdown-item>
+                  <a>Chưa làm</a>
+                </div>
+                <div tds-dropdown-item>
+                  <a>Đã làm</a>
+                </div>
+              </div>
+            </tds-dropdown-menu> -->
+
+            <!-- <div tds-button [disabled]="data.status === true" color="secondary" tds-dropdown trigger="click"
+              [tdsDropdownMenu]="menu" class="pl-4 cursor-pointer">
               <span class="flex items-center">
-                <tds-tag [status]="'primary'" [type]="'outline'"> {{data.isDone === true?'Đã làm':'Chưa làm' }}</tds-tag>
+                <tds-tag [status]="'primary'" [type]="'outline'">
+                  {{ data.isDone === true ? 'Đã làm' : 'Chưa làm' }}</tds-tag>
                 <i class="tdsi-chevron-down-fill text-lg leading-none ml-2"></i>
               </span>
               <tds-dropdown-menu tds-dropdown #menu="tdsDropdownMenu">
@@ -33,8 +63,8 @@
                   </div>
                 </div>
               </tds-dropdown-menu>
-            </div>
-            </td>
+            </div> -->
+          </td>
         </tr>
       </ng-container>
     </tbody>
