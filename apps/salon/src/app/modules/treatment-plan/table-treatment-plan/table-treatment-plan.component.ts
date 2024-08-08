@@ -19,6 +19,14 @@ export class TableTreatmentPlanComponent implements OnChanges {
   }
 
   //
+  onClickService(idService: any, event: any){
+    // const row = event.treatmendSessionDetail
+    // const val = row.map((v:any) => v.serviceID)
+    this.company._change_service$.next(idService);
+    this.company._change_session_status$.next(event.sessionID);
+  }
+
+  //
   onClickRow(event: any){
     const row = event.treatmendSessionDetail
     const val = row.map((v:any) => v.serviceID)
