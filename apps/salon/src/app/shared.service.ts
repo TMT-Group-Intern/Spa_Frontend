@@ -20,13 +20,13 @@ export class AuthService {
     this.hubConnection
       .start()
       .then(() => {
-        console.log('SignalR Connection started');
+        //console.log('SignalR Connection started');
         this.isConnected = true;
       })
       .catch(err => console.error('Error while starting connection: ' + err));
     this.hubConnection.onclose(() => {
       this.isConnected = false;
-      console.log('SignalR Connection closed');
+      //console.log('SignalR Connection closed');
     });
 
   }
@@ -35,7 +35,7 @@ export class AuthService {
   public addTransferChatDataListener(callback: (user: string, message: string) => void): void {
     if (this.hubConnection) {
       this.hubConnection.on('ReceiveMessage', callback);
-      console.log(callback)
+      //console.log(callback)
     }
   }
 
