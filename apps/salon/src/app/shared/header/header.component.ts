@@ -15,6 +15,8 @@ import { TDSCascaderModule, TDSCascaderOption } from 'tds-ui/cascader';
 import { HomeComponent } from '../../modules/home/home.component';
 import { CompanyService } from '../../core/services/company.service';
 import { TDSDropDownModule } from 'tds-ui/dropdown';
+import { ChangePassComponent } from './change-pass/change-pass.component';
+import { tap } from 'rxjs';
 
 
 @Component({
@@ -41,7 +43,7 @@ export class HeaderComponent implements OnInit {
 
   public contact = 1;
   userSession: any;
-
+  private readonly tModalSvc =inject(TDSModalService)
   branchOptions: any[] = [];
   branchName='';
   public branchID = 0;
@@ -50,11 +52,13 @@ export class HeaderComponent implements OnInit {
   branch = inject(FormBuilder).nonNullable.control({
     branch: [''],
   });
+
   ngOnInit() {
 
     const storedUserSession = localStorage.getItem('userSession');
     if (storedUserSession !== null) {
       this.userSession = JSON.parse(storedUserSession);
+      const branchId = this.userSession.user.branchID;
       this.companySvc._companyIdCur$.next(this.userSession.user.branchID);
     }
     if(this.userSession.user.role ==='Admin'){
@@ -79,6 +83,15 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private companySvc: CompanyService
   ) {
+  }
+  changePassword(){
+    const modal = this.tModalSvc.create({
+      title:'Đổi mật khẩu',
+      content: ChangePassComponent,
+      footer:null,
+      size:'md',
+    });
+    modal.afterClose.asObservable().subscribe();
   }
   onBranchChanges(values: string[]): void {
     this.selectedBranch=this.branchID

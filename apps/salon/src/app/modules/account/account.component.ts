@@ -153,7 +153,7 @@ export class AccountComponent implements OnInit{
         title:'Sửa thông tin tài khoản',
         content: AccountModalComponent,
         footer:null,
-        size:'xl',
+        size:'md',
         componentParams:{
           id,role,isActive,lastName,firstName
         }
@@ -162,9 +162,9 @@ export class AccountComponent implements OnInit{
     }
 
     changeStatusAccount(userName:string){
-      const modal = this.tModalSvc.error({
-        title:'Vô hiệu hóa tài khoản',
-        content: `<h5 class="text-error-500">Bạn có chắc chắn muốn xóa vô hiệu hóa tài khoản <strong>${ userName }</strong> không?</h5>`,
+      const modal = this.tModalSvc.confirm({
+        title:'Đổi trạng thái tài khoản',
+        content: `<h5 class="text-error-500">Bạn có chắc chắn muốn đổi trạng thái tài khoản <strong>${ userName }</strong> không?</h5>`,
         iconType:'tdsi-block-1-fill',
         okText:'Vô hiệu hóa',
         size: 'md',
