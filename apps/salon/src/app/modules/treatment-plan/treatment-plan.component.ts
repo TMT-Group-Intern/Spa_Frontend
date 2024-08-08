@@ -26,6 +26,8 @@ export class TreatmentPlanComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.getTreatmentByCustomerId(this.customerId as number);
   }
+
+  //
   getTreatmentByCustomerId(customerId: number):void{
     if(customerId) {
       this.shared.getTreatmentOfCustomer(customerId).subscribe(
@@ -48,16 +50,21 @@ export class TreatmentPlanComponent implements OnInit, OnChanges {
         customerId: this.customerId
       }
     })
+    modal.afterClose.asObservable().subscribe((res) => {
+      if (res) {
+        this.getTreatmentByCustomerId(this.customerId as number);
+      }
+    });
   }
 
   onExpandChange(id: number, checked: boolean): void {
-
     if (checked) {
       this.expandSet.add(id);
     } else {
       this.expandSet.delete(id);
     }
   }
+
   //
   treatmentExpand(event: any) {
     console.log(event)

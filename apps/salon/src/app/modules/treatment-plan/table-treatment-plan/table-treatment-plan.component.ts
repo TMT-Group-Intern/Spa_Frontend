@@ -17,15 +17,21 @@ export class TableTreatmentPlanComponent implements OnChanges {
       this.treatmentDetail(this.id as number);
     }
   }
+
+  //
   onClickRow(event: any){
     const row = event.treatmendSessionDetail
     const val = row.map((v:any) => v.serviceID)
     this.company._change_service$.next(val);
+    this.company._change_session_status$.next(event.sessionID);
   }
+
+  //
   treatmentDetail(id: number) {
       this.shared.getTreatmentDetail(id).subscribe(
         (data: any) => {
           this.treatment = data.treatmentSessions
+          console.log(this.treatment)
         }
       )
   }

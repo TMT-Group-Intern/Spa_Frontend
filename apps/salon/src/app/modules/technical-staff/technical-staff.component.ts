@@ -66,28 +66,16 @@ export class TechnicalStaffComponent {
   checkActive?: boolean = false;
   status!: FormControl;
   currentBranch: number | null = null;
-  service: any;
-  isLoad?: boolean = false;
-  fileList: TDSUploadFile[] = [];
-  previewImage: string | undefined = '';
-  previewVisible = false;
-  checkReloadHistory : any;
-  tempId?:number;
-
-
   timer = false;
   hour = 0;
   minute = 0;
   second = 0;
   count = 0;
-
   hrString = '00';
   minString = '00';
   secString = '00';
   countString = '00';
   //count:number = 0;
-
-
   ngOnInit(): void {
     this.auth.DataListenerDoctorChagneStatus(this.onReceiveAppointments.bind(this));
     const storedUserSession = localStorage.getItem('userSession');
@@ -103,21 +91,11 @@ export class TechnicalStaffComponent {
       this.renderCustomerInQueueTemp(id)
     });
   }
-
   constructor(
     private auth: AuthService,
     private notification: TDSNotificationService,
     private companySvc: CompanyService
-  ) {
-    this.checkReloadHistory = '';
-   }
-
-  beforeUpload = (file: TDSUploadFile): boolean => {
-    this.fileList = this.fileList.concat(file);
-    this.selectedFiles = this.fileList as unknown as File[]
-    return false;
-};
-
+  ) { }
   onReceiveAppointments(): void {
     this.renderCustomerInQueue();
   }
@@ -151,54 +129,42 @@ export class TechnicalStaffComponent {
           });
       });
   }
-
   renderCustomerDetail(data: any) {
     const observer = {
       next: (data: any) => {
         this.checkActive = true;
         this.appointmentAllInfo = data;
-        this.service = data.chooseServices.map((item: any) =>item.service.serviceName)
-        this.checkReloadHistory = true;
       },
     };
     this.auth.getAppointment(data.appointmentID).subscribe(observer);
   }
-
   uploadImage(id: number) {
     if (this.selectedFiles.length > 0) {
       const formData = new FormData();
       for (const file of this.selectedFiles) {
         formData.append('files', file);
       }
-
       //formData.append('id', this.listSpaServiceQueue.toString());
-
       this.auth.UploadImageCustomer(id, formData).subscribe(
-     {
-      next:() => {
-        this.checkReloadHistory = this.selectedFiles.map(file => file.name)
-        this.createNotificationSuccess('Lưu ảnh thành công');
-      },
-      error:(res) => {
-        this.createNotificationError(res.error.message);
-      }
-    }
+        () => {
+          this.createNotificationSuccess('Upload successful');
+        },
+        (res) => {
+          this.createNotificationError(res.error.message);
+        }
       );
     } else {
-      this.createNotificationError('Bạn chưa chọn ảnh?');
+      this.createNotificationError('No file selected');
     }
   }
-
   onFileSelected(event: any) {
     const input = event.target as HTMLInputElement;
     if (input && input.files) {
       const files = Array.from(input.files);
       this.selectedFiles = files;
-
       for (let i = 0; i < files.length; i++) {
         const reader = new FileReader();
         reader.readAsDataURL(files[i]);
-
         reader.onload = (e) => {
           const target = e.target as FileReader;
           const result = target.result;
@@ -209,7 +175,6 @@ export class TechnicalStaffComponent {
       }
     }
   }
-
   callModalHistory() {
     //console.log(this.dataParent.CustomerID)
     this.modalSvc.create({
@@ -222,26 +187,21 @@ export class TechnicalStaffComponent {
       }
     })
   }
-
   // Success Notification
   createNotificationSuccess(content: any): void {
     this.notification.success('Succesfully', content);
   }
-
   // Error Notification
   createNotificationError(content: any): void {
     this.notification.error('Error', content);
   }
-
   onStatusChange(event: any, id: number) {
     const status = event.target.value;
     if (status === 'Hoàn thành') {
       this.checkActive = false;
-
     }
     this.updateStatus(id, status);
   }
-
   updateStatus(id: number, status: string) {
     this.auth.UpdateStatus(id, status).subscribe(
       () => {

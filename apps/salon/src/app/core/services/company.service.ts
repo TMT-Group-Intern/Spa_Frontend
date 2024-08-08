@@ -10,4 +10,5 @@ export class CompanyService {
  _search$ = new BehaviorSubject<string>('');
  _check_create$ = new BehaviorSubject<boolean>(true);
  _change_service$ = new BehaviorSubject<string|null>(null);
+ _change_session_status$ = new BehaviorSubject<string|null>(null);
 }
