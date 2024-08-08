@@ -134,10 +134,18 @@ export class DoctorComponent implements OnInit {
 
     // theo dõi thay đổi serviceId
     this.companySvc._change_service$.subscribe((data) => {
+      // Lấy giá trị hiện tại của service, nếu null hoặc undefined thì gán nó là mảng trống
+      const currentService = this.form.value.service ?? [];
+
+      // Chuyển đổi các mảng hiện tại và mới thành Set để loại bỏ các giá trị trùng lặp
+      const updatedServiceSet = new Set([...currentService, ...(Array.isArray(data) ? data : [data])]);
+
+      // Chuyển đổi Set thành mảng để cập nhật lại giá trị của service
+      const updatedService = Array.from(updatedServiceSet);
+
+      // Cập nhật lại giá trị của service bằng patchValue
       this.form.patchValue({
-        service: (Array.isArray(data)
-          ? data
-          : [data]) as unknown as undefined,
+        service: updatedService as unknown as undefined
       });
       this.serviceBefore = data;
     });
