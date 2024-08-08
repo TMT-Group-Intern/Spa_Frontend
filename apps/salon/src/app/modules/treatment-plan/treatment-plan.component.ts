@@ -43,7 +43,6 @@ export class TreatmentPlanComponent implements OnInit, OnChanges {
     const modal = this.modalSvc.create({
       title:'Tạo lộ trình điều trị',
       content:ModalTreatmentPlanComponent,
-      okText:'Xác nhận',
       footer: null,
       size:'lg',
       componentParams:{

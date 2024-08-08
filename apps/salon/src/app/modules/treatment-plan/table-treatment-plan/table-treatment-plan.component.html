@@ -2,10 +2,10 @@
   <tds-table [hideOnSinglePage]="true" #table [listData]="treatment" tableLayout="fixed">
     <thead>
       <tr>
-        <th>Buổi thứ</th>
-        <th>Dịch vụ</th>
-        <th>Chọn dịch vụ</th>
-        <th>Trạng thái</th>
+        <th width="20%">Buổi thứ</th>
+        <th width="60%">Chọn dịch vụ</th>
+        <!-- <th>Chọn dịch vụ</th> -->
+        <th width="20%">Trạng thái</th>
       </tr>
     </thead>
     <tbody>
@@ -15,14 +15,28 @@
             {{ data.sessionNumber }}
           </td>
           <td>
-            <p *ngFor="let service of data.treatmendSessionDetail">{{ service.service.serviceName }}</p>
-          </td>
-          <td>
-            <a color="secondary" (click)="onClickRow(data)" *ngIf="!data.isDone">
-              <span class="hover:underline font-semibold text-green-d-secondary-1 hover:decoration-green-d-secondary-1">
-                Thực hiện
-              </span>
-            </a>
+            <div class="grid grid-cols-4">
+              <div class="col-span-3">
+                <div *ngFor="let service of data.treatmendSessionDetail" class="grid grid-cols-3">
+                  <span class="col-span-2">{{ service.service.serviceName }}</span>
+                  <a
+                    (click)="onClickService(service.service.serviceID, data)" *ngIf="!data.isDone">
+                    <span
+                      class="hover:underline font-semibold text-green-d-secondary-1 hover:decoration-green-d-secondary-1">
+                      Chọn
+                    </span>
+                  </a>
+                </div>
+              </div>
+              <div class="flex justify-center items-center">
+                <a (click)="onClickRow(data)" *ngIf="!data.isDone">
+                  <span
+                    class="hover:underline font-semibold text-green-d-secondary-1 hover:decoration-green-d-secondary-1">
+                    Chọn tất cả
+                  </span>
+                </a>
+              </div>
+            </div>
           </td>
           <td>
             <tds-tag [status]="data.isDone ? 'success' : 'error'" [type]="'outline'" class="!rounded-full">
