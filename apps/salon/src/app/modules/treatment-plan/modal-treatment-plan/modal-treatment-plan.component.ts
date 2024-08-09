@@ -46,12 +46,13 @@ export class ModalTreatmentPlanComponent implements OnInit {
 
   sessionChosen: number[] = [];
   listService: any;
-  listOfData: any;
+  listOfData: any[] = [];
 
   userSession: any;
   storedUserSession = localStorage.getItem('userSession');
 
   sessionFormGroup: any;
+  total: any;
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
@@ -102,8 +103,61 @@ export class ModalTreatmentPlanComponent implements OnInit {
   }
 
    getValueFromSelect(value: TDSSafeAny){
-    this.listOfData =  value;
+    this.listOfData =  [...(value as any[]).map(item => ({
+      serviceID: item.serviceID,
+      serviceName: item.serviceName,
+      unitPrice: item.price,
+      quantity: 1,
+      tempPrice: item.price,
+      totalPrice: item.price,
+      amountDiscount: 0,
+      kindofDiscount: '%',
+    }))]
     console.log(this.listOfData)
+  }
+
+  //
+  resetTotal() {
+    this.total = 0
+    for (const num of this.listOfData) {
+      this.total += num.totalPrice;
+    }
+  }
+
+  // Calculate Total Price
+  totalPrice(id: number) {
+    const service = this.listOfData.find(ser => ser.serviceID === id);
+    service.tempPrice = service.unitPrice * service.quantity
+    this.priceAfterDiscount(id)
+  }
+
+  // Calculate the price after use discount
+  priceAfterDiscount(id: number) {
+    const service = this.listOfData.find(ser => ser.serviceID === id);
+    if (service.kindofDiscount == '%') {
+      service.totalPrice = service.tempPrice * (100 - service.amountDiscount) / 100;
+    } else {
+      service.totalPrice = service.tempPrice - service.amountDiscount;
+    }
+    this.resetTotal()
+  }
+
+  //
+  activeDiscountPercentagePrice(id: number) {
+    const service = this.listOfData.find(ser => ser.serviceID === id);
+    service.kindofDiscount = '%'
+    service.amountDiscount = 0
+    service.totalPrice = service.tempPrice
+    this.resetTotal()
+  }
+
+  //
+  activeDiscountVNDPrice(id: number) {
+    const service = this.listOfData.find(ser => ser.serviceID === id);
+    service.kindofDiscount = 'VND'
+    service.amountDiscount = 0
+    service.totalPrice = service.tempPrice
+    this.resetTotal()
   }
 
   private addItemToTreatmentSession(session: any) {
