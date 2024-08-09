@@ -119,10 +119,11 @@ export class DoctorComponent implements OnInit {
         this.branchID = data[0].branchID;
         this.reception = this.appointmentList.filter(
           (appointment: any) =>
-            appointment.status === 'Chờ khám' ||
-            appointment.status === 'Đang khám'
+            (appointment.status === 'Chờ khám' ||
+              appointment.status === 'Đang khám') &&
+            (appointment.employeeCode === this.userSession.user.userCode ||
+              this.userSession.user.role === 'Admin')
         );
-
         const foundExamingAppoint = this.appointmentList.find(
           (item) => item.status == 'Đang khám'
         );
@@ -157,7 +158,6 @@ export class DoctorComponent implements OnInit {
 
   //
   isCheck(event: any) {
-    console.log(event);
     if (event.checked) {
       this.form.patchValue({
         status: 'Không sử dụng dịch vụ',

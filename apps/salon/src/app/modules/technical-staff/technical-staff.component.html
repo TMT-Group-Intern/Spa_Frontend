@@ -31,7 +31,7 @@
             </tds-form-field> -->
             <select
               name="status"
-              class=""
+              class="form-control custom-select custom-select-sm"
               (change)="onStatusChange($event, data.appointmentID)"
             >
               <option [selected]="data.status === 'Chờ chăm sóc'" value="Chờ chăm sóc">
@@ -90,7 +90,7 @@
             class="font-normal"
             *ngFor="let service of customerDetail; let first = first"
           >
-            {{ (first ? '' : ', ') + service.serviceName }}
+            {{ (first ? '' : ', ') + service.service.serviceName }}
           </span>
         </div>
         <div class="font-medium mb-4">
@@ -134,7 +134,7 @@
             History Customer
           </button>
         </div>
-        <div class="container">
+        <!-- <div class="container">
           <div id="time">
             <span class="digit">{{ hrString }}</span>
             <span class="txt">Hr</span>
@@ -144,12 +144,12 @@
             <span class="txt">Sec</span>
             <span class="digit">{{ countString }}</span>
           </div>
-          <!-- <div id="buttons">
+          <div id="buttons">
             <button class="btn" id="start" (click)="start()">Start</button>
             <button class="btn" id="stop" (click)="stop()">Stop</button>
             <button class="btn" id="reset" (click)="reset()">Reset</button>
-          </div> -->
-        </div>
+          </div>
+        </div> -->
       </div>
     </div>
     <!-- Table section -->
@@ -163,15 +163,14 @@
       <tbody>
         <tr *ngFor="let service of customerDetail">
           <td class="border border-gray-400 px-4 py-2 text-center">
-            {{ service.serviceName }}
+            {{ service.service.serviceName }}
           </td>
           <td class="border border-gray-400 px-4 py-2 text-center">
-            <!-- <input
+            <input
               type="checkbox"
-              [checked]="checkboxStatess[service.ServiceID]"
-              (change)="toggleCheckbox(service.ServiceID)"
+              [checked]="checkboxStatess[service.service.ServiceID]"
               class="form-checkbox h-5 w-5 text-green-500"
-            /> -->
+            />
           </td>
         </tr>
       </tbody>
