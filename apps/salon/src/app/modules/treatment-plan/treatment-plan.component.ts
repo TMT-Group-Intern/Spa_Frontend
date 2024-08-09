@@ -80,5 +80,21 @@ export class TreatmentPlanComponent implements OnInit, OnChanges {
       this.expandSet.delete(id);
     }
   }
+  
+  //
+  treatmentExpand(event: any) {
+    console.log(event)
+  }
 
+  //
+  treatmentDetail(event: any) {
+    console.log(event)
+    if(event.expand) {
+      this.shared.getTreatmentDetail(event.data.dataRow.treatmentID).subscribe(
+        (data: any) => {
+          this.treatment = data.treatmentSessions
+        }
+      )
+    }
+  }
 }
