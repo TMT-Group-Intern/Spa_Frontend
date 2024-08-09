@@ -72,8 +72,6 @@ export class TreatmentPlanComponent implements OnInit, OnChanges {
   //
   treatmentDetail(event: any) {
     console.log(event)
-    // console.log(event.expand)
-    // console.log(event.data.dataRow.treatmentID)
     if(event.expand) {
       this.shared.getTreatmentDetail(event.data.dataRow.treatmentID).subscribe(
         (data: any) => {
