@@ -3,7 +3,7 @@
     <button
       tds-button
       [tds-tooltip]="'Tạo lộ trình'"
-      (click)="modalTreatmentPlan()"
+      (click)="modalCreateTreatmentPlan()"
     >
       <span class="flex items-center">
         <i class="tdsi-plus-circle-fill text-lg leading-none mr-2"></i>
@@ -21,6 +21,7 @@
         <th>Tổng buổi</th>
         <th>Người tạo</th>
         <th>Trạng thái</th>
+        <th>Thao tác</th>
       </tr>
     </thead>
     <tbody>
@@ -35,6 +36,11 @@
           <td>{{ data.totalSessions }}</td>
           <td>{{ data.createBy }}</td>
           <td><tds-tag [status]="'primary'" [type]="'outline'"> {{data.status }}</tds-tag></td>
+          <td>
+            <button tds-button-outline-icon color="secondary" (click)="modalEditTreatmentPlan(data.treatmentID)">
+              <i class="tdsi-edit-fill"></i>
+              </button>
+          </td>
         </tr>
         <tr class="w-full" [expand]="expandSet.has(data.treatmentID)">
           <frontend-table-treatment-plan [id]="data.treatmentID"></frontend-table-treatment-plan>

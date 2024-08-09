@@ -403,4 +403,9 @@ export class AuthService {
   getTreatmentDetail(idTreatment: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Treatment/' + idTreatment);
   }
+
+  //Cập nhật treatment
+  updateTreatmentPlan(treatmentId: number, body: any) {
+    return this.http.put(this.baseUrl + 'Treatment/'+ treatmentId ,body);
+  }
 }

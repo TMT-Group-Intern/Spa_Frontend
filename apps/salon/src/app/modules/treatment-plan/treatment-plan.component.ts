@@ -37,15 +37,36 @@ export class TreatmentPlanComponent implements OnInit, OnChanges {
   }
 
   // Sử dụng modal
-  modalTreatmentPlan():void{
+  modalCreateTreatmentPlan():void{
     const modal = this.modalSvc.create({
       title:'Tạo lộ trình điều trị',
       content:ModalTreatmentPlanComponent,
-      okText:'Xác nhận',
       footer: null,
-      size:'lg',
+      size:'xl',
       componentParams:{
         customerId: this.customerId
+      }
+    })
+    modal.afterClose.asObservable().subscribe((res)=>{
+      if(res){
+        this.getTreatmentByCustomerId(this.customerId as number)
+      }
+    })
+  }
+  modalEditTreatmentPlan(id:number):void{
+    const modal = this.modalSvc.create({
+      title:'Sửa lộ trình điều trị',
+      content:ModalTreatmentPlanComponent,
+      footer: null,
+      size:'xl',
+      componentParams:{
+        customerId: this.customerId,
+        treatmentId:id
+      }
+    })
+    modal.afterClose.asObservable().subscribe((res)=>{
+      if(res){
+        this.getTreatmentByCustomerId(this.customerId as number)
       }
     })
   }
@@ -56,24 +77,6 @@ export class TreatmentPlanComponent implements OnInit, OnChanges {
       this.expandSet.add(id);
     } else {
       this.expandSet.delete(id);
-    }
-  }
-  //
-  treatmentExpand(event: any) {
-    console.log(event)
-  }
-
-  //
-  treatmentDetail(event: any) {
-    console.log(event)
-    // console.log(event.expand)
-    // console.log(event.data.dataRow.treatmentID)
-    if(event.expand) {
-      this.shared.getTreatmentDetail(event.data.dataRow.treatmentID).subscribe(
-        (data: any) => {
-          this.treatment = data.treatmentSessions
-        }
-      )
     }
   }
 

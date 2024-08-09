@@ -18,7 +18,7 @@ import { PaymentModalComponent } from '../../home/payment-modal/payment-modal.co
   templateUrl: './appointment-table-list.component.html',
   styleUrls: ['./appointment-table-list.component.scss'],
 })
-export class AppointmentTableListComponent implements OnChanges, OnInit {
+export class AppointmentTableListComponent implements OnChanges {
   private readonly shareApi = inject(AuthService);
   private readonly modalSvc = inject(TDSModalService);
   @Input() branchId?: number;
@@ -58,9 +58,6 @@ export class AppointmentTableListComponent implements OnChanges, OnInit {
     }
   }
 
-  ngOnInit(): void {
-    this.initAppointmentbyDays(this.startDay as string, this.endDay as string);
-  }
   // kiểm tra nội dung tìm kiếm
   checkChanges():void{
     if (this.search == '') {
@@ -218,4 +215,5 @@ export class AppointmentTableListComponent implements OnChanges, OnInit {
   onClickGetCustomerId(customerID: number) {
     localStorage.setItem('customerID', JSON.stringify(customerID));
   }
+
 }
