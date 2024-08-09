@@ -1,37 +1,65 @@
 <form id="idform" [formGroup]="form" autocomplete="off" class="w-full">
   <!--  -->
   <div class="flex flex-row">
-    <div class="flex flex-col w-[80%]">
-      <div class="flex-1">
-        <tds-form-field class="py-2">
-          <tds-label>Lộ trình</tds-label>
-          <input tdsInput placeholder="Tên lộ trình" formControlName="treatmentName">
-        </tds-form-field>
-      </div>
-    </div>
-    <div class="flex flex-col w-[20%]">
-      <div class="flex-1">
-        <tds-form-field class="p-2">
-          <tds-label>Số buổi</tds-label>
-          <tds-select valueField="id" textField="name" [data]="sessionOptions" formControlName="totalSessions"
-            [(ngModel)]="selectSessionOptions">
-          </tds-select>
-        </tds-form-field>
-      </div>
-    </div>
-  </div>
-  <!-- Hiển thị số buổi + dịch vụ của mỗi buổi -->
-  <div class="flex-1" formArrayName="treatmentSessionsDTO">
-    <div *ngFor="let lessonForm of treatmentSessionsDTO.controls; let i = index" [formGroupName]="i">
+    <div class="flex-1">
       <tds-form-field class="py-2">
-        <tds-label>Buổi {{i+1}}</tds-label>
-        <tds-select valueField="serviceID" formControlName="treatmendSessionDetailDTO" textField="serviceName" [data]="listService"
-          placeholder="Hãy chọn dịch vụ" mode="multiple" [valuePrimitive]="false">
-        </tds-select>
-        <tds-error><span>Vui lòng chọn <strong>dịch vụ</strong>!</span></tds-error>
+        <tds-label>Lộ trình</tds-label>
+        <input tdsInput placeholder="Tên lộ trình" formControlName="treatmentName">
       </tds-form-field>
     </div>
   </div>
+  <!-- -->
+  <div class="flex-1">
+    <tds-form-field class="py-2">
+      <tds-label>Dịch vụ</tds-label>
+      <tds-select valueField="serviceID" textField="serviceName" [ngModelOptions]="{standalone: true}"
+        [(ngModel)]="listSelected" (ngModelChange)="getValueFromSelect($event)" [data]="listService" mode="multiple"
+        placeholder="Hãy chọn dịch vụ" [valuePrimitive]="false">
+      </tds-select>
+      <tds-error><span>Vui lòng chọn <strong>dịch vụ</strong>!</span></tds-error>
+    </tds-form-field>
+  </div>
+  <!--  -->
+
+  <tds-table class="text-sm" [hideOnSinglePage]="true" #basicTable [listData]="listOfData">
+    <thead>
+      <tr>
+        <th>Tên dịch vụ</th>
+        <th>Số lượng</th>
+        <th>Giá gốc</th>
+        <th>Giảm giá</th>
+        <th>Thành tiền</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-template ngFor let-data [ngForOf]="basicTable.data">
+        <tr>
+          <td>{{ data.serviceName }}</td>
+          <td>
+            <tds-form-field class="w-20">
+              <tds-input-number #input="tdsInputNumber" [hiddenIcon]="true" [min]="1" [max]="100" [step]="1"
+                [defaultValue]="null" [ngModelOptions]="{standalone:true}" (ngModelChange)="onChange($event)" [(ngModel)]="numberValue"
+                placeholder="Nhập số">
+              </tds-input-number>
+            </tds-form-field>
+          </td>
+          <td>{{ data.price | tdsFormatNumber}}</td>
+          <td>
+            <div>
+              <button tds-button class="border-none cursor-pointer" color="secondary" tds-dropdown trigger="click">
+                <p class="flex items-center">
+                  <i class="tdsi-cash-payment-fill text-success-400 text-2xl pr-1"></i>
+                </p>
+              </button>
+              <tds-label>{{totalDiscount}}</tds-label>
+            </div>
+          </td>
+          <td>{{ totalService |tdsFormatNumber}}</td>
+        </tr>
+      </ng-template>
+    </tbody>
+  </tds-table>
+
   <!--  -->
   <div class="w-full">
     <tds-form-field class="pt-2">
