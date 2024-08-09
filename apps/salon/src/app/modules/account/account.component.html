@@ -59,7 +59,7 @@
             <i class="tdsi-edit-fill"></i>
           </button>
           <button tds-button-flat-icon color="custom" [disabled]="this.userSession.user.userName ===dataRow.userName"
-            class="text-slate-500 hover:text-red-500 tdsi-block-1-fill" tds-tooltip tooltipTitle="Vô hiệu hóa tài khoản"
+            class="text-slate-500 hover:text-red-500 tdsi-sync-line" tds-tooltip tooltipTitle="Thay đổi trạng thái tài khoản"
             (click)="changeStatusAccount(dataRow.userName)">
           </button>
           <button tds-button-flat-icon color="custom" [disabled]="this.userSession.user.userName ===dataRow.userName"

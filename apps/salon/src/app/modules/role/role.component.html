@@ -24,18 +24,6 @@
         [tdsColumnType]="'command'"
       >
         <ng-template #commandTpl let-dataRow>
-          <div class="flex justify-around">
-            <!-- <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-secondary-1">
-              <i class="tdsi-edit-fill"></i>
-            </button> -->
-            <button
-              tds-button-flat-icon
-              color="custom"
-              class="text-slate-500 hover:text-red-500"
-            >
-              <i class="tdsi-trash-fill"></i>
-            </button>
-          </div>
         </ng-template>
       </tds-data-table-column>
     </tds-data-table>
@@ -50,7 +38,7 @@
 
       <tds-tree
         #tdsTreeComponent
-        [data]="nodes"
+        [data]="permissions"
         checkable
         (onClick)="onClick($event)"
         (contextMenu)="onClick($event)"

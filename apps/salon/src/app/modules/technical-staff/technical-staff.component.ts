@@ -134,6 +134,7 @@ export class TechnicalStaffComponent {
       next: (data: any) => {
         this.checkActive = true;
         this.appointmentAllInfo = data;
+        this.customerDetail=this.appointmentAllInfo.chooseServices
       },
     };
     this.auth.getAppointment(data.appointmentID).subscribe(observer);

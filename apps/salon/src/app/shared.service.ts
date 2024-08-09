@@ -347,6 +347,18 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'Job/allJobs');
   }
 
+  getJobTypeForPermission(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Job/allJobForPermissions');
+  }
+
+  getAllPermissions(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Permission/allPermissons');
+  }
+
+  getRolePermissions(id:number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Permission/GetPermissionsByJobType?jobTypeId='+id);
+  }
+
   // Create Bill
   createBill(val: any) {
     return this.http.post(this.baseUrl + 'Bill', val);

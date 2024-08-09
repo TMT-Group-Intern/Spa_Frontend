@@ -110,8 +110,8 @@
       </tbody>
     </tds-table>
 
-    <div class="grid grid-cols-3 gap-16 pt-4">
-      <div>
+    <div class="grid grid-cols-3 gap-8 pt-4">
+      <div class="p-4 bg-gray-100 rounded-10">
         <!-- Total -->
         <p class="grid grid-cols-5 gap-3 py-2">
           <strong class="col-span-3">Tổng tiền:</strong> <span class="col-span-2 flex justify-end">{{ total |
@@ -165,9 +165,9 @@
         </p>
       </div>
 
-      <div>
+      <div class="p-4 bg-gray-100 rounded-10">
         <div class="grid grid-cols-5 gap-3 py-2">
-          <p class="col-span-3"><strong>Khách hàng thanh toán:</strong></p>
+          <p class="col-span-3"><strong>Khách hàng TT:</strong></p>
           <tds-form-field class="col-span-2">
             <tds-input-number class="pr-2" [min]="0" [max]="totalAmount" [step]="1" [tdsTextAlign]="'right'"
               [hiddenIcon]="true" [(ngModel)]="amountInvoiced" (ngModelChange)="totalAmountAfterDiscount()">
