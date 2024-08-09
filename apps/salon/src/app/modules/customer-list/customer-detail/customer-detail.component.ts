@@ -18,6 +18,7 @@ import { TDSTagModule } from 'tds-ui/tag';
 import { BillModalComponent } from '../../home/bill-modal/bill-modal.component';
 import { TDSModalService } from 'tds-ui/modal';
 import { CustomerDetailPaymenthistoryTableComponent } from "./customer-detail-paymenthistory-table/customer-detail-paymenthistory-table.component";
+import { PaymentModalComponent } from '../../home/payment-modal/payment-modal.component';
 
 @Component({
   selector: 'frontend-customer-detail',
@@ -94,18 +95,43 @@ export class CustomerDetailComponent implements OnInit {
   }
 
   updateBill(id: number) {
-    const modal = this.modalSvc.create({
-      title: 'Xem hóa đơn',
-      content: BillModalComponent,
-      footer: null,
-      size: 'xl',
-      componentParams: {
-        id,
-      },
-    });
-    modal.afterClose.asObservable().subscribe((res) => {
-      if (res) {
-        this.billHistory()
+    this.shared.getAllBillByAppointmentID(id).subscribe((data) => {
+      if (data) {
+        const billID = data.billID;
+        const modal = this.modalSvc.create({
+          title: 'Thanh toán',
+          content: PaymentModalComponent,
+          footer: null,
+          size: 'xl',
+          componentParams: {
+            id,
+            billID,
+          },
+        });
+        modal.afterClose.asObservable().subscribe((res) => {
+          if (res) {
+            this.getCustomerDetails();
+            this.treatmentHistory();
+            this.billHistory();
+          }
+        });
+      } else {
+        const modal = this.modalSvc.create({
+          title: 'Tạo hóa đơn',
+          content: BillModalComponent,
+          footer: null,
+          size: 'xl',
+          componentParams: {
+            id,
+          },
+        });
+        modal.afterClose.asObservable().subscribe((res) => {
+          if (res) {
+            this.getCustomerDetails();
+            this.treatmentHistory();
+            this.billHistory();
+          }
+        });
       }
     });
   }

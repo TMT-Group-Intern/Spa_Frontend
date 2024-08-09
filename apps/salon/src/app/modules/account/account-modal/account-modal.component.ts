@@ -170,7 +170,7 @@ export class AccountModalComponent implements OnInit {
           title:'Thành công',
           content: `<h5 class="text-success-500">Tạo tài khoản <strong>${ userName }</strong> thành công!</h5>`,
           footer:null,
-          size:'md',
+          size:'sm',
           okText:'Xác nhận',
           onOk:()=> true
         });
@@ -180,7 +180,7 @@ export class AccountModalComponent implements OnInit {
           // password:'',
           // confirmPassword:'',
         //})))
-        .subscribe();
+        .subscribe(() =>this.modalRef.close());
       }
       else{
          const modal = this.tModalSvc.error({

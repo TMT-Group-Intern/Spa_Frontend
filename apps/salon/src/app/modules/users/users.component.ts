@@ -223,10 +223,10 @@ export class UsersComponent implements OnInit{
     });
     modal.afterClose.asObservable().pipe(tap(()=>  this.initUserList())).subscribe()
   }
-  deleteUser(email:string){
-    const modal = this.tModalSvc.error({
-      title:'Xóa tài khoản',
-      content: `<h5 class="text-error-500">Bạn có chắc chắn muốn xóa tài khoản <strong>${ email }</strong> không?</h5>`,
+  deleteUser(email:string, name:string){
+    const modal = this.tModalSvc.confirm({
+      title:'Đổi trạng thái nhân viên',
+      content: `<h5 class="text-success-500">Bạn có chắc chắn muốn đổi trạng thái chủa <strong>${ name }</strong> không?</h5>`,
       iconType:'tdsi-trash-line',
       okText:'Xóa',
       size: 'md',

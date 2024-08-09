@@ -20,13 +20,13 @@ export class AuthService {
     this.hubConnection
       .start()
       .then(() => {
-        console.log('SignalR Connection started');
+        //console.log('SignalR Connection started');
         this.isConnected = true;
       })
       .catch(err => console.error('Error while starting connection: ' + err));
     this.hubConnection.onclose(() => {
       this.isConnected = false;
-      console.log('SignalR Connection closed');
+      //console.log('SignalR Connection closed');
     });
 
   }
@@ -35,7 +35,7 @@ export class AuthService {
   public addTransferChatDataListener(callback: (user: string, message: string) => void): void {
     if (this.hubConnection) {
       this.hubConnection.on('ReceiveMessage', callback);
-      console.log(callback)
+      //console.log(callback)
     }
   }
 
@@ -273,6 +273,16 @@ export class AuthService {
       role: role
     })
   }
+
+  changePassword(userName:string, oldPassword:string,password: string, confirmPassword: string) {
+    return this.http.post<{ flag: boolean, message: string,}>(this.baseUrl + 'Authentication/changePassword', {
+      userName: userName,
+      oldPassword: oldPassword,
+      password: password,
+      confirmPassword: confirmPassword,
+    })
+  }
+
   createAdmin(lastName: string, firstName: string, gender: string, phone: string, email: string,userName:string, password: string, confirmPassword: string, dateOfBirth: string) {
     return this.http.post<{ status: object }>(this.baseUrl + 'Authentication/createAdmin', {
       lastName: lastName,
@@ -335,6 +345,18 @@ export class AuthService {
   // Get Job Type
   getJobType(): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Job/allJobs');
+  }
+
+  getJobTypeForPermission(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Job/allJobForPermissions');
+  }
+
+  getAllPermissions(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Permission/allPermissons');
+  }
+
+  getRolePermissions(id:number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Permission/GetPermissionsByJobType?jobTypeId='+id);
   }
 
   // Create Bill
