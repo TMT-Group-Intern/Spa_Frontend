@@ -1,9 +1,12 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { format } from 'date-fns';
 import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
 import { AuthService } from '../../../shared.service';
 import { TDSNotificationService } from 'tds-ui/notification';
+import { TDSModalRef } from 'tds-ui/modal';
+import { TDSSafeAny } from 'tds-ui/shared/utility';
+
 
 @Component({
   selector: 'frontend-modal-treatment-plan',
@@ -11,7 +14,6 @@ import { TDSNotificationService } from 'tds-ui/notification';
   styleUrls: ['./modal-treatment-plan.component.scss'],
 })
 export class ModalTreatmentPlanComponent implements OnInit {
-
   public sessionOptions = [
     { id: 1, name: '1 buổi' },
     { id: 2, name: '2 buổi' },
@@ -22,36 +24,44 @@ export class ModalTreatmentPlanComponent implements OnInit {
     { id: 7, name: '7 buổi' },
     { id: 8, name: '8 buổi' },
     { id: 9, name: '9 buổi' },
-    { id: 10, name: '10 buổi'}
-  ]
+    { id: 10, name: '10 buổi' },
+  ];
 
-  private readonly sharesApi = inject(AuthService)
-  private readonly notification = inject(TDSNotificationService)
-  form: FormGroup;
+  private readonly sharesApi = inject(AuthService);
+  private readonly notification = inject(TDSNotificationService);
+  private readonly modalRef = inject(TDSModalRef);
+
   @Input() customerId?: number;
+  @Input() treatmentId?: number;
 
-  selectSessionOptions = 1
+  form: FormGroup;
+
+  selectSessionOptions = 1;
+  public listSelected = [];
+  byName = '';
+  number = 1;
+  totalService = 0;
+  numberValue = 1;
+  totalDiscount = 0;
 
   sessionChosen: number[] = [];
-  byName = '';
   listService: any;
+  listOfData: any;
 
   userSession: any;
   storedUserSession = localStorage.getItem('userSession');
 
- sessionFormGroup :any;
+  sessionFormGroup: any;
 
-
-  constructor(
-    private fb: FormBuilder
-  ){
+  constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       treatmentName: ['', Validators.required],
       customerID: [''],
-      startDate: format(new Date(),DATE_CONFIG.DATE_BASE),
+      startDate: format(new Date(), DATE_CONFIG.DATE_BASE),
       createBy: [''],
       note: [''],
-      totalSessions:[''],
+      service: [],
+      totalSessions: [''],
       treatmentSessionsDTO: this.fb.array([]),
     });
   }
@@ -60,89 +70,126 @@ export class ModalTreatmentPlanComponent implements OnInit {
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
       this.byName = this.userSession.user.name;
-      // console.log(this.byName);
-    }// kiểm tra lấy tên tài khoản
+    } // kiểm tra lấy tên tài khoản
 
-   this.form.get('totalSessions')?.valueChanges.subscribe(data => {
-    this.sessionChosen = Array( data as unknown as number).fill(0).map((x, i) => i + 1);
-    // this.addSessions(data);
-    this.updateSessions(data);
-  });// Lấy value id
+    // gọi hàm lấy danh sách dịch vụ
+    this.initService();
 
-  // gọi hàm lấy danh sách dịch vụ
-  this.initService();
+    this.initTreatmentById();
+
+  }
+
+  private initTreatmentById() {
+    if (this.treatmentId) {
+      this.sharesApi
+        .getTreatmentDetail(this.treatmentId)
+        .subscribe((data: any) => {
+          // Patch simple form controls
+          this.form.patchValue({
+            treatmentName: data.treatmentName,
+            totalSessions: data.totalSessions,
+          });
+
+          // Clear existing FormArray
+          this.treatmentSessionsDTO.clear();
+
+          // Add new form groups to the FormArray
+          data.treatmentSessions.forEach((session: any) => {
+            this.addItemToTreatmentSession(session);
+          });
+        });
+    }
+  }
+
+   getValueFromSelect(value: TDSSafeAny){
+    this.listOfData =  value;
+    console.log(this.listOfData)
+  }
+
+  private addItemToTreatmentSession(session: any) {
+    const treatmentSessionForm = this.fb.group({
+      sessionNumber: [session.sessionNumber],
+      treatmendSessionDetailDTO: [session.treatmendSessionDetail],
+    });
+    this.treatmentSessionsDTO.push(treatmentSessionForm);
   }
 
   get treatmentSessionsDTO(): FormArray {
     return this.form.get('treatmentSessionsDTO') as FormArray;
   }
-
-  addSession(key: number) {
-     this.sessionFormGroup = this.fb.group({
-      sessionNumber: [key],
-      treatmendSessionDetailDTO:[
-      ]
+  addSession() {
+    this.sessionFormGroup = this.fb.group({
+      sessionNumber: [1],
+      treatmendSessionDetailDTO: [],
     });
     this.treatmentSessionsDTO.push(this.sessionFormGroup);
   }
 
-  updateSessions(totalSessions: number): void {
-    const currentSessions = this.treatmentSessionsDTO.length;
-    if (totalSessions > currentSessions) {
-      for (let i = currentSessions + 1; i <= totalSessions; i++) {
-        this.addSession(i);
-      }
-    } else if (totalSessions < currentSessions) {
-      for (let i = currentSessions; i > totalSessions; i--) {
-        this.treatmentSessionsDTO.removeAt(i - 1);
-      }
-    }
+  //xóa vị trí đã chọn
+  deleteSession(key: number) {
+    this.treatmentSessionsDTO.removeAt(key);
   }
-  // lấy danh sách dịch vụ
-  initService(){
-    this.sharesApi.renderListService().subscribe((data: any)=> {
-      this.listService = data.serviceDTO;
-    })
-  }
-  submit(){
-    if(this.form.invalid) return;
 
-    if(this.form.value){
+  // lấy danh sách dịch vụ
+  initService() {
+    this.sharesApi.renderListService().subscribe((data: any) => {
+      this.listService = data.serviceDTO;
+    });
+  }
+  submit() {
+    if (this.form.invalid) return;
+    if (this.form.value) {
       const val = this.form.value;
-      const body: any ={
+      const body: any = {
         ...val,
         createBy: this.userSession.user.name,
         customerID: this.customerId,
+      };
+      if (this.treatmentId) {
+        this.updateTreatment(this.treatmentId, body);
+      } else {
+        this.add(body);
       }
-      // console.log(body);
-      this.add(body);
     }
   }
 
-  add(body: any){
-    this.sharesApi.addTreatmentPlan(body).subscribe(
-      {
-        next:() => {
-          this.createNotificationSuccess('Thành công');
-        },
-        error:(res) => {
-          this.createNotificationError(res.error.message);
-        }
-      }
-  )
+  add(body: any) {
+    this.sharesApi.addTreatmentPlan(body).subscribe({
+      next: (res) => {
+        this.createNotificationSuccess('Thành công');
+        this.modalRef.destroy(res);
+      },
+      error: (res) => {
+        this.createNotificationError(res.error.message);
+      },
+    });
   }
 
-    // Success Notification
-    createNotificationSuccess(content: any): void {
-      this.notification.success(
-        '', content
-      );
-    }
+  updateTreatment(id: number, body: any) {
+    this.sharesApi.updateTreatmentPlan(id, body).subscribe({
+      next: (res) => {
+        this.createNotificationSuccess('Thành công');
+        this.modalRef.destroy(res);
+      },
+      error: (res) => {
+        this.createNotificationError(res.error.message);
+      },
+    });
+  }
 
-    // Error Notification
-    createNotificationError(content: any): void {
-      this.notification.error(
-        '', content
-      );
-    }
+  // Success Notification
+  createNotificationSuccess(content: any): void {
+    this.notification.success('', content);
+  }
+
+  // Error Notification
+  createNotificationError(content: any): void {
+    this.notification.error('', content);
+  }
+
+  onChange(e: TDSSafeAny) {
+    const total = this. totalService
+    this.totalService = total * e
+  }
+
 }
