@@ -61,6 +61,7 @@ const routes: Routes = [
       { path: 'appoitmentList', loadChildren: () => AppointmentListModule },
       { path: 'role', loadComponent: () => RoleComponent },
       { path: 'account', loadComponent: () => AccountComponent },
+      { path: 'chatbox', loadComponent: () => ChatboxComponent },
       { path: '', loadChildren: () => import("./modules/treatment-plan/treatment-plan.module").then(m => m.TreatmentPlanModule) },
     ],
   },

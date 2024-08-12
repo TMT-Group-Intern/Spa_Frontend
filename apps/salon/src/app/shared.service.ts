@@ -54,6 +54,20 @@ export class AuthService {
     }
   }
 
+  public getMessages(): void {
+  if (this.hubConnection) {
+    this.hubConnection.invoke('GetMessages')
+      .then((messages: any[]) => {
+        // Xử lý danh sách tin nhắn
+        console.log(messages);
+      })
+      .catch(err => console.error('Error while retrieving messages: ' + err));
+  }
+}
+
+  getChat(): Observable<any[]> {
+  return this.http.get<any[]>(this.baseUrl + 'Chat/allMess');
+ }
   // get by id service
   getByIdService(id: number): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + 'Services/' + id);
@@ -62,6 +76,11 @@ export class AuthService {
   // Render list of service
   renderListService(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + 'Services');
+  }
+
+  // Search service
+  searchService(searchTerm: string): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Services/searchService?searchTerm=' + searchTerm);
   }
 
   //Create a new service

@@ -39,10 +39,11 @@ export class ModalTreatmentPlanComponent implements OnInit {
   @Input() customerId?: number;
   @Input() treatmentId?: number;
 
-  form: FormGroup;
+  treatmentForm: FormGroup;
 
+  inputValue?: string;
   selectSessionOptions = 1;
-  public listSelected = [];
+  listSearch: any[] = [];
   byName = '';
   number = 1;
   totalService = 0;
@@ -51,16 +52,17 @@ export class ModalTreatmentPlanComponent implements OnInit {
   total = 0;
 
   sessionChosen: number[] = [];
-  listService: any;
+  listService: TDSSafeAny;
   listOfData: any[] = [];
 
   userSession: any;
   storedUserSession = localStorage.getItem('userSession');
 
   sessionFormGroup: any;
+  options: TDSSafeAny;
 
   constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
+    this.treatmentForm = this.fb.group({
       treatmentName: ['', Validators.required],
       customerID: [''],
       startDate: format(new Date(), DATE_CONFIG.DATE_BASE),
@@ -90,7 +92,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
         .getTreatmentDetail(this.treatmentId)
         .subscribe((data: any) => {
           // Patch simple form controls
-          this.form.patchValue({
+          this.treatmentForm.patchValue({
             treatmentName: data.treatmentName,
             totalSessions: data.totalSessions,
           });
@@ -107,27 +109,35 @@ export class ModalTreatmentPlanComponent implements OnInit {
   }
 
   getValueFromSelect(value: TDSSafeAny) {
-    const val =  {
-        serviceID: value.serviceID,
-        serviceName: value.serviceName,
-        unitPrice: value.price,
-        quantity: 1,
-        tempPrice: value.price,
-        totalPrice: value.price,
-        amountDiscount: 0,
-        kindofDiscount: '%',
-      }
+    const val = {
+      serviceID: value.value.serviceID,
+      serviceName: value.value.serviceName,
+      unitPrice: value.value.price,
+      quantity: 1,
+      tempPrice: value.value.price,
+      totalPrice: value.value.price,
+      amountDiscount: 0,
+      kindofDiscount: '%',
+    }
     this.addPushData(val);
+  }
+
+  //
+  onClearAll(event: MouseEvent) {
+    event.stopPropagation();
+    this.inputValue = "";
+    this.listSearch = this.listService
   }
 
   // Kiểm tra trước khi push
   private addPushData(value: any) {
-    const itemDub = this.listOfData?.find(item => item.serviceID === value.serviceID);
-    if(itemDub){
-      this.createNotificationError('Dịch vụ đã tồn tại!');
-    }else{
-      this.listOfData = [...this.listOfData||[], value];
-    }
+    this.listOfData = [...this.listOfData || [], value];
+    this.resetTotal();
+  }
+
+  delete(idService: number) {
+    const newList = this.listOfData.filter(item => item.serviceID !== idService);
+    this.listOfData = newList
     this.resetTotal();
   }
 
@@ -176,6 +186,17 @@ export class ModalTreatmentPlanComponent implements OnInit {
     this.resetTotal();
   }
 
+  onChangeAutocomplete(data: any): void {
+    console.log(data.data);
+    this.sharesApi.searchService(data.data).subscribe(
+      (res: any) => {
+        // console.log(res.service)
+        this.listSearch = res.services
+        // console.log(this.listSearch)
+      }
+    )
+  }
+
   private addItemToTreatmentSession(session: any) {
     const treatmentSessionForm = this.fb.group({
       sessionNumber: [session.sessionNumber],
@@ -185,7 +206,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
   }
 
   get treatmentSessionsDTO(): FormArray {
-    return this.form.get('treatmentSessionsDTO') as FormArray;
+    return this.treatmentForm.get('treatmentSessionsDTO') as FormArray;
   }
   addSession() {
     this.sessionFormGroup = this.fb.group({
@@ -203,13 +224,13 @@ export class ModalTreatmentPlanComponent implements OnInit {
   // lấy danh sách dịch vụ
   initService() {
     this.sharesApi.renderListService().subscribe((data: any) => {
-      this.listService = data.serviceDTO;
+      this.listSearch = this.listService = data.serviceDTO;
     });
   }
-  submit() {
-    if (this.form.invalid) return;
-    if (this.form.value) {
-      const val = this.form.value;
+  enter() {
+    if (this.treatmentForm.invalid) return;
+    if (this.treatmentForm.value) {
+      const val = this.treatmentForm.value;
       const body: any = {
         ...val,
         createBy: this.userSession.user.name,

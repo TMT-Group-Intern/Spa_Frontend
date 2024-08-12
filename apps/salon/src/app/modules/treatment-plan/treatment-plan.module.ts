@@ -19,6 +19,7 @@ import { TDSDropDownModule } from 'tds-ui/dropdown';
 import { TDSAutocompleteModule } from 'tds-ui/auto-complete';
 import { TDSInputNumberModule } from 'tds-ui/input-number';
 import { TDSPipesModule } from 'tds-ui/core/pipes';
+import { TDSModalModule } from 'tds-ui/modal';
 const routes = [{ path: 'test', component: TreatmentPlanComponent }];
 @NgModule({
   declarations: [
@@ -45,6 +46,8 @@ const routes = [{ path: 'test', component: TreatmentPlanComponent }];
     TDSAutocompleteModule,
     TDSInputNumberModule,
     TDSPipesModule,
+    TDSModalModule,
+    TDSAutocompleteModule,
   ],
   exports: [TreatmentPlanComponent],
 })
