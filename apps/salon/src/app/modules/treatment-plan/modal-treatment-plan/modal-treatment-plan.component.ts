@@ -41,8 +41,9 @@ export class ModalTreatmentPlanComponent implements OnInit {
 
   form: FormGroup;
 
+  inputValue?: string;
   selectSessionOptions = 1;
-  public listSelected = [];
+  listSearch: any[] = [];
   byName = '';
   number = 1;
   totalService = 0;
@@ -51,13 +52,14 @@ export class ModalTreatmentPlanComponent implements OnInit {
   total = 0;
 
   sessionChosen: number[] = [];
-  listService: any;
+  listService: TDSSafeAny;
   listOfData: any[] = [];
 
   userSession: any;
   storedUserSession = localStorage.getItem('userSession');
 
   sessionFormGroup: any;
+  options: TDSSafeAny;
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
@@ -107,27 +109,29 @@ export class ModalTreatmentPlanComponent implements OnInit {
   }
 
   getValueFromSelect(value: TDSSafeAny) {
-    const val =  {
-        serviceID: value.serviceID,
-        serviceName: value.serviceName,
-        unitPrice: value.price,
-        quantity: 1,
-        tempPrice: value.price,
-        totalPrice: value.price,
-        amountDiscount: 0,
-        kindofDiscount: '%',
-      }
+    const val = {
+      serviceID: value.value.serviceID,
+      serviceName: value.value.serviceName,
+      unitPrice: value.value.price,
+      quantity: 1,
+      tempPrice: value.value.price,
+      totalPrice: value.value.price,
+      amountDiscount: 0,
+      kindofDiscount: '%',
+    }
     this.addPushData(val);
   }
 
+  //
+  onClearAll(event: MouseEvent) {
+    event.stopPropagation();
+    this.inputValue = "";
+    // this.filteredOptions = this.options;
+}
+
   // Kiểm tra trước khi push
   private addPushData(value: any) {
-    const itemDub = this.listOfData?.find(item => item.serviceID === value.serviceID);
-    if(itemDub){
-      this.createNotificationError('Dịch vụ đã tồn tại!');
-    }else{
-      this.listOfData = [...this.listOfData||[], value];
-    }
+    this.listOfData = [...this.listOfData || [], value];
     this.resetTotal();
   }
 
@@ -175,6 +179,10 @@ export class ModalTreatmentPlanComponent implements OnInit {
     service.totalPrice = service.tempPrice;
     this.resetTotal();
   }
+
+  onChangeAutocomplete(data: any): void {
+    console.log(data);
+}
 
   private addItemToTreatmentSession(session: any) {
     const treatmentSessionForm = this.fb.group({
