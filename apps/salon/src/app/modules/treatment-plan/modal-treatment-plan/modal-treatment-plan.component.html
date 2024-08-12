@@ -31,7 +31,7 @@
     </tds-form-field>
 
     <tds-autocomplete #auto (selectionChange)="getValueFromSelect($event)">
-      <tds-auto-option *ngFor="let option of listService" [label]="option.serviceName" [value]="option">
+      <tds-auto-option *ngFor="let option of listSearch" [label]="option.serviceName" [value]="option">
         <div class="flex w-full justify-between items-center">
           {{ option.serviceName }}
         </div>
