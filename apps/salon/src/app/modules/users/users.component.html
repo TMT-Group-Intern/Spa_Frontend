@@ -73,8 +73,8 @@
           <i class="tdsi-edit-fill"></i>
         </button>
         <button tds-button-flat-icon color="custom" [disabled]="this.userSession.user.email ===dataRow.email"
-          class="text-slate-500 hover:text-red-500 tdsi-trash-fill" tds-tooltip tooltipTitle="Đổi trạng thái nhân viên"
-          (click)="deleteUser(dataRow.email)">
+          class="text-slate-500 hover:text-red-500 tdsi-sync-line" tds-tooltip tooltipTitle="Thay đổi trạng thái nhân viên"
+          (click)="deleteUser(dataRow.email,dataRow.name)">
         </button>
       </ng-template>
     </tds-data-table-column>

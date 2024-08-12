@@ -16,6 +16,9 @@ import { TableTreatmentPlanComponent } from './table-treatment-plan/table-treatm
 import { TDSTableModule } from 'tds-ui/table';
 import { TDSTagModule } from 'tds-ui/tag';
 import { TDSDropDownModule } from 'tds-ui/dropdown';
+import { TDSAutocompleteModule } from 'tds-ui/auto-complete';
+import { TDSInputNumberModule } from 'tds-ui/input-number';
+import { TDSPipesModule } from 'tds-ui/core/pipes';
 const routes = [{ path: 'test', component: TreatmentPlanComponent }];
 @NgModule({
   declarations: [
@@ -38,7 +41,10 @@ const routes = [{ path: 'test', component: TreatmentPlanComponent }];
     TDSToolTipModule,
     TDSTableModule,
     TDSTagModule,
-    TDSDropDownModule
+    TDSDropDownModule,
+    TDSAutocompleteModule,
+    TDSInputNumberModule,
+    TDSPipesModule,
   ],
   exports: [TreatmentPlanComponent],
 })

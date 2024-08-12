@@ -209,7 +209,7 @@ export class AdminModalComponent implements OnInit{
           // password:'',
           // confirmPassword:'',
         //})))
-        .subscribe();
+        .subscribe(() =>this.modalRef.close());
       }
       else{
          const modal = this.tModalSvc.error({

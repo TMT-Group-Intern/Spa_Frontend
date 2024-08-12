@@ -20,13 +20,13 @@ export class AuthService {
     this.hubConnection
       .start()
       .then(() => {
-        console.log('SignalR Connection started');
+        //console.log('SignalR Connection started');
         this.isConnected = true;
       })
       .catch(err => console.error('Error while starting connection: ' + err));
     this.hubConnection.onclose(() => {
       this.isConnected = false;
-      console.log('SignalR Connection closed');
+      //console.log('SignalR Connection closed');
     });
 
   }
@@ -35,7 +35,7 @@ export class AuthService {
   public addTransferChatDataListener(callback: (user: string, message: string) => void): void {
     if (this.hubConnection) {
       this.hubConnection.on('ReceiveMessage', callback);
-      console.log(callback)
+      //console.log(callback)
     }
   }
 
@@ -347,6 +347,18 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'Job/allJobs');
   }
 
+  getJobTypeForPermission(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Job/allJobForPermissions');
+  }
+
+  getAllPermissions(): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Permission/allPermissons');
+  }
+
+  getRolePermissions(id:number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Permission/GetPermissionsByJobType?jobTypeId='+id);
+  }
+
   // Create Bill
   createBill(val: any) {
     return this.http.post(this.baseUrl + 'Bill', val);
@@ -412,5 +424,10 @@ export class AuthService {
   //
   getTreatmentDetail(idTreatment: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Treatment/' + idTreatment);
+  }
+
+  //Cập nhật treatment
+  updateTreatmentPlan(treatmentId: number, body: any) {
+    return this.http.put(this.baseUrl + 'Treatment/'+ treatmentId ,body);
   }
 }

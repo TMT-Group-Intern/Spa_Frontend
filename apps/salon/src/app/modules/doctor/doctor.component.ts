@@ -21,7 +21,7 @@ import { TDSInputModule } from 'tds-ui/tds-input';
 import { CompanyService } from '../../core/services/company.service';
 import { concatMap, filter, tap } from 'rxjs';
 import { TDSCheckBoxModule } from 'tds-ui/tds-checkbox';
-import { UserProfileComponent } from "../user-profile/user-profile.component";
+import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { TDSTabsModule } from 'tds-ui/tabs';
 import { TreatmentPlanComponent } from '../treatment-plan/treatment-plan.component';
 import { TreatmentPlanModule } from '../treatment-plan/treatment-plan.module';
@@ -50,10 +50,9 @@ import { TreatmentPlanModule } from '../treatment-plan/treatment-plan.module';
     TDSCheckBoxModule,
     UserProfileComponent,
     TDSTabsModule,
-    TreatmentPlanModule
+    TreatmentPlanModule,
   ],
 })
-
 export class DoctorComponent implements OnInit {
   public statusOptions = [
     // 'Chờ khám',
@@ -78,8 +77,9 @@ export class DoctorComponent implements OnInit {
   companyId: number | null = null;
   branchID: any;
   getServiceId: any;
-
   appointments: any[] = [];
+  sessionID: any;
+  serviceBefore: any;
 
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
@@ -91,15 +91,15 @@ export class DoctorComponent implements OnInit {
     doctor: [''],
     appointmentDate: ['', Validators.required],
     status: ['Đã khám'],
-    service: [null,Validators.required],
+    service: [[], Validators.required],
     note: ['', Validators.required],
   });
-  constructor(
-    private companySvc: CompanyService
-  ) { }
+  constructor(private companySvc: CompanyService) { }
 
   ngOnInit(): void {
-    this.sharedService.DataListenerDoctorChagneStatus(this.onReceiveAppointments.bind(this));
+    this.sharedService.DataListenerDoctorChagneStatus(
+      this.onReceiveAppointments.bind(this)
+    );
 
     const storedUserSession = localStorage.getItem('userSession');
     if (storedUserSession !== null) {
@@ -107,47 +107,66 @@ export class DoctorComponent implements OnInit {
     }
     this.initAppointmentList();
 
-    this.companySvc._companyIdCur$.pipe(
-      filter(companyId => !!companyId),
-      concatMap((branchID) => {
-        return this.sharedService.appointmentList(branchID as number)
-      })
-    ).subscribe((data: any) => {
-      this.appointmentList = data;
-      this.branchID = data[0].branchID
-      this.reception = this.appointmentList.filter(
-        (appointment: any) =>
-          appointment.status === 'Chờ khám' ||
-          appointment.status === 'Đang khám'
-      );
+    this.companySvc._companyIdCur$
+      .pipe(
+        filter((companyId) => !!companyId),
+        concatMap((branchID) => {
+          return this.sharedService.appointmentList(branchID as number);
+        })
+      )
+      .subscribe((data: any) => {
+        this.appointmentList = data;
+        this.branchID = data[0].branchID;
+        this.reception = this.appointmentList.filter(
+          (appointment: any) =>
+            (appointment.status === 'Chờ khám' ||
+              appointment.status === 'Đang khám') &&
+            (appointment.employeeCode === this.userSession.user.userCode ||
+              this.userSession.user.role === 'Admin')
+        );
+        const foundExamingAppoint = this.appointmentList.find(
+          (item) => item.status == 'Đang khám'
+        );
+        if (foundExamingAppoint) {
+          this.userFrofile(foundExamingAppoint.appointmentID);
+        }
+      });
 
-      const foundExamingAppoint = this.appointmentList.find(item => item.status == 'Đang khám');
-      if (foundExamingAppoint) {
-        this.userFrofile(foundExamingAppoint.appointmentID)
-      }
-    });
 
     // theo dõi thay đổi serviceId
-    this.companySvc._change_service$.pipe(
-    ).subscribe(data => {
+    this.companySvc._change_service$.subscribe((data) => {
+      // Lấy giá trị hiện tại của service, nếu null hoặc undefined thì gán nó là mảng trống
+      const currentService = this.form.value.service ?? [];
+
+      // Chuyển đổi các mảng hiện tại và mới thành Set để loại bỏ các giá trị trùng lặp
+      const updatedServiceSet = new Set([...currentService, ...(Array.isArray(data) ? data : [data])]);
+
+      // Chuyển đổi Set thành mảng để cập nhật lại giá trị của service
+      const updatedService = Array.from(updatedServiceSet);
+
+      // Cập nhật lại giá trị của service bằng patchValue
       this.form.patchValue({
-        service: data as null
-      })
+        service: updatedService as unknown as undefined
+      });
+      this.serviceBefore = data;
     });
+    this.companySvc._change_session_status$.subscribe((data) => {
+      this.sessionID = data;
+    });
+
   }
 
   //
   isCheck(event: any) {
-    console.log(event)
     if (event.checked) {
       this.form.patchValue({
         status: 'Không sử dụng dịch vụ',
-        service: null
+        service: undefined,
       });
       this.form.get('service')?.disable();
     } else {
       this.form.patchValue({
-        status: 'Đã khám'
+        status: 'Đã khám',
       });
       this.form.get('service')?.enable();
     }
@@ -156,7 +175,6 @@ export class DoctorComponent implements OnInit {
   //
   onReceiveAppointments(): void {
     this.initAppointmentList();
-
   }
 
   initService(): void {
@@ -173,63 +191,83 @@ export class DoctorComponent implements OnInit {
 
   // Display Appointment List
   initAppointmentList() {
-    const branchID = this.userSession.user.branchID
+    const branchID = this.userSession.user.branchID;
     this.sharedService.appointmentList(branchID).subscribe((data: any) => {
       this.appointmentList = data;
       this.reception = this.appointmentList.filter(
         (appointment: any) =>
           (appointment.status === 'Chờ khám' ||
-            appointment.status === 'Đang khám')
-          && (appointment.employeeCode === this.userSession.user.userCode
-            || this.userSession.user.role === 'Admin')
+            appointment.status === 'Đang khám') &&
+          (appointment.employeeCode === this.userSession.user.userCode ||
+            this.userSession.user.role === 'Admin')
       );
     });
   }
 
   userFrofile(id: number) {
-    this.sharedService.getAppointment(id).pipe(
-      tap((data: any) => {
-        this.dataAppointmentbyid = data;
-        this.active = true;
-        this.CustomerID = data.customerID;
-        this.form.patchValue({
-          phone: data.customer.phone,
-          name: `${data.customer.firstName} ${data.customer.lastName}`,
-          appointmentDate: this.formatDate(data.appointmentDate, 'HH:mm'),
-          customerID: data.customer.customerID,
-          // status: data.status,
-          service: data.chooseServices.map((item: any) => item.serviceID),
-          note: data.notes,
-        });
-        const foundDoctor = (data.assignments as any[]).find(item => item.employees.jobTypeID === 2);
-        if (foundDoctor) {
+    this.sharedService
+      .getAppointment(id)
+      .pipe(
+        tap((data: any) => {
+          this.dataAppointmentbyid = data;
+          this.active = true;
+          this.CustomerID = data.customerID;
           this.form.patchValue({
-            doctor: `${foundDoctor.employees.lastName} ${foundDoctor.employees.firstName}`
+            phone: data.customer.phone,
+            name: `${data.customer.firstName} ${data.customer.lastName}`,
+            appointmentDate: this.formatDate(data.appointmentDate, 'HH:mm'),
+            customerID: data.customer.customerID,
+            // status: data.status,
+            service: data.chooseServices.map((item: any) => item.serviceID),
+            note: data.notes,
           });
-        }
-      }),
-      concatMap(() => this.sharedService.appointmentList(this.branchID).pipe(
-        tap((dataAllAppoint: any[]) => {
-          const foundExamingAppoint = dataAllAppoint.find(item => item.status == 'Đang khám');
-          if (foundExamingAppoint) {
-            if (foundExamingAppoint.appointmentID != id) {
-              this.sharedService.UpdateStatus(foundExamingAppoint.appointmentID, 'Chờ khám').pipe(
-                concatMap(() => this.sharedService.UpdateStatus(id, 'Đang khám').pipe(
-                  tap(() => {
-                    this.initAppointmentList();
-                  })
-                ))
-              ).subscribe()
-            }
-          } else {
-            this.sharedService.UpdateStatus(id, 'Đang khám').subscribe()
+          const foundDoctor = (data.assignments as any[]).find(
+            (item) => item.employees.jobTypeID === 2
+          );
+          if (foundDoctor) {
+            this.form.patchValue({
+              doctor: `${foundDoctor.employees.lastName} ${foundDoctor.employees.firstName}`,
+            });
           }
-        })
-      ))
-    ).subscribe();
+        }),
+        concatMap(() =>
+          this.sharedService.appointmentList(this.branchID).pipe(
+            tap((dataAllAppoint: any[]) => {
+              const foundExamingAppoint = dataAllAppoint.find(
+                (item) => item.status == 'Đang khám'
+              );
+              if (foundExamingAppoint) {
+                if (foundExamingAppoint.appointmentID != id) {
+                  this.sharedService
+                    .UpdateStatus(foundExamingAppoint.appointmentID, 'Chờ khám')
+                    .pipe(
+                      concatMap(() =>
+                        this.sharedService.UpdateStatus(id, 'Đang khám').pipe(
+                          tap(() => {
+                            this.initAppointmentList();
+                          })
+                        )
+                      )
+                    )
+                    .subscribe();
+                }
+              } else {
+                this.sharedService
+                  .UpdateStatus(id, 'Đang khám')
+                  .pipe(
+                    tap(() => {
+                      this.initAppointmentList();
+                    })
+                  )
+                  .subscribe();
+              }
+            })
+          )
+        )
+      )
+      .subscribe();
     this.initService();
   }
-
 
   submitUpdateServiceAppointment(id: number) {
     // if (this.form.value.status == 'Đã khám') {
@@ -280,6 +318,6 @@ export class DoctorComponent implements OnInit {
   }
 
   onCardClick() {
-    console.log("hehe")
+    console.log('hehe');
   }
 }

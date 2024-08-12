@@ -164,7 +164,7 @@ export class AccountComponent implements OnInit{
     changeStatusAccount(userName:string){
       const modal = this.tModalSvc.confirm({
         title:'Đổi trạng thái tài khoản',
-        content: `<h5 class="text-error-500">Bạn có chắc chắn muốn đổi trạng thái tài khoản <strong>${ userName }</strong> không?</h5>`,
+        content: `<h5 class="text-success-500">Bạn có chắc chắn muốn đổi trạng thái tài khoản <strong>${ userName }</strong> không?</h5>`,
         iconType:'tdsi-block-1-fill',
         okText:'Vô hiệu hóa',
         size: 'md',
