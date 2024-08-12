@@ -44,13 +44,13 @@
       [tdsDataType]="'text'"
     ></tds-data-table-column>
 
-    <tds-data-table-column [tdsField]="'gender'" [tdsTitle]="'Giới tính'" tdsWidth="3%"
+    <tds-data-table-column [tdsField]="'gender'" [tdsTitle]="'Giới tính'" tdsWidth="5%"
       [tdsDataType]="'text'"></tds-data-table-column>
     <tds-data-table-column [tdsField]="'dateOfBirth'" [tdsTitle]="'Ngày sinh'" tdsWidth="6%"
-      [tdsDataType]="'date'"></tds-data-table-column>
+      [tdsDataType]="'date'" [tdsFormat]="'dd/MM/YYYY'"></tds-data-table-column>
     <tds-data-table-column [tdsField]="'role'" [tdsTitle]="'Công việc'" tdsWidth="12%"
       [tdsDataType]="'text'"></tds-data-table-column>
-      <tds-data-table-column [tdsField]="'status'" [tdsTitle]="'Trạng thái'" tdsWidth="12%"
+      <tds-data-table-column [tdsField]="'status'" [tdsTitle]="'Trạng thái'" tdsWidth="9%"
       [tdsDataType]="'text'"></tds-data-table-column>
 
     <tds-data-table-column [tdsContent]="commandTpl" [tdsTitle]="'Tùy chọn'" tdsWidth="8%" [tdsColumnType]="'command'"

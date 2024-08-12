@@ -39,7 +39,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
   @Input() customerId?: number;
   @Input() treatmentId?: number;
 
-  form: FormGroup;
+  treatmentForm: FormGroup;
 
   inputValue?: string;
   selectSessionOptions = 1;
@@ -62,7 +62,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
   options: TDSSafeAny;
 
   constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
+    this.treatmentForm = this.fb.group({
       treatmentName: ['', Validators.required],
       customerID: [''],
       startDate: format(new Date(), DATE_CONFIG.DATE_BASE),
@@ -92,7 +92,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
         .getTreatmentDetail(this.treatmentId)
         .subscribe((data: any) => {
           // Patch simple form controls
-          this.form.patchValue({
+          this.treatmentForm.patchValue({
             treatmentName: data.treatmentName,
             totalSessions: data.totalSessions,
           });
@@ -193,7 +193,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
   }
 
   get treatmentSessionsDTO(): FormArray {
-    return this.form.get('treatmentSessionsDTO') as FormArray;
+    return this.treatmentForm.get('treatmentSessionsDTO') as FormArray;
   }
   addSession() {
     this.sessionFormGroup = this.fb.group({
@@ -214,10 +214,10 @@ export class ModalTreatmentPlanComponent implements OnInit {
       this.listService = data.serviceDTO;
     });
   }
-  submit() {
-    if (this.form.invalid) return;
-    if (this.form.value) {
-      const val = this.form.value;
+  enter() {
+    if (this.treatmentForm.invalid) return;
+    if (this.treatmentForm.value) {
+      const val = this.treatmentForm.value;
       const body: any = {
         ...val,
         createBy: this.userSession.user.name,
