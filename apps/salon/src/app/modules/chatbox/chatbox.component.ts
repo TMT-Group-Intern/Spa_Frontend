@@ -17,6 +17,7 @@ export class ChatboxComponent {
   messages: { user: string, message: string }[] = [];
   userSession: any;
   userCurrent: '' | undefined;
+  time: Date | undefined;
 
   constructor(private auth: AuthService,) { }
 
@@ -36,6 +37,7 @@ export class ChatboxComponent {
   }
 
   sendMessage() {
+    this.time = new Date();
     this.auth.sendMessage(this.userCurrent as string, this.message);
     this.message = '';
   }

@@ -99,9 +99,9 @@ export class AuthService {
   createUser(val: any) {
     return this.http.post(this.baseUrl + 'Authentication/register', val);
   }
-  createAccount(userName:string,password:string,confirmPassword:string) {
+  createAccount(userName: string, password: string, confirmPassword: string) {
     return this.http.post<{ status: object }>(this.baseUrl + 'Authentication/createAccount',
-       {userName,password,confirmPassword});
+      { userName, password, confirmPassword });
   }
   createAccountForEmployee(Email: string) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -112,7 +112,7 @@ export class AuthService {
     return this.http.put(this.baseUrl + 'User/updateUser?email=' + email, val);
   }
   editAccount(id: string, val: any) {
-    return this.http.put(this.baseUrl + 'User/updateAccount?id='+id, val);
+    return this.http.put(this.baseUrl + 'User/updateAccount?id=' + id, val);
   }
   getUserByUserName(userName: string): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'User/getUserByUserName?userName=' + userName)
@@ -200,7 +200,7 @@ export class AuthService {
     return this.http.get(this.baseUrl + 'User/AllAccountNotActivePage?pageNumber=' + pageNumber + '&pageSize=' + pageSize);
   }
 
-  pageEmpByPages(jobtypeID: number,pageNumber: number, pageSize: number) {
+  pageEmpByPages(jobtypeID: number, pageNumber: number, pageSize: number) {
     return this.http.get(this.baseUrl + 'User/AllEmpPage?jobTypeId=' + jobtypeID + '&pageNumber=' + pageNumber + '&pageSize=' + pageSize);
   }
 
@@ -274,8 +274,8 @@ export class AuthService {
     })
   }
 
-  changePassword(userName:string, oldPassword:string,password: string, confirmPassword: string) {
-    return this.http.post<{ flag: boolean, message: string,}>(this.baseUrl + 'Authentication/changePassword', {
+  changePassword(userName: string, oldPassword: string, password: string, confirmPassword: string) {
+    return this.http.post<{ flag: boolean, message: string, }>(this.baseUrl + 'Authentication/changePassword', {
       userName: userName,
       oldPassword: oldPassword,
       password: password,
@@ -283,13 +283,13 @@ export class AuthService {
     })
   }
 
-  createAdmin(lastName: string, firstName: string, gender: string, phone: string, email: string,userName:string, password: string, confirmPassword: string, dateOfBirth: string) {
+  createAdmin(lastName: string, firstName: string, gender: string, phone: string, email: string, userName: string, password: string, confirmPassword: string, dateOfBirth: string) {
     return this.http.post<{ status: object }>(this.baseUrl + 'Authentication/createAdmin', {
       lastName: lastName,
       firstName: firstName,
       phone: phone,
       email: email,
-      userName:userName,
+      userName: userName,
       password: password,
       confirmPassword: confirmPassword,
       dateOfBirth: dateOfBirth,
@@ -374,7 +374,7 @@ export class AuthService {
 
   //
   login(userName: string, password: string) {
-    return this.http.post<{ flag: boolean, mess: string,userSession:object, token: string }>(this.baseUrl + 'Authentication/login', {
+    return this.http.post<{ flag: boolean, mess: string, userSession: object, token: string }>(this.baseUrl + 'Authentication/login', {
       userName: userName,
       password: password
     })
@@ -400,7 +400,7 @@ export class AuthService {
   }
 
   // treatment Post
-  addTreatmentPlan(body:any){
+  addTreatmentPlan(body: any) {
     return this.http.post(this.baseUrl + 'Treatment', body);
   }
 
