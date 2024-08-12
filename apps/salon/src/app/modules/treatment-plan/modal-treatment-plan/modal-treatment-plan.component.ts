@@ -135,6 +135,12 @@ export class ModalTreatmentPlanComponent implements OnInit {
     this.resetTotal();
   }
 
+  delete(idService: number) {
+    const newList = this.listOfData.filter(item => item.serviceID !== idService);
+    this.listOfData = newList
+    this.resetTotal();
+  }
+
   //
   resetTotal() {
     this.total = 0;
@@ -181,8 +187,14 @@ export class ModalTreatmentPlanComponent implements OnInit {
   }
 
   onChangeAutocomplete(data: any): void {
-    console.log(data);
-    this.listSearch
+    console.log(data.data);
+    this.sharesApi.searchService(data.data).subscribe(
+      (res: any) => {
+        // console.log(res.service)
+        this.listSearch = res.services
+        // console.log(this.listSearch)
+      }
+    )
   }
 
   private addItemToTreatmentSession(session: any) {

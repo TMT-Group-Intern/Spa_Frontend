@@ -78,6 +78,11 @@ export class AuthService {
     return this.http.get<any[]>(this.baseUrl + 'Services');
   }
 
+  // Search service
+  searchService(searchTerm: string): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Services/searchService?searchTerm=' + searchTerm);
+  }
+
   //Create a new service
   createService(val: any) {
     return this.http.post(this.baseUrl + 'Services', val);
