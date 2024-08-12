@@ -1,19 +1,27 @@
 <form id="idform" [formGroup]="form" autocomplete="off" class="w-full">
   <!--  -->
   <div class="flex flex-row">
-    <div class="flex-1">
+    <div class="flex-1 mr-1">
       <tds-form-field class="py-2">
         <tds-label>Lộ trình</tds-label>
         <input tdsInput placeholder="Tên lộ trình" formControlName="treatmentName">
       </tds-form-field>
     </div>
+      <!--  -->
+  <div class="flex-1">
+    <tds-form-field class="pt-2 ml-1">
+      <tds-label>Ghi chú</tds-label>
+      <textarea tdsInput [tdsAutosize]="{ minRows: 1,  maxRows: 20}" formControlName="note" placeholder='Ghi chú'>
+      </textarea>
+    </tds-form-field>
+  </div>
   </div>
   <!-- -->
   <div class="flex-1">
     <tds-form-field class="py-2">
       <tds-label>Dịch vụ</tds-label>
       <tds-select valueField="serviceID" textField="serviceName" [ngModelOptions]="{standalone: true}"
-        [(ngModel)]="listSelected" (ngModelChange)="getValueFromSelect($event)" [data]="listService" mode="multiple"
+        [(ngModel)]="listSelected" (ngModelChange)="getValueFromSelect($event)" [data]="listService"
         placeholder="Hãy chọn dịch vụ" [valuePrimitive]="false">
       </tds-select>
       <tds-error><span>Vui lòng chọn <strong>dịch vụ</strong>!</span></tds-error>
@@ -21,7 +29,7 @@
   </div>
   <!--  -->
 
-  <tds-table class="text-sm" [hideOnSinglePage]="true" #basicTable [listData]="listOfData">
+  <tds-table [scroll]="{y: '100px'}" class="text-sm" [hideOnSinglePage]="true" #basicTable [listData]="listOfData">
     <thead>
       <tr>
         <th>Tên dịch vụ</th>
@@ -29,6 +37,7 @@
         <th>Giá gốc</th>
         <th>Giảm giá</th>
         <th>Thành tiền</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -37,14 +46,15 @@
           <td>{{ data.serviceName }}</td>
           <td>
             <div>
-              <tds-input-number class="pr-2" [tdsTextAlign]="'center'" [hiddenIcon]="true" [min]="1"
-               [ngModelOptions]="{standalone:true}" [(ngModel)]="data.quantity" (ngModelChange)="totalPrice(data.serviceID)">
+              <tds-input-number [max]="99" class="pr-2" [tdsTextAlign]="'center'" [hiddenIcon]="true" [min]="1"
+                [ngModelOptions]="{standalone:true}" [(ngModel)]="data.quantity"
+                (ngModelChange)="totalPrice(data.serviceID)">
               </tds-input-number>
             </div>
           </td>
           <td>{{ data.unitPrice | tdsFormatNumber}}</td>
           <td>
-            <div>
+            <div >
               <button class="border-none" color="secondary" tds-dropdown trigger="click" [tdsDropdownMenu]="menu">
                 <p class="flex items-center">
                   <i class="tdsi-cash-payment-fill text-success-400 text-2xl pr-1"></i>
@@ -63,7 +73,8 @@
                       </tds-input-number>
                       <tds-input-number *ngIf="data.kindofDiscount === 'VND'" class="pr-2" [tdsTextAlign]="'right'"
                         [hiddenIcon]="true" [min]="0" [max]="data.tempPrice" [step]="1"
-                        [ngModelOptions]="{standalone:true}" [(ngModel)]="data.amountDiscount" (ngModelChange)="priceAfterDiscount(data.serviceID)">
+                        [ngModelOptions]="{standalone:true}" [(ngModel)]="data.amountDiscount"
+                        (ngModelChange)="priceAfterDiscount(data.serviceID)">
                       </tds-input-number>
                     </tds-form-field>
                     <tds-button-group>
@@ -88,21 +99,18 @@
             </div>
           </td>
           <td>{{ data.totalPrice | tdsFormatNumber}}</td>
+          <td><button tds-button-icon class="tdsi-trash-fill"></button></td>
         </tr>
       </ng-template>
     </tbody>
   </tds-table>
-
-  <p>Total: {{ total }}</p>
-
-  <!--  -->
-  <div class="w-full">
-    <tds-form-field class="pt-2">
-      <tds-label>Ghi chú</tds-label>
-      <textarea tdsInput [tdsAutosize]="{ minRows: 3,  maxRows: 20}" formControlName="note" placeholder='Ghi chú'>
-      </textarea>
-    </tds-form-field>
+  <div class="text-sm flex justify-end p-4">
+    <span class="flex flex-row">
+      <h2 class="font-bold mr-2">Tổng tiền: </h2>
+      <p class="text-tds-font-size-5 text-base-lime-600">{{ total | tdsFormatNumber}}</p>
+    </span>
   </div>
+
   <!--  -->
   <div class="flex flex-row-reverse p-4">
     <button tds-button form="idform" color="success" class="w-[100px] px-4 py-2 text-white rounded" (click)="submit()">

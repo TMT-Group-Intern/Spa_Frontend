@@ -44,7 +44,7 @@ export class TreatmentPlanComponent implements OnInit, OnChanges {
       title:'Tạo lộ trình điều trị',
       content:ModalTreatmentPlanComponent,
       footer: null,
-      size:'xl',
+      size:'lg',
       componentParams:{
         customerId: this.customerId
       }
@@ -80,21 +80,5 @@ export class TreatmentPlanComponent implements OnInit, OnChanges {
       this.expandSet.delete(id);
     }
   }
-  
-  //
-  treatmentExpand(event: any) {
-    console.log(event)
-  }
 
-  //
-  treatmentDetail(event: any) {
-    console.log(event)
-    if(event.expand) {
-      this.shared.getTreatmentDetail(event.data.dataRow.treatmentID).subscribe(
-        (data: any) => {
-          this.treatment = data.treatmentSessions
-        }
-      )
-    }
-  }
 }
