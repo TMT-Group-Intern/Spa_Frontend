@@ -92,7 +92,7 @@ export class DoctorComponent implements OnInit {
     appointmentDate: ['', Validators.required],
     status: ['Đã khám'],
     service: [[], Validators.required],
-    note: ['', Validators.required],
+    note: [''],
   });
   constructor(private companySvc: CompanyService) { }
 
