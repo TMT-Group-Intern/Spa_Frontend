@@ -15,6 +15,7 @@ export class ChatboxComponent {
   user = '';
   message = '';
   messages: { user: string, message: string }[] = [];
+  messageChats: { user: string, message: string, time: string }[] = [];
   userSession: any;
   userCurrent: '' | undefined;
 
@@ -28,7 +29,16 @@ export class ChatboxComponent {
       this.userSession = JSON.parse(storedUserSession);
       this.userCurrent = this.userSession.user.name
     }
-
+    this.auth.getChat().subscribe((messages) => {
+      this.messageChats = messages.map(m => {
+        const messageTime = new Date(m.messageTime).toLocaleTimeString('en-US', {hour12: false, hour: 'numeric', minute: 'numeric' });
+        return {
+          user: m.userName,
+          message: m.content,
+          time: messageTime
+        };
+      });
+    });
   }
 
   onReceiveMessage(user: any, message: string) {
@@ -39,5 +49,4 @@ export class ChatboxComponent {
     this.auth.sendMessage(this.userCurrent as string, this.message);
     this.message = '';
   }
-
 }
