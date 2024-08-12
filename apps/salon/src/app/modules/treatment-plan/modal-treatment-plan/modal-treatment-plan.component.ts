@@ -215,7 +215,6 @@ export class ModalTreatmentPlanComponent implements OnInit {
       this.listSearch = this.listService = data.serviceDTO;
     });
   }
-
   enter() {
     if (this.treatmentForm.invalid) return;
     if (this.treatmentForm.value) {
