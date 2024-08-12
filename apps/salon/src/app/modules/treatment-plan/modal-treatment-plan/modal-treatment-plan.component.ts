@@ -126,8 +126,8 @@ export class ModalTreatmentPlanComponent implements OnInit {
   onClearAll(event: MouseEvent) {
     event.stopPropagation();
     this.inputValue = "";
-    // this.filteredOptions = this.options;
-}
+    this.listSearch = this.listService
+  }
 
   // Kiểm tra trước khi push
   private addPushData(value: any) {
@@ -182,7 +182,8 @@ export class ModalTreatmentPlanComponent implements OnInit {
 
   onChangeAutocomplete(data: any): void {
     console.log(data);
-}
+    this.listSearch
+  }
 
   private addItemToTreatmentSession(session: any) {
     const treatmentSessionForm = this.fb.group({
@@ -211,9 +212,11 @@ export class ModalTreatmentPlanComponent implements OnInit {
   // lấy danh sách dịch vụ
   initService() {
     this.sharesApi.renderListService().subscribe((data: any) => {
-      this.listService = data.serviceDTO;
+      this.listSearch = this.listService = data.serviceDTO;
     });
   }
+
+  //
   submit() {
     if (this.form.invalid) return;
     if (this.form.value) {
