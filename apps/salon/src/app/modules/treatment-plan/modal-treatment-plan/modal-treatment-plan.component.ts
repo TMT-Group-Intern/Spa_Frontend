@@ -1,12 +1,17 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { format } from 'date-fns';
 import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
 import { AuthService } from '../../../shared.service';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { TDSModalRef } from 'tds-ui/modal';
 import { TDSSafeAny } from 'tds-ui/shared/utility';
-
 
 @Component({
   selector: 'frontend-modal-treatment-plan',
@@ -43,6 +48,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
   totalService = 0;
   numberValue = 1;
   totalDiscount = 0;
+  total = 0;
 
   sessionChosen: number[] = [];
   listService: any;
@@ -52,7 +58,6 @@ export class ModalTreatmentPlanComponent implements OnInit {
   storedUserSession = localStorage.getItem('userSession');
 
   sessionFormGroup: any;
-  total: any;
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
@@ -77,7 +82,6 @@ export class ModalTreatmentPlanComponent implements OnInit {
     this.initService();
 
     this.initTreatmentById();
-
   }
 
   private initTreatmentById() {
@@ -102,23 +106,34 @@ export class ModalTreatmentPlanComponent implements OnInit {
     }
   }
 
-   getValueFromSelect(value: TDSSafeAny){
-    this.listOfData =  [...(value as any[]).map(item => ({
-      serviceID: item.serviceID,
-      serviceName: item.serviceName,
-      unitPrice: item.price,
-      quantity: 1,
-      tempPrice: item.price,
-      totalPrice: item.price,
-      amountDiscount: 0,
-      kindofDiscount: '%',
-    }))]
-    console.log(this.listOfData)
+  getValueFromSelect(value: TDSSafeAny) {
+    const val =  {
+        serviceID: value.serviceID,
+        serviceName: value.serviceName,
+        unitPrice: value.price,
+        quantity: 1,
+        tempPrice: value.price,
+        totalPrice: value.price,
+        amountDiscount: 0,
+        kindofDiscount: '%',
+      }
+    this.addPushData(val);
+  }
+
+  // Kiểm tra trước khi push
+  private addPushData(value: any) {
+    const itemDub = this.listOfData?.find(item => item.serviceID === value.serviceID);
+    if(itemDub){
+      this.createNotificationError('Dịch vụ đã tồn tại!');
+    }else{
+      this.listOfData = [...this.listOfData||[], value];
+    }
+    this.resetTotal();
   }
 
   //
   resetTotal() {
-    this.total = 0
+    this.total = 0;
     for (const num of this.listOfData) {
       this.total += num.totalPrice;
     }
@@ -126,38 +141,39 @@ export class ModalTreatmentPlanComponent implements OnInit {
 
   // Calculate Total Price
   totalPrice(id: number) {
-    const service = this.listOfData.find(ser => ser.serviceID === id);
-    service.tempPrice = service.unitPrice * service.quantity
-    this.priceAfterDiscount(id)
+    const service = this.listOfData.find((ser) => ser.serviceID === id);
+    service.tempPrice = service.unitPrice * service.quantity;
+    this.priceAfterDiscount(id);
   }
 
   // Calculate the price after use discount
   priceAfterDiscount(id: number) {
-    const service = this.listOfData.find(ser => ser.serviceID === id);
+    const service = this.listOfData.find((ser) => ser.serviceID === id);
     if (service.kindofDiscount == '%') {
-      service.totalPrice = service.tempPrice * (100 - service.amountDiscount) / 100;
+      service.totalPrice =
+        (service.tempPrice * (100 - service.amountDiscount)) / 100;
     } else {
       service.totalPrice = service.tempPrice - service.amountDiscount;
     }
-    this.resetTotal()
+    this.resetTotal();
   }
 
   //
   activeDiscountPercentagePrice(id: number) {
-    const service = this.listOfData.find(ser => ser.serviceID === id);
-    service.kindofDiscount = '%'
-    service.amountDiscount = 0
-    service.totalPrice = service.tempPrice
-    this.resetTotal()
+    const service = this.listOfData.find((ser) => ser.serviceID === id);
+    service.kindofDiscount = '%';
+    service.amountDiscount = 0;
+    service.totalPrice = service.tempPrice;
+    this.resetTotal();
   }
 
   //
   activeDiscountVNDPrice(id: number) {
-    const service = this.listOfData.find(ser => ser.serviceID === id);
-    service.kindofDiscount = 'VND'
-    service.amountDiscount = 0
-    service.totalPrice = service.tempPrice
-    this.resetTotal()
+    const service = this.listOfData.find((ser) => ser.serviceID === id);
+    service.kindofDiscount = 'VND';
+    service.amountDiscount = 0;
+    service.totalPrice = service.tempPrice;
+    this.resetTotal();
   }
 
   private addItemToTreatmentSession(session: any) {
@@ -242,8 +258,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
   }
 
   onChange(e: TDSSafeAny) {
-    const total = this. totalService
-    this.totalService = total * e
+    const total = this.totalService;
+    this.totalService = total * e;
   }
-
 }
