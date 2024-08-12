@@ -116,7 +116,6 @@ export class HomeComponent implements OnInit {
   }
 
   onReceiveAppointments(): void {
-    console.log(1)
     this.initAppointment();
   }
 
