@@ -133,11 +133,11 @@ export class ModalTreatmentPlanComponent implements OnInit {
   private addPushData(value: any) {
     this.listOfData = [...this.listOfData || [], value];
     this.resetTotal();
+    console.log(this.listOfData)
   }
 
-  delete(idService: number) {
-    const newList = this.listOfData.filter(item => item.serviceID !== idService);
-    this.listOfData = newList
+  delete(index: number) {
+    this.listOfData = this.listOfData.slice(0, index).concat(this.listOfData.slice(index + 1));
     this.resetTotal();
   }
 
