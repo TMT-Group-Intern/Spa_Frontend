@@ -53,14 +53,14 @@
       </tr>
     </thead>
     <tbody>
-      <ng-template ngFor let-data [ngForOf]="basicTable.data">
+      <ng-template ngFor let-data [ngForOf]="basicTable.data" let-index="index">
         <tr>
           <td>{{ data.serviceName }}</td>
           <td>
             <div>
               <tds-input-number [max]="99" class="pr-2" [tdsTextAlign]="'center'" [hiddenIcon]="true" [min]="1"
                 [ngModelOptions]="{standalone:true}" [(ngModel)]="data.quantity"
-                (ngModelChange)="totalPrice(data.serviceID)">
+                (ngModelChange)="price(data.serviceID)">
               </tds-input-number>
             </div>
           </td>
@@ -110,9 +110,9 @@
               </tds-dropdown-menu>
             </div>
           </td>
-          <td>{{ data.totalPrice | tdsFormatNumber}}</td>
+          <td>{{ data.price | tdsFormatNumber}}</td>
           <td>
-            <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-red-500" (click)="delete(data.serviceID)">
+            <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-red-500" (click)="delete(index)">
               <i class="tdsi-trash-fill"></i>
             </button>
           </td>

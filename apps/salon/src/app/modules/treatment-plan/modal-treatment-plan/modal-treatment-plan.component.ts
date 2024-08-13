@@ -19,18 +19,6 @@ import { TDSSafeAny } from 'tds-ui/shared/utility';
   styleUrls: ['./modal-treatment-plan.component.scss'],
 })
 export class ModalTreatmentPlanComponent implements OnInit {
-  public sessionOptions = [
-    { id: 1, name: '1 buổi' },
-    { id: 2, name: '2 buổi' },
-    { id: 3, name: '3 buổi' },
-    { id: 4, name: '4 buổi' },
-    { id: 5, name: '5 buổi' },
-    { id: 6, name: '5 buổi' },
-    { id: 7, name: '7 buổi' },
-    { id: 8, name: '8 buổi' },
-    { id: 9, name: '9 buổi' },
-    { id: 10, name: '10 buổi' },
-  ];
 
   private readonly sharesApi = inject(AuthService);
   private readonly notification = inject(TDSNotificationService);
@@ -63,14 +51,11 @@ export class ModalTreatmentPlanComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.treatmentForm = this.fb.group({
-      treatmentName: ['', Validators.required],
       customerID: [''],
       startDate: format(new Date(), DATE_CONFIG.DATE_BASE),
       createBy: [''],
       note: [''],
-      service: [],
-      totalSessions: [''],
-      treatmentSessionsDTO: this.fb.array([]),
+      treatmentDetailDTOs: this.fb.array([]),
     });
   }
 
@@ -96,14 +81,6 @@ export class ModalTreatmentPlanComponent implements OnInit {
             treatmentName: data.treatmentName,
             totalSessions: data.totalSessions,
           });
-
-          // Clear existing FormArray
-          this.treatmentSessionsDTO.clear();
-
-          // Add new form groups to the FormArray
-          data.treatmentSessions.forEach((session: any) => {
-            this.addItemToTreatmentSession(session);
-          });
         });
     }
   }
@@ -115,7 +92,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
       unitPrice: value.value.price,
       quantity: 1,
       tempPrice: value.value.price,
-      totalPrice: value.value.price,
+      price: value.value.price,
       amountDiscount: 0,
       kindofDiscount: '%',
     }
@@ -133,24 +110,24 @@ export class ModalTreatmentPlanComponent implements OnInit {
   private addPushData(value: any) {
     this.listOfData = [...this.listOfData || [], value];
     this.resetTotal();
+    console.log(this.listOfData)
   }
 
-  delete(idService: number) {
-    const newList = this.listOfData.filter(item => item.serviceID !== idService);
-    this.listOfData = newList
+  delete(index: number) {
+    this.listOfData = this.listOfData.slice(0, index).concat(this.listOfData.slice(index + 1));
     this.resetTotal();
   }
 
-  //
+  //Tính lại tổng tiền
   resetTotal() {
     this.total = 0;
     for (const num of this.listOfData) {
-      this.total += num.totalPrice;
+      this.total += num.price;
     }
   }
 
   // Calculate Total Price
-  totalPrice(id: number) {
+  price(id: number) {
     const service = this.listOfData.find((ser) => ser.serviceID === id);
     service.tempPrice = service.unitPrice * service.quantity;
     this.priceAfterDiscount(id);
@@ -160,10 +137,10 @@ export class ModalTreatmentPlanComponent implements OnInit {
   priceAfterDiscount(id: number) {
     const service = this.listOfData.find((ser) => ser.serviceID === id);
     if (service.kindofDiscount == '%') {
-      service.totalPrice =
+      service.price =
         (service.tempPrice * (100 - service.amountDiscount)) / 100;
     } else {
-      service.totalPrice = service.tempPrice - service.amountDiscount;
+      service.price = service.tempPrice - service.amountDiscount;
     }
     this.resetTotal();
   }
@@ -173,7 +150,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
     const service = this.listOfData.find((ser) => ser.serviceID === id);
     service.kindofDiscount = '%';
     service.amountDiscount = 0;
-    service.totalPrice = service.tempPrice;
+    service.price = service.tempPrice;
     this.resetTotal();
   }
 
@@ -182,7 +159,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
     const service = this.listOfData.find((ser) => ser.serviceID === id);
     service.kindofDiscount = 'VND';
     service.amountDiscount = 0;
-    service.totalPrice = service.tempPrice;
+    service.price = service.tempPrice;
     this.resetTotal();
   }
 
@@ -197,29 +174,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
     )
   }
 
-  private addItemToTreatmentSession(session: any) {
-    const treatmentSessionForm = this.fb.group({
-      sessionNumber: [session.sessionNumber],
-      treatmendSessionDetailDTO: [session.treatmendSessionDetail],
-    });
-    this.treatmentSessionsDTO.push(treatmentSessionForm);
-  }
 
-  get treatmentSessionsDTO(): FormArray {
-    return this.treatmentForm.get('treatmentSessionsDTO') as FormArray;
-  }
-  addSession() {
-    this.sessionFormGroup = this.fb.group({
-      sessionNumber: [1],
-      treatmendSessionDetailDTO: [],
-    });
-    this.treatmentSessionsDTO.push(this.sessionFormGroup);
-  }
-
-  //xóa vị trí đã chọn
-  deleteSession(key: number) {
-    this.treatmentSessionsDTO.removeAt(key);
-  }
 
   // lấy danh sách dịch vụ
   initService() {
@@ -233,6 +188,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
       const val = this.treatmentForm.value;
       const body: any = {
         ...val,
+        TreatmentDetailDTOs: this.listOfData,
         createBy: this.userSession.user.name,
         customerID: this.customerId,
       };
