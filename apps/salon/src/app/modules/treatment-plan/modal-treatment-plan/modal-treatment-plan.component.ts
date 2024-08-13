@@ -130,7 +130,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
   }
 
   // Calculate Total Price
-  totalPrice(id: number) {
+  price(id: number) {
     const service = this.listOfData.find((ser) => ser.serviceID === id);
     service.tempPrice = service.unitPrice * service.quantity;
     this.priceAfterDiscount(id);
@@ -191,6 +191,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
       const val = this.treatmentForm.value;
       const body: any = {
         ...val,
+        TreatmentDetailDTOs: this.listOfData,
         createBy: this.userSession.user.name,
         customerID: this.customerId,
         treatmentDetailDTOs: this.listOfData
