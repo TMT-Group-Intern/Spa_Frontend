@@ -55,19 +55,19 @@ export class AuthService {
   }
 
   public getMessages(): void {
-  if (this.hubConnection) {
-    this.hubConnection.invoke('GetMessages')
-      .then((messages: any[]) => {
-        // Xử lý danh sách tin nhắn
-        console.log(messages);
-      })
-      .catch(err => console.error('Error while retrieving messages: ' + err));
+    if (this.hubConnection) {
+      this.hubConnection.invoke('GetMessages')
+        .then((messages: any[]) => {
+          // Xử lý danh sách tin nhắn
+          console.log(messages);
+        })
+        .catch(err => console.error('Error while retrieving messages: ' + err));
+    }
   }
-}
 
   getChat(): Observable<any[]> {
-  return this.http.get<any[]>(this.baseUrl + 'Chat/allMess');
- }
+    return this.http.get<any[]>(this.baseUrl + 'Chat/allMess');
+  }
   // get by id service
   getByIdService(id: number): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + 'Services/' + id);
@@ -374,8 +374,8 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'Permission/allPermissons');
   }
 
-  getRolePermissions(id:number): Observable<any[]> {
-    return this.http.get<any>(this.baseUrl + 'Permission/GetPermissionsByJobType?jobTypeId='+id);
+  getRolePermissions(id: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Permission/GetPermissionsByJobType?jobTypeId=' + id);
   }
 
   // Create Bill
@@ -447,6 +447,10 @@ export class AuthService {
 
   //Cập nhật treatment
   updateTreatmentPlan(treatmentId: number, body: any) {
-    return this.http.put(this.baseUrl + 'Treatment/'+ treatmentId ,body);
+    return this.http.put(this.baseUrl + 'Treatment/' + treatmentId, body);
+  }
+
+  getFinance() {
+    return this.http.get(this.baseUrl + "Report/finance")
   }
 }

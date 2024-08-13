@@ -16,6 +16,7 @@ import { AppointmentListModule } from './modules/appointment-list/appointment-li
 import { ChatboxComponent } from './modules/chatbox/chatbox.component';
 import { RoleComponent } from './modules/role/role.component';
 import { AccountComponent } from './modules/account/account.component';
+import { TreasuryComponent } from './modules/treasury/treasury.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -62,7 +63,9 @@ const routes: Routes = [
       { path: 'role', loadComponent: () => RoleComponent },
       { path: 'account', loadComponent: () => AccountComponent },
       { path: 'chatbox', loadComponent: () => ChatboxComponent },
+      { path: 'treasury', loadComponent: () => TreasuryComponent },
       { path: '', loadChildren: () => import("./modules/treatment-plan/treatment-plan.module").then(m => m.TreatmentPlanModule) },
+
     ],
   },
 ];

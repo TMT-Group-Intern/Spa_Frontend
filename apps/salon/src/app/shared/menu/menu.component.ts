@@ -91,21 +91,26 @@ export class MenuComponent {
     {
       "name": "Nhóm quyền",
       "icon": "tdsi-id-card-fill",
-            "listChild": [
+      "listChild": [
         {
-            "name": "Tài khoản",
-            "link": '/account'
+          "name": "Tài khoản",
+          "link": '/account'
         },
         {
-            "name": "Nhóm quyền",
-            "link": '/role'
+          "name": "Nhóm quyền",
+          "link": '/role'
         },
-    ]
+      ]
     },
     {
       "name": "Chat box",
       "icon": "tdsi-chat-buble-fill",
       "link": '/chat-box'
+    },
+    {
+      "name": "Kho Quỹ",
+      "icon": "tdsi-accounting-line",
+      "link": '/treasury'
     },
   ]
 

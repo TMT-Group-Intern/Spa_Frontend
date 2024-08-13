@@ -34,10 +34,16 @@
               class="form-control custom-select custom-select-sm"
               (change)="onStatusChange($event, data.appointmentID)"
             >
-              <option [selected]="data.status === 'Chờ chăm sóc'" value="Chờ chăm sóc">
+              <option
+                [selected]="data.status === 'Chờ chăm sóc'"
+                value="Chờ chăm sóc"
+              >
                 Chờ chăm sóc
               </option>
-              <option [selected]="data.status === 'Đang chăm sóc'" value="Đang chăm sóc">
+              <option
+                [selected]="data.status === 'Đang chăm sóc'"
+                value="Đang chăm sóc"
+              >
                 Đang chăm sóc
               </option>
               <option
