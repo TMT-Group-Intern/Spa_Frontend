@@ -25,9 +25,7 @@ import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { TDSTabsModule } from 'tds-ui/tabs';
 import { TreatmentPlanComponent } from '../treatment-plan/treatment-plan.component';
 import { TreatmentPlanModule } from '../treatment-plan/treatment-plan.module';
-// import { updateValidator } from '@funcs';
-import { updateValidator } from '../../core/funcs/form.func';
-// import { updateValidator } from '@core/funcs';
+import { updateValidator } from '@core/funcs';
 
 @Component({
   selector: 'frontend-doctor',
@@ -300,7 +298,7 @@ export class DoctorComponent implements OnInit {
       ...this.form.value,
     };
 
-    // this.updateServiceAppointment(id, val.status, val.service, val.note);
+    this.updateServiceAppointment(id, val.status, val.service, val.note);
 
     // if (id && this.form.value.status != 'Không sử dụng dịch vụ') {
     //   // this.updateServiceAppointment(id, val.status, val.service, val.note);

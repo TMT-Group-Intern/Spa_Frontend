@@ -12,6 +12,7 @@ import { AuthService } from '../../../shared.service';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { TDSModalRef } from 'tds-ui/modal';
 import { TDSSafeAny } from 'tds-ui/shared/utility';
+import { catchError, EMPTY, iif, tap } from 'rxjs';
 
 @Component({
   selector: 'frontend-modal-treatment-plan',
@@ -67,7 +68,6 @@ export class ModalTreatmentPlanComponent implements OnInit {
 
     // gọi hàm lấy danh sách dịch vụ
     this.initService();
-
     this.initTreatmentById();
   }
 
@@ -194,36 +194,49 @@ export class ModalTreatmentPlanComponent implements OnInit {
         createBy: this.userSession.user.name,
         customerID: this.customerId,
       };
-      if (this.treatmentId) {
-        this.updateTreatment(this.treatmentId, body);
-      } else {
-        this.add(body);
-      }
+      this.submit$(this.treatmentId as number, body).subscribe();
+      // if (this.treatmentId) {
+      // } else {
+      //   this.add(body);
+      // }
     }
   }
 
-  add(body: any) {
-    this.sharesApi.addTreatmentPlan(body).subscribe({
-      next: (res) => {
-        this.createNotificationSuccess('Thành công');
-        this.modalRef.destroy(res);
-      },
-      error: (res) => {
-        this.createNotificationError(res.error.message);
-      },
-    });
-  }
+  // add(body: any) {
+  //   this.sharesApi.addTreatmentPlan(body).subscribe({
+  //     next: (res) => {
+  //       this.createNotificationSuccess('Thành công');
+  //       this.modalRef.destroy(res || true);
+  //     },
+  //     error: (res) => {
+  //       this.createNotificationError(res.error.message);
+  //     },
+  //   });
+  // }
 
-  updateTreatment(id: number, body: any) {
-    this.sharesApi.updateTreatmentPlan(id, body).subscribe({
-      next: (res) => {
+  // updateTreatment(id: number, body: any) {
+  //  return this.sharesApi.updateTreatmentPlan(id, body).subscribe({
+  //     next: (res) => {
+  //       this.createNotificationSuccess('Thành công');
+  //       this.modalRef.destroy(res || true);
+  //     },
+  //     error: (res) => {
+  //       this.createNotificationError(res.error.message);
+  //     },
+  //   });
+  // }
+
+  submit$(id:number, body:any){
+    return iif(()=> (id ===undefined), this.sharesApi.addTreatmentPlan(body), this.sharesApi.updateTreatmentPlan(id, body)).pipe(
+      tap((res) => {
         this.createNotificationSuccess('Thành công');
-        this.modalRef.destroy(res);
-      },
-      error: (res) => {
+        this.modalRef.destroy(res || true);
+      }),
+      catchError((res) => {
         this.createNotificationError(res.error.message);
-      },
-    });
+        return EMPTY
+      })
+    )
   }
 
   // Success Notification
