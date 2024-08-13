@@ -71,15 +71,17 @@ export class ModalTreatmentPlanComponent implements OnInit {
     this.initTreatmentById();
   }
 
+  // lấy dữ liệu treatment by id và patchValue
   private initTreatmentById() {
     if (this.treatmentId) {
       this.sharesApi
         .getTreatmentDetail(this.treatmentId)
         .subscribe((data: any) => {
-          // Patch simple form controls
           this.treatmentForm.patchValue({
-            treatmentName: data.treatmentName,
-            totalSessions: data.totalSessions,
+            customerID: data.customerID,
+            startDate: data.startDate,
+            createBy: data.createBy,
+            note: data.note,
           });
         });
     }
