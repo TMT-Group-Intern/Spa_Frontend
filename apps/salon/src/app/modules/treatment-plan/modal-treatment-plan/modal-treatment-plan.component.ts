@@ -51,14 +51,14 @@ export class ModalTreatmentPlanComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.treatmentForm = this.fb.group({
-      treatmentName: ['', Validators.required],
+      // treatmentName: ['', Validators.required],
       customerID: [''],
       startDate: format(new Date(), DATE_CONFIG.DATE_BASE),
       createBy: [''],
       note: [''],
-      service: [],
-      totalSessions: [''],
-      treatmentSessionsDTO: this.fb.array([]),
+      // service: [],
+      // totalSessions: [''],
+      treatmentDetailDTOs: this.fb.array([]),
     });
   }
 
@@ -84,14 +84,6 @@ export class ModalTreatmentPlanComponent implements OnInit {
             treatmentName: data.treatmentName,
             totalSessions: data.totalSessions,
           });
-
-          // Clear existing FormArray
-          this.treatmentSessionsDTO.clear();
-
-          // Add new form groups to the FormArray
-          data.treatmentSessions.forEach((session: any) => {
-            this.addItemToTreatmentSession(session);
-          });
         });
     }
   }
@@ -103,7 +95,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
       unitPrice: value.value.price,
       quantity: 1,
       tempPrice: value.value.price,
-      totalPrice: value.value.price,
+      price: value.value.price,
       amountDiscount: 0,
       kindofDiscount: '%',
     }
@@ -133,7 +125,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
   resetTotal() {
     this.total = 0;
     for (const num of this.listOfData) {
-      this.total += num.totalPrice;
+      this.total += num.price;
     }
   }
 
@@ -148,10 +140,10 @@ export class ModalTreatmentPlanComponent implements OnInit {
   priceAfterDiscount(id: number) {
     const service = this.listOfData.find((ser) => ser.serviceID === id);
     if (service.kindofDiscount == '%') {
-      service.totalPrice =
+      service.price =
         (service.tempPrice * (100 - service.amountDiscount)) / 100;
     } else {
-      service.totalPrice = service.tempPrice - service.amountDiscount;
+      service.price = service.tempPrice - service.amountDiscount;
     }
     this.resetTotal();
   }
@@ -161,7 +153,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
     const service = this.listOfData.find((ser) => ser.serviceID === id);
     service.kindofDiscount = '%';
     service.amountDiscount = 0;
-    service.totalPrice = service.tempPrice;
+    service.price = service.tempPrice;
     this.resetTotal();
   }
 
@@ -170,7 +162,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
     const service = this.listOfData.find((ser) => ser.serviceID === id);
     service.kindofDiscount = 'VND';
     service.amountDiscount = 0;
-    service.totalPrice = service.tempPrice;
+    service.price = service.tempPrice;
     this.resetTotal();
   }
 
@@ -185,29 +177,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
     )
   }
 
-  private addItemToTreatmentSession(session: any) {
-    const treatmentSessionForm = this.fb.group({
-      sessionNumber: [session.sessionNumber],
-      treatmendSessionDetailDTO: [session.treatmendSessionDetail],
-    });
-    this.treatmentSessionsDTO.push(treatmentSessionForm);
-  }
 
-  get treatmentSessionsDTO(): FormArray {
-    return this.treatmentForm.get('treatmentSessionsDTO') as FormArray;
-  }
-  addSession() {
-    this.sessionFormGroup = this.fb.group({
-      sessionNumber: [1],
-      treatmendSessionDetailDTO: [],
-    });
-    this.treatmentSessionsDTO.push(this.sessionFormGroup);
-  }
-
-  //xóa vị trí đã chọn
-  deleteSession(key: number) {
-    this.treatmentSessionsDTO.removeAt(key);
-  }
 
   // lấy danh sách dịch vụ
   initService() {
@@ -223,6 +193,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
         ...val,
         createBy: this.userSession.user.name,
         customerID: this.customerId,
+        treatmentDetailDTOs: this.listOfData
       };
       if (this.treatmentId) {
         this.updateTreatment(this.treatmentId, body);
