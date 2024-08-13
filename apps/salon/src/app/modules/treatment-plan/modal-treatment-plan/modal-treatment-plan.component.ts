@@ -63,7 +63,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.treatmentForm = this.fb.group({
-      treatmentName: ['', Validators.required],
+      // treatmentName: ['', Validators.required],
       customerID: [''],
       startDate: format(new Date(), DATE_CONFIG.DATE_BASE),
       createBy: [''],
@@ -115,7 +115,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
       unitPrice: value.value.price,
       quantity: 1,
       tempPrice: value.value.price,
-      totalPrice: value.value.price,
+      price: value.value.price,
       amountDiscount: 0,
       kindofDiscount: '%',
     }
@@ -145,12 +145,12 @@ export class ModalTreatmentPlanComponent implements OnInit {
   resetTotal() {
     this.total = 0;
     for (const num of this.listOfData) {
-      this.total += num.totalPrice;
+      this.total += num.price;
     }
   }
 
   // Calculate Total Price
-  totalPrice(id: number) {
+  price(id: number) {
     const service = this.listOfData.find((ser) => ser.serviceID === id);
     service.tempPrice = service.unitPrice * service.quantity;
     this.priceAfterDiscount(id);
@@ -160,10 +160,10 @@ export class ModalTreatmentPlanComponent implements OnInit {
   priceAfterDiscount(id: number) {
     const service = this.listOfData.find((ser) => ser.serviceID === id);
     if (service.kindofDiscount == '%') {
-      service.totalPrice =
+      service.price =
         (service.tempPrice * (100 - service.amountDiscount)) / 100;
     } else {
-      service.totalPrice = service.tempPrice - service.amountDiscount;
+      service.price = service.tempPrice - service.amountDiscount;
     }
     this.resetTotal();
   }
@@ -173,7 +173,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
     const service = this.listOfData.find((ser) => ser.serviceID === id);
     service.kindofDiscount = '%';
     service.amountDiscount = 0;
-    service.totalPrice = service.tempPrice;
+    service.price = service.tempPrice;
     this.resetTotal();
   }
 
@@ -182,7 +182,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
     const service = this.listOfData.find((ser) => ser.serviceID === id);
     service.kindofDiscount = 'VND';
     service.amountDiscount = 0;
-    service.totalPrice = service.tempPrice;
+    service.price = service.tempPrice;
     this.resetTotal();
   }
 
@@ -233,6 +233,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
       const val = this.treatmentForm.value;
       const body: any = {
         ...val,
+        TreatmentDetailDTOs: this.listOfData,
         createBy: this.userSession.user.name,
         customerID: this.customerId,
       };

@@ -20,11 +20,14 @@ import { TDSNotificationService } from 'tds-ui/notification';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { CompanyService } from '../../core/services/company.service';
 import { concatMap, filter, tap } from 'rxjs';
-import { TDSCheckBoxModule } from 'tds-ui/tds-checkbox';
+import { TDSCheckboxChange, TDSCheckBoxModule } from 'tds-ui/tds-checkbox';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { TDSTabsModule } from 'tds-ui/tabs';
 import { TreatmentPlanComponent } from '../treatment-plan/treatment-plan.component';
 import { TreatmentPlanModule } from '../treatment-plan/treatment-plan.module';
+// import { updateValidator } from '@funcs';
+import { updateValidator } from '../../core/funcs/form.func';
+// import { updateValidator } from '@core/funcs';
 
 @Component({
   selector: 'frontend-doctor',
@@ -80,6 +83,7 @@ export class DoctorComponent implements OnInit {
   appointments: any[] = [];
   sessionID: any;
   serviceBefore: any;
+  // isNote = false
 
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
@@ -135,29 +139,31 @@ export class DoctorComponent implements OnInit {
 
     // theo dõi thay đổi serviceId
     this.companySvc._change_service$.subscribe((data) => {
-      // Lấy giá trị hiện tại của service, nếu null hoặc undefined thì gán nó là mảng trống
-      const currentService = this.form.value.service ?? [];
+      if (this.form.value.status != 'Không sử dụng dịch vụ') {
+        // Lấy giá trị hiện tại của service, nếu null hoặc undefined thì gán nó là mảng trống
+        const currentService = this.form.value.service ?? [];
 
-      // Chuyển đổi các mảng hiện tại và mới thành Set để loại bỏ các giá trị trùng lặp
-      const updatedServiceSet = new Set([...currentService, ...(Array.isArray(data) ? data : [data])]);
+        // Chuyển đổi các mảng hiện tại và mới thành Set để loại bỏ các giá trị trùng lặp
+        const updatedServiceSet = new Set([...currentService, ...(Array.isArray(data) ? data : [data])]);
 
-      // Chuyển đổi Set thành mảng để cập nhật lại giá trị của service
-      const updatedService = Array.from(updatedServiceSet);
+        // Chuyển đổi Set thành mảng để cập nhật lại giá trị của service
+        const updatedService = Array.from(updatedServiceSet);
 
-      // Cập nhật lại giá trị của service bằng patchValue
-      this.form.patchValue({
-        service: updatedService as unknown as undefined
-      });
-      this.serviceBefore = data;
+        // Cập nhật lại giá trị của service bằng patchValue
+        this.form.patchValue({
+          service: updatedService as unknown as undefined
+        });
+        this.serviceBefore = data;
+      }
     });
     this.companySvc._change_session_status$.subscribe((data) => {
-      this.sessionID = data;
+      if (this.form.value.status != 'Không sử dụng dịch vụ') this.sessionID = data;
     });
 
   }
 
   //
-  isCheck(event: any) {
+  isCheck(event:TDSCheckboxChange) {
     if (event.checked) {
       this.form.patchValue({
         status: 'Không sử dụng dịch vụ',
@@ -170,7 +176,22 @@ export class DoctorComponent implements OnInit {
       });
       this.form.get('service')?.enable();
     }
+
+    updateValidator(event.checked, this.form, {
+      field: 'note',
+      validators: [Validators.required],
+      state: 'setErrors',
+    });
   }
+
+  //
+  // note() {
+  //   if (this.form.value.note == '' && this.form.value.status == 'Không sử dụng dịch vụ') {
+  //     this.isNote = true
+  //   } else {
+  //     this.isNote = false
+  //   }
+  // }
 
   //
   onReceiveAppointments(): void {
@@ -279,11 +300,20 @@ export class DoctorComponent implements OnInit {
       ...this.form.value,
     };
 
-    if (id && this.form.value.status != 'Không sử dụng dịch vụ') {
-      this.updateServiceAppointment(id, val.status, val.service, val.note);
-    } else {
-      this.updateServiceAppointment(id, val.status, val.service, val.note);
-    }
+    // this.updateServiceAppointment(id, val.status, val.service, val.note);
+
+    // if (id && this.form.value.status != 'Không sử dụng dịch vụ') {
+    //   // this.updateServiceAppointment(id, val.status, val.service, val.note);
+    //   console.log(1)
+    // } else {
+    //   console.log(2)
+    //   if(this.form.value.note == '') {
+    //     this.isNote = true
+    //     return
+    //   }
+    //   this.isNote = false
+    //   // this.updateServiceAppointment(id, val.status, val.service, val.note);
+    // }
   }
 
   // Update service Appointment
