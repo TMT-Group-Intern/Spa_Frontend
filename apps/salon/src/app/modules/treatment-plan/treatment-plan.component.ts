@@ -51,7 +51,6 @@ export class TreatmentPlanComponent implements OnChanges {
       }
     })
     modal.afterClose.asObservable().subscribe((res)=>{
-      console.log(res);
       if(res){
         this.getTreatmentByCustomerId(this.customerId as number)
       }
