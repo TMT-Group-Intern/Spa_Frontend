@@ -19,18 +19,6 @@ import { TDSSafeAny } from 'tds-ui/shared/utility';
   styleUrls: ['./modal-treatment-plan.component.scss'],
 })
 export class ModalTreatmentPlanComponent implements OnInit {
-  public sessionOptions = [
-    { id: 1, name: '1 buổi' },
-    { id: 2, name: '2 buổi' },
-    { id: 3, name: '3 buổi' },
-    { id: 4, name: '4 buổi' },
-    { id: 5, name: '5 buổi' },
-    { id: 6, name: '5 buổi' },
-    { id: 7, name: '7 buổi' },
-    { id: 8, name: '8 buổi' },
-    { id: 9, name: '9 buổi' },
-    { id: 10, name: '10 buổi' },
-  ];
 
   private readonly sharesApi = inject(AuthService);
   private readonly notification = inject(TDSNotificationService);
@@ -63,14 +51,11 @@ export class ModalTreatmentPlanComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.treatmentForm = this.fb.group({
-      // treatmentName: ['', Validators.required],
       customerID: [''],
       startDate: format(new Date(), DATE_CONFIG.DATE_BASE),
       createBy: [''],
       note: [''],
-      service: [],
-      totalSessions: [''],
-      treatmentSessionsDTO: this.fb.array([]),
+      treatmentDetailDTOs: this.fb.array([]),
     });
   }
 
@@ -95,14 +80,6 @@ export class ModalTreatmentPlanComponent implements OnInit {
           this.treatmentForm.patchValue({
             treatmentName: data.treatmentName,
             totalSessions: data.totalSessions,
-          });
-
-          // Clear existing FormArray
-          this.treatmentSessionsDTO.clear();
-
-          // Add new form groups to the FormArray
-          data.treatmentSessions.forEach((session: any) => {
-            this.addItemToTreatmentSession(session);
           });
         });
     }
@@ -141,7 +118,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
     this.resetTotal();
   }
 
-  //
+  //Tính lại tổng tiền
   resetTotal() {
     this.total = 0;
     for (const num of this.listOfData) {
@@ -197,29 +174,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
     )
   }
 
-  private addItemToTreatmentSession(session: any) {
-    const treatmentSessionForm = this.fb.group({
-      sessionNumber: [session.sessionNumber],
-      treatmendSessionDetailDTO: [session.treatmendSessionDetail],
-    });
-    this.treatmentSessionsDTO.push(treatmentSessionForm);
-  }
 
-  get treatmentSessionsDTO(): FormArray {
-    return this.treatmentForm.get('treatmentSessionsDTO') as FormArray;
-  }
-  addSession() {
-    this.sessionFormGroup = this.fb.group({
-      sessionNumber: [1],
-      treatmendSessionDetailDTO: [],
-    });
-    this.treatmentSessionsDTO.push(this.sessionFormGroup);
-  }
-
-  //xóa vị trí đã chọn
-  deleteSession(key: number) {
-    this.treatmentSessionsDTO.removeAt(key);
-  }
 
   // lấy danh sách dịch vụ
   initService() {
