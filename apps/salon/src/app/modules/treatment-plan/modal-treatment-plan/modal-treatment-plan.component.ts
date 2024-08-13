@@ -19,18 +19,6 @@ import { TDSSafeAny } from 'tds-ui/shared/utility';
   styleUrls: ['./modal-treatment-plan.component.scss'],
 })
 export class ModalTreatmentPlanComponent implements OnInit {
-  public sessionOptions = [
-    { id: 1, name: '1 buổi' },
-    { id: 2, name: '2 buổi' },
-    { id: 3, name: '3 buổi' },
-    { id: 4, name: '4 buổi' },
-    { id: 5, name: '5 buổi' },
-    { id: 6, name: '5 buổi' },
-    { id: 7, name: '7 buổi' },
-    { id: 8, name: '8 buổi' },
-    { id: 9, name: '9 buổi' },
-    { id: 10, name: '10 buổi' },
-  ];
 
   private readonly sharesApi = inject(AuthService);
   private readonly notification = inject(TDSNotificationService);
@@ -141,7 +129,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
     this.resetTotal();
   }
 
-  //
+  //Tính lại tổng tiền
   resetTotal() {
     this.total = 0;
     for (const num of this.listOfData) {
