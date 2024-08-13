@@ -51,13 +51,10 @@ export class ModalTreatmentPlanComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.treatmentForm = this.fb.group({
-      // treatmentName: ['', Validators.required],
       customerID: [''],
       startDate: format(new Date(), DATE_CONFIG.DATE_BASE),
       createBy: [''],
       note: [''],
-      // service: [],
-      // totalSessions: [''],
       treatmentDetailDTOs: this.fb.array([]),
     });
   }
@@ -194,7 +191,6 @@ export class ModalTreatmentPlanComponent implements OnInit {
         TreatmentDetailDTOs: this.listOfData,
         createBy: this.userSession.user.name,
         customerID: this.customerId,
-        treatmentDetailDTOs: this.listOfData
       };
       if (this.treatmentId) {
         this.updateTreatment(this.treatmentId, body);
