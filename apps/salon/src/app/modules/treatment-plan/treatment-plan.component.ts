@@ -8,7 +8,7 @@ import { AuthService } from '../../shared.service';
   templateUrl: './treatment-plan.component.html',
   styleUrls: ['./treatment-plan.component.scss'],
 })
-export class TreatmentPlanComponent implements OnInit, OnChanges {
+export class TreatmentPlanComponent implements OnChanges {
   @Input() customerId?: number;
   private readonly modalSvc = inject(TDSModalService)
   listOfData: any[] = []
@@ -22,9 +22,6 @@ export class TreatmentPlanComponent implements OnInit, OnChanges {
     if(changes['customerId']?.currentValue){
        this.getTreatmentByCustomerId(this.customerId as number);
     }
-  }
-  ngOnInit(): void {
-    this.getTreatmentByCustomerId(this.customerId as number);
   }
 
   //

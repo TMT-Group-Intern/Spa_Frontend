@@ -1,12 +1,4 @@
 <form id="treatmentForm" [formGroup]="treatmentForm" autocomplete="off" class="w-full">
-  <!--  -->
-  <!-- <div class="flex flex-row">
-    <div class="flex-1 mr-1">
-      <tds-form-field class="py-2">
-        <tds-label>Lộ trình</tds-label>
-        <input tdsInput placeholder="Tên lộ trình" formControlName="treatmentName">
-      </tds-form-field>
-    </div> -->
     <!--  -->
     <div>
       <tds-form-field class="pt-2 pb-4">
@@ -15,7 +7,6 @@
       </textarea>
       </tds-form-field>
     </div>
-  <!-- </div> -->
   <!-- -->
   <div class="flex-1">
     <tds-form-field class="py-2">
@@ -27,7 +18,6 @@
         <i class="tdsi-close-fill text-neutral-1-500 text-base" *ngIf="inputValue && inputValue !== ''">
         </i>
       </span>
-      <!-- <tds-error><span>Vui lòng chọn <strong>dịch vụ</strong>!</span></tds-error> -->
     </tds-form-field>
 
     <tds-autocomplete #auto (selectionChange)="getValueFromSelect($event)">
@@ -37,7 +27,6 @@
         </div>
       </tds-auto-option>
     </tds-autocomplete>
-    <!-- <tds-autocomplete [dataSource]="listService" backfill #auto></tds-autocomplete> -->
   </div>
   <!--  -->
 
@@ -110,7 +99,7 @@
               </tds-dropdown-menu>
             </div>
           </td>
-          <td>{{ data.price | tdsFormatNumber}}</td>
+          <td>{{ data.totalPrice | tdsFormatNumber}}</td>
           <td>
             <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-red-500" (click)="delete(index)">
               <i class="tdsi-trash-fill"></i>
