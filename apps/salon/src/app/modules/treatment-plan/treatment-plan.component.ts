@@ -8,7 +8,7 @@ import { AuthService } from '../../shared.service';
   templateUrl: './treatment-plan.component.html',
   styleUrls: ['./treatment-plan.component.scss'],
 })
-export class TreatmentPlanComponent implements OnInit, OnChanges {
+export class TreatmentPlanComponent implements OnChanges {
   @Input() customerId?: number;
   private readonly modalSvc = inject(TDSModalService)
   listOfData: any[] = []
@@ -18,21 +18,22 @@ export class TreatmentPlanComponent implements OnInit, OnChanges {
   constructor (
     private shared: AuthService
   ) {}
+
+
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['customerId']?.currentValue){
        this.getTreatmentByCustomerId(this.customerId as number);
     }
   }
-  ngOnInit(): void {
-    this.getTreatmentByCustomerId(this.customerId as number);
-  }
 
   //
-  getTreatmentByCustomerId(customerId: number):void{
+  getTreatmentByCustomerId(customerId: number) {
+    console.log(customerId);
     if(customerId) {
+
       this.shared.getTreatmentOfCustomer(customerId).subscribe(
         (data) => {
-          this.listOfData = data
+          this.listOfData = [...data]
         }
       )
     }
