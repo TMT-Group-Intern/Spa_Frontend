@@ -43,6 +43,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
   sessionChosen: number[] = [];
   listService: TDSSafeAny;
   listOfData: any[] = [];
+  quantity?:number;
 
   userSession: any;
   storedUserSession = localStorage.getItem('userSession');
@@ -54,21 +55,21 @@ export class ModalTreatmentPlanComponent implements OnInit {
   startDate: any
   createBy: any
   notes: any
+  treatmentForm: FormGroup<>;
 
-  // constructor(private fb: FormBuilder) {
-  //   this.treatmentForm = this.fb.group({
-  //     customerID: [''],
-  //     startDate: format(new Date(), DATE_CONFIG.DATE_BASE),
-  //     createBy: [''],
-  //     note: [''],
-  //     treatmentDetailDTOs: this.fb.array([]),
-  //   });
-  // }
-
-  constructor(
+  constructor(private fb: FormBuilder,
     private sharesApi : AuthService,
     private notification : TDSNotificationService
-  ) {}
+  ) {
+    this.treatmentForm = this.fb.group({
+      customerID: [''],
+      startDate: format(new Date(), DATE_CONFIG.DATE_BASE),
+      createBy: [''],
+      note: [''],
+      treatmentDetailDTOs: this.fb.array([]),
+    });
+  }
+
 
   ngOnInit(): void {
     if (this.storedUserSession !== null) {
@@ -80,31 +81,48 @@ export class ModalTreatmentPlanComponent implements OnInit {
     this.initService();
     // this.initTreatmentById();
     if (this.treatmentId) {
-      this.sharesApi.getTreatmentDetail(this.treatmentId).subscribe(
-        (data: any) => {
-          console.log(data.treatmentDetails)
-          // this.treatmentForm.patchValue({
-          //   customerID: data.customerID,
-          //   startDate: data.startDate,
-          //   createBy: data.createBy,
-          //   note: data.note,
-          // });
-          this.customerID = data.customerID
-          this.startDate = data.startDate
-          this.createBy = data.createBy
-          this.notes = data.notes
-          this.listOfData = data.treatmentDetails
-          this.resetTotal()
-          console.log(this.listOfData)
+      this.sharesApi
+        .getTreatmentDetail(this.treatmentId)
+        .subscribe((data: any) => {
+          this.treatmentForm.patchValue({
+            customerID: data.customerID,
+            startDate: data.startDate,
+            createBy: data.createBy,
+            note: data.note,
+            treatmentDetailDTOs: data.treatmentDetailDTOs
+          });
         });
     }
   }
+  get treatmentSessionsDTO(): FormArray {
+    return this.treatmentForm.get('treatmentDetailDTOs') as FormArray;
+  }
 
-  // lấy dữ liệu treatment by id và patchValue
-  // private initTreatmentById() {
-
+  addSession(value: TDSSafeAny) {
+     this.sessionFormGroup = this.fb.group({
+      serviceID: value.serviceID,
+      serviceName: value.serviceName,
+      unitPrice: value.price,
+      quantity: 1,
+      tempPrice: value.price,
+      price: value.price,
+      amountDiscount: 0,
+      kindofDiscount: '%',
+    });
+    this.treatmentSessionsDTO.push(this.sessionFormGroup);
+  }
+  // updateSessions(totalSessions: number): void {
+  //   const currentSessions = this.treatmentSessionsDTO.length;
+  //   if (totalSessions > currentSessions) {
+  //     for (let i = currentSessions + 1; i <= totalSessions; i++) {
+  //       this.addSession(i);
+  //     }
+  //   } else if (totalSessions < currentSessions) {
+  //     for (let i = currentSessions; i > totalSessions; i--) {
+  //       this.treatmentSessionsDTO.removeAt(i - 1);
+  //     }
+  //   }
   // }
-
   getValueFromSelect(value: TDSSafeAny) {
     const val = {
       serviceID: value.value.serviceID,
@@ -116,6 +134,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
       amountDiscount: 0,
       kindofDiscount: '%',
     }
+    this.addSession(val)
     this.addPushData(val);
   }
 
@@ -187,9 +206,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
     console.log(data.data);
     this.sharesApi.searchService(data.data).subscribe(
       (res: any) => {
-        // console.log(res.service)
         this.listSearch = res.services
-        // console.log(this.listSearch)
       }
     )
   }
@@ -203,21 +220,24 @@ export class ModalTreatmentPlanComponent implements OnInit {
     });
   }
   enter() {
-    // if (this.treatmentForm.invalid) return;
-    // if (this.treatmentForm.value) {
-      // const val = this.treatmentForm.value;
+    if (this.treatmentForm.invalid) return;
+    if (this.treatmentForm.value) {
+      const val = this.treatmentForm.value;
       const body: any = {
-        //
-        TreatmentDetailDTOs: this.listOfData,
+        ...val,
+        // TreatmentDetailDTOs: this.listOfData,
         createBy: this.userSession.user.name,
         customerID: this.customerId,
       };
-      this.submit$(this.treatmentId as number, body).subscribe();
+      console.log(body);
       // if (this.treatmentId) {
+      //   this.updateTreatment(this.treatmentId, body);
       // } else {
       //   this.add(body);
       // }
-    // }
+    }
+      // this.submit$(this.treatmentId as number, body).subscribe();
+
   }
 
   // add(body: any) {
