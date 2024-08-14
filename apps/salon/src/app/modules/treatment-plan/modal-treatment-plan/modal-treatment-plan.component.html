@@ -13,13 +13,8 @@
     <tds-form-field class="py-2">
       <tds-label>Dịch vụ</tds-label>
       <input aria-colspan="" class="placeholder-neutral-1-400" placeholder="Search..." tdsInput [(ngModel)]="inputValue"
-        formControlName="treatmentDetailDTOs" (input)="onChangeAutocomplete($event)" [tdsAutocomplete]="auto"
-        [tdsInputDebounce]="300" />
+        formControlName="treatmentDetailDTOs" (input)="onChangeAutocomplete($event)" [tdsAutocomplete]="auto">
       <span tdsPrefix><i class="text-neutral-1-500 tdsi-search-fill text-base"></i></span>
-      <span tdsSuffix (click)="onClearAll($event)">
-        <i class="tdsi-close-fill text-neutral-1-500 text-base" *ngIf="inputValue && inputValue !== ''">
-        </i>
-      </span>
     </tds-form-field>
 
     <tds-autocomplete #auto (selectionChange)="getValueFromSelect($event)">
@@ -118,7 +113,7 @@
       <p class="text-tds-font-size-5 text-base-lime-600">{{ total | tdsFormatNumber}}</p>
     </span>
   </div>
-</form>
+</div>
 
 <ng-container *tdsModalFooter>
   <div class="flex flex-row-reverse p-4">

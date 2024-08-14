@@ -12,6 +12,7 @@ import { AuthService } from '../../../shared.service';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { TDSModalRef } from 'tds-ui/modal';
 import { TDSSafeAny } from 'tds-ui/shared/utility';
+import { catchError, EMPTY, iif, tap } from 'rxjs';
 
 @Component({
   selector: 'frontend-modal-treatment-plan',
@@ -20,14 +21,14 @@ import { TDSSafeAny } from 'tds-ui/shared/utility';
 })
 export class ModalTreatmentPlanComponent implements OnInit {
 
-  private readonly sharesApi = inject(AuthService);
-  private readonly notification = inject(TDSNotificationService);
+  // private readonly sharesApi = inject(AuthService);
+  // private readonly notification = inject(TDSNotificationService);
   private readonly modalRef = inject(TDSModalRef);
 
   @Input() customerId?: number;
   @Input() treatmentId?: number;
 
-  treatmentForm: FormGroup;
+  // treatmentForm: FormGroup;
 
   inputValue?: string;
   selectSessionOptions = 1;
@@ -50,7 +51,16 @@ export class ModalTreatmentPlanComponent implements OnInit {
   sessionFormGroup: any;
   options: TDSSafeAny;
 
-  constructor(private fb: FormBuilder) {
+  customerID: any
+  startDate: any
+  createBy: any
+  notes: any
+  treatmentForm: FormGroup<>;
+
+  constructor(private fb: FormBuilder,
+    private sharesApi : AuthService,
+    private notification : TDSNotificationService
+  ) {
     this.treatmentForm = this.fb.group({
       customerID: [''],
       startDate: format(new Date(), DATE_CONFIG.DATE_BASE),
@@ -60,6 +70,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
     });
   }
 
+
   ngOnInit(): void {
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
@@ -68,12 +79,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
 
     // gọi hàm lấy danh sách dịch vụ
     this.initService();
-
-    this.initTreatmentById();
-  }
-
-  // lấy dữ liệu treatment by id và patchValue
-  private initTreatmentById() {
+    // this.initTreatmentById();
     if (this.treatmentId) {
       this.sharesApi
         .getTreatmentDetail(this.treatmentId)
@@ -230,30 +236,45 @@ export class ModalTreatmentPlanComponent implements OnInit {
       //   this.add(body);
       // }
     }
+      // this.submit$(this.treatmentId as number, body).subscribe();
+
   }
 
-  add(body: any) {
-    this.sharesApi.addTreatmentPlan(body).subscribe({
-      next: (res) => {
-        this.createNotificationSuccess('Thành công');
-        this.modalRef.destroy(res);
-      },
-      error: (res) => {
-        this.createNotificationError(res.error.message);
-      },
-    });
-  }
+  // add(body: any) {
+  //   this.sharesApi.addTreatmentPlan(body).subscribe({
+  //     next: (res) => {
+  //       this.createNotificationSuccess('Thành công');
+  //       this.modalRef.destroy(res || true);
+  //     },
+  //     error: (res) => {
+  //       this.createNotificationError(res.error.message);
+  //     },
+  //   });
+  // }
 
-  updateTreatment(id: number, body: any) {
-    this.sharesApi.updateTreatmentPlan(id, body).subscribe({
-      next: (res) => {
+  // updateTreatment(id: number, body: any) {
+  //  return this.sharesApi.updateTreatmentPlan(id, body).subscribe({
+  //     next: (res) => {
+  //       this.createNotificationSuccess('Thành công');
+  //       this.modalRef.destroy(res || true);
+  //     },
+  //     error: (res) => {
+  //       this.createNotificationError(res.error.message);
+  //     },
+  //   });
+  // }
+
+  submit$(id: number, body: any) {
+    return iif(() => (id === undefined), this.sharesApi.addTreatmentPlan(body), this.sharesApi.updateTreatmentPlan(id, body)).pipe(
+      tap((res) => {
         this.createNotificationSuccess('Thành công');
-        this.modalRef.destroy(res);
-      },
-      error: (res) => {
+        this.modalRef.destroy(res || true);
+      }),
+      catchError((res) => {
         this.createNotificationError(res.error.message);
-      },
-    });
+        return EMPTY
+      })
+    )
   }
 
   // Success Notification

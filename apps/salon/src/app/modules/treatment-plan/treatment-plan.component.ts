@@ -18,6 +18,8 @@ export class TreatmentPlanComponent implements OnChanges {
   constructor (
     private shared: AuthService
   ) {}
+
+
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['customerId']?.currentValue){
        this.getTreatmentByCustomerId(this.customerId as number);
@@ -25,11 +27,13 @@ export class TreatmentPlanComponent implements OnChanges {
   }
 
   //
-  getTreatmentByCustomerId(customerId: number):void{
+  getTreatmentByCustomerId(customerId: number) {
+    console.log(customerId);
     if(customerId) {
+
       this.shared.getTreatmentOfCustomer(customerId).subscribe(
         (data) => {
-          this.listOfData = data
+          this.listOfData = [...data]
         }
       )
     }

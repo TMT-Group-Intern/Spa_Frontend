@@ -23,8 +23,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@core": ["src/app/core"],
-      "@funcs": ["src/app/core/funcs"],
+      "@core/*": ["apps/salon/src/app/core/*"],
     }
   },
   "angularCompilerOptions": {
