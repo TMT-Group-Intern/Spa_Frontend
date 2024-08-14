@@ -1,18 +1,20 @@
 <form id="treatmentForm" [formGroup]="treatmentForm" autocomplete="off" class="w-full">
-    <!--  -->
-    <div>
-      <tds-form-field class="pt-2 pb-4">
-        <tds-label>Ghi chú</tds-label>
-        <textarea tdsInput [tdsAutosize]="{ minRows: 1,  maxRows: 20}" formControlName="note" placeholder='Ghi chú'>
+  <!--  -->
+  <div>
+    <tds-form-field class="pt-2 pb-4">
+      <tds-label>Ghi chú</tds-label>
+      <textarea tdsInput [tdsAutosize]="{ minRows: 1,  maxRows: 20}" formControlName="note" placeholder='Ghi chú'>
       </textarea>
-      </tds-form-field>
-    </div>
+    </tds-form-field>
+  </div>
   <!-- -->
-  <div class="flex-1">
+  <div class="flex-1" formArrayName="treatmentSessionsDTO">
+    <div *ngFor="let lessonForm of treatmentSessionsDTO.controls; let i = index"></div>
     <tds-form-field class="py-2">
       <tds-label>Dịch vụ</tds-label>
       <input aria-colspan="" class="placeholder-neutral-1-400" placeholder="Search..." tdsInput [(ngModel)]="inputValue"
-        [ngModelOptions]="{standalone:true}" (input)="onChangeAutocomplete($event)" [tdsAutocomplete]="auto" [tdsInputDebounce]="300"/>
+        formControlName="treatmentDetailDTOs" (input)="onChangeAutocomplete($event)" [tdsAutocomplete]="auto"
+        [tdsInputDebounce]="300" />
       <span tdsPrefix><i class="text-neutral-1-500 tdsi-search-fill text-base"></i></span>
       <span tdsSuffix (click)="onClearAll($event)">
         <i class="tdsi-close-fill text-neutral-1-500 text-base" *ngIf="inputValue && inputValue !== ''">
@@ -30,7 +32,7 @@
   </div>
   <!--  -->
 
-  <tds-table class="text-sm" [hideOnSinglePage]="true" #basicTable [listData]="listOfData">
+  <tds-table class="text-sm" [hideOnSinglePage]="true" #basicTable >
     <thead>
       <tr>
         <th width="26%">Tên dịch vụ</th>
@@ -42,25 +44,25 @@
       </tr>
     </thead>
     <tbody>
-      <ng-template ngFor let-data [ngForOf]="basicTable.data" let-index="index">
+      <ng-template  let-index="index">
         <tr>
-          <td>{{ data.serviceName }}</td>
+          <td><div formControlName = "serviceID"></div></td>
           <td>
             <div>
               <tds-input-number [max]="99" class="pr-2" [tdsTextAlign]="'center'" [hiddenIcon]="true" [min]="1"
-                [ngModelOptions]="{standalone:true}" [(ngModel)]="data.quantity"
-                (ngModelChange)="price(data.serviceID)">
+                 formControlName="quantity" [(ngModel)]="quantity"
+                >
               </tds-input-number>
             </div>
           </td>
-          <td>{{ data.unitPrice | tdsFormatNumber}}</td>
+          <td><div formControlName="unitPrice"></div></td>
           <td>
-            <div>
+            <div f>
               <button class="border-none" color="secondary" tds-dropdown trigger="click" [tdsDropdownMenu]="menu">
                 <p class="flex items-center">
                   <i class="tdsi-cash-payment-fill text-success-400 text-2xl pr-1"></i>
-                  <span *ngIf="data.kindofDiscount === '%'">{{ data.amountDiscount }}%</span>
-                  <span *ngIf="data.kindofDiscount === 'VND'">{{ data.amountDiscount | tdsFormatNumber }} VND</span>
+                  <!-- <span *ngIf="data.kindofDiscount === '%'">{{ data.amountDiscount }}%</span>
+                  <span *ngIf="data.kindofDiscount === 'VND'">{{ data.amountDiscount | tdsFormatNumber }} VND</span> -->
                 </p>
               </button>
               <tds-dropdown-menu #menu="tdsDropdownMenu">
@@ -99,9 +101,10 @@
               </tds-dropdown-menu>
             </div>
           </td>
-          <td>{{ data.totalPrice | tdsFormatNumber}}</td>
+          <td>{{ data.price | tdsFormatNumber}}</td>
           <td>
-            <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-red-500" (click)="delete(index)">
+            <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-red-500"
+              (click)="delete(index)">
               <i class="tdsi-trash-fill"></i>
             </button>
           </td>
@@ -119,7 +122,8 @@
 
 <ng-container *tdsModalFooter>
   <div class="flex flex-row-reverse p-4">
-    <button tds-button form="treatmentForm" color="success" class="w-[100px] px-4 py-2 text-white rounded" (click)="enter()">
+    <button tds-button form="treatmentForm" color="success" class="w-[100px] px-4 py-2 text-white rounded"
+      (click)="enter()">
       Lưu
     </button>
   </div>

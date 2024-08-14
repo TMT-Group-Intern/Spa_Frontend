@@ -42,6 +42,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
   sessionChosen: number[] = [];
   listService: TDSSafeAny;
   listOfData: any[] = [];
+  quantity?:number;
 
   userSession: any;
   storedUserSession = localStorage.getItem('userSession');
@@ -82,11 +83,40 @@ export class ModalTreatmentPlanComponent implements OnInit {
             startDate: data.startDate,
             createBy: data.createBy,
             note: data.note,
+            treatmentDetailDTOs: data.treatmentDetailDTOs
           });
         });
     }
   }
+  get treatmentSessionsDTO(): FormArray {
+    return this.treatmentForm.get('treatmentDetailDTOs') as FormArray;
+  }
 
+  addSession(value: TDSSafeAny) {
+     this.sessionFormGroup = this.fb.group({
+      serviceID: value.serviceID,
+      serviceName: value.serviceName,
+      unitPrice: value.price,
+      quantity: 1,
+      tempPrice: value.price,
+      price: value.price,
+      amountDiscount: 0,
+      kindofDiscount: '%',
+    });
+    this.treatmentSessionsDTO.push(this.sessionFormGroup);
+  }
+  // updateSessions(totalSessions: number): void {
+  //   const currentSessions = this.treatmentSessionsDTO.length;
+  //   if (totalSessions > currentSessions) {
+  //     for (let i = currentSessions + 1; i <= totalSessions; i++) {
+  //       this.addSession(i);
+  //     }
+  //   } else if (totalSessions < currentSessions) {
+  //     for (let i = currentSessions; i > totalSessions; i--) {
+  //       this.treatmentSessionsDTO.removeAt(i - 1);
+  //     }
+  //   }
+  // }
   getValueFromSelect(value: TDSSafeAny) {
     const val = {
       serviceID: value.value.serviceID,
@@ -98,6 +128,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
       amountDiscount: 0,
       kindofDiscount: '%',
     }
+    this.addSession(val)
     this.addPushData(val);
   }
 
@@ -169,9 +200,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
     console.log(data.data);
     this.sharesApi.searchService(data.data).subscribe(
       (res: any) => {
-        // console.log(res.service)
         this.listSearch = res.services
-        // console.log(this.listSearch)
       }
     )
   }
@@ -190,15 +219,16 @@ export class ModalTreatmentPlanComponent implements OnInit {
       const val = this.treatmentForm.value;
       const body: any = {
         ...val,
-        TreatmentDetailDTOs: this.listOfData,
+        // TreatmentDetailDTOs: this.listOfData,
         createBy: this.userSession.user.name,
         customerID: this.customerId,
       };
-      if (this.treatmentId) {
-        this.updateTreatment(this.treatmentId, body);
-      } else {
-        this.add(body);
-      }
+      console.log(body);
+      // if (this.treatmentId) {
+      //   this.updateTreatment(this.treatmentId, body);
+      // } else {
+      //   this.add(body);
+      // }
     }
   }
 

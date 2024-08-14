@@ -17,8 +17,7 @@
       <tr>
         <th width="60px"></th>
         <th>Ngày</th>
-        <th>Tên lộ trình</th>
-        <th>Tổng buổi</th>
+        <th>Lộ trình</th>
         <th>Người tạo</th>
         <th>Trạng thái</th>
         <th>Thao tác</th>
@@ -32,8 +31,7 @@
             (expandChange)="onExpandChange(data.treatmentID, $event)"
           ></td>
           <td>{{ data.startDate | date : 'dd/MM/YYYY' }}</td>
-          <td>{{ data.treatmentName }}</td>
-          <td>{{ data.totalSessions }}</td>
+          <td>{{ data.treatmentCode }}</td>
           <td>{{ data.createBy }}</td>
           <td><tds-tag [status]="'primary'" [type]="'outline'"> {{data.status }}</tds-tag></td>
           <td>
