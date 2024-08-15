@@ -79,8 +79,9 @@ export class DoctorComponent implements OnInit {
   branchID: any;
   getServiceId: any;
   appointments: any[] = [];
-  sessionID: any;
+  // sessionID: any;
   serviceBefore: any;
+  chooseTreatment: any
   // isNote = false
 
   form = inject(FormBuilder).nonNullable.group({
@@ -155,9 +156,9 @@ export class DoctorComponent implements OnInit {
       }
     });
     this.companySvc._change_session_status$.subscribe((data) => {
-      if (this.form.value.status != 'Không sử dụng dịch vụ') this.sessionID = data;
+      if (this.form.value.status != 'Không sử dụng dịch vụ') this.chooseTreatment = (Array.isArray(data) ? data : [data]);
+      console.log(this.chooseTreatment)
     });
-
   }
 
   //
@@ -294,11 +295,29 @@ export class DoctorComponent implements OnInit {
     // }
     if (this.form.invalid) return;
 
+    const currentService = this.form.value.service ?? [];
+    this.chooseTreatment = this.chooseTreatment.filter((item1: any) => currentService.some(item2 => item1.serviceID === item2))
+    const currentTreatment = (this.chooseTreatment as any[]).map(item => ({
+      appointmentID: this.dataAppointmentbyid.appointmentID,
+      treatmentDetailID: item.treatmentDetailID,
+      qualityChooses: item.quantity
+    }))
+    // console.log(this.chooseTreatment)
+    // console.log(currentTreatment)
+
+    const chooseService = currentService.filter(item1 => this.chooseTreatment.some((item2: any) => item1 !== item2.serviceID))
+    // console.log(chooseService)
+
     const val = {
       ...this.form.value,
+      service: chooseService,
+      chooseTreatment: currentTreatment
     };
 
-    this.updateServiceAppointment(id, val.status, val.service, val.note);
+
+
+
+    this.updateServiceAppointment(id, val.status, val.service, val.note, val.chooseTreatment);
 
     // if (id && this.form.value.status != 'Không sử dụng dịch vụ') {
     //   // this.updateServiceAppointment(id, val.status, val.service, val.note);
@@ -317,17 +336,18 @@ export class DoctorComponent implements OnInit {
   // Update service Appointment
   updateServiceAppointment(
     id: number,
-    Status: any,
-    ListServiceID: any,
-    Notes: any
+    status: any,
+    listServiceID: any,
+    notes: any,
+    chooseServiceTreatmentDTO: any
   ) {
     this.sharedService
-      .updateAppointmentWithService(id, { ListServiceID, Status, Notes })
+      .updateAppointmentWithService(id, { listServiceID, status, notes, chooseServiceTreatmentDTO })
       .subscribe({
-        next: (data) => {
+        next: () => {
           this.createNotificationSuccess('');
           this.initAppointmentList();
-          if (Status === 'Đã khám' || Status === 'Không sử dụng dịch vụ')
+          if (status === 'Đã khám' || status === 'Không sử dụng dịch vụ')
             this.active = false;
         },
         error: (res) => {

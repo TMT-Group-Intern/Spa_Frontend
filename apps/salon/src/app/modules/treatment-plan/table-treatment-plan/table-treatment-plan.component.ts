@@ -22,7 +22,7 @@ export class TableTreatmentPlanComponent implements OnChanges {
   //Chọn dịch vụ cần thực hiện
   onClickService(idService: any, event: any){
     this.company._change_service$.next(idService);
-    this.company._change_session_status$.next(event.sessionID);
+    this.company._change_session_status$.next(event);
   }
 
   //chọn hàng của dịch vụ đó
@@ -30,7 +30,7 @@ export class TableTreatmentPlanComponent implements OnChanges {
     const valueFilter = event.filter((c: any)=> c.isDone == false);
     const val = valueFilter.map((v:any) => v.serviceID )
     this.company._change_service$.next(val);
-    this.company._change_session_status$.next(event.sessionID);
+    this.company._change_session_status$.next(event);
   }
 
   // lấy dữ liệu treatmentDetails
@@ -38,6 +38,7 @@ export class TableTreatmentPlanComponent implements OnChanges {
       this.shared.getTreatmentDetail(id).subscribe(
         (data: any) => {
           this.treatment = data.treatmentDetails
+          console.log(this.treatment)
         }
       )
   }

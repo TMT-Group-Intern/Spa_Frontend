@@ -39,7 +39,7 @@
       </tr>
     </thead>
     <tbody>
-      <ng-template  let-index="index">
+      <ng-template ngFor let-data [ngForOf]="basicTable.data" let-index="index">
         <tr>
           <td><div formControlName = "serviceID"></div></td>
           <td>
@@ -52,7 +52,7 @@
           </td>
           <td><div formControlName="unitPrice"></div></td>
           <td>
-            <div f>
+            <div>
               <button class="border-none" color="secondary" tds-dropdown trigger="click" [tdsDropdownMenu]="menu">
                 <p class="flex items-center">
                   <i class="tdsi-cash-payment-fill text-success-400 text-2xl pr-1"></i>
@@ -113,7 +113,7 @@
       <p class="text-tds-font-size-5 text-base-lime-600">{{ total | tdsFormatNumber}}</p>
     </span>
   </div>
-</div>
+<!-- </div> -->
 
 <ng-container *tdsModalFooter>
   <div class="flex flex-row-reverse p-4">

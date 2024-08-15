@@ -55,7 +55,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
   startDate: any
   createBy: any
   notes: any
-  treatmentForm: FormGroup<>;
+  treatmentForm: FormGroup;
 
   constructor(private fb: FormBuilder,
     private sharesApi : AuthService,
