@@ -2,6 +2,8 @@ import { Component, inject, Input, OnChanges, OnInit, SimpleChanges, TemplateRef
 import { TDSModalService } from 'tds-ui/modal';
 import { ModalTreatmentPlanComponent } from './modal-treatment-plan/modal-treatment-plan.component';
 import { AuthService } from '../../shared.service';
+import { ta } from 'date-fns/locale';
+import { filter, tap } from 'rxjs';
 
 @Component({
   selector: 'frontend-treatment-plan',
@@ -39,6 +41,13 @@ export class TreatmentPlanComponent implements OnChanges {
     }
   }
 
+  //cập nhật status
+  updateStatus(idTreatment: number, status: string){
+    this.shared.updateStatusTreatment(idTreatment , status).pipe(
+      filter((response)=> !response),
+      tap(() => this.getTreatmentByCustomerId(this.customerId as number))
+    ).subscribe();
+  }
   // Sử dụng modal
   modalCreateTreatmentPlan():void{
     const modal = this.modalSvc.create({
