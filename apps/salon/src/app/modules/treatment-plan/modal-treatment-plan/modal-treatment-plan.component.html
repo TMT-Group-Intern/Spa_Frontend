@@ -1,6 +1,6 @@
 <form id="treatmentForm" [formGroup]="treatmentForm" autocomplete="off" class="w-full">
   <!--  -->
-  <div>
+  <div *ngIf="!treatmentId">
     <tds-form-field class="pt-2 pb-4">
       <tds-label>Ghi chú</tds-label>
       <textarea tdsInput [tdsAutosize]="{ minRows: 1,  maxRows: 20}" formControlName="note" placeholder='Ghi chú'>
@@ -31,6 +31,7 @@
       <tr>
         <th width="26%">Tên dịch vụ</th>
         <th width="11%">Số lượng</th>
+        <th *ngIf="treatmentId" width="11%">Thực hiện</th>
         <th width="15%">Giá gốc</th>
         <th width="19%">Giảm giá</th>
         <th width="15%">Thành tiền</th>
@@ -43,23 +44,24 @@
           <td>{{lessonForm.value.serviceName}}</td>
           <td>
             <tds-form-field class="w-full">
-              <tds-input-number formControlName="quantity" [decimal]="'never'" [step]="1" [min]="0"
-                [placeholder]="'never'" (ngModelChange)="price(lessonForm.value.serviceID)"></tds-input-number >
+              <tds-input-number (disabled)="lessonForm.value.quantity === lessonForm.value.quantityDone" formControlName="quantity" [decimal]="'never'" [step]="1" [min]="lessonForm.value.quantityDone"
+                [placeholder]="'never'" (ngModelChange)="price(i)"></tds-input-number >
             </tds-form-field>
           </td>
+          <td *ngIf="treatmentId">{{lessonForm.value.quantityDone}}</td>
           <td>
             {{lessonForm.value.unitPrice}}
           </td>
           <td>
             <div class="w-full">
-              <button class="border-none" color="secondary" tds-dropdown trigger="click" [tdsDropdownMenu]="menu">
+              <button tds-button color="secondary" [disabled]="lessonForm.value.quantityDone > 0" class="border-none"  tds-dropdown trigger="click" [tdsDropdownMenu]="menu">
                 <p class="flex items-center">
                   <i class="tdsi-cash-payment-fill text-success-400 text-2xl pr-1"></i>
                   <span *ngIf="lessonForm.value.kindofDiscount === '%'">{{ lessonForm.value.amountDiscount }}%</span>
                   <span *ngIf="lessonForm.value.kindofDiscount === 'VND'">{{ lessonForm.value.amountDiscount | tdsFormatNumber }} VND</span>
                 </p>
               </button>
-              <tds-dropdown-menu #menu="tdsDropdownMenu">
+              <tds-dropdown-menu  #menu="tdsDropdownMenu">
                 <div class="p-4">
                   <p class="pb-2"><strong>Giảm giá:</strong></p>
                   <div class="flex">
@@ -67,12 +69,12 @@
                       <tds-input-number *ngIf="lessonForm.value.kindofDiscount  === '%'" class="pr-2"
                         [tdsTextAlign]="'right'" [hiddenIcon]="true" [min]="0" [max]="100" [step]="1"
                         formControlName="amountDiscount"
-                        (ngModelChange)="priceAfterDiscount(lessonForm.value.serviceID)">
+                        (ngModelChange)="priceAfterDiscount(i)">
                       </tds-input-number>
                       <tds-input-number *ngIf="lessonForm.value.kindofDiscount  === 'VND'" class="pr-2"
                         [tdsTextAlign]="'right'" [hiddenIcon]="true" [min]="0" [max]="lessonForm.value.tempPrice" [step]="1"
                         formControlName="amountDiscount"
-                        (ngModelChange)="priceAfterDiscount(lessonForm.value.serviceID)">
+                        (ngModelChange)="priceAfterDiscount(i)">
                       </tds-input-number>
                     </tds-form-field>
                     <tds-button-group >
@@ -97,7 +99,12 @@
             </div>
           </td>
           <td>{{lessonForm.value.price}}</td>
-          <td><button tds-button-icon class="tdsi-trash-fill" (click)="delete(i)"></button></td>
+          <td class="flex">
+            <div >
+              <button *ngIf="!treatmentId" tds-button-icon [tds-tooltip]="'Sửa'" class="tdsi-trash-fill" [color]="'error'" (click)="removeItem(i)"></button>
+              <button *ngIf="treatmentId" tds-button-icon [tds-tooltip]="'Xóa'" class="tdsi-trash-fill ml-2" [color]="'error'" (click)="deleteDetailTreatment(i)"></button>
+            </div>
+           </td>
         </tr>
       </ng-container>
     </tbody>
