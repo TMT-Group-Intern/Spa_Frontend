@@ -62,6 +62,7 @@ export class PaymentModalComponent implements OnInit {
   amountResidualContinue = 0
   paymentMethod = 'Tiền mặt'
   paymentByBill: any
+  billCode: any
 
   constructor(
     // private route: ActivatedRoute,
@@ -77,6 +78,7 @@ export class PaymentModalComponent implements OnInit {
       concatMap(() => this.shared.getAllBillByAppointmentID(this.id).pipe(
         tap((dataBill: any) => {
           // this.billID = dataBill.billID
+          this.billCode = dataBill.billCode
           this.billStatus = dataBill.billStatus
           this.totalAmount = dataBill.totalAmount
           this.amountInvoiced = dataBill.amountInvoiced

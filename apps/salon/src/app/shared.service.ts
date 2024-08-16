@@ -453,4 +453,8 @@ export class AuthService {
   getFinance() {
     return this.http.get(this.baseUrl + "Report/finance")
   }
+
+  getAllThuChi() {
+    return this.http.get(this.baseUrl + "Report/PhieuThuChi")
+  }
 }
