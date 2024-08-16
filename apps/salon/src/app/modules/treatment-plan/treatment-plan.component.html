@@ -8,13 +8,12 @@
     </button>
   </div>
 
-  <tds-table class="text-sm" #table [listData]="listOfData" tableLayout="fixed">
+  <tds-table [outerBordered]="true" [rounded]="true" [scroll]="{y: '250px'}" class="text-sm" #table [listData]="listOfData" tableLayout="fixed">
     <thead>
       <tr>
         <th width="60px"></th>
         <th>Ngày</th>
-        <th>Tên lộ trình</th>
-        <th>Tổng buổi</th>
+        <th>Lộ trình</th>
         <th>Người tạo</th>
         <th>Trạng thái</th>
         <th>Thao tác</th>
@@ -25,10 +24,30 @@
         <tr>
           <td [expand]="expandSet.has(data.treatmentID)" (expandChange)="onExpandChange(data.treatmentID, $event)"></td>
           <td>{{ data.startDate | date : 'dd/MM/YYYY' }}</td>
-          <td>{{ data.treatmentName }}</td>
-          <td>{{ data.totalSessions }}</td>
+          <td>{{ data.treatmentCode }}</td>
           <td>{{ data.createBy }}</td>
-          <td><tds-tag [status]="'primary'" [type]="'outline'"> {{data.status }}</tds-tag></td>
+          <td>
+            <div class="w-full">
+              <div tds-button class="cursor-pointer" color="secondary" tds-dropdown trigger="click" [tdsDropdownMenu]="menu">
+                <span class="flex items-center">
+                  <tds-tag
+                    [status]="data.status === 'Chưa xác nhận'?'warning': data.status ==='Đang điều trị'?'primary': data.status ==='Ngừng điều trị'?'error':'success'"
+                    [type]="'outline'"> {{data.status }}</tds-tag>
+                  <i class="tdsi-chevron-down-fill text-lg leading-none ml-2"></i>
+                </span>
+              </div>
+              <tds-dropdown-menu #menu="tdsDropdownMenu">
+                <div class="w-full">
+                  <div tds-dropdown-item (click)="updateStatus(data.treatmentID,'Đang điều trị')">
+                    <a class="text-sky-600 hover:underline">Đang điều trị</a>
+                  </div>
+                  <div tds-dropdown-item (click)="updateStatus(data.treatmentID,'Ngừng điều trị')">
+                    <a class="text-red-600 hover:underline">Ngừng điều trị</a>
+                  </div>
+                </div>
+              </tds-dropdown-menu>
+            </div>
+          </td>
           <td>
             <button tds-button-outline-icon color="secondary" (click)="modalEditTreatmentPlan(data.treatmentID)">
               <i class="tdsi-edit-fill"></i>

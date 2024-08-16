@@ -2,13 +2,15 @@ import { Component, inject, Input, OnChanges, OnInit, SimpleChanges, TemplateRef
 import { TDSModalService } from 'tds-ui/modal';
 import { ModalTreatmentPlanComponent } from './modal-treatment-plan/modal-treatment-plan.component';
 import { AuthService } from '../../shared.service';
+import { ta } from 'date-fns/locale';
+import { filter, tap } from 'rxjs';
 
 @Component({
   selector: 'frontend-treatment-plan',
   templateUrl: './treatment-plan.component.html',
   styleUrls: ['./treatment-plan.component.scss'],
 })
-export class TreatmentPlanComponent implements OnInit, OnChanges {
+export class TreatmentPlanComponent implements OnChanges {
   @Input() customerId?: number;
   private readonly modalSvc = inject(TDSModalService)
   listOfData: any[] = []
@@ -17,27 +19,33 @@ export class TreatmentPlanComponent implements OnInit, OnChanges {
 
   constructor(
     private shared: AuthService
-  ) { }
+  ) {}
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['customerId']?.currentValue) {
       this.getTreatmentByCustomerId(this.customerId as number);
     }
   }
-  ngOnInit(): void {
-    this.getTreatmentByCustomerId(this.customerId as number);
-  }
 
   //
-  getTreatmentByCustomerId(customerId: number): void {
-    if (customerId) {
+  getTreatmentByCustomerId(customerId: number) {
+    console.log(customerId);
+    if(customerId) {
       this.shared.getTreatmentOfCustomer(customerId).subscribe(
         (data) => {
-          this.listOfData = data
+          this.listOfData = [...data]
         }
       )
     }
   }
 
+  //cập nhật status
+  updateStatus(idTreatment: number, status: string){
+    this.shared.updateStatusTreatment(idTreatment , status).pipe(
+      filter((response)=> !response),
+      tap(() => this.getTreatmentByCustomerId(this.customerId as number))
+    ).subscribe();
+  }
   // Sử dụng modal
   modalCreateTreatmentPlan(): void {
     const modal = this.modalSvc.create({

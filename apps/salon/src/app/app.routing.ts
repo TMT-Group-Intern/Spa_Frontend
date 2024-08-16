@@ -19,6 +19,7 @@ import { AccountComponent } from './modules/account/account.component';
 import { InvoiceComponent } from './modules/invoice/invoice.component';
 import { BranchComponent } from './modules/branch/branch.component';
 import { JobComponent } from './modules/job/job.component';
+import { TreasuryComponent } from './modules/treasury/treasury.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -68,7 +69,9 @@ const routes: Routes = [
       { path: 'chatbox', loadComponent: () => ChatboxComponent },
       { path: 'branch', loadComponent: () => BranchComponent },
       { path: 'job', loadComponent: () => JobComponent },
+      { path: 'treasury', loadComponent: () => TreasuryComponent },
       { path: '', loadChildren: () => import("./modules/treatment-plan/treatment-plan.module").then(m => m.TreatmentPlanModule) },
+
     ],
   },
 ];

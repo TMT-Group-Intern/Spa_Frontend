@@ -2,44 +2,46 @@
   <tds-table [hideOnSinglePage]="true" #table [listData]="treatment" tableLayout="fixed">
     <thead>
       <tr>
-        <th width="20%">Buổi thứ</th>
-        <th width="60%">Chọn dịch vụ</th>
-        <!-- <th>Chọn dịch vụ</th> -->
+        <th width="20%">
+          <div class="flex justify-center items-center">
+            <a (click)="onClickRow(treatment)">
+              <span
+                class="cursor-pointer hover:underline font-semibold text-green-d-secondary-1 hover:decoration-green-d-secondary-1">
+                Tất cả
+              </span>
+            </a>
+          </div>
+        </th>
+        <th width="20%">Dịch vụ</th>
+        <th width="20%">Số lượng</th>
+        <th width="20%">Thực hiện</th>
         <th width="20%">Trạng thái</th>
       </tr>
     </thead>
     <tbody>
       <ng-container *ngFor="let data of treatment">
         <tr>
+          <td></td>
           <td>
-            {{ data.sessionNumber }}
+            {{ data.service.serviceName}}
           </td>
           <td>
             <div class="grid grid-cols-4">
-              <div class="col-span-3">
-                <div *ngFor="let service of data.treatmendSessionDetail" class="grid grid-cols-3">
-                  <span class="col-span-2">{{ service.service.serviceName }}</span>
-                  <a (click)="onClickService(service.service.serviceID, data)" *ngIf="!data.isDone">
-                    <span
-                      class="hover:underline font-semibold text-green-d-secondary-1 hover:decoration-green-d-secondary-1">
-                      Chọn
-                    </span>
-                  </a>
-                </div>
-              </div>
-              <div class="flex justify-center items-center">
-                <a (click)="onClickRow(data)" *ngIf="!data.isDone">
-                  <span
-                    class="hover:underline font-semibold text-green-d-secondary-1 hover:decoration-green-d-secondary-1">
-                    Chọn tất cả
-                  </span>
-                </a>
-              </div>
+              <span class="col-span-2">{{ data.quantity }}</span>
+              <a (click)="onClickService(data.service.serviceID, data)" *ngIf="!data.isDone">
+                <span
+                  class="cursor-pointer hover:underline font-semibold text-green-d-secondary-1 hover:decoration-green-d-secondary-1">
+                  Chọn
+                </span>
+              </a>
             </div>
           </td>
           <td>
+            {{ data.quantityDone}}
+          </td>
+          <td>
             <tds-tag [status]="data.isDone ? 'success' : 'error'" [type]="'outline'" class="!rounded-full">
-              {{ data.isDone ? 'Đã làm' : 'Chưa làm' }}</tds-tag>
+              {{ data.isDone ? 'Đã xong' : 'Chưa xong' }}</tds-tag>
           </td>
         </tr>
       </ng-container>

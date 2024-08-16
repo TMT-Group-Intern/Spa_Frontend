@@ -20,11 +20,12 @@ import { TDSNotificationService } from 'tds-ui/notification';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { CompanyService } from '../../core/services/company.service';
 import { concatMap, filter, tap } from 'rxjs';
-import { TDSCheckBoxModule } from 'tds-ui/tds-checkbox';
+import { TDSCheckboxChange, TDSCheckBoxModule } from 'tds-ui/tds-checkbox';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { TDSTabsModule } from 'tds-ui/tabs';
 import { TreatmentPlanComponent } from '../treatment-plan/treatment-plan.component';
 import { TreatmentPlanModule } from '../treatment-plan/treatment-plan.module';
+import { updateValidator } from '@core/funcs';
 
 @Component({
   selector: 'frontend-doctor',
@@ -78,8 +79,10 @@ export class DoctorComponent implements OnInit {
   branchID: any;
   getServiceId: any;
   appointments: any[] = [];
-  sessionID: any;
+  // sessionID: any;
   serviceBefore: any;
+  chooseTreatment: any
+  // isNote = false
 
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
@@ -135,29 +138,31 @@ export class DoctorComponent implements OnInit {
 
     // theo dõi thay đổi serviceId
     this.companySvc._change_service$.subscribe((data) => {
-      // Lấy giá trị hiện tại của service, nếu null hoặc undefined thì gán nó là mảng trống
-      const currentService = this.form.value.service ?? [];
+      if (this.form.value.status != 'Không sử dụng dịch vụ') {
+        // Lấy giá trị hiện tại của service, nếu null hoặc undefined thì gán nó là mảng trống
+        const currentService = this.form.value.service ?? [];
 
-      // Chuyển đổi các mảng hiện tại và mới thành Set để loại bỏ các giá trị trùng lặp
-      const updatedServiceSet = new Set([...currentService, ...(Array.isArray(data) ? data : [data])]);
+        // Chuyển đổi các mảng hiện tại và mới thành Set để loại bỏ các giá trị trùng lặp
+        const updatedServiceSet = new Set([...currentService, ...(Array.isArray(data) ? data : [data])]);
 
-      // Chuyển đổi Set thành mảng để cập nhật lại giá trị của service
-      const updatedService = Array.from(updatedServiceSet);
+        // Chuyển đổi Set thành mảng để cập nhật lại giá trị của service
+        const updatedService = Array.from(updatedServiceSet);
 
-      // Cập nhật lại giá trị của service bằng patchValue
-      this.form.patchValue({
-        service: updatedService as unknown as undefined
-      });
-      this.serviceBefore = data;
+        // Cập nhật lại giá trị của service bằng patchValue
+        this.form.patchValue({
+          service: updatedService as unknown as undefined
+        });
+        this.serviceBefore = data;
+      }
     });
     this.companySvc._change_session_status$.subscribe((data) => {
-      this.sessionID = data;
+      if (this.form.value.status != 'Không sử dụng dịch vụ') this.chooseTreatment = (Array.isArray(data) ? data : [data]);
+      console.log(this.chooseTreatment)
     });
-
   }
 
   //
-  isCheck(event: any) {
+  isCheck(event: TDSCheckboxChange) {
     if (event.checked) {
       this.form.patchValue({
         status: 'Không sử dụng dịch vụ',
@@ -170,7 +175,22 @@ export class DoctorComponent implements OnInit {
       });
       this.form.get('service')?.enable();
     }
+
+    updateValidator(event.checked, this.form, {
+      field: 'note',
+      validators: [Validators.required],
+      state: 'setErrors',
+    });
   }
+
+  //
+  // note() {
+  //   if (this.form.value.note == '' && this.form.value.status == 'Không sử dụng dịch vụ') {
+  //     this.isNote = true
+  //   } else {
+  //     this.isNote = false
+  //   }
+  // }
 
   //
   onReceiveAppointments(): void {
@@ -275,31 +295,57 @@ export class DoctorComponent implements OnInit {
     // }
     if (this.form.invalid) return;
 
+    const currentService = this.form.value.service ?? [];
+    this.chooseTreatment = this.chooseTreatment.filter((item1: any) => currentService.some(item2 => item1.serviceID === item2))
+    const currentTreatment = (this.chooseTreatment as any[]).map(item => ({
+      appointmentID: this.dataAppointmentbyid.appointmentID,
+      treatmentDetailID: item.treatmentDetailID,
+      qualityChooses: item.quantity
+    }))
+    // console.log(this.chooseTreatment)
+    // console.log(currentTreatment)
+
+    const chooseService = currentService.filter(item1 => this.chooseTreatment.some((item2: any) => item1 !== item2.serviceID))
+    // console.log(chooseService)
+
     const val = {
       ...this.form.value,
+      service: chooseService,
+      chooseTreatment: currentTreatment
     };
+    this.updateServiceAppointment(id, val.status, val.service, val.note, val.chooseTreatment);
 
-    if (id && this.form.value.status != 'Không sử dụng dịch vụ') {
-      this.updateServiceAppointment(id, val.status, val.service, val.note);
-    } else {
-      this.updateServiceAppointment(id, val.status, val.service, val.note);
-    }
+    // if (id && this.form.value.status != 'Không sử dụng dịch vụ') {
+    //   // this.updateServiceAppointment(id, val.status, val.service, val.note);
+    //   console.log(1)
+    // } else {
+    //   console.log(2)
+    //   if(this.form.value.note == '') {
+    //     this.isNote = true
+    //     return
+    //   }
+    //   this.isNote = false
+    //   // this.updateServiceAppointment(id, val.status, val.service, val.note);
+    // }
   }
 
   // Update service Appointment
   updateServiceAppointment(
     id: number,
-    Status: any,
-    ListServiceID: any,
-    Notes: any
+    status: any,
+    listServiceID: any,
+    notes: any,
+    chooseServiceTreatmentDTO: any
   ) {
+    console.log(listServiceID, chooseServiceTreatmentDTO);
+
     this.sharedService
-      .updateAppointmentWithService(id, { ListServiceID, Status, Notes })
+      .updateAppointmentWithService(id, { listServiceID, status, notes, chooseServiceTreatmentDTO })
       .subscribe({
-        next: (data) => {
+        next: () => {
           this.createNotificationSuccess('');
           this.initAppointmentList();
-          if (Status === 'Đã khám' || Status === 'Không sử dụng dịch vụ')
+          if (status === 'Đã khám' || status === 'Không sử dụng dịch vụ')
             this.active = false;
         },
         error: (res) => {

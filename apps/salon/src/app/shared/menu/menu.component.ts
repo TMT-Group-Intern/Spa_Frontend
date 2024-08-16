@@ -6,6 +6,7 @@ import { IsActiveMatchOptions, RouterModule } from "@angular/router";
 import { TDSTagStatusType } from 'tds-ui/tag';
 import { NgClassType } from 'tds-ui/core/config';
 import { ReactiveFormsModule } from '@angular/forms';
+import { truncate } from 'fs';
 
 
 @Component({
@@ -27,7 +28,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 
 export class MenuComponent {
-  isHovered = false;
+  isHovered = true;
   isCollapsed = true;
   activeTab = 1;
   active = 1;
@@ -115,6 +116,11 @@ export class MenuComponent {
       "icon": "tdsi-chat-buble-fill",
       "link": '/chat-box'
     },
+    {
+      "name": "Kho Quỹ",
+      "icon": "tdsi-accounting-line",
+      "link": '/treasury'
+    },
   ]
 
   setActiveTab(event: TDSSafeAny) {
@@ -123,11 +129,13 @@ export class MenuComponent {
 
 
   onMouseEnter() {
-    this.isHovered = true;
+    this.isHovered = false;
+    this.onOpenChange(this.isHovered);
   }
 
   onMouseLeave() {
-    this.isHovered = false;
+    this.isHovered = true;
+    this.onOpenChange(this.isHovered);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
