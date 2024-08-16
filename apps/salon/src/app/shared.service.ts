@@ -67,7 +67,6 @@ export class AuthService {
     }
   }
 
-
   getChat(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + 'Chat/allMess');
   }
@@ -129,8 +128,10 @@ export class AuthService {
     return this.http.post(this.baseUrl + 'Authentication/register', val);
   }
   createAccount(userName: string, password: string, confirmPassword: string) {
-    return this.http.post<{ status: object }>(this.baseUrl + 'Authentication/createAccount',
-      { userName, password, confirmPassword });
+    return this.http.post<{ status: object }>(
+      this.baseUrl + 'Authentication/createAccount',
+      { userName, password, confirmPassword }
+    );
   }
   createAccountForEmployee(Email: string) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -290,7 +291,15 @@ export class AuthService {
   }
 
   pageEmpByPages(jobtypeID: number, pageNumber: number, pageSize: number) {
-    return this.http.get(this.baseUrl + 'User/AllEmpPage?jobTypeId=' + jobtypeID + '&pageNumber=' + pageNumber + '&pageSize=' + pageSize);
+    return this.http.get(
+      this.baseUrl +
+      'User/AllEmpPage?jobTypeId=' +
+      jobtypeID +
+      '&pageNumber=' +
+      pageNumber +
+      '&pageSize=' +
+      pageSize
+    );
   }
 
   //Delete a customer
@@ -445,27 +454,48 @@ export class AuthService {
     );
   }
 
-  changePassword(userName: string, oldPassword: string, password: string, confirmPassword: string) {
-    return this.http.post<{ flag: boolean, message: string, }>(this.baseUrl + 'Authentication/changePassword', {
-      userName: userName,
-      oldPassword: oldPassword,
-      password: password,
-      confirmPassword: confirmPassword,
-    })
+  changePassword(
+    userName: string,
+    oldPassword: string,
+    password: string,
+    confirmPassword: string
+  ) {
+    return this.http.post<{ flag: boolean; message: string }>(
+      this.baseUrl + 'Authentication/changePassword',
+      {
+        userName: userName,
+        oldPassword: oldPassword,
+        password: password,
+        confirmPassword: confirmPassword,
+      }
+    );
   }
 
-  createAdmin(lastName: string, firstName: string, gender: string, phone: string, email: string, userName: string, password: string, confirmPassword: string, dateOfBirth: string) {
-    return this.http.post<{ status: object }>(this.baseUrl + 'Authentication/createAdmin', {
-      lastName: lastName,
-      firstName: firstName,
-      phone: phone,
-      email: email,
-      userName: userName,
-      password: password,
-      confirmPassword: confirmPassword,
-      dateOfBirth: dateOfBirth,
-      gender: gender,
-    })
+  createAdmin(
+    lastName: string,
+    firstName: string,
+    gender: string,
+    phone: string,
+    email: string,
+    userName: string,
+    password: string,
+    confirmPassword: string,
+    dateOfBirth: string
+  ) {
+    return this.http.post<{ status: object }>(
+      this.baseUrl + 'Authentication/createAdmin',
+      {
+        lastName: lastName,
+        firstName: firstName,
+        phone: phone,
+        email: email,
+        userName: userName,
+        password: password,
+        confirmPassword: confirmPassword,
+        dateOfBirth: dateOfBirth,
+        gender: gender,
+      }
+    );
   }
 
   // Update Discount
@@ -559,7 +589,9 @@ export class AuthService {
   }
 
   getRolePermissions(id: number): Observable<any[]> {
-    return this.http.get<any>(this.baseUrl + 'Permission/GetPermissionsByJobType?jobTypeId=' + id);
+    return this.http.get<any>(
+      this.baseUrl + 'Permission/GetPermissionsByJobType?jobTypeId=' + id
+    );
   }
 
   // Create Bill
@@ -593,7 +625,12 @@ export class AuthService {
 
   //
   login(userName: string, password: string) {
-    return this.http.post<{ flag: boolean, mess: string, userSession: object, token: string }>(this.baseUrl + 'Authentication/login', {
+    return this.http.post<{
+      flag: boolean;
+      mess: string;
+      userSession: object;
+      token: string;
+    }>(this.baseUrl + 'Authentication/login', {
       userName: userName,
       password: password,
     });
@@ -656,5 +693,24 @@ export class AuthService {
   //Cập nhật treatment
   updateTreatmentPlan(treatmentId: number, body: any) {
     return this.http.put(this.baseUrl + 'Treatment/' + treatmentId, body);
+  }
+
+  //Xóa treatment detail
+  deleteTreatmentDetail(treatmentDetailId: number) {
+    return this.http.delete(
+      this.baseUrl + 'Treatment?treatmentDetailID=' + treatmentDetailId
+    );
+  }
+
+  //Cập nhật status
+  updateStatusTreatment(idTreatment: number, status: string) {
+    return this.http.put(
+      this.baseUrl +
+      'Treatment/UpdateStatusTreatmentCard?treatmentCardId=' +
+      idTreatment +
+      '&status=' +
+      status,
+      status
+    );
   }
 }
