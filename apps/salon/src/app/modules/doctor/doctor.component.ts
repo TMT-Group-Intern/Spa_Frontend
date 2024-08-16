@@ -162,7 +162,7 @@ export class DoctorComponent implements OnInit {
   }
 
   //
-  isCheck(event:TDSCheckboxChange) {
+  isCheck(event: TDSCheckboxChange) {
     if (event.checked) {
       this.form.patchValue({
         status: 'Không sử dụng dịch vụ',
@@ -313,10 +313,6 @@ export class DoctorComponent implements OnInit {
       service: chooseService,
       chooseTreatment: currentTreatment
     };
-
-
-
-
     this.updateServiceAppointment(id, val.status, val.service, val.note, val.chooseTreatment);
 
     // if (id && this.form.value.status != 'Không sử dụng dịch vụ') {
@@ -341,6 +337,8 @@ export class DoctorComponent implements OnInit {
     notes: any,
     chooseServiceTreatmentDTO: any
   ) {
+    console.log(listServiceID, chooseServiceTreatmentDTO);
+
     this.sharedService
       .updateAppointmentWithService(id, { listServiceID, status, notes, chooseServiceTreatmentDTO })
       .subscribe({

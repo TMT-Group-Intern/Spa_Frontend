@@ -4,6 +4,8 @@
     [data]="lstMenu"
     [inlineCollapsed]="isCollapsed"
     [showLogo]="true"
+    (mouseenter)="onMouseEnter()"
+    (mouseleave)="onMouseLeave()"
     (onOpenChange)="onOpenChange($event)"
   >
     <img src="../../assets/img/imgspa.jpg" logo-text class="h-10" />

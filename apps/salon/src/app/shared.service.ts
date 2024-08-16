@@ -695,7 +695,15 @@ export class AuthService {
     return this.http.put(this.baseUrl + 'Treatment/' + treatmentId, body);
   }
 
-  //Xóa treatment detail
+  getFinance() {
+    return this.http.get(this.baseUrl + "Report/finance")
+  }
+
+  getAllThuChi() {
+    return this.http.get(this.baseUrl + "Report/PhieuThuChi")
+    //Xóa treatment detail
+  }
+
   deleteTreatmentDetail(treatmentDetailId: number) {
     return this.http.delete(
       this.baseUrl + 'Treatment?treatmentDetailID=' + treatmentDetailId
