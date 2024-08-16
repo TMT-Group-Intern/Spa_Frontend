@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -13,6 +13,7 @@ import { TDSNotificationService } from 'tds-ui/notification';
 import { TDSModalRef } from 'tds-ui/modal';
 import { TDSSafeAny } from 'tds-ui/shared/utility';
 import { catchError, EMPTY, iif, tap } from 'rxjs';
+import { TDSFormField } from 'tds-ui/form-field';
 
 @Component({
   selector: 'frontend-modal-treatment-plan',
@@ -20,9 +21,6 @@ import { catchError, EMPTY, iif, tap } from 'rxjs';
   styleUrls: ['./modal-treatment-plan.component.scss'],
 })
 export class ModalTreatmentPlanComponent implements OnInit {
-
-  // private readonly sharesApi = inject(AuthService);
-  // private readonly notification = inject(TDSNotificationService);
   private readonly modalRef = inject(TDSModalRef);
 
   @Input() customerId?: number;
@@ -40,9 +38,13 @@ export class ModalTreatmentPlanComponent implements OnInit {
   totalDiscount = 0;
   total = 0;
 
+  isCheck?: boolean = false;
+  isIndex?: number;
+
   sessionChosen: number[] = [];
   listService: TDSSafeAny;
   listOfData: any[] = [];
+  quantity?: number;
 
   userSession: any;
   storedUserSession = localStorage.getItem('userSession');
@@ -50,25 +52,26 @@ export class ModalTreatmentPlanComponent implements OnInit {
   sessionFormGroup: any;
   options: TDSSafeAny;
 
-  customerID: any
-  startDate: any
-  createBy: any
-  notes: any
-
-  // constructor(private fb: FormBuilder) {
-  //   this.treatmentForm = this.fb.group({
-  //     customerID: [''],
-  //     startDate: format(new Date(), DATE_CONFIG.DATE_BASE),
-  //     createBy: [''],
-  //     note: [''],
-  //     treatmentDetailDTOs: this.fb.array([]),
-  //   });
-  // }
+  customerID: any;
+  startDate: any;
+  createBy: any;
+  notes: any;
+  treatmentForm: FormGroup;
 
   constructor(
-    private sharesApi : AuthService,
-    private notification : TDSNotificationService
-  ) {}
+    private fb: FormBuilder,
+    private sharesApi: AuthService,
+    private notification: TDSNotificationService
+  ) {
+    this.treatmentForm = this.fb.group({
+      customerID: [''],
+      startDate: format(new Date(), DATE_CONFIG.DATE_BASE),
+      createBy: [''],
+      note: [''],
+      status: ['Chưa xác nhận'],
+      treatmentDetailDTOs: this.fb.array([]),
+    });
+  }
 
   ngOnInit(): void {
     if (this.storedUserSession !== null) {
@@ -78,123 +81,149 @@ export class ModalTreatmentPlanComponent implements OnInit {
 
     // gọi hàm lấy danh sách dịch vụ
     this.initService();
-    // this.initTreatmentById();
+    this.initTreatmentById();
+  }
+
+  // api và patchValue dữ liệu nếu có id
+  initTreatmentById() {
     if (this.treatmentId) {
-      this.sharesApi.getTreatmentDetail(this.treatmentId).subscribe(
-        (data: any) => {
-          console.log(data.treatmentDetails)
-          // this.treatmentForm.patchValue({
-          //   customerID: data.customerID,
-          //   startDate: data.startDate,
-          //   createBy: data.createBy,
-          //   note: data.note,
-          // });
-          this.customerID = data.customerID
-          this.startDate = data.startDate
-          this.createBy = data.createBy
-          this.notes = data.notes
-          this.listOfData = data.treatmentDetails
-          this.resetTotal()
-          console.log(this.listOfData)
+      this.sharesApi
+        .getTreatmentDetail(this.treatmentId)
+        .subscribe((data: any) => {
+          this.treatmentForm.patchValue({
+            customerID: data.customerID,
+            startDate: data.startDate,
+            createBy: data.createBy,
+            status: data.status,
+            note: data.note,
+          });
+
+          data.treatmentDetails.forEach((item: any) => {
+            this.updateItem(item);
+          });
         });
     }
   }
 
-  // lấy dữ liệu treatment by id và patchValue
-  // private initTreatmentById() {
-
-  // }
-
-  getValueFromSelect(value: TDSSafeAny) {
-    const val = {
-      serviceID: value.value.serviceID,
-      serviceName: value.value.serviceName,
-      unitPrice: value.value.price,
-      quantity: 1,
-      tempPrice: value.value.price,
-      price: value.value.price,
-      amountDiscount: 0,
-      kindofDiscount: '%',
-    }
-    this.addPushData(val);
+  // lấy treatmentDetailDTOs
+  get treatmentDetailDTOs(): FormArray {
+    return this.treatmentForm.get('treatmentDetailDTOs') as FormArray;
   }
 
-  //
+  // hiển thị danh sách items dịch vụ
+  updateItem(value: TDSSafeAny) {
+    this.sessionFormGroup = this.fb.group({
+      serviceID: [value.serviceID],
+      treatmentDetailID: [value.treatmentDetailID],
+      serviceName: [
+        value.serviceName ? value.serviceName : value.service.serviceName,
+      ],
+      unitPrice: [value.service.price],
+      quantity: [value.quantity ? value.quantity : 1],
+      quantityDone: [value.quantityDone],
+      tempPrice: [value.service.price],
+      price: [value.price],
+      amountDiscount: [value.amountDiscount ? value.amountDiscount : 0],
+      kindofDiscount: [value.kindofDiscount ? value.kindofDiscount : '%'],
+    });
+    this.treatmentDetailDTOs.push(this.sessionFormGroup);
+    this.resetTotal();
+  }
+  // thêm item dịch vụ
+  addItem(value: TDSSafeAny) {
+    this.sessionFormGroup = this.fb.group({
+      serviceID: [value.serviceID],
+      serviceName: [
+        value.serviceName ? value.serviceName : value.service.serviceName,
+      ],
+      unitPrice: [value.price],
+      quantity: [value.quantity ? value.quantity : 1],
+      quantityDone: [value.quantityDone? value.quantityDone: 0],
+      tempPrice: [value.price],
+      price: [value.price],
+      amountDiscount: [value.amountDiscount ? value.amountDiscount : 0],
+      kindofDiscount: [value.kindofDiscount ? value.kindofDiscount : '%'],
+    });
+    this.treatmentDetailDTOs.push(this.sessionFormGroup);
+    this.resetTotal();
+  }
+
   onClearAll(event: MouseEvent) {
     event.stopPropagation();
-    this.inputValue = "";
-    this.listSearch = this.listService
-  }
-
-  // Kiểm tra trước khi push
-  private addPushData(value: any) {
-    this.listOfData = [...this.listOfData || [], value];
-    this.resetTotal();
-    console.log(this.listOfData)
-  }
-
-  delete(index: number) {
-    this.listOfData = this.listOfData.slice(0, index).concat(this.listOfData.slice(index + 1));
-    this.resetTotal();
+    this.inputValue = '';
+    this.listSearch = this.listService;
   }
 
   //Tính lại tổng tiền
   resetTotal() {
     this.total = 0;
-    for (const num of this.listOfData) {
+    for (const num of this.treatmentDetailDTOs.value) {
       this.total += num.price;
     }
   }
 
   // Calculate Total Price
-  price(id: number) {
-    const service = this.listOfData.find((ser) => ser.serviceID === id);
-    service.tempPrice = service.unitPrice * service.quantity;
-    this.priceAfterDiscount(id);
+  price(index: number) {
+    const service = this.treatmentDetailDTOs.controls[index];
+    const unitPrice = service.get('unitPrice')?.value;
+    const quantity = service.get('quantity')?.value;
+    service.patchValue({
+      tempPrice: unitPrice * quantity,
+    });
+    this.priceAfterDiscount(index);
   }
 
   // Calculate the price after use discount
-  priceAfterDiscount(id: number) {
-    const service = this.listOfData.find((ser) => ser.serviceID === id);
-    if (service.kindofDiscount == '%') {
-      service.price =
-        (service.tempPrice * (100 - service.amountDiscount)) / 100;
+  priceAfterDiscount(index: number) {
+    const service = this.treatmentDetailDTOs.controls[index];
+    const kindofDiscount = service.get('kindofDiscount')?.value;
+    const tempPrice = service.get('tempPrice')?.value;
+    const amountDiscount = service.get('amountDiscount')?.value;
+
+    if (kindofDiscount == '%') {
+      service.patchValue({
+        price: (tempPrice * (100 - amountDiscount)) / 100,
+      });
     } else {
-      service.price = service.tempPrice - service.amountDiscount;
+      service.patchValue({
+        price: tempPrice - amountDiscount,
+      });
     }
     this.resetTotal();
   }
 
-  //
-  activeDiscountPercentagePrice(id: number) {
-    const service = this.listOfData.find((ser) => ser.serviceID === id);
-    service.kindofDiscount = '%';
-    service.amountDiscount = 0;
-    service.price = service.tempPrice;
+  // Lấy id và loại giảm giá % hoặc VND
+  updateTypeDiscount(index: number, type: string) {
+    const serviceCur = this.treatmentDetailDTOs.controls[index];
+    serviceCur.patchValue({
+      amountDiscount: 0,
+      kindofDiscount: type,
+    });
     this.resetTotal();
   }
 
-  //
-  activeDiscountVNDPrice(id: number) {
-    const service = this.listOfData.find((ser) => ser.serviceID === id);
-    service.kindofDiscount = 'VND';
-    service.amountDiscount = 0;
-    service.price = service.tempPrice;
-    this.resetTotal();
+  // Xóa 1 item dịch vụ
+  deleteDetailTreatment(index: number): void {
+    const serviceCur = this.treatmentDetailDTOs.controls[index];
+    const idTreatmentDetail = serviceCur.get('treatmentDetailID')?.value;
+    this.sharesApi.deleteTreatmentDetail(idTreatmentDetail).pipe(
+      tap(() => {
+        this.createNotificationSuccess('Thành công');
+        this.treatmentDetailDTOs.removeAt(index);
+        this.resetTotal();
+      }),
+      catchError(() => {
+        this.createNotificationError('Thất bại');
+        return EMPTY;
+      })
+    ).subscribe();
   }
 
   onChangeAutocomplete(data: any): void {
-    console.log(data.data);
-    this.sharesApi.searchService(data.data).subscribe(
-      (res: any) => {
-        // console.log(res.service)
-        this.listSearch = res.services
-        // console.log(this.listSearch)
-      }
-    )
+    this.sharesApi.searchService(data.data).subscribe((res: any) => {
+      this.listSearch = res.services;
+    });
   }
-
-
 
   // lấy danh sách dịch vụ
   initService() {
@@ -203,72 +232,77 @@ export class ModalTreatmentPlanComponent implements OnInit {
     });
   }
   enter() {
-    // if (this.treatmentForm.invalid) return;
-    // if (this.treatmentForm.value) {
-      // const val = this.treatmentForm.value;
+    if (this.treatmentForm.invalid) return;
+    if (this.treatmentForm.value) {
+      const val = this.treatmentForm.value;
       const body: any = {
-        //
-        TreatmentDetailDTOs: this.listOfData,
+        ...val,
         createBy: this.userSession.user.name,
         customerID: this.customerId,
       };
-      this.submit$(this.treatmentId as number, body).subscribe();
-      // if (this.treatmentId) {
-      // } else {
-      //   this.add(body);
-      // }
-    // }
+      // this.submit$(this.treatmentId as number, body).subscribe();
+      if (this.treatmentId) {
+        this.updateTreatment(this.treatmentId, body);
+      } else {
+        this.addTreatment(body);
+      }
+    }
+  }
+  // thêm lộ trình
+  addTreatment(body: any) {
+    this.sharesApi.addTreatmentPlan(body).subscribe({
+      next: (res) => {
+        this.createNotificationSuccess('Thành công');
+        this.modalRef.destroy(res || true);
+      },
+      error: (res) => {
+        this.createNotificationError(res.error.message);
+      },
+    });
+  }
+  // sửa lộ trình
+  updateTreatment(id: number, body: any) {
+    console.log(body);
+    return this.sharesApi.updateTreatmentPlan(id, body).subscribe({
+      next: (res) => {
+        this.createNotificationSuccess('Thành công');
+        this.modalRef.destroy(res || true);
+      },
+      error: (res) => {
+        this.createNotificationError(res.error.message);
+      },
+    });
   }
 
-  // add(body: any) {
-  //   this.sharesApi.addTreatmentPlan(body).subscribe({
-  //     next: (res) => {
-  //       this.createNotificationSuccess('Thành công');
-  //       this.modalRef.destroy(res || true);
-  //     },
-  //     error: (res) => {
-  //       this.createNotificationError(res.error.message);
-  //     },
-  //   });
-  // }
-
-  // updateTreatment(id: number, body: any) {
-  //  return this.sharesApi.updateTreatmentPlan(id, body).subscribe({
-  //     next: (res) => {
-  //       this.createNotificationSuccess('Thành công');
-  //       this.modalRef.destroy(res || true);
-  //     },
-  //     error: (res) => {
-  //       this.createNotificationError(res.error.message);
-  //     },
-  //   });
-  // }
-
   submit$(id: number, body: any) {
-    return iif(() => (id === undefined), this.sharesApi.addTreatmentPlan(body), this.sharesApi.updateTreatmentPlan(id, body)).pipe(
+    return iif(
+      () => id === undefined,
+      this.sharesApi.addTreatmentPlan(body),
+      this.sharesApi.updateTreatmentPlan(id, body)
+    ).pipe(
       tap((res) => {
         this.createNotificationSuccess('Thành công');
         this.modalRef.destroy(res || true);
       }),
       catchError((res) => {
         this.createNotificationError(res.error.message);
-        return EMPTY
+        return EMPTY;
       })
-    )
+    );
   }
 
   // Success Notification
   createNotificationSuccess(content: any): void {
-    this.notification.success('', content);
+    this.notification.success(content,'' );
   }
 
   // Error Notification
   createNotificationError(content: any): void {
-    this.notification.error('', content);
+    this.notification.error(content,'');
   }
 
-  onChange(e: TDSSafeAny) {
-    const total = this.totalService;
-    this.totalService = total * e;
+  removeItem(index: number) {
+    this.treatmentDetailDTOs.removeAt(index);
+    this.resetTotal();
   }
 }
