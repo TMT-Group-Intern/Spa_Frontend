@@ -3,32 +3,58 @@
     <div>
       <p class="mb-2 grid grid-cols-9 gap-4">
         <strong class="col-span-2">Khách hàng:</strong>
-        <strong class="col-span-7">{{ infoAppoint?.customer.lastName | uppercase }} {{ infoAppoint?.customer.firstName |
-          uppercase }}</strong>
+        <strong class="col-span-7"
+          >{{ infoAppoint?.customer.lastName | uppercase }}
+          {{ infoAppoint?.customer.firstName | uppercase }}</strong
+        >
       </p>
       <p class="mb-2 grid grid-cols-9 gap-4">
         <strong class="col-span-2">Ngày:</strong>
         <span class="col-span-7">{{
           infoAppoint?.appointmentDate | date : 'dd/MM/YYYY'
-          }}</span>
+        }}</span>
       </p>
       <p class="mb-6 grid grid-cols-9 gap-4">
         <strong class="col-span-2">Giờ:</strong>
         <span class="col-span-7">{{
           infoAppoint?.appointmentDate | date : 'HH:mm'
-          }}</span>
+        }}</span>
+      </p>
+      <p class="mb-6 grid grid-cols-9 gap-4">
+        <strong class="col-span-2">Số hóa đơn:</strong>
+        <span class="col-span-7">{{ billCode }}</span>
       </p>
     </div>
     <div class="h-full flex justify-end items-start">
-      <tds-tag *ngIf="billStatus === 'Chưa thanh toán'" class="rounded-full" status='custom'
-        [tdsStyle]="{background:'#7f2ed1'}">{{ billStatus }}</tds-tag>
-      <tds-tag *ngIf="billStatus === 'Thanh toán 1 phần'" class="rounded-full" status="primary">{{ billStatus }}</tds-tag>
-      <img class="mr-32" *ngIf="billStatus === 'Thanh toán hoàn tất'" src="../../../assets/img/paid.png"
-        alt="Paid image" width="130px">
+      <tds-tag
+        *ngIf="billStatus === 'Chưa thanh toán'"
+        class="rounded-full"
+        status="custom"
+        [tdsStyle]="{ background: '#7f2ed1' }"
+        >{{ billStatus }}</tds-tag
+      >
+      <tds-tag
+        *ngIf="billStatus === 'Thanh toán 1 phần'"
+        class="rounded-full"
+        status="primary"
+        >{{ billStatus }}</tds-tag
+      >
+      <img
+        class="mr-32"
+        *ngIf="billStatus === 'Thanh toán hoàn tất'"
+        src="../../../assets/img/paid.png"
+        alt="Paid image"
+        width="130px"
+      />
     </div>
   </div>
 
-  <tds-table #appointmentTable [listData]="service" [showPagination]="false" [title]="'Hóa đơn'">
+  <tds-table
+    #appointmentTable
+    [listData]="service"
+    [showPagination]="false"
+    [title]="'Hóa đơn'"
+  >
     <thead>
       <tr>
         <th width="25%">Tên</th>
@@ -51,7 +77,8 @@
             {{ data.unitPrice | tdsFormatNumber }}
           </td>
           <td [align]="'right'">
-            {{ data.amountDiscount | tdsFormatNumber }}<span *ngIf="data.kindofDiscount === '%'">%</span>
+            {{ data.amountDiscount | tdsFormatNumber
+            }}<span *ngIf="data.kindofDiscount === '%'">%</span>
           </td>
           <td [align]="'right'">
             {{ data.totalPrice | tdsFormatNumber }}
@@ -70,15 +97,18 @@
     <div>
       <!-- Total -->
       <p class="grid grid-cols-5 gap-3 py-2">
-        <span class="col-span-3">Tổng tiền:</span> <span class="col-span-2 flex justify-end">{{ total |
-          tdsFormatNumber }}</span>
+        <span class="col-span-3">Tổng tiền:</span>
+        <span class="col-span-2 flex justify-end">{{
+          total | tdsFormatNumber
+        }}</span>
       </p>
 
       <!-- Discount -->
       <div class="grid grid-cols-6 gap-3 py-2">
         <p class="col-span-2 flex items-center"><span>Giảm giá:</span></p>
         <p class="col-span-4 flex justify-end">
-          {{ amountDiscount | tdsFormatNumber }} <span *ngIf="kindofDiscount === '%'">%</span>
+          {{ amountDiscount | tdsFormatNumber }}
+          <span *ngIf="kindofDiscount === '%'">%</span>
         </p>
       </div>
 
@@ -93,13 +123,20 @@
       <!-- Final Total -->
       <p class="grid grid-cols-5 gap-3 py-2">
         <span class="col-span-3">Thành tiền:</span>
-        <span class="col-span-2 flex justify-end">{{ totalAmount | tdsFormatNumber }}</span>
+        <span class="col-span-2 flex justify-end">{{
+          totalAmount | tdsFormatNumber
+        }}</span>
       </p>
     </div>
   </div>
 
-  <tds-table *ngIf="billStatus !== 'Chưa thanh toán' === true; else nodata" #paymentTable [listData]="paymentByBill"
-    [showPagination]="false" [title]="'Lịch sử thanh toán'">
+  <tds-table
+    *ngIf="(billStatus !== 'Chưa thanh toán') === true; else nodata"
+    #paymentTable
+    [listData]="paymentByBill"
+    [showPagination]="false"
+    [title]="'Lịch sử thanh toán'"
+  >
     <thead>
       <tr>
         <th>Ngày thanh toán</th>
@@ -112,8 +149,8 @@
     <tbody>
       <ng-template ngFor let-data [ngForOf]="paymentTable.data">
         <tr>
-          <td>{{ data.date | date:'dd/MM/YYYY' }}</td>
-          <td>{{ data.date | date:'hh:mm' }}</td>
+          <td>{{ data.date | date : 'dd/MM/YYYY' }}</td>
+          <td>{{ data.date | date : 'hh:mm' }}</td>
           <td>
             {{ data.amount | tdsFormatNumber }}
           </td>
@@ -127,50 +164,81 @@
 
   <ng-template #nodata>
     <div>
-      <span class="flex justify-center text-sm font-bold text-error-500">Chưa có lịch sử thanh toán!</span>
+      <span class="flex justify-center text-sm font-bold text-error-500"
+        >Chưa có lịch sử thanh toán!</span
+      >
     </div>
   </ng-template>
 
   <div class="grid grid-cols-5 gap-16 pt-4">
-    <div class="col-span-3">
-
-    </div>
+    <div class="col-span-3"></div>
 
     <div class="col-span-2">
-
-      <div class="grid grid-cols-5 gap-3 py-2" *ngIf="billStatus === 'Thanh toán hoàn tất'">
+      <div
+        class="grid grid-cols-5 gap-3 py-2"
+        *ngIf="billStatus === 'Thanh toán hoàn tất'"
+      >
         <p class="col-span-2"><strong>Khách hàng đã TT:</strong></p>
-        <p class="col-span-3 flex justify-end">{{ amountInvoiced | tdsFormatNumber }}</p>
+        <p class="col-span-3 flex justify-end">
+          {{ amountInvoiced | tdsFormatNumber }}
+        </p>
       </div>
 
-      <div class="grid grid-cols-5 gap-3 py-2" *ngIf="billStatus !== 'Thanh toán hoàn tất'">
+      <div
+        class="grid grid-cols-5 gap-3 py-2"
+        *ngIf="billStatus !== 'Thanh toán hoàn tất'"
+      >
         <p class="col-span-3">
-          <strong *ngIf="billStatus !== 'Chưa thanh toán'">Khách hàng tiếp tục TT:</strong>
-          <strong *ngIf="billStatus === 'Chưa thanh toán'">Khách hàng thanh toán:</strong>
+          <strong *ngIf="billStatus !== 'Chưa thanh toán'"
+            >Khách hàng tiếp tục TT:</strong
+          >
+          <strong *ngIf="billStatus === 'Chưa thanh toán'"
+            >Khách hàng thanh toán:</strong
+          >
         </p>
         <tds-form-field class="col-span-2">
-          <tds-input-number class="pr-2" [min]="0" [max]="amountResidual" [step]="1" [tdsTextAlign]="'right'"
-            [hiddenIcon]="true" [(ngModel)]="amountInvoicedContinue" (ngModelChange)="updateAmountResidual()">
+          <tds-input-number
+            class="pr-2"
+            [min]="0"
+            [max]="amountResidual"
+            [step]="1"
+            [tdsTextAlign]="'right'"
+            [hiddenIcon]="true"
+            [(ngModel)]="amountInvoicedContinue"
+            (ngModelChange)="updateAmountResidual()"
+          >
           </tds-input-number>
         </tds-form-field>
       </div>
 
       <p class="grid grid-cols-5 gap-3 py-2">
         <strong class="col-span-2">Số tiền còn lại:</strong>
-        <span class="col-span-3 flex justify-end">{{ amountResidualContinue | tdsFormatNumber }}</span>
+        <span class="col-span-3 flex justify-end">{{
+          amountResidualContinue | tdsFormatNumber
+        }}</span>
       </p>
 
-      <div class="grid grid-cols-7 gap-3 py-2" *ngIf="billStatus !== 'Thanh toán hoàn tất'">
+      <div
+        class="grid grid-cols-7 gap-3 py-2"
+        *ngIf="billStatus !== 'Thanh toán hoàn tất'"
+      >
         <p class="col-span-3"><strong>Phương thức TT:</strong></p>
-        <tds-radio-group [(ngModel)]="paymentMethod" class="col-span-4 flex justify-between">
+        <tds-radio-group
+          [(ngModel)]="paymentMethod"
+          class="col-span-4 flex justify-between"
+        >
           <label tds-radio value="Tiền mặt">Tiền mặt</label>
           <label tds-radio value="Chuyển khoản">Chuyển khoản</label>
         </tds-radio-group>
       </div>
 
       <div class="flex justify-center">
-        <img *ngIf="paymentMethod === 'Chuyển khoản'" src="../../../../assets/img/1721276662570.png" alt="QR Code"
-          width="225px">
+        <img
+          *ngIf="paymentMethod === 'Chuyển khoản'"
+          src="../../../../assets/img/1721276662570.png"
+          alt="QR Code"
+          width="225px"
+        />
       </div>
     </div>
   </div>
@@ -178,12 +246,23 @@
 
 <ng-container *tdsModalFooter>
   <div class="p-4" *ngIf="billStatus !== 'Thanh toán hoàn tất'">
-    <button tds-button form="idform" (click)="save()" color="success" class="w-full rounded">
+    <button
+      tds-button
+      form="idform"
+      (click)="save()"
+      color="success"
+      class="w-full rounded"
+    >
       Xác nhận thanh toán
     </button>
   </div>
   <div class="p-4" *ngIf="billStatus === 'Thanh toán hoàn tất'">
-    <button tds-button (click)="exit()" color="custom" class="w-full rounded text-white bg-gray-400 hover:bg-gray-500">
+    <button
+      tds-button
+      (click)="exit()"
+      color="custom"
+      class="w-full rounded text-white bg-gray-400 hover:bg-gray-500"
+    >
       Thoát
     </button>
   </div>

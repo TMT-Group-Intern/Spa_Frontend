@@ -6,6 +6,7 @@ import { IsActiveMatchOptions, RouterModule } from "@angular/router";
 import { TDSTagStatusType } from 'tds-ui/tag';
 import { NgClassType } from 'tds-ui/core/config';
 import { ReactiveFormsModule } from '@angular/forms';
+import { truncate } from 'fs';
 
 
 @Component({
@@ -27,7 +28,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 
 export class MenuComponent {
-  isHovered = false;
+  isHovered = true;
   isCollapsed = true;
   activeTab = 1;
   active = 1;
@@ -91,21 +92,26 @@ export class MenuComponent {
     {
       "name": "Nhóm quyền",
       "icon": "tdsi-id-card-fill",
-            "listChild": [
+      "listChild": [
         {
-            "name": "Tài khoản",
-            "link": '/account'
+          "name": "Tài khoản",
+          "link": '/account'
         },
         {
-            "name": "Nhóm quyền",
-            "link": '/role'
+          "name": "Nhóm quyền",
+          "link": '/role'
         },
-    ]
+      ]
     },
     {
       "name": "Chat box",
       "icon": "tdsi-chat-buble-fill",
       "link": '/chat-box'
+    },
+    {
+      "name": "Kho Quỹ",
+      "icon": "tdsi-accounting-line",
+      "link": '/treasury'
     },
   ]
 
@@ -115,11 +121,13 @@ export class MenuComponent {
 
 
   onMouseEnter() {
-    this.isHovered = true;
+    this.isHovered = false;
+    this.onOpenChange(this.isHovered);
   }
 
   onMouseLeave() {
-    this.isHovered = false;
+    this.isHovered = true;
+    this.onOpenChange(this.isHovered);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
