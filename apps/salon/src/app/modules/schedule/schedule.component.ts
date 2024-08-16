@@ -112,7 +112,6 @@ export class SchedulesComponent implements OnInit {
       footer: null,
       size:'lg',
       componentParams:{
-        // formatTime: format(new Date(date.date as Date),DATE_CONFIG.DATE_BASE )
       }
     })
     modal.afterClose.asObservable().subscribe(
@@ -131,22 +130,6 @@ export class SchedulesComponent implements OnInit {
   onModelChange(e: TDSSafeAny) {
     this.mode = e;
   }
-
-  // onSelectDay(date: Date) {
-  //   console.log(3);
-  //   this.lstData = [
-  //     ...this.lstData,
-  //     {
-  //       start: setHours(date, 8),
-  //       end: setHours(date, 17),
-  //       data: {
-  //         name: this.getListName()[Math.floor(Math.random() * 22) + 0],
-  //         doctor: this.getListName()[Math.floor(Math.random() * 22) + 0],
-  //         status: this.getStatus()[Math.floor(Math.random() * 3)],
-  //       },
-  //     },
-  //   ];
-  // }
 
   getMonthData(date: Date, event: TDSSafeAny): boolean {
     return isSameDay(date, event.start);

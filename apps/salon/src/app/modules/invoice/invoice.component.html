@@ -1,48 +1,104 @@
-<div class="flex flex-col items-center space-y-4" id="idInvoice">
-  <img class="w-24 h-24 mt-4" src="./assets/img/default.svg" alt="Logo">
-  <h2 class="text-xl font-bold">Hà Nội</h2>
-  <span class="text-center">
-    111 Le Loi, Phường Đức Thắng, Quận Từ Bắc Liêm, Thành phố Hà Nội
-  </span>
-  <span class="text-center">0123456789</span>
-</div>
-
-<div class="flex flex-col items-center mt-8">
-  <span class="text-lg font-bold mb-4">Biên lai thanh toán</span>
-  <div class="items-center flex flex-col w-full max-w-4xl">
-    <div class="flex w-[50%]">
-      <div class="items-start w-[250px]  py-1 text-left text-gray-500 tracking-wider">Ngày thanh toán</div>
-      <div class="items-start  py-1  text-left whitespace-nowrap">02/07/2024</div>
-    </div>
-    <div class="flex w-[50%]">
-      <div class="w-[250px] items-start   py-1 text-left text-gray-500 tracking-wider">Nhân viên</div>
-      <div class=" py-1 items-start  text-left whitespace-nowrap">Nguyễn Tuấn Vũ</div>
-    </div>
-    <div class="flex w-[50%]">
-      <div class="w-[250px] items-start  py-1 text-left text-gray-500 tracking-wider">Khách hàng</div>
-      <div class=" py-1 items-start  text-left whitespace-nowrap">Nguyên Cao</div>
-    </div>
-    <div class="flex w-[50%]">
-      <div class="w-[250px] items-start  py-1 text-left text-gray-500 tracking-wider">Điện thoại</div>
-      <div class=" py-1 items-start text-left whitespace-nowrap">1234455412</div>
-    </div>
-    <div class="flex w-[50%]">
-      <div class="w-[250px] items-start  py-1 text-left text-gray-500 tracking-wider">Địa chỉ</div>
-      <div class=" py-1 items-start text-left whitespace-nowrap"></div>
-    </div>
-    <div class="flex w-[50%]">
-      <div class="w-[250px] items-start  py-1 text-left text-gray-500 tracking-wider">Dịch vụ đã chọn:</div>
-    </div>
-    <div class="flex w-[50%] border-b-tds-border-width-s border-solid">
-      <div class="w-[250px] items-start  py-1 text-left text-gray-500 tracking-wider">Trị mụn</div>
-      <div class=" py-1 items-start text-left whitespace-nowrap">100.000</div>
-    </div>
-    <div class="flex w-[50%]">
-      <div class="w-[250px] items-start  py-1 text-left text-gray-500 tracking-wider">Tổng tiền</div>
-      <div class=" py-1 items-start text-left whitespace-nowrap">100.000</div>
+<div class="print-only">
+  <div class="flex flex-col items-center space-y-4" id="idInvoice">
+    <img class="h-32 w-32 mt-4" src="../../../assets/img/imgspa.jpg" alt="Logo">
+    <h2 class="text-3xl font-bold">{{branchInfo?.branchName}}</h2>
+    <span class="text-center text-xl">
+      {{branchInfo?.branchAddress}}
+    </span>
+    <span class="text-center text-xl">{{branchInfo?.branchPhone}}</span>
+  </div>
+  <div class="flex flex-col items-center mt-8">
+    <span class="text-3xl font-bold mb-4">Hóa đơn thanh toán</span>
+  </div>
+  <div class="flex flex-col items-center mt-4 text-xl">
+    <div class="items-center flex flex-col w-full max-w-4xl">
+      <div class="flex w-full justify-between">
+        <div class="flex items-center w-[50%]">
+          <div class="w-[150px] py-1 text-left text-black-500 tracking-wider font-bold">Hóa đơn:</div>
+          <div class="py-1 text-left whitespace-nowrap">{{paymentInfo?.paymentID}}</div>
+        </div>
+        <div class="flex items-center w-1/2">
+          <div class="w-[250px] py-1 text-left text-black-500 tracking-wider font-bold">Ngày tạo:</div>
+          <div class="py-1 text-left whitespace-nowrap">{{ billInfo?.date | date:'dd/MM/yyyy' }}</div>
+        </div>
+      </div>
+      <div class="flex w-full justify-between">
+        <div class="flex items-center w-1/2">
+          <div class="w-[150px] py-1 text-left text-black-500 tracking-wider font-bold">Nhân viên:</div>
+          <div class="py-1 text-left whitespace-nowrap">{{employee}}</div>
+        </div>
+        <div class="flex items-center w-1/2">
+          <div class="w-[250px] py-1 text-left text-black-500 tracking-wider font-bold">Ngày thanh toán:</div>
+          <div class="py-1 text-left whitespace-nowrap">{{ paymentInfo?.paymentDate | date:'dd/MM/yyyy' }}</div>
+        </div>
+      </div>
+      <div class="flex w-full justify-between">
+        <div class="flex items-center w-1/2">
+          <div class="w-[150px] py-1 text-left text-black-500 tracking-wider font-bold">Khách hàng:</div>
+          <div class="py-1 text-left whitespace-nowrap">{{billInfo?.customer?.lastName}}
+            {{billInfo?.customer?.firstName}}</div>
+        </div>
+        <div class="flex items-center w-1/2">
+          <div class="w-[250px] py-1 text-left text-black-500 tracking-wider font-bold">Điện thoại:</div>
+          <div class="py-1 text-left whitespace-nowrap">{{billInfo?.customer?.phone}}</div>
+        </div>
+      </div>
+      <div class="flex w-full justify-between">
+        <div class="flex items-center w-1/2">
+          <div class="w-[250px] py-1 text-left text-black-500 tracking-wider font-bold">Dịch vụ đã chọn:</div>
+        </div>
+      </div>
+      <div class="flex w-full border-b-tds-border-width-m border-solid"></div>
+      <div class="mt-2">
+        <tds-table [hideOnSinglePage]="true" #table [listData]="listServices" tableLayout="fixed" [bordered]="true">
+          <thead>
+            <tr>
+              <th class="text-xl" width="">Dịch vụ</th>
+              <th class="text-xl" width="">Đơn giá</th>
+              <th class="text-xl" width="10%">SL</th>
+              <th class="text-xl" width="">Giảm giá</th>
+              <th class="text-xl" width="">Thành tiền</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let data of listServices">
+              <tr>
+                <td>{{ data.serviceName }}</td>
+                <td>{{ data.unitPrice | tdsFormatNumber }}</td>
+                <td>{{ data.quantity }}</td>
+                <td>{{ data.amountDiscount | tdsFormatNumber }}<span *ngIf="data.kindofDiscount === '%'">%</span></td>
+                <td>{{ data.totalPrice | tdsFormatNumber }}</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </tds-table>
+      </div>
+      <div class="flex w-full border-b-tds-border-width-m border-solid"></div>
+      <div class="flex w-full justify-between">
+        <div class="flex items-center w-1/2">
+          <div class="w-[250px] py-1 text-left text-black-500 tracking-wider font-bold">Tổng thành tiền:</div>
+          <div class="py-1 text-left whitespace-nowrap">{{ total | tdsFormatNumber }}</div>
+        </div>
+        <div class="flex items-center w-1/2">
+          <div class="w-[250px] py-1 text-left text-black-500 tracking-wider font-bold">Giảm giá trên hóa đơn:</div>
+          <div class="py-1 text-left whitespace-nowrap">{{billInfo?.amountDiscount | tdsFormatNumber}}{{billInfo?.kindofDiscount}}</div>
+        </div>
+      </div>
+      <div class="flex w-full justify-between">
+        <div class="flex items-center w-1/2">
+          <div class="w-[250px] py-1 text-left text-black-500 tracking-wider font-bold">Số tiền cần thanh toán:</div>
+          <div class="py-1 text-left whitespace-nowrap">{{billInfo?.totalAmount | tdsFormatNumber}}</div>
+        </div>
+        <div class="flex items-center w-1/2">
+          <div class="w-[250px] py-1 text-left text-black-500 tracking-wider font-bold">Số tiền đã thanh toán:</div>
+          <div class="py-1 text-left whitespace-nowrap">{{ amountInvoiced | tdsFormatNumber }}</div>
+        </div>
+      </div>
     </div>
   </div>
-
   <ng-container *tdsModalFooter>
-    <button tds-button form="idInvoice">In hóa đơn</button>
+    <div class="p-4 flex flex-row-reverse">
+      <button tds-button form="idInvoice" (click)="printInvoice()" color="success" class="w-[100px] rounded">In hóa
+        đơn</button>
+    </div>
   </ng-container>

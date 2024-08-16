@@ -42,10 +42,10 @@ export class UserProfileComponent implements OnChanges {
   fallback = './assets/img/default.svg';
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(this.customerId && changes['customerId']?.currentValue){
+    if (this.customerId && changes['customerId']?.currentValue) {
       this.getHistory(this.customerId as number);
     }
-    if(changes['checkChange']?.currentValue ){
+    if (changes['checkChange']?.currentValue) {
       this.getHistory(this.customerId as number);
     }
   }

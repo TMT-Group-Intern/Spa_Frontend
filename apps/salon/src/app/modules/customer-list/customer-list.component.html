@@ -2,111 +2,50 @@
   <div class="flex items-center pt-2">
     <div class="flex items-center">
       <tds-form-field class="ml-2 w-[250px]">
-        <input
-          tdsInput
-          class="text-neutral-1-600"
-          placeholder="search.."
-          autocomplete="off"
-          [(ngModel)]="searchText"
-          (ngModelChange)="_change$.next($event)"
-        />
-        <span tdsPrefix
-          ><i class="text-neutral-1-600 tdsi-search-fill"></i
-        ></span>
+        <input tdsInput class="text-neutral-1-600" placeholder="search.." autocomplete="off" [(ngModel)]="searchText"
+          (ngModelChange)="_change$.next($event)" />
+        <span tdsPrefix><i class="text-neutral-1-600 tdsi-search-fill"></i></span>
       </tds-form-field>
     </div>
-    <button
-      tds-button-icon
-      (click)="createCustomer()"
-      class="m-2 p-2 rounded-full"
-      color="success"
-      tds-tooltip
-      tooltipTitle="New Customer"
-    >
+    <button tds-button-icon (click)="createCustomer()" class="m-2 p-2 rounded-full" color="success" tds-tooltip
+      tooltipTitle="New Customer">
       <span class="flex items-center">
         <i class="tdsi-plus-fill"></i>
       </span>
     </button>
   </div>
 
-  <tds-data-table
-    class="p-2"
-    [tdsRounded]="true"
-    [tdsShowPagination]="false"
-    [tdsFrontPagination]="false"
-    [tdsData]="customerOfPage"
-    [tdsShowSizeChanger]="true"
-    [tdsPageSize]="20"
-    [tdsBordered]="true"
-    (tdsClickRow)="customerDetail($event)"
-  >
-    <tds-data-table-column
-      [tdsField]="'customerCode'"
-      [tdsTitle]="'Mã số'"
-      tdsWidth="8%"
-      [tdsDataType]="'text'"
-    >
+  <tds-data-table class="p-2" [tdsRounded]="true" [tdsShowPagination]="false" [tdsFrontPagination]="false"
+    [tdsData]="customerOfPage" [tdsShowSizeChanger]="true" [tdsPageSize]="20" [tdsBordered]="true"
+    (tdsClickRow)="customerDetail($event)">
+    <tds-data-table-column [tdsField]="'customerCode'" [tdsTitle]="'Mã số'" tdsWidth="8%" [tdsDataType]="'text'">
     </tds-data-table-column>
 
-    <tds-data-table-column
-      [tdsField]="'lastName'"
-      [tdsTitle]="'Họ'"
-      tdsWidth="20%"
-      [tdsDataType]="'text'"
-    ></tds-data-table-column>
+    <tds-data-table-column [tdsField]="'lastName'" [tdsTitle]="'Họ'" tdsWidth="20%"
+      [tdsDataType]="'text'"></tds-data-table-column>
 
-    <tds-data-table-column
-      [tdsField]="'firstName'"
-      [tdsTitle]="'Tên'"
-      tdsWidth="20%"
-      [tdsDataType]="'text'"
-    ></tds-data-table-column>
+    <tds-data-table-column [tdsField]="'firstName'" [tdsTitle]="'Tên'" tdsWidth="20%"
+      [tdsDataType]="'text'"></tds-data-table-column>
 
-    <tds-data-table-column
-      [tdsField]="'phone'"
-      [tdsTitle]="'Số điện thoại'"
-      tdsWidth="15%"
-      [tdsDataType]="'text'"
-    ></tds-data-table-column>
+    <tds-data-table-column [tdsField]="'phone'" [tdsTitle]="'Số điện thoại'" tdsWidth="15%"
+      [tdsDataType]="'text'"></tds-data-table-column>
 
-    <tds-data-table-column
-      [tdsField]="'gender'"
-      [tdsTitle]="'Giới tính'"
-      tdsWidth="10%"
-      [tdsDataType]="'text'"
-    ></tds-data-table-column>
+    <tds-data-table-column [tdsField]="'gender'" [tdsTitle]="'Giới tính'" tdsWidth="10%"
+      [tdsDataType]="'text'"></tds-data-table-column>
 
-    <tds-data-table-column
-      [tdsField]="'dateOfBirth'"
-      [tdsTitle]="'Ngày sinh'"
-      tdsWidth="9%"
-      [tdsDataType]="'date'"
-      [tdsFormat]="'dd/MM/YYYY'"
-    >
+    <tds-data-table-column [tdsField]="'dateOfBirth'" [tdsTitle]="'Ngày sinh'" tdsWidth="9%" [tdsDataType]="'date'"
+      [tdsFormat]="'dd/MM/YYYY'">
     </tds-data-table-column>
 
-    <tds-data-table-column
-      tdsWidth="9%"
-      [tdsTitle]="'Tùy chọn'"
-      [tdsContent]="commandTpl"
-      [tdsColumnType]="'command'"
-    >
+    <tds-data-table-column tdsWidth="9%" [tdsTitle]="'Tùy chọn'" [tdsContent]="commandTpl" [tdsColumnType]="'command'">
       <ng-template #commandTpl let-dataRow>
         <div class="flex justify-around">
-          <button
-            tds-button-flat-icon
-            color="custom"
-            class="text-slate-500 hover:text-secondary-1"
-            (click)="onEditCustomer(dataRow.customerID)"
-          >
+          <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-secondary-1"
+            (click)="onEditCustomer(dataRow.customerID)">
             <i class="tdsi-edit-fill"></i>
           </button>
-          <button
-            tds-button-flat-icon
-            color="custom"
-            class="text-slate-500 hover:text-red-500"
-            (click)="deleteCustomer(dataRow.customerID)"
-          >
+          <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-red-500"
+            (click)="deleteCustomer(dataRow.customerID)">
             <i class="tdsi-trash-fill"></i>
           </button>
         </div>
@@ -115,20 +54,10 @@
   </tds-data-table>
 
   <div class="w-full flex items-center p-2">
-    <tds-pagination
-      class="w-full"
-      [pageSize]="pageSize"
-      [pageIndex]="pageNumber"
-      [total]="totalItemsCustomers"
-      [pageSizeOptions]="[5, 10, 15, 20]"
-      [showTotal]="rangeTemplate"
-      showSizeChanger
-      [showRefresh]="true"
-      (pageIndexChange)="changeNumberPage($event)"
-      (pageSizeChange)="changeSizePage($event)"
-      (clickRefresh)="onRefresh($event)"
-      [bordered]="true"
-    >
+    <tds-pagination class="w-full" [pageSize]="pageSize" [pageIndex]="pageNumber" [total]="totalItemsCustomers"
+      [pageSizeOptions]="[5, 10, 15, 20]" [showTotal]="rangeTemplate" showSizeChanger [showRefresh]="true"
+      (pageIndexChange)="changeNumberPage($event)" (pageSizeChange)="changeSizePage($event)"
+      (clickRefresh)="onRefresh($event)" [bordered]="true">
     </tds-pagination>
     <ng-template #rangeTemplate let-range="range" let-total>
       {{ range[0] }}-{{ range[1] }} of {{ total }}

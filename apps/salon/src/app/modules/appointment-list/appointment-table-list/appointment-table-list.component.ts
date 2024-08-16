@@ -36,36 +36,29 @@ export class AppointmentTableListComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
-      changes['boolean$']?.currentValue === true ||
-      changes['boolean$']?.currentValue === false
-    ) {
-      this.initListAppointment();
-    }
-
-    if (
       changes['search']?.currentValue ||
-      changes['search']?.currentValue === ''
-    ) {
-      this.checkChanges();
-    }
-    if (
+      changes['search']?.currentValue === ''||
       changes['startDay']?.currentValue ||
       changes['endDay']?.currentValue ||
       changes['tabCurStr']?.currentValue ||
-      changes['branchId']?.currentValue
-    ) {
-      this.initListAppointment();
+      changes['branchId']?.currentValue ||
+      changes['boolean$']?.currentValue === true ||
+      changes['boolean$']?.currentValue === false
+    ){
+      this.checkChanges();
     }
   }
 
   // kiểm tra nội dung tìm kiếm
-  checkChanges():void{
+  checkChanges(): void {
     if (this.search == '') {
       this.initListAppointment();
     } else {
       if (this.tabCurStr === 'Tất cả') {
+        console.log(this.tabCurStr)
         this.searchAppointment(this.search as string, '');
       } else {
+        console.log(this.tabCurStr)
         this.searchAppointment(this.search as string, this.tabCurStr);
       }
     }
@@ -73,16 +66,16 @@ export class AppointmentTableListComponent implements OnChanges {
   // Kiểm tra trạng thái để chạy vào hàm thích hợp
   initListAppointment(): void {
     if (this.tabCurStr === 'Tất cả') {
-      this.initAppointmentbyDays(
+      this.initAppointmentByDays(
         this.startDay as string,
         this.endDay as string
       );
     } else {
-      this.initAppointmentbyDaysWithStatus();
+      this.initAppointmentByDaysWithStatus();
     }
   }
   // lấy danh sách tất cả theo thời gian
-  initAppointmentbyDays(fromDate: string, toDate: string): void {
+  initAppointmentByDays(fromDate: string, toDate: string): void {
     this.shareApi
       .getAppointmentByDays(
         this.branchId as number,
@@ -129,7 +122,7 @@ export class AppointmentTableListComponent implements OnChanges {
       });
   }
   // lấy danh sách với trạng thái
-  initAppointmentbyDaysWithStatus(): void {
+  initAppointmentByDaysWithStatus(): void {
     this.shareApi
       .getAppointmentByDaysWithStatus(
         this.branchId as number,
@@ -188,13 +181,13 @@ export class AppointmentTableListComponent implements OnChanges {
     });
   }
   // call modal chi tiết hóa đơn sau khi hoàn tất thanh toán.
-  callModalDetailBillComplete(id: number){
+  callModalDetailBillComplete(id: number) {
     this.modalSvc.create({
-      title:'Chi tiết hóa đơn',
+      title: 'Chi tiết hóa đơn',
       content: PaymentModalComponent,
       footer: null,
-      size:'lg',
-      componentParams:{
+      size: 'lg',
+      componentParams: {
         id: id
       }
     })
@@ -203,7 +196,6 @@ export class AppointmentTableListComponent implements OnChanges {
     this.pageNumber = event;
     this.checkChanges();
   }
-  // get back changeSizePage
   changeSizePage(event: number): void {
     this.pageSize = event;
     this.checkChanges();
@@ -215,5 +207,4 @@ export class AppointmentTableListComponent implements OnChanges {
   onClickGetCustomerId(customerID: number) {
     localStorage.setItem('customerID', JSON.stringify(customerID));
   }
-
 }

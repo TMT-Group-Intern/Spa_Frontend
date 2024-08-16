@@ -5,14 +5,8 @@
       <div class="grid grid-cols-3 gap-1 my-2">
         <tds-label [tdsRequired]="true">Họ</tds-label>
         <tds-form-field class="col-span-2">
-          <input
-            tdsInput
-            autocomplete="off"
-            placeholder="Nguyen Van"
-            formControlName="lastName"
-            class="appearance-none w-full"
-            type="text"
-          />
+          <input tdsInput autocomplete="off" placeholder="Nguyen Van" formControlName="lastName"
+            class="appearance-none w-full" type="text" />
           <tds-error>
             <span><strong>Họ</strong> của bạn không được để trống!</span>
           </tds-error>
@@ -23,14 +17,8 @@
       <div class="grid grid-cols-3 gap-1 my-2">
         <tds-label [tdsRequired]="true">Tên</tds-label>
         <tds-form-field class="col-span-2">
-          <input
-            tdsInput
-            autocomplete="off"
-            placeholder="Nam"
-            formControlName="firstName"
-            class="appearance-none w-full"
-            type="text"
-          />
+          <input tdsInput autocomplete="off" placeholder="Nam" formControlName="firstName"
+            class="appearance-none w-full" type="text" />
           <tds-error>
             <span><strong>Tên</strong> của bạn không được để trống!</span>
           </tds-error>
@@ -41,14 +29,8 @@
       <div class="grid grid-cols-3 gap-1 my-2">
         <tds-label>Email</tds-label>
         <tds-form-field class="col-span-2">
-          <input
-            tdsInput
-            autocomplete="off"
-            placeholder="abc@example.com"
-            formControlName="email"
-            type="email"
-            class="appearance-none w-full"
-          />
+          <input tdsInput autocomplete="off" placeholder="abc@example.com" formControlName="email" type="email"
+            class="appearance-none w-full" />
           <tds-error>
             <span><strong>Email</strong> của bạn không đúng cú pháp!</span>
           </tds-error>
@@ -62,37 +44,24 @@
         <tds-label [tdsRequired]="true">Số điện thoại</tds-label>
         <div class="col-span-2">
           <tds-form-field class="col-span-2">
-            <input
-              tdsInput
-              autocomplete="off"
-              placeholder="0123456789"
-              class="appearance-none w-full"
-              formControlName="phone"
-              type="tel"
-            />
+            <input tdsInput autocomplete="off" placeholder="0123456789" class="appearance-none w-full"
+              formControlName="phone" type="tel" />
             <tds-error>
-              <span *ngIf="form.controls['phone'].hasError('required')"
-                ><strong>Số điện thoại</strong> không được để trống!</span
-              >
-              <span *ngIf="form.controls['phone'].hasError('pattern')"
-                ><strong>Số điện thoại</strong> phải bắt đầu bằng số 0 và có 10
-                chữ số!</span
-              >
+              <span *ngIf="form.controls['phone'].hasError('required')"><strong>Số điện thoại</strong> không được để
+                trống!</span>
+              <span *ngIf="form.controls['phone'].hasError('pattern')"><strong>Số điện thoại</strong> phải bắt đầu bằng
+                số 0 và có 10
+                chữ số!</span>
             </tds-error>
           </tds-form-field>
-          <tds-error *ngIf="checkPhone"
-            ><span><strong>Số điện thoại</strong> đã tồn tại</span></tds-error
-          >
+          <tds-error *ngIf="checkPhone"><span><strong>Số điện thoại</strong> đã tồn tại</span></tds-error>
         </div>
       </div>
 
       <!-- Ngày sinh  -->
       <div class="grid grid-cols-3 gap-1 my-2">
         <tds-label>Ngày sinh</tds-label>
-        <tds-date-picker
-          class="col-span-2"
-          formControlName="dateOfBirth"
-        ></tds-date-picker>
+        <tds-date-picker class="col-span-2" formControlName="dateOfBirth"></tds-date-picker>
       </div>
 
       <!-- Gender -->
@@ -111,13 +80,7 @@
 
 <ng-container *tdsModalFooter>
   <div class="p-4 flex flex-row-reverse">
-    <button
-      tds-button
-      form="idform"
-      (click)="submit()"
-      color="success"
-      class="w-[100px] rounded"
-    >
+    <button tds-button form="idform" (click)="submit()" color="success" class="w-[100px] rounded">
       Chấp Nhận
     </button>
   </div>

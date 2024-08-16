@@ -72,11 +72,11 @@ export class ModalServiceComponent implements OnInit {
   // Tạo Service
   btnCreateService(val: any): void {
     this.auth.createService(val).subscribe({
-      next:(data) => {
+      next: (data) => {
         this.createNotificationSuccess('');
         this.modalRef.destroy(data);
       },
-      error:(ex) => {
+      error: (ex) => {
         this.createNotificationError(ex.error.message);
       }
     }
@@ -91,7 +91,7 @@ export class ModalServiceComponent implements OnInit {
         this.createNotificationSuccess('');
         this.modalRef.destroy(data);
       },
-      error:(ex) => {
+      error: (ex) => {
         this.createNotificationError(ex.error.message);
       }
     }

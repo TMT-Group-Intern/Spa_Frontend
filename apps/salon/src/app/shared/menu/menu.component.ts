@@ -89,18 +89,26 @@ export class MenuComponent {
       "link": '/test'
     },
     {
-      "name": "Nhóm quyền",
+      "name": "Thiết lập",
       "icon": "tdsi-id-card-fill",
-            "listChild": [
+      "listChild": [
         {
-            "name": "Tài khoản",
-            "link": '/account'
+          "name": "Tài khoản",
+          "link": '/account'
         },
         {
-            "name": "Nhóm quyền",
-            "link": '/role'
+          "name": "Nhóm quyền",
+          "link": '/role'
         },
-    ]
+        {
+          "name": "Chi nhánh",
+          "link": '/branch'
+        },
+        {
+          "name": "Công việc",
+          "link": '/job'
+        },
+      ]
     },
     {
       "name": "Chat box",

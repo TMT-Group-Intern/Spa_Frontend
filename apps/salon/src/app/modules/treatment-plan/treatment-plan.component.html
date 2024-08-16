@@ -1,10 +1,6 @@
 <div class="w-full h-full">
   <div class="flex-1 mb-2">
-    <button
-      tds-button
-      [tds-tooltip]="'Tạo lộ trình'"
-      (click)="modalCreateTreatmentPlan()"
-    >
+    <button tds-button [tds-tooltip]="'Tạo lộ trình'" (click)="modalCreateTreatmentPlan()">
       <span class="flex items-center">
         <i class="tdsi-plus-circle-fill text-lg leading-none mr-2"></i>
         Tạo lộ trình
@@ -27,10 +23,7 @@
     <tbody>
       <ng-container *ngFor="let data of table.data">
         <tr>
-          <td
-            [expand]="expandSet.has(data.treatmentID)"
-            (expandChange)="onExpandChange(data.treatmentID, $event)"
-          ></td>
+          <td [expand]="expandSet.has(data.treatmentID)" (expandChange)="onExpandChange(data.treatmentID, $event)"></td>
           <td>{{ data.startDate | date : 'dd/MM/YYYY' }}</td>
           <td>{{ data.treatmentName }}</td>
           <td>{{ data.totalSessions }}</td>
@@ -39,7 +32,7 @@
           <td>
             <button tds-button-outline-icon color="secondary" (click)="modalEditTreatmentPlan(data.treatmentID)">
               <i class="tdsi-edit-fill"></i>
-              </button>
+            </button>
           </td>
         </tr>
         <tr class="w-full" [expand]="expandSet.has(data.treatmentID)">

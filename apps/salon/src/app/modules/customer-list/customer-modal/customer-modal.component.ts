@@ -69,7 +69,7 @@ export class CustomerModalComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private notification: TDSNotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (this.id) {
@@ -86,10 +86,6 @@ export class CustomerModalComponent implements OnInit {
           gender,
         });
       });
-      // this.checkNumberPhone();
-      // if(this.form.value.phone != this.dataCustomer.phone) {
-      //   this.checkNumberPhone();
-      // }
     } else {
       this.checkNumberPhone();
     }

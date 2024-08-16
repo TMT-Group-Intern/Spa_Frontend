@@ -37,7 +37,7 @@ export class RoleComponent implements OnInit {
   permissionName: any;
   rolePermissions: any;
 
-  constructor(private shared: AuthService) {}
+  constructor(private shared: AuthService) { }
 
   ngOnInit(): void {
     this.shared.getJobTypeForPermission().subscribe((data) => {

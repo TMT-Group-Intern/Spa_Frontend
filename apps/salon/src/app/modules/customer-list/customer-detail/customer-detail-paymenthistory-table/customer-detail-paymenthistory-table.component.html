@@ -1,25 +1,25 @@
 <div class="m-4 border rounded-md">
-    <tds-table [showPagination]="false" #table [listData]="listOfDataDetail" tableLayout="fixed">
-      <thead>
+  <tds-table [showPagination]="false" #table [listData]="listOfDataDetail" tableLayout="fixed">
+    <thead>
+      <tr>
+        <th>Ngày thanh toán</th>
+        <th>Số tiền thanh toán</th>
+        <th>Phương thức thanh toán</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let data of listOfDataDetail">
         <tr>
-          <th>Ngày thanh toán</th>
-          <th>Số tiền thanh toán</th>
-          <th>Phương thức thanh toán</th>
+          <td>{{ data.date | date : 'dd/MM/yyyy' }}<br /></td>
+          <td>{{ data.amount }}<br /></td>
+          <td>{{ data.paymentMethod }}</td>
+          <td><button tds-tooltip tooltipTitle="In hóa đơn" tds-button-flat-icon color="custom"
+            (click)="onInvoice(data.paymentID)">
+              <i class="tdsi-print-line" ></i>
+            </button></td>
         </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let data of listOfDataDetail">
-          <tr>
-            <td>
-                {{ data.date | date:'dd/MM/yyyy' }}<br />
-            </td>
-            <td>
-              {{ data.amount }}<br />
-            </td>
-            <td>{{ data.paymentMethod }}</td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </tds-table>
-  </div>
-  
+      </ng-container>
+    </tbody>
+  </tds-table>
+</div>

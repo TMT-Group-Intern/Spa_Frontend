@@ -32,6 +32,7 @@ import { CustomerModalComponent } from '../customer-list/customer-modal/customer
 import { PaymentModalComponent } from './payment-modal/payment-modal.component';
 import { AppointmentListModule } from '../appointment-list/appointment-list.module';
 import { TDSBadgeModule } from 'tds-ui/badges';
+import { PaymentInfoComponent } from './payment-info/payment-info.component';
 
 @Component({
   selector: 'frontend-home',
@@ -65,7 +66,7 @@ export class HomeComponent implements OnInit {
   inSession: any[] = [];
   status: any;
   assign: any[] = [];
-  _checkcreate = true;
+  _checkCreate = true;
 
   userSession: any;
   storedUserSession = localStorage.getItem('userSession');
@@ -97,17 +98,15 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.sharedService.DataListenerDoctorChagneStatus(this.onReceiveAppointments.bind(this))
-
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
-      this.initAppointment();
     }
 
     this.company._companyIdCur$
       .pipe(
         filter((companyId) => !!companyId),
         concatMap((brachID) => {
-          return this.shareApi.appointmentList(brachID as number);
+          return this.shareApi.appointmentListToday(brachID as number);
         })
       )
       .subscribe((data: any) => {
@@ -126,7 +125,8 @@ export class HomeComponent implements OnInit {
       .pipe(
         filter((branchID) => !!branchID),
         switchMap((branchID) => {
-          return branchID ? this.shareApi.appointmentList(branchID) : of(null);
+          //return branchID ? this.shareApi.appointmentList(branchID) : of(null);
+          return branchID ? this.shareApi.appointmentListToday(branchID) : of(null);
         })
       )
       .subscribe((data: any) => {
@@ -146,31 +146,19 @@ export class HomeComponent implements OnInit {
         phoneCus: item.customer.phone,
         doctor: item.doctor == null ? '---' : item.doctor,
         spaTherapist:
-          item.teachnicalStaff == null ? '---' : item.teachnicalStaff,
+          item.technicalStaff == null ? '---' : item.technicalStaff,
         status: {
           name: item.status,
           status: '',
           bg: '',
         },
-        billStatus: null,
+        billStatus: item.billStatus,
       },
     }));
 
     const foundCompletedAppointment = this.lstData.filter(
       (item) => item.data.status.name === 'Hoàn thành'
     );
-    for (const bill of foundCompletedAppointment) {
-      this.shareApi
-        .getAllBillByAppointmentID(bill.data.id)
-        .subscribe((dataBill: any) => {
-          if (dataBill) {
-            bill.data.billStatus = dataBill.billStatus;
-          } else {
-            bill.data.billStatus = 'Chưa tạo hóa đơn thanh toán';
-          }
-        });
-    }
-
     for (const appoint of this.lstData) {
       if (appoint.data.status.name == 'Đã hẹn') {
         appoint.data.status.status = 'primary'
@@ -200,16 +188,6 @@ export class HomeComponent implements OnInit {
         appoint.data.status.status = 'warning';
         appoint.data.status.bg = 'bg-warning-100';
       }
-      // else if (appoint.data.status.name == 'Chưa thanh toán') {
-      //   appoint.data.status.status = 'primary'
-      //   appoint.data.status.bg = 'bg-info-100'
-      // } else if (appoint.data.status.name == 'Thanh toán 1 phần') {
-      //   appoint.data.status.status = 'info'
-      //   appoint.data.status.bg = 'bg-info-100'
-      // } else if (appoint.data.status.name == 'Thanh toán hoàn tất') {
-      //   appoint.data.status.status = 'success'
-      //   appoint.data.status.bg = 'bg-success-100'
-      // }
     }
   }
 
@@ -240,12 +218,12 @@ export class HomeComponent implements OnInit {
     this.checkCreateAppointment();
   }
   checkCreateAppointment() {
-    if (this._checkcreate === true) {
-      this._checkcreate = false;
+    if (this._checkCreate === true) {
+      this._checkCreate = false;
       this.company._check_create$.next(false);
     } else {
 
-      this._checkcreate = true;
+      this._checkCreate = true;
       this.company._check_create$.next(true);
     }
   }
@@ -420,12 +398,10 @@ export class HomeComponent implements OnInit {
         modal.afterClose.asObservable().subscribe((res) => {
           if (res) {
             this.updateStatus(id, status);
-            // this.sharedService.sendChangStatusByReciption();
           }
         });
       } else {
         this.updateStatus(id, status);
-        // this.sharedService.sendChangStatusByReciption();
       }
     });
   }
@@ -437,7 +413,7 @@ export class HomeComponent implements OnInit {
         const billID = data.billID;
         const modal = this.modalSvc.create({
           title: 'Thanh toán',
-          content: PaymentModalComponent,
+          content: PaymentInfoComponent,
           footer: null,
           size: 'xl',
           componentParams: {

@@ -43,11 +43,11 @@ export class HeaderComponent implements OnInit {
 
   public contact = 1;
   userSession: any;
-  private readonly tModalSvc =inject(TDSModalService)
+  private readonly tModalSvc = inject(TDSModalService)
   branchOptions: any[] = [];
-  branchName='';
+  branchName = '';
   public branchID = 0;
-  selectedBranch :any;
+  selectedBranch: any;
   signUpForm!: FormGroup;
   branch = inject(FormBuilder).nonNullable.control({
     branch: [''],
@@ -59,9 +59,9 @@ export class HeaderComponent implements OnInit {
     if (storedUserSession !== null) {
       this.userSession = JSON.parse(storedUserSession);
       const branchId = this.userSession.user.branchID;
-      this.companySvc._companyIdCur$.next(this.userSession.user.branchID);
+      this.companySvc._companyIdCur$.next(branchId);
     }
-    if(this.userSession.user.role ==='Admin'){
+    if (this.userSession.user.role === 'Admin') {
       this.branchID = this.userSession.user.branchID
       //this.branchName = this.userSession.user.branch
       localStorage.setItem('userSession', JSON.stringify(this.userSession));
@@ -84,18 +84,18 @@ export class HeaderComponent implements OnInit {
     private companySvc: CompanyService
   ) {
   }
-  changePassword(){
+  changePassword() {
     const modal = this.tModalSvc.create({
-      title:'Đổi mật khẩu',
+      title: 'Đổi mật khẩu',
       content: ChangePassComponent,
-      footer:null,
-      size:'md',
+      footer: null,
+      size: 'md',
     });
     modal.afterClose.asObservable().subscribe();
   }
   onBranchChanges(values: string[]): void {
-    this.selectedBranch=this.branchID
-    this.userSession.user.branchID=this.selectedBranch
+    this.selectedBranch = this.branchID
+    this.userSession.user.branchID = this.selectedBranch
     this.companySvc._companyIdCur$.next(this.branchID)
     localStorage.setItem('userSession', JSON.stringify(this.userSession));
   };

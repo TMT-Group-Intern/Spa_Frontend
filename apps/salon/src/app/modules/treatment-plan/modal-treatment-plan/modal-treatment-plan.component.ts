@@ -133,7 +133,6 @@ export class ModalTreatmentPlanComponent implements OnInit {
   private addPushData(value: any) {
     this.listOfData = [...this.listOfData || [], value];
     this.resetTotal();
-    console.log(this.listOfData)
   }
 
   delete(index: number) {
@@ -187,12 +186,11 @@ export class ModalTreatmentPlanComponent implements OnInit {
   }
 
   onChangeAutocomplete(data: any): void {
-    console.log(data.data);
+    ;
     this.sharesApi.searchService(data.data).subscribe(
       (res: any) => {
-        // console.log(res.service)
         this.listSearch = res.services
-        // console.log(this.listSearch)
+
       }
     )
   }

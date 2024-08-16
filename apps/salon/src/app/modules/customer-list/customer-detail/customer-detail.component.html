@@ -73,7 +73,7 @@
                 <th>Thanh toán</th>
                 <th>Còn lại</th>
                 <th>Trạng thái</th>
-                <th>Chi tiết hóa đơn</th>
+                <th>Thao tác</th>
               </tr>
             </thead>
             <tbody>
@@ -97,14 +97,17 @@
                   <td>
                     <div class="flex justify-around">
                       <button tds-tooltip tooltipTitle="Xem chi tiết hóa đơn" tds-button-flat-icon color="custom"
-                        class="text-slate-500 hover:text-secondary-1 px-4 py-3"
                         (click)="updateBill(data.appointmentId)">
-                        <i class="tdsi-cash-fill text-lg"></i>
+                        <i class="tdsi-cash-fill"></i>
+                      </button>
+                      <button tds-tooltip tooltipTitle="In hóa đơn" tds-button-flat-icon color="custom"
+                      (click)="onInvoice(data.billId)">
+                        <i class="tdsi-print-line" ></i>
                       </button>
                     </div>
                   </td>
                 </tr>
-                <tr class="w-full h-[340px]" [expand]="expandSet.has(data.billId)">
+                <tr class="w-full h-[50px]" [expand]="expandSet.has(data.billId)">
                   <frontend-customer-detail-paymenthistory-table
                     [billId]="data.billId"></frontend-customer-detail-paymenthistory-table>
                 </tr>
