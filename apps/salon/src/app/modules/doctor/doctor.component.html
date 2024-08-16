@@ -5,9 +5,7 @@
       <span class="p-4 text-heading-2">Tiếp nhận tư vấn</span>
       <div class="overflow-y-auto mt-3" style="max-height: 570px">
         <tds-card *ngFor="let appoint of reception" class="border rounded-20 mb-2 hover:bg-neutral-200 cursor-pointer"
-          (click)="
-            userFrofile(appoint.appointmentID)
-          ">
+          (click)="userProfile(appoint.appointmentID)">
           <!-- Card Header -->
           <tds-card-header *ngIf="appoint.status === 'Đang khám'" class="bg-green-success-200 text-white rounded-t-md">
             <div class="flex justify-between text-gray-700">
@@ -47,22 +45,6 @@
             </div>
           </tds-card-content>
           <hr />
-          <!-- Card button
-          <tds-card-actions>
-            <div class="flex space-x-2 justify-end">
-              <button
-                class="tdsi-id-card-fill"
-                (click)="
-                  userFrofile(appoint.AppointmentID);
-                  getHistory(appoint.CustomerID)
-                "
-                tds-button-icon
-                color="secondary"
-                tds-tooltip
-                tooltipTitle="Thông tin"
-              ></button>
-            </div>
-          </tds-card-actions> -->
         </tds-card>
       </div>
     </div>
@@ -71,8 +53,7 @@
   <!-- //////////bên phải /////////// -->
   <div class="col-span-9 border rounded-10 overflow-y-auto h-full">
     <!-- && active == true thì  -->
-    <div class=" bg-gray-200 flex flex-col h-full" *ngIf="dataAppointmentbyid && active === true; else nodata">
-
+    <div class="bg-gray-200 flex flex-col h-full" *ngIf="dataAppointmentById && active === true; else nodata">
       <div class="basis-1/4 border p-4 rounded-10 bg-white h-[600px]">
         <div class="p-2 flex flex-col">
           <div class="flex justify-between bg-white rounded-lg">
@@ -83,9 +64,9 @@
                 </label>
                 <span class="block text-lg font-bold text-gray-700">
                   {{
-                  dataAppointmentbyid.customer.lastName +
+                  dataAppointmentById.customer.lastName +
                   ' ' +
-                  dataAppointmentbyid.customer.firstName
+                  dataAppointmentById.customer.firstName
                   }}</span>
               </div>
               <div class="flex flex-row">
@@ -93,7 +74,7 @@
                   Số điện thoại:
                 </label>
                 <span class="block text-gray-700">
-                  {{ dataAppointmentbyid.customer.phone }}
+                  {{ dataAppointmentById.customer.phone }}
                 </span>
               </div>
               <div class="flex flex-row">
@@ -102,7 +83,7 @@
                 </label>
                 <span class="block text-gray-700">
                   {{
-                  dataAppointmentbyid.customer.dateOfBirth
+                  dataAppointmentById.customer.dateOfBirth
                   | date : 'dd/MM/YYYY'
                   }}
                 </span>
@@ -113,9 +94,7 @@
                 </label>
                 <span class="block text-gray-700">
                   {{
-                  dataAppointmentbyid.customer.gender === 'Nam'
-                  ? 'Nam'
-                  : 'Nữ'
+                  dataAppointmentById.customer.gender === 'Nam' ? 'Nam' : 'Nữ'
                   }}
                 </span>
               </div>
@@ -125,11 +104,6 @@
                 <!-- Status -->
                 <div class="grid grid-cols-2 gap-2">
                   <div>
-                    <!-- <tds-label>Trạng thái</tds-label>
-                    <tds-form-field class="py-2">
-                      <tds-select placeholder="---" [data]="statusOptions" formControlName="status">
-                      </tds-select>
-                    </tds-form-field> -->
                     <div>
                       <tds-label>Lựa chọn dịch vụ</tds-label>
                       <tds-form-field class="py-2">
@@ -157,7 +131,7 @@
                 <div class="flex flex-row-reverse p-4">
                   <button tds-button form="idform" (click)="
                       submitUpdateServiceAppointment(
-                        dataAppointmentbyid.appointmentID
+                        dataAppointmentById.appointmentID
                       )
                     " color="success" class="w-[100px] px-4 py-2 text-white rounded">
                     Lưu
@@ -168,23 +142,22 @@
           </div>
         </div>
       </div>
-      <div class=" basis-3/4 border p-2 rounded-10 bg-white mt-2">
+      <div class="basis-3/4 border p-2 rounded-10 bg-white mt-2">
         <div class="flex">
-            <tds-tabset tdsType="pill" [clsTab]="'p-0'">
-              <tds-tab [clsContent]="'p-0'" title="Lịch sử điều trị">
-                <frontend-user-profile [customerId]="CustomerID"></frontend-user-profile>
-              </tds-tab>
-              <tds-tab [clsContent]="'p-0'" title="Lộ trình điều trị">
-                <frontend-treatment-plan [customerId]="CustomerID"></frontend-treatment-plan>
-              </tds-tab>
+          <tds-tabset tdsType="pill" [clsTab]="'p-0'">
+            <tds-tab [clsContent]="'p-0'" title="Lịch sử điều trị">
+              <frontend-user-profile [customerId]="CustomerID"></frontend-user-profile>
+            </tds-tab>
+            <tds-tab [clsContent]="'p-0'" title="Lộ trình điều trị">
+              <frontend-treatment-plan [customerId]="CustomerID"></frontend-treatment-plan>
+            </tds-tab>
           </tds-tabset>
         </div>
       </div>
     </div>
     <ng-template #nodata>
       <div class="flex flex-col justify-center items-center h-full">
-        <tds-empty>
-        </tds-empty>
+        <tds-empty> </tds-empty>
         <span class="text-sm font-bold">Vui lòng chọn khách hàng để thăm khám!</span>
       </div>
     </ng-template>

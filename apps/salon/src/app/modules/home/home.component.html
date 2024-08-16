@@ -1,38 +1,17 @@
 <div class="flex flex-col w-full">
-  <tds-calendar-header
-    class="pl-4"
-    [(tdsViewDate)]="date"
-    [tdsMode]="mode"
-    (tdsModeChange)="onModelChange($event)"
-    (tdsViewDateChange)="onChangeTime($event)"
-  >
-    <button
-      class="mr-2"
-      tds-button
-      color="success"
-      (click)="createAppointment()"
-    >
+  <tds-calendar-header class="pl-4" [(tdsViewDate)]="date" [tdsMode]="mode" (tdsModeChange)="onModelChange($event)"
+    (tdsViewDateChange)="onChangeTime($event)">
+    <button class="mr-2" tds-button color="success" (click)="createAppointment()">
       Thêm lịch hẹn
     </button>
     <button tds-button color="success" (click)="createCustomer()">
       Thêm khách hàng
     </button>
   </tds-calendar-header>
-  <tds-tabset
-    [tdsHideBar]="false"
-    [tdsSize]="'small'"
-    [tdsType]="'pill'"
-    [clsTab]="'pl-2 flex-1'"
-  >
-    <tds-tab
-      (tabClick)="renderDataTabBook()"
-      [title]="titleCustomer"
-      [clsContent]="'flex flex-col'"
-    >
+  <tds-tabset [tdsHideBar]="false" [tdsSize]="'small'" [tdsType]="'pill'" [clsTab]="'pl-2 flex-1'">
+    <tds-tab (tabClick)="renderDataTabBook()" [title]="titleCustomer" [clsContent]="'pl-2 flex flex-col'">
       <ng-template #titleCustomer let-active="active">
-        <div
-          class="flex items-center justify-center font-semibold cursor-pointer text-body-2 relative group"
-        >
+        <div class="flex items-center justify-center font-semibold cursor-pointer text-body-2 relative group">
           <span>Lịch hẹn</span>
         </div>
       </ng-template>
@@ -143,16 +122,6 @@
                           >
                             <i class="tdsi-accounting-line"></i>
                           </button>
-                          <!-- <button
-                            *ngIf="event.data.status.name === 'Chưa thanh toán' || event.data.status.name === 'Thanh toán 1 phần'"
-                            tds-button-flat-icon color="secondary" tds-tooltip tooltipTitle="Tiếp tục thanh toán"
-                            (click)="updateBill(event.data.id)">
-                            <i class="tdsi-accounting-line"></i>
-                          </button>
-                          <button *ngIf="event.data.status.name === 'Thanh toán hoàn tất'" tds-button-flat-icon
-                            color="secondary" tds-tooltip tooltipTitle="Xem hóa đơn" (click)="getBill(event.data.id)">
-                            <i class="tdsi-cash-fill"></i>
-                        </button> -->
                         </div>
                       </div>
                       <div

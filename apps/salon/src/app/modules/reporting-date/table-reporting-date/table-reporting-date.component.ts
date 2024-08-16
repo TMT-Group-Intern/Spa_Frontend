@@ -12,7 +12,7 @@ import { TDSInputModule } from 'tds-ui/tds-input';
   templateUrl: './table-reporting-date.component.html',
   styleUrls: ['./table-reporting-date.component.scss'],
   standalone: true,
-  imports:[
+  imports: [
     CommonModule,
     TDSTableModule,
     TDSPipesModule,
@@ -26,7 +26,7 @@ export class TableReportingDateComponent implements OnInit, OnChanges {
   listOfDataDetail: any
   totalMoney = 0;
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['branchId']?.currentValue || changes['date']?.currentValue){
+    if (changes['branchId']?.currentValue || changes['date']?.currentValue) {
       this.listBillOfDay(this.date as Date)
       this.getReportDataByDate(this.date as Date)
     }
@@ -62,7 +62,7 @@ export class TableReportingDateComponent implements OnInit, OnChanges {
         const temp = data.map((item: any) => (
           item.totalRevenue
         ))
-        this.totalMoney =  temp.length >0? temp: 0;
+        this.totalMoney = temp.length > 0 ? temp : 0;
       });
-      }
+  }
 }

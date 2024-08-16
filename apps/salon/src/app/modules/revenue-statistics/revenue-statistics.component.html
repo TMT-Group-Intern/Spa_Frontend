@@ -2,10 +2,7 @@
   <div class="flex flex-col h-full">
     <div class="basis-2/4 mb-1 bg-white rounded-b-lg">
       <div class="m-2 flex justify-center w-full">
-        <tds-range-picker
-          [(ngModel)]="leftControl['Tháng này']"
-          (ngModelChange)="onSelectionChange($event)"
-        >
+        <tds-range-picker [(ngModel)]="leftControl['Tháng này']" (ngModelChange)="onSelectionChange($event)">
         </tds-range-picker>
       </div>
       <div class="p-2">
@@ -15,9 +12,7 @@
     </div>
     <div class="basis-2/4 mt-1 bg-white rounded-t-lg">
       <div class="rounded-10">
-        <span class="ml-2 py-4 font-bold text-heading-3"
-          >Số liệu doanh thu</span
-        >
+        <span class="ml-2 py-4 font-bold text-heading-3">Số liệu doanh thu</span>
         <tds-table #table [listData]="listOfData" tableLayout="fixed">
           <thead>
             <tr>
@@ -29,15 +24,13 @@
           <tbody>
             <ng-container *ngFor="let data of table.data">
               <tr>
-                <td
-                  [expand]="expandSet.has(data.date)"
-                  (expandChange)="onExpandChange(data.date, $event)"
-                ></td>
+                <td [expand]="expandSet.has(data.date)" (expandChange)="onExpandChange(data.date, $event)"></td>
                 <td>{{ data.date | date : 'dd/MM/YYYY' }}</td>
                 <td>{{ data.totalRevenue }}</td>
               </tr>
               <tr class="w-full" [expand]="expandSet.has(data.date)">
-                <frontend-revenue-statistics-detail [date]="data.date" [branchId]="branchId"></frontend-revenue-statistics-detail>
+                <frontend-revenue-statistics-detail [date]="data.date"
+                  [branchId]="branchId"></frontend-revenue-statistics-detail>
               </tr>
             </ng-container>
           </tbody>

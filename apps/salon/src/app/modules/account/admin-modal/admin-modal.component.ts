@@ -30,8 +30,8 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z
   templateUrl: './admin-modal.component.html',
   styleUrls: ['./admin-modal.component.scss'],
 })
-export class AdminModalComponent implements OnInit{
-  private readonly tModalSvc =inject(TDSModalService)
+export class AdminModalComponent implements OnInit {
+  private readonly tModalSvc = inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
   @Input() email?: string;
   @Input() role?: string;
@@ -63,11 +63,12 @@ export class AdminModalComponent implements OnInit{
     ],
     userName: ['', Validators.required],
     dateOfBirth: ['', Validators.required],
-    gender: ['Nam', Validators.required], 
- });
+    gender: ['Nam', Validators.required],
+  });
 
   readonly genderOptions = [{
-    id: "Nam", name: 'Nam'},
+    id: "Nam", name: 'Nam'
+  },
   { id: "Nữ", name: 'Nữ' },]
 
   branchOptions: any[] = [];
@@ -76,11 +77,11 @@ export class AdminModalComponent implements OnInit{
   constructor(
     private shared: AuthService,
     private notification: TDSNotificationService
-  ) {}
+  ) { }
 
   matchValidator(control: AbstractControl): { [key: string]: boolean } | null {
     if (!this.createAdmin) {
-      return {mustMatch:false};
+      return { mustMatch: false };
     }
 
     const pass = this.createAdmin.value.password;
@@ -111,25 +112,25 @@ export class AdminModalComponent implements OnInit{
         }))]
       })
 
-      if(this.email) {
-        this.checkDislay = false
-        if(this.role==='Quản lý'){
-          this.shared.getAdminByEmail(this.email).subscribe(
-            (data: any) => {
-              this.createAdmin.patchValue({
-               lastName: data.adminDTO.lastName,
-               firstName: data.adminDTO.firstName,
-               email: data.adminDTO.email,
-               userName:data.adminDTO.userName,
-               password: data.adminDTO.password,
-               confirmPassword: data.adminDTO.confirmPassword,
-               phone: data.adminDTO.phone,
-               gender: data.adminDTO.gender,
-               dateOfBirth: data.adminDTO.dateOfBirth,
-              })
-            }
-          )
-        }
+    if (this.email) {
+      this.checkDislay = false
+      if (this.role === 'Quản lý') {
+        this.shared.getAdminByEmail(this.email).subscribe(
+          (data: any) => {
+            this.createAdmin.patchValue({
+              lastName: data.adminDTO.lastName,
+              firstName: data.adminDTO.firstName,
+              email: data.adminDTO.email,
+              userName: data.adminDTO.userName,
+              password: data.adminDTO.password,
+              confirmPassword: data.adminDTO.confirmPassword,
+              phone: data.adminDTO.phone,
+              gender: data.adminDTO.gender,
+              dateOfBirth: data.adminDTO.dateOfBirth,
+            })
+          }
+        )
+      }
     }
   }
 
@@ -182,53 +183,38 @@ export class AdminModalComponent implements OnInit{
     const dateOfBirth = this.createAdmin.value.dateOfBirth as string;
     const gender = this.createAdmin.value.gender as string;
 
-    this.shared.createAdmin(lastName, firstName, gender, phone, email,userName, password,
-       confirmPassword, dateOfBirth)
-       .subscribe((result) => {
-      if (result.status != null) {
-         const modal = this.tModalSvc.success({
-          title:'Thành công',
-          content: `<h5 class="text-success-500">Tạo tài khoản <strong>${ email }</strong> thành công!</h5>`,
-          footer:null,
-          size:'md',
-          okText:'Xác nhận',
-          onOk:()=> true
-        });
-        modal.afterClose.asObservable()
-        //.pipe(tap(()=>this.createUser.reset({
-          // branchID:0,
-          // dateOfBirth:'',
-          // email:'',
-          // firstName:'',
-          // gender:'',
-          // hireDate:'',
-          // jobTypeID:0,
-          // lastName:'',
-          // phone:'',
-          // role:'',
-          // password:'',
-          // confirmPassword:'',
-        //})))
-        .subscribe(() =>this.modalRef.close());
-      }
-      else{
-         const modal = this.tModalSvc.error({
-          title:'Thất bại',
-          content: `<h5 class="text-error-500">Tạo tài khoản <strong>${ email }</strong> thất bại! Tài khoản đã tồn tại hoặc đã xảy ra lỗi!</h5>`,
-          footer:null,
-          size:'md',
-          okText:'Xác nhận',
-          onOk:()=> true
-        });
-        modal.afterClose.asObservable()
-        .subscribe
-        (res=>{
-          if(res){
-            this.createAdmin;
-          }
-        });
-      }
-    });
+    this.shared.createAdmin(lastName, firstName, gender, phone, email, userName, password,
+      confirmPassword, dateOfBirth)
+      .subscribe((result) => {
+        if (result.status != null) {
+          const modal = this.tModalSvc.success({
+            title: 'Thành công',
+            content: `<h5 class="text-success-500">Tạo tài khoản <strong>${email}</strong> thành công!</h5>`,
+            footer: null,
+            size: 'md',
+            okText: 'Xác nhận',
+            onOk: () => true
+          });
+          modal.afterClose.asObservable().subscribe(() => this.modalRef.destroy());
+        }
+        else {
+          const modal = this.tModalSvc.error({
+            title: 'Thất bại',
+            content: `<h5 class="text-error-500">Tạo tài khoản <strong>${email}</strong> thất bại! Tài khoản đã tồn tại hoặc đã xảy ra lỗi!</h5>`,
+            footer: null,
+            size: 'md',
+            okText: 'Xác nhận',
+            onOk: () => true
+          });
+          modal.afterClose.asObservable()
+            .subscribe
+            (res => {
+              if (res) {
+                this.createAdmin;
+              }
+            });
+        }
+      });
   }
   markFormGroupTouched(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(key => {

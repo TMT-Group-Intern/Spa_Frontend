@@ -75,6 +75,10 @@ export class AuthService {
     return this.http.get<any[]>(this.baseUrl + 'Services/' + id);
   }
 
+  getBranchById(branchID: number): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + 'Branch/getBranchByID?id=' + branchID);
+  }
+
   // Render list of service
   renderListService(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + 'Services');
@@ -185,6 +189,10 @@ export class AuthService {
     return this.http.get<any>(
       this.baseUrl + 'Payment/GetPaymentsByBill?idBill=' + id
     );
+  }
+
+  getPaymentsById(id: any): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Bill/GetBillByPayment?id=' + id);
   }
 
   // Search Customer
@@ -316,7 +324,9 @@ export class AuthService {
   appointmentList(id: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Appointment?idBrand=' + id);
   }
-
+  appointmentListToday(id: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Appointment/GetAllByBranchAndToday?idBrand=' + id);
+  }
   // Create a new Appointment
   createAppointment(val: any) {
     return this.http.post(this.baseUrl + 'Appointment', val);
@@ -575,6 +585,35 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + 'Branch/allBranches');
   }
 
+  pageBranchByPages(pageNumber: number, pageSize: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Branch/AllBranchPage?pageNumber=' + pageNumber + '&pageSize=' + pageSize);
+  }
+  createBranch(branchName:string,branchAddress:string,branchPhone:string) {
+    return this.http.post<{id:object}>(this.baseUrl + 'Branch/createBranch', {
+      branchName:branchName,
+      branchAddress:branchAddress,
+      branchPhone:branchPhone
+    });
+  }
+  // Update Appointment
+  editBranch(id: number, val: any) {
+    return this.http.put(this.baseUrl + 'Branch/updateBranch?id=' + id, val);
+  }
+  changeStatusBranch(id: number) {
+    return this.http.post(`${this.baseUrl}Branch/changeStatusBranch?id=${id}`, {});
+  }
+  pageActiveBranchByPages(pageNumber: number, pageSize: number) {
+    return this.http.get(this.baseUrl + 'Branch/AllBranchActivePage?pageNumber=' + pageNumber + '&pageSize=' + pageSize);
+  }
+
+  pageNotActiveBranchByPages(pageNumber: number, pageSize: number) {
+    return this.http.get(this.baseUrl + 'Branch/AllBranchNotActivePage?pageNumber=' + pageNumber + '&pageSize=' + pageSize);
+  }
+
+  deleteBranch(id: any) {
+    return this.http.delete(this.baseUrl + 'Branch/deleteBranch?id=' + id);
+  }
+
   // Get Job Type
   getJobType(): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Job/allJobs');
@@ -721,4 +760,6 @@ export class AuthService {
       status
     );
   }
+
+
 }

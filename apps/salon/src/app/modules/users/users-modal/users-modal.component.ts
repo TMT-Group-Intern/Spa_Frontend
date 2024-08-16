@@ -75,8 +75,8 @@ export class UsersModalComponent implements OnInit {
   });
 
   readonly roleOptions = [
-  //{ id: "Admin", name: 'Quản lý'},
-  { id: "Employee", name: 'Nhân viên' },]
+    //{ id: "Admin", name: 'Quản lý'},
+    { id: "Employee", name: 'Nhân viên' },]
 
   readonly genderOptions = [{
     id: "Nam", name: 'Nam'
@@ -124,27 +124,27 @@ export class UsersModalComponent implements OnInit {
         }))]
       })
 
-      if(this.email) {
-        this.checkDislay = false
-        if(this.role==='Quản lý'){
-          this.shared.getAdminByEmail(this.email).subscribe(
-            (data: any) => {
-              this.createUser.patchValue({
-               role: 'Admin',
-               lastName: data.adminDTO.lastName,
-               firstName: data.adminDTO.firstName,
-               email: data.adminDTO.email,
-               phone: data.adminDTO.phone,
-               gender: data.adminDTO.gender,
-               dateOfBirth: data.adminDTO.dateOfBirth,
-               hireDate: new Date().toISOString(),
-               jobTypeID:data.adminDTO.jobTypeID,
-               branchID: 0,
-              })
-            }
-          )
-        }
-      else if(this.role !=='Quản lý'){
+    if (this.email) {
+      this.checkDislay = false
+      if (this.role === 'Quản lý') {
+        this.shared.getAdminByEmail(this.email).subscribe(
+          (data: any) => {
+            this.createUser.patchValue({
+              role: 'Admin',
+              lastName: data.adminDTO.lastName,
+              firstName: data.adminDTO.firstName,
+              email: data.adminDTO.email,
+              phone: data.adminDTO.phone,
+              gender: data.adminDTO.gender,
+              dateOfBirth: data.adminDTO.dateOfBirth,
+              hireDate: new Date().toISOString(),
+              jobTypeID: data.adminDTO.jobTypeID,
+              branchID: 0,
+            })
+          }
+        )
+      }
+      else if (this.role !== 'Quản lý') {
         this.shared.getEmployeeByEmail(this.email).subscribe(
           (data: any) => {
             this.createUser.patchValue({
@@ -250,7 +250,7 @@ export class UsersModalComponent implements OnInit {
             // password:'',
             // confirmPassword:'',
             //})))
-            .subscribe(() =>this.modalRef.close());
+            .subscribe(() => this.modalRef.close());
         }
         else {
           const modal = this.tModalSvc.error({

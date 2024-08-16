@@ -6,22 +6,13 @@
       <div class="grid grid-cols-3 gap-1 my-2">
         <tds-label>Họ</tds-label>
         <tds-form-field class="col-span-2">
-          <input
-            tdsInput
-            autocomplete="off"
-            placeholder="Nhập họ"
-            formControlName="lastName"
-            [required]="true"
-            class="appearance-none"
-          />
+          <input tdsInput autocomplete="off" placeholder="Nhập họ" formControlName="lastName" [required]="true"
+            class="appearance-none" />
           <tds-error>
-            <span
-              *ngIf="
+            <span *ngIf="
                 createUser.controls['lastName'].touched &&
                 createUser.controls['lastName'].hasError('required')
-              "
-              >Vui lòng nhập họ</span
-            >
+              ">Vui lòng nhập họ</span>
           </tds-error>
         </tds-form-field>
       </div>
@@ -30,22 +21,13 @@
       <div class="grid grid-cols-3 gap-1 my-2">
         <tds-label>Tên</tds-label>
         <tds-form-field class="col-span-2">
-          <input
-            tdsInput
-            autocomplete="off"
-            placeholder="Nhập tên"
-            formControlName="firstName"
-            [required]="true"
-            class="appearance-none"
-          />
+          <input tdsInput autocomplete="off" placeholder="Nhập tên" formControlName="firstName" [required]="true"
+            class="appearance-none" />
           <tds-error>
-            <span
-              *ngIf="
+            <span *ngIf="
                 createUser.controls['firstName'].touched &&
                 createUser.controls['firstName'].hasError('required')
-              "
-              >Vui lòng nhập tên</span
-            >
+              ">Vui lòng nhập tên</span>
           </tds-error>
         </tds-form-field>
       </div>
@@ -54,30 +36,17 @@
       <div class="grid grid-cols-3 gap-1 my-2" *ngIf="checkDislay === true">
         <tds-label>Email</tds-label>
         <tds-form-field class="col-span-2">
-          <input
-            tdsInput
-            autocomplete="off"
-            placeholder="Nhập email"
-            formControlName="email"
-            type="email"
-            [required]="true"
-            class="appearance-none"
-          />
+          <input tdsInput autocomplete="off" placeholder="Nhập email" formControlName="email" type="email"
+            [required]="true" class="appearance-none" />
           <tds-error>
-            <span
-              *ngIf="
+            <span *ngIf="
                 createUser.controls['email'].touched &&
                 createUser.controls['email'].hasError('required')
-              "
-              >Vui lòng nhập email</span
-            >
-            <span
-              *ngIf="
+              ">Vui lòng nhập email</span>
+            <span *ngIf="
                 createUser.controls['email'].touched &&
                 createUser.controls['email'].hasError('email')
-              "
-              >Email không hợp lệ</span
-            >
+              ">Email không hợp lệ</span>
           </tds-error>
         </tds-form-field>
       </div>
@@ -86,21 +55,12 @@
       <div class="grid grid-cols-3 gap-1 my-2">
         <tds-label>Số điện thoại</tds-label>
         <tds-form-field class="col-span-2">
-          <input
-            tdsInput
-            autocomplete="off"
-            placeholder="Nhập số điện thoại"
-            formControlName="phone"
-            [required]="true"
-            class="appearance-none"
-          />
+          <input tdsInput autocomplete="off" placeholder="Nhập số điện thoại" formControlName="phone" [required]="true"
+            class="appearance-none" />
           <tds-error>
-            <span *ngIf="createUser.controls['phone'].hasError('required')"
-              >Vui lòng nhập số điện thoại</span
-            >
-            <span *ngIf="createUser.controls['phone'].hasError('pattern')"
-              >Số điện thoại phải có đủ 10 số và bắt đầu bằng 0</span
-            >
+            <span *ngIf="createUser.controls['phone'].hasError('required')">Vui lòng nhập số điện thoại</span>
+            <span *ngIf="createUser.controls['phone'].hasError('pattern')">Số điện thoại phải có đủ 10 số và bắt đầu
+              bằng 0</span>
           </tds-error>
         </tds-form-field>
       </div>
@@ -122,38 +82,26 @@
       <div class="grid grid-cols-3 gap-1 my-2">
         <tds-label>Ngày sinh</tds-label>
         <tds-form-field class="col-span-2">
-          <tds-date-picker
-            formControlName="dateOfBirth"
-            [required]="true"
-            [allowClear]="true"
-          ></tds-date-picker>
+          <tds-date-picker formControlName="dateOfBirth" [required]="true" [allowClear]="true"></tds-date-picker>
           <tds-error>
-            <span
-              *ngIf="
+            <span *ngIf="
                 createUser.controls['dateOfBirth'].touched &&
                 createUser.controls['dateOfBirth'].hasError('required')
-              "
-            >
+              ">
               Vui lòng chọn ngày sinh
             </span>
           </tds-error>
         </tds-form-field>
       </div>
 
-      <div
-        *ngIf="
+      <div *ngIf="
           this.createUser.value.role === 'Employee' || this.role === 'Employee'
-        "
-      >
+        ">
         <!--  -->
         <div class="grid grid-cols-3 gap-1 my-2">
           <tds-label>Ngày bắt đầu làm việc</tds-label>
           <tds-form-field class="col-span-2">
-            <tds-date-picker
-              formControlName="hireDate"
-              [required]="true"
-              [allowClear]="true"
-            ></tds-date-picker>
+            <tds-date-picker formControlName="hireDate" [required]="true" [allowClear]="true"></tds-date-picker>
             <tds-error>
               <span *ngIf="createUser.controls['hireDate'].touched">
                 Vui lòng chọn ngày bắt đầu làm việc
@@ -166,22 +114,12 @@
         <div class="grid grid-cols-3 gap-1 my-2">
           <tds-label>Loại công việc</tds-label>
           <tds-form-field class="col-span-2">
-            <tds-select
-              [required]="true"
-              valueField="id"
-              textField="name"
-              placeholder="Lựa chọn công việc"
-              disabledField="isActive"
-              formControlName="jobTypeID"
-              [data]="jobTypeOptions"
-              [allowClear]="true"
-              class="appearance-none"
-            >
+            <tds-select [required]="true" valueField="id" textField="name" placeholder="Lựa chọn công việc"
+              disabledField="isActive" formControlName="jobTypeID" [data]="jobTypeOptions" [allowClear]="true"
+              class="appearance-none">
             </tds-select>
             <tds-error>
-              <span *ngIf="createUser.controls['jobTypeID'].touched"
-                >Vui lòng chọn công việc</span
-              >
+              <span *ngIf="createUser.controls['jobTypeID'].touched">Vui lòng chọn công việc</span>
             </tds-error>
           </tds-form-field>
         </div>
@@ -190,22 +128,12 @@
         <div class="grid grid-cols-3 gap-1 my-2">
           <tds-label>Chi nhánh</tds-label>
           <tds-form-field class="col-span-2">
-            <tds-select
-              [required]="true"
-              valueField="id"
-              textField="name"
-              placeholder="Lựa chọn chi nhánh"
-              disabledField="isActive"
-              formControlName="branchID"
-              [data]="branchOptions"
-              [allowClear]="true"
-              class="appearance-none"
-            >
+            <tds-select [required]="true" valueField="id" textField="name" placeholder="Lựa chọn chi nhánh"
+              disabledField="isActive" formControlName="branchID" [data]="branchOptions" [allowClear]="true"
+              class="appearance-none">
             </tds-select>
             <tds-error>
-              <span *ngIf="createUser.controls['branchID'].touched"
-                >Vui lòng chọn chi nhánh</span
-              >
+              <span *ngIf="createUser.controls['branchID'].touched">Vui lòng chọn chi nhánh</span>
             </tds-error>
           </tds-form-field>
         </div>
@@ -218,15 +146,8 @@
 <ng-container *tdsModalFooter>
   <div class="p-4">
     <div class="w-full flex flex-col justify-center mt-8">
-      <button
-        class="w-full mt-4"
-        size="lg"
-        tds-button
-        type="submit"
-        (click)="submit()"
-        form="registerUser"
-        style="background-color: #1b7c20"
-      >
+      <button class="w-full mt-4" size="lg" tds-button type="submit" (click)="submit()" form="registerUser"
+        style="background-color: #1b7c20">
         Xác nhận
       </button>
     </div>

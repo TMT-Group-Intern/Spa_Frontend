@@ -2,52 +2,22 @@
   <!-- Full name -->
   <tds-label>Khách hàng</tds-label>
   <tds-form-field class="my-2">
-    <input
-      tdsInput
-      autocomplete="off"
-      formControlName="name"
-      class="appearance-none w-full"
-      type="text"
-    />
+    <input tdsInput autocomplete="off" formControlName="name" class="appearance-none w-full" type="text" />
   </tds-form-field>
 
   <!-- Spa Therapist -->
   <tds-label>Nhân viên chăm sóc</tds-label>
   <tds-form-field class="my-2">
-    <tds-select
-      valueField="id"
-      textField="name"
-      placeholder="---"
-      [data]="spaTherapistOptions"
-      formControlName="spaTherapist"
-    >
+    <tds-select valueField="id" textField="name" placeholder="---" [data]="spaTherapistOptions"
+      formControlName="spaTherapist">
     </tds-select>
     <tds-error><span>Vui lòng chọn <strong>nhân viên chăm sóc</strong>!</span></tds-error>
   </tds-form-field>
-
-  <!-- Status -->
-  <!-- <tds-label>Trạng thái</tds-label>
-  <tds-form-field class="my-2">
-    <tds-select
-      valueField="id"
-      textField="name"
-      placeholder="---"
-      [data]="statusOptions"
-      formControlName="status"
-    >
-    </tds-select>
-  </tds-form-field> -->
 </form>
 
 <ng-container *tdsModalFooter>
   <div class="p-4">
-    <button
-      tds-button
-      form="idform"
-      (click)="submit()"
-      color="success"
-      class="w-full rounded"
-    >
+    <button tds-button form="idform" (click)="submit()" color="success" class="w-full rounded">
       Chuyển sang chăm sóc
     </button>
   </div>

@@ -21,7 +21,7 @@ import { TDSTypographyModule } from 'tds-ui/typography';
 
 const routes: Routes = [{ path: '', component: AppointmentListComponent }];
 @NgModule({
-  declarations: [AppointmentListComponent,AppointmentTableListComponent],
+  declarations: [AppointmentListComponent, AppointmentTableListComponent],
   imports: [
     CommonModule,
     TDSDatePickerModule,
@@ -43,4 +43,4 @@ const routes: Routes = [{ path: '', component: AppointmentListComponent }];
   ],
   exports: [AppointmentListComponent],
 })
-export class AppointmentListModule {}
+export class AppointmentListModule { }
