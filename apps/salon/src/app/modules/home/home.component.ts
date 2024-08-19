@@ -33,6 +33,7 @@ import { PaymentModalComponent } from './payment-modal/payment-modal.component';
 import { AppointmentListModule } from '../appointment-list/appointment-list.module';
 import { TDSBadgeModule } from 'tds-ui/badges';
 import { PaymentInfoComponent } from './payment-info/payment-info.component';
+import { SpinnerComponent } from "../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'frontend-home',
@@ -54,7 +55,8 @@ import { PaymentInfoComponent } from './payment-info/payment-info.component';
     TDSTabsModule,
     TDSBadgeModule,
     AppointmentListModule,
-  ],
+    SpinnerComponent
+],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
@@ -84,6 +86,7 @@ export class HomeComponent implements OnInit {
   endDate = '';
   lstData: Array<{ start: Date; end: Date; data: TDSSafeAny }> = [];
   dataAppointments: any;
+  isLoading = false;
   // options = ['Chờ chăm sóc', 'Thanh toán'];
 
   constructor(
@@ -121,6 +124,7 @@ export class HomeComponent implements OnInit {
 
   // call get list of appoiment
   initAppointment() {
+    this.isLoading = true;
     this.companySvc._companyIdCur$
       .pipe(
         filter((branchID) => !!branchID),
@@ -131,6 +135,10 @@ export class HomeComponent implements OnInit {
       )
       .subscribe((data: any) => {
         this.dataAppointment(data);
+      },error => {
+        console.log('Error!')
+      }, () => {
+        this.isLoading = false; // Kết thúc loading
       });
   }
 
@@ -189,6 +197,7 @@ export class HomeComponent implements OnInit {
         appoint.data.status.bg = 'bg-warning-100';
       }
     }
+    this.isLoading=false
   }
 
   onChangeTime(event: any) {

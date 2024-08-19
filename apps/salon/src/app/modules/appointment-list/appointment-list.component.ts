@@ -80,7 +80,7 @@ export class AppointmentListComponent implements OnInit, OnChanges {
   @Input() _endDate = format(this.thisTime[1], DATE_CONFIG.DATE_BASE_TO);
   startDate = format(this.thisTime[0], DATE_CONFIG.DATE_BASE_FROM);
   endDate = format(this.thisTime[1], DATE_CONFIG.DATE_BASE_TO);
-
+  isLoading=false;
 
   ngOnInit() {
     if (this.storedUserSession !== null) {

@@ -12,26 +12,23 @@
     </button>
   </div>
 
-  <tds-data-table class="p-2" [tdsRounded]="true" [tdsShowPagination]="false" [tdsFrontPagination]="false"
-    [tdsData]="AccountList" [tdsShowSizeChanger]="true" [tdsPageSize]="20" [tdsBordered]="true">
+  <!-- Hiển thị spinner khi đang load dữ liệu -->
+  <frontend-spinner *ngIf="isLoading"></frontend-spinner>
+
+  <!-- Hiển thị bảng khi đã load xong -->
+  <tds-data-table *ngIf="!isLoading" class="p-2" [tdsRounded]="true" [tdsShowPagination]="false"
+    [tdsFrontPagination]="false" [tdsData]="AccountList" [tdsShowSizeChanger]="true" [tdsPageSize]="20"
+    [tdsBordered]="true">
     <tds-data-table-column [tdsField]="'code'" [tdsTitle]="'Mã tài khoản'" tdsWidth="8%"
       [tdsDataType]="'text'"></tds-data-table-column>
-
     <tds-data-table-column [tdsField]="'lastName'" [tdsTitle]="'Họ'" tdsWidth="12%"
       [tdsDataType]="'text'"></tds-data-table-column>
-
     <tds-data-table-column [tdsField]="'firstName'" [tdsTitle]="'Tên'" tdsWidth="9%"
       [tdsDataType]="'text'"></tds-data-table-column>
-
-    <!-- <tds-data-table-column [tdsField]="'email'" [tdsTitle]="'Email'" tdsWidth="15%"
-        [tdsDataType]="'text'"></tds-data-table-column> -->
-
     <tds-data-table-column [tdsField]="'userName'" [tdsTitle]="'Tài khoản'" tdsWidth="15%"
       [tdsDataType]="'text'"></tds-data-table-column>
-
     <tds-data-table-column [tdsField]="'phoneNumber'" [tdsTitle]="'Số điện thoại'" tdsWidth="7%"
       [tdsDataType]="'text'"></tds-data-table-column>
-
     <tds-data-table-column [tdsField]="'role'" [tdsTitle]="'Công việc'" tdsWidth="12%"
       [tdsDataType]="'text'"></tds-data-table-column>
     <tds-data-table-column [tdsField]="'isActiveAcount'" [tdsTitle]="'Trạng thái'" tdsWidth="12%"
@@ -43,14 +40,14 @@
         <span class="px-4" *ngIf="dataRow.haveAccount === true"></span>
         <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-secondary-1" tds-tooltip
           tooltipTitle="Cập nhật thông tin tài khoản" (click)="
-            onEditAccount(
-              dataRow.id,
-              dataRow.role,
-              dataRow.isActiveAcount,
-              dataRow.lastName,
-              dataRow.firstName
-            )
-          ">
+          onEditAccount(
+            dataRow.id,
+            dataRow.role,
+            dataRow.isActiveAcount,
+            dataRow.lastName,
+            dataRow.firstName
+          )
+        ">
           <i class="tdsi-edit-fill"></i>
         </button>
         <button tds-button-flat-icon color="custom" [disabled]="this.userSession.user.userName === dataRow.userName"
@@ -62,6 +59,7 @@
       </ng-template>
     </tds-data-table-column>
   </tds-data-table>
+
   <div class="w-full flex items-center p-2">
     <tds-pagination class="w-full" [pageSize]="pageSize" [pageIndex]="pageNumber" [total]="totalItemsUsers"
       [pageSizeOptions]="[10, 20, 30, 40]" [showTotal]="rangeTemplate" showSizeChanger [showRefresh]="true"
