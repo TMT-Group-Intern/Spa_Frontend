@@ -156,9 +156,6 @@ export class HomeComponent implements OnInit {
       },
     }));
 
-    const foundCompletedAppointment = this.lstData.filter(
-      (item) => item.data.status.name === 'Hoàn thành'
-    );
     for (const appoint of this.lstData) {
       if (appoint.data.status.name == 'Đã hẹn') {
         appoint.data.status.status = 'primary'

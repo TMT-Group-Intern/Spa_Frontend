@@ -32,12 +32,13 @@
   <tds-table #appointmentTable [listData]="service" [showPagination]="false" [title]="'Hóa đơn'">
     <thead>
       <tr>
-        <th width="25%">Tên</th>
+        <th width="22%">Tên</th>
         <th width="9%">Số lượng</th>
-        <th width="13%">Đơn giá</th>
+        <th width="7%">Lộ trình</th>
+        <th width="11%">Đơn giá</th>
         <th width="15%">Giảm giá</th>
-        <th width="10%">Thành tiền</th>
-        <th width="30%">Ghi chú</th>
+        <th width="11%">Thành tiền</th>
+        <th width="25%">Ghi chú</th>
       </tr>
     </thead>
 
@@ -47,6 +48,9 @@
           <td>{{ data.serviceName }}</td>
           <td [align]="'center'">
             {{ data.quantity }}
+          </td>
+          <td [align]="'center'">
+            {{ data.isTreatment ? 'x' : '' }}
           </td>
           <td [align]="'right'">
             {{ data.unitPrice | tdsFormatNumber }}
@@ -106,7 +110,9 @@
     </div>
   </div>
 
-  <tds-table *ngIf="(billStatus !== 'Chưa thanh toán') === true; else nodata" #paymentTable [listData]="paymentByBill"
+  <hr *ngIf="billStatus === 'Chưa thanh toán'" class="mb-5"/>
+
+  <tds-table *ngIf="billStatus !== 'Chưa thanh toán'; else nodata" #paymentTable [listData]="paymentByBill"
     [showPagination]="false" [title]="'Lịch sử thanh toán'">
     <thead>
       <tr>

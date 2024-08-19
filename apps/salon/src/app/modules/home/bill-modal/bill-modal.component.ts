@@ -54,7 +54,7 @@ export class BillModalComponent {
   amountResidual = 0
   amountInvoiced = 0
   note = ''
-  paymentMethod = 'Tiền mặt'
+  paymentMethod = 'Chuyển khoản'
 
   constructor(
     private shared: AuthService,
@@ -131,17 +131,31 @@ export class BillModalComponent {
   // Calculate Total Price
   totalPrice(id: number) {
     const service = this.service.find(ser => ser.serviceID === id);
-    service.tempPrice = service.unitPrice * service.quantity
-    this.priceAfterDiscount(id)
+    if (service) {
+      service.tempPrice = service.unitPrice * service.quantity
+      this.priceAfterDiscount(id)
+    } else {
+      const treatment = this.treatment.find(treat => treat.serviceID === id);
+      this.priceAfterDiscount(id)
+    }
   }
 
   // Calculate the price after use discount
   priceAfterDiscount(id: number) {
     const service = this.service.find(ser => ser.serviceID === id);
-    if (service.kindofDiscount == '%') {
-      service.totalPrice = service.tempPrice * (100 - service.amountDiscount) / 100;
+    if (service) {
+      if (service.kindofDiscount == '%') {
+        service.totalPrice = service.tempPrice * (100 - service.amountDiscount) / 100;
+      } else {
+        service.totalPrice = service.tempPrice - service.amountDiscount;
+      }
     } else {
-      service.totalPrice = service.tempPrice - service.amountDiscount;
+      const treatment = this.treatment.find(treat => treat.serviceID === id);
+      if (treatment.kindofDiscount == '%') {
+        treatment.totalPrice = treatment.unitPrice * (100 - treatment.amountDiscount) / 100;
+      } else {
+        treatment.totalPrice = treatment.unitPrice - treatment.amountDiscount;
+      }
     }
     this.resetTotal()
   }
@@ -149,18 +163,32 @@ export class BillModalComponent {
   //
   activeDiscountPercentagePrice(id: number) {
     const service = this.service.find(ser => ser.serviceID === id);
-    service.kindofDiscount = '%'
-    service.amountDiscount = 0
-    service.totalPrice = service.tempPrice
+    if (service) {
+      service.kindofDiscount = '%'
+      service.amountDiscount = 0
+      service.totalPrice = service.tempPrice
+    } else {
+      const treatment = this.treatment.find(treat => treat.serviceID === id);
+      treatment.kindofDiscount = '%'
+      treatment.amountDiscount = 0
+      treatment.totalPrice = treatment.unitPrice
+    }
     this.resetTotal()
   }
 
   //
   activeDiscountVNDPrice(id: number) {
     const service = this.service.find(ser => ser.serviceID === id);
-    service.kindofDiscount = 'VND'
-    service.amountDiscount = 0
-    service.totalPrice = service.tempPrice
+    if (service) {
+      service.kindofDiscount = 'VND'
+      service.amountDiscount = 0
+      service.totalPrice = service.tempPrice
+    } else {
+      const treatment = this.treatment.find(treat => treat.serviceID === id);
+      treatment.kindofDiscount = 'VND'
+      treatment.amountDiscount = 0
+      treatment.totalPrice = treatment.unitPrice
+    }
     this.resetTotal()
   }
 
@@ -207,7 +235,7 @@ export class BillModalComponent {
       })
     )
   }
-  onInvoice(billId:any) {
+  onInvoice(billId: any) {
     const modal = this.tModalSvc.create({
       title: 'In hóa đơn',
       content: InvoiceComponent,
@@ -218,7 +246,7 @@ export class BillModalComponent {
       }
     });
     modal.afterClose.asObservable().subscribe()
-}
+  }
   //
   save() {
     for (const ser of this.service) {

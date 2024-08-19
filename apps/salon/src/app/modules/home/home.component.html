@@ -47,8 +47,7 @@
                           </tds-tag>
                           <tds-badge
                             *ngIf="
-                              event.data.billStatus ===
-                              'Chưa tạo hóa đơn thanh toán'
+                              !event.data.billStatus
                             "
                             status="error"
                             tds-tooltip
