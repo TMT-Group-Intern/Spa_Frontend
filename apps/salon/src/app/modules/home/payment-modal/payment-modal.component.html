@@ -43,12 +43,13 @@
   >
     <thead>
       <tr>
-        <th width="25%">Tên</th>
-        <th width="7%">Số lượng</th>
-        <th width="13%">Đơn giá</th>
+        <th width="22%">Tên</th>
+        <th width="9%">Số lượng</th>
+        <th width="7%">Lộ trình</th>
+        <th width="11%">Đơn giá</th>
         <th width="15%">Giảm giá</th>
-        <th width="10%">Thành tiền</th>
-        <th width="30%">Ghi chú</th>
+        <th width="11%">Thành tiền</th>
+        <th width="25%">Ghi chú</th>
       </tr>
     </thead>
 
@@ -58,6 +59,9 @@
           <td>{{ data.serviceName }}</td>
           <td [align]="'center'">
             {{ data.quantity }}
+          </td>
+          <td [align]="'center'">
+            {{ data.isTreatment ? 'x' : '' }}
           </td>
           <td [align]="'right'">
             {{ data.unitPrice | tdsFormatNumber }}
@@ -85,7 +89,7 @@
           <span class="col-span-3">Tổng tiền:</span> <span class="col-span-2 flex justify-end">{{ total |
             tdsFormatNumber }}</span>
         </p>
-  
+
         <!-- Discount -->
         <div class="grid grid-cols-6 gap-3 py-2">
           <p class="col-span-2 flex items-center"><span>Giảm giá:</span></p>
@@ -95,7 +99,7 @@
         </div>
     </div>
 
-    <div  class="p-4 bg-gray-100 rounded-10">       
+    <div  class="p-4 bg-gray-100 rounded-10">
 
       <!-- Note -->
       <div class="grid grid-cols-4 gap-3 py-2">
@@ -115,8 +119,10 @@
     </div>
   </div>
 
+  <hr *ngIf="billStatus === 'Chưa thanh toán'" class="mb-5"/>
+
   <tds-table
-    *ngIf="(billStatus !== 'Chưa thanh toán') === true; else nodata"
+    *ngIf="billStatus !== 'Chưa thanh toán'; else nodata"
     #paymentTable
     [listData]="paymentByBill"
     [showPagination]="false"
@@ -219,7 +225,7 @@
 
       <div class="flex justify-center">
         <img
-          *ngIf="paymentMethod === 'Chuyển khoản'"
+          *ngIf="paymentMethod === 'Chuyển khoản' && billStatus !== 'Thanh toán hoàn tất'"
           src="../../../../assets/img/1721276662570.png"
           alt="QR Code"
           width="225px"

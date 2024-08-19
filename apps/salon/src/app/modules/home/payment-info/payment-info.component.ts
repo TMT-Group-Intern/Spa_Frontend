@@ -91,6 +91,7 @@ export class PaymentInfoComponent implements OnInit {
             amountDiscount: item.amountDiscount,
             kindofDiscount: item.kindofDiscount,
             note: item.note,
+            isTreatment: item.isTreatment
           }))]
           this.resetTotal()
         })
