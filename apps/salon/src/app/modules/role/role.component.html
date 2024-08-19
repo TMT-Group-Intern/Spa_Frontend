@@ -19,9 +19,15 @@
     <div *ngIf="isClick" class="bg-white rounded-lg overflow-y-auto h-full p-7">
       <p class="py-3 font-bold text-lg">{{ jobName }}</p>
 
-      <tds-tree #tdsTreeComponent [data]="permissions" checkable (onClick)="onClick($event)"
+      <tds-tree #tdsTreeComponent [data]="permissions" checkable
         (contextMenu)="onClick($event)" (onCheckBoxChange)="onCheck($event)" (onExpandChange)="onCheck($event)">
       </tds-tree>
+    </div>
+    <div class="w-full flex flex-col justify-center">
+      <button class="w-full" size="lg" tds-button type="submit"
+        style="background-color: #1b7c20">
+        Lưu
+      </button>
     </div>
   </div>
 </div>
