@@ -18,6 +18,7 @@ import { TDSSelectModule } from 'tds-ui/select';
 import { TDSPaginationModule } from 'tds-ui/pagination';
 import { AccountModalComponent } from './account-modal/account-modal.component';
 import { AdminModalComponent } from './admin-modal/admin-modal.component';
+import { SpinnerComponent } from "../../shared/spinner/spinner.component";
 
 const roleOptions = [
   {
@@ -57,7 +58,8 @@ const roleOptions = [
     FormsModule,
     TDSCascaderModule,
     TDSPaginationModule,
-  ],
+    SpinnerComponent
+],
 })
 export class AccountComponent implements OnInit {
   tdsOptions: TDSCascaderOption[] = roleOptions;
@@ -70,6 +72,7 @@ export class AccountComponent implements OnInit {
   pageNumber: any = 1
   pageSize: any = 10
   totalItemsUsers: any
+  isLoading = false;
 
   constructor(
     private auth: AuthService,
@@ -87,6 +90,7 @@ export class AccountComponent implements OnInit {
   }
 
   initAccountList() {
+    this.isLoading = true;
     this.auth.pageAccountByPages(this.pageNumber, this.pageSize).subscribe((data: any) => {
       this.AccountList = data.item;
       this.totalItemsUsers = data.totalItems;
@@ -107,6 +111,10 @@ export class AccountComponent implements OnInit {
             this.totalItemsUsers = data.totalItems;
           })
       }
+    },error => {
+      console.log('Error!')
+    }, () => {
+      this.isLoading = false; // Kết thúc loading
     });
   }
   // Format Date & Time
