@@ -1,237 +1,137 @@
 <form [formGroup]="createAdmin" id="registerAdmin" autocomplete="off">
-    <!-- model register -->
-    <div class="grid grid-cols-2 gap-12">
-      <div>
-        <!-- Last Name -->
-        <div class="grid grid-cols-3 gap-1 my-2">
-          <tds-label>Họ</tds-label>
-          <tds-form-field class="col-span-2">
-            <input
-              tdsInput
-              autocomplete="off"
-              placeholder="Nhập họ"
-              formControlName="lastName"
-              [required]="true"
-              class="appearance-none"
-            />
-            <tds-error>
-              <span
-                *ngIf="
+  <div class="grid grid-cols-2 gap-12">
+    <div>
+      <div class="grid grid-cols-3 gap-1 my-2">
+        <tds-label>Họ</tds-label>
+        <tds-form-field class="col-span-2">
+          <input tdsInput autocomplete="off" placeholder="Nhập họ" formControlName="lastName" [required]="true"
+            class="appearance-none" />
+          <tds-error>
+            <span *ngIf="
                 createAdmin.controls['lastName'].touched &&
                 createAdmin.controls['lastName'].hasError('required')
-                "
-                >Vui lòng nhập họ</span
-              >
-            </tds-error>
-          </tds-form-field>
-        </div>
-  
-        <!-- First Name -->
-        <div class="grid grid-cols-3 gap-1 my-2">
-          <tds-label>Tên</tds-label>
-          <tds-form-field class="col-span-2">
-            <input
-              tdsInput
-              autocomplete="off"
-              placeholder="Nhập tên"
-              formControlName="firstName"
-              [required]="true"
-              class="appearance-none"
-            />
-            <tds-error>
-              <span
-                *ngIf="
+                ">Vui lòng nhập họ</span>
+          </tds-error>
+        </tds-form-field>
+      </div>
+      <div class="grid grid-cols-3 gap-1 my-2">
+        <tds-label>Tên</tds-label>
+        <tds-form-field class="col-span-2">
+          <input tdsInput autocomplete="off" placeholder="Nhập tên" formControlName="firstName" [required]="true"
+            class="appearance-none" />
+          <tds-error>
+            <span *ngIf="
                 createAdmin.controls['firstName'].touched &&
                 createAdmin.controls['firstName'].hasError('required')
-                "
-                >Vui lòng nhập tên</span
-              >
-            </tds-error>
-          </tds-form-field>
-        </div>
-  
-        <!-- Email -->
-        <div class="grid grid-cols-3 gap-1 my-2" *ngIf="checkDislay === true">
-          <tds-label>Email</tds-label>
-          <tds-form-field class="col-span-2">
-            <input
-              tdsInput
-              autocomplete="off"
-              placeholder="Nhập email"
-              formControlName="email"
-              type="email"
-              [required]="true"
-              class="appearance-none"
-            />
-            <tds-error>
-              <span
-                *ngIf="
+                ">Vui lòng nhập tên</span>
+          </tds-error>
+        </tds-form-field>
+      </div>
+      <div class="grid grid-cols-3 gap-1 my-2" *ngIf="checkDislay === true">
+        <tds-label>Email</tds-label>
+        <tds-form-field class="col-span-2">
+          <input tdsInput autocomplete="off" placeholder="Nhập email" formControlName="email" type="email"
+            [required]="true" class="appearance-none" />
+          <tds-error>
+            <span *ngIf="
                 createAdmin.controls['email'].touched &&
                 createAdmin.controls['email'].hasError('required')
-                "
-                >Vui lòng nhập email</span
-              >
-              <span
-                *ngIf="
+                ">Vui lòng nhập email</span>
+            <span *ngIf="
                 createAdmin.controls['email'].touched &&
                 createAdmin.controls['email'].hasError('email')
-                "
-                >Email không hợp lệ</span
-              >
-            </tds-error>
-          </tds-form-field>
-        </div>
-
-        <div class="grid grid-cols-3 gap-1 my-2" *ngIf="checkDislay === true">
-            <tds-label>Tài khoản</tds-label>
-            <tds-form-field class="col-span-2">
-              <input
-                tdsInput
-                autocomplete="off"
-                placeholder="Nhập tài khoản"
-                formControlName="userName"
-                type="text"
-                [required]="true"
-                class="appearance-none"
-              />
-              <tds-error>
-                <span
-                  *ngIf="
+                ">Email không hợp lệ</span>
+          </tds-error>
+        </tds-form-field>
+      </div>
+      <div class="grid grid-cols-3 gap-1 my-2" *ngIf="checkDislay === true">
+        <tds-label>Tài khoản</tds-label>
+        <tds-form-field class="col-span-2">
+          <input tdsInput autocomplete="off" placeholder="Nhập tài khoản" formControlName="userName" type="text"
+            [required]="true" class="appearance-none" />
+          <tds-error>
+            <span *ngIf="
                   createAdmin.controls['userName'].touched &&
                   createAdmin.controls['userName'].hasError('required')
-                  "
-                  >Vui lòng nhập tài khoản</span
-                >
-              </tds-error>
-            </tds-form-field>
-          </div>
-  
-        <!-- Phone -->
-        <div class="grid grid-cols-3 gap-1 my-2">
-          <tds-label>Số điện thoại</tds-label>
-          <tds-form-field class="col-span-2">
-            <input
-              tdsInput
-              autocomplete="off"
-              placeholder="Nhập số điện thoại"
-              formControlName="phone"
-              [required]="true"
-              class="appearance-none"
-            />
-            <tds-error>
-              <span *ngIf="createAdmin.controls['phone'].hasError('required')"
-                >Vui lòng nhập số điện thoại</span
-              >
-              <span *ngIf="createAdmin.controls['phone'].hasError('pattern')"
-                >Số điện thoại phải có đủ 10 số và bắt đầu bằng 0</span
-              >
-            </tds-error>
-          </tds-form-field>
-        </div>
+                  ">Vui lòng nhập tài khoản</span>
+          </tds-error>
+        </tds-form-field>
       </div>
-  
-      <div>
-        <!--  -->
-        <div class="grid grid-cols-3 gap-1 my-2">
-          <tds-label>Giới tính</tds-label>
-          <tds-radio-group class="col-span-2" formControlName="gender">
-            <div>
-              <label tds-radio value="Nam">Nam</label>
-              <label tds-radio value="Nữ">Nữ</label>
-            </div>
-          </tds-radio-group>
-        </div>
-  
-        <!--  -->
-        <div class="grid grid-cols-3 gap-1 my-2">
-          <tds-label>Ngày sinh</tds-label>
-          <tds-form-field class="col-span-2">
-            <tds-date-picker
-              formControlName="dateOfBirth"
-              [required]="true"
-              [allowClear]="true"
-            ></tds-date-picker>
-            <tds-error>
-              <span
-                *ngIf="
+      <div class="grid grid-cols-3 gap-1 my-2">
+        <tds-label>Số điện thoại</tds-label>
+        <tds-form-field class="col-span-2">
+          <input tdsInput autocomplete="off" placeholder="Nhập số điện thoại" formControlName="phone" [required]="true"
+            class="appearance-none" />
+          <tds-error>
+            <span *ngIf="createAdmin.controls['phone'].hasError('required')">Vui lòng nhập số điện thoại</span>
+            <span *ngIf="createAdmin.controls['phone'].hasError('pattern')">Số điện thoại phải có đủ 10 số và bắt đầu
+              bằng 0</span>
+          </tds-error>
+        </tds-form-field>
+      </div>
+    </div>
+    <div>
+      <div class="grid grid-cols-3 gap-1 my-2">
+        <tds-label>Giới tính</tds-label>
+        <tds-radio-group class="col-span-2" formControlName="gender">
+          <div>
+            <label tds-radio value="Nam">Nam</label>
+            <label tds-radio value="Nữ">Nữ</label>
+          </div>
+        </tds-radio-group>
+      </div>
+      <div class="grid grid-cols-3 gap-1 my-2">
+        <tds-label>Ngày sinh</tds-label>
+        <tds-form-field class="col-span-2">
+          <tds-date-picker formControlName="dateOfBirth" [required]="true" [allowClear]="true"></tds-date-picker>
+          <tds-error>
+            <span *ngIf="
                 createAdmin.controls['dateOfBirth'].touched &&
                 createAdmin.controls['dateOfBirth'].hasError('required')
-                "
-              >
-                Vui lòng chọn ngày sinh
-              </span>
-            </tds-error>
-          </tds-form-field>
-        </div>
-  
-      <!-- Password -->
+                ">
+              Vui lòng chọn ngày sinh
+            </span>
+          </tds-error>
+        </tds-form-field>
+      </div>
       <div>
         <div class="grid grid-cols-3 gap-1 my-2">
           <tds-label>Mật khẩu</tds-label>
           <tds-form-field class="col-span-2">
-            <input
-              [required]="true"
-              tdsInput
-              autocomplete="off"
-              placeholder="Nhập mật khẩu"
-              formControlName="password"
-              type="password"
-            />
+            <input [required]="true" tdsInput autocomplete="off" placeholder="Nhập mật khẩu" formControlName="password"
+              type="password" />
             <tds-error>
-              <span *ngIf="createAdmin.controls['password'].touched"
-                >Vui lòng nhập mật khẩu</span
-              >
-              <span
-                *ngIf="
+              <span *ngIf="createAdmin.controls['password'].touched">Vui lòng nhập mật khẩu</span>
+              <span *ngIf="
                 createAdmin.controls['password'].touched &&
                   createAdmin.controls['password'].hasError('pattern')
-                "
-                >Mật khẩu ít nhất 8 kí tự, gồm chữ hoa, chữ thường, số và kí tự
-                đặc biệt</span
-              >
+                ">Mật khẩu ít nhất 8 kí tự, gồm chữ hoa, chữ thường, số và kí tự
+                đặc biệt</span>
             </tds-error>
           </tds-form-field>
         </div>
         <div class="grid grid-cols-3 gap-1 my-2">
           <tds-label>Nhập lại mật khẩu</tds-label>
           <tds-form-field class="col-span-2">
-            <input
-              [required]="true"
-              tdsInput
-              autocomplete="off"
-              placeholder="Xác nhận mật khẩu"
-              formControlName="confirmPassword"
-              type="password"
-            />
+            <input [required]="true" tdsInput autocomplete="off" placeholder="Xác nhận mật khẩu"
+              formControlName="confirmPassword" type="password" />
             <tds-error>
-              <span
-                *ngIf="createAdmin.get('confirmPassword')?.errors?.['mustMatch']"
-                >Mật khẩu không khớp</span
-              >
+              <span *ngIf="createAdmin.get('confirmPassword')?.errors?.['mustMatch']">Mật khẩu không khớp</span>
             </tds-error>
           </tds-form-field>
         </div>
-      </div> 
       </div>
     </div>
-    <!-- Kết thúc mã modal register -->
-  </form>
-  
-  <ng-container *tdsModalFooter>
-    <div class="p-4">
-      <div class="w-full flex flex-col justify-center">
-        <button
-          class="w-full"
-          size="lg"
-          tds-button
-          type="submit"
-          (click)="submit()"
-          form="registerAdmin"
-          style="background-color: #1b7c20"
-        >
-          Xác nhận
-        </button>
-      </div>
+  </div>
+</form>
+
+<ng-container *tdsModalFooter>
+  <div class="p-4">
+    <div class="w-full flex flex-col justify-center">
+      <button class="w-full" size="lg" tds-button type="submit" (click)="submit()" form="registerAdmin"
+        style="background-color: #1b7c20">
+        Xác nhận
+      </button>
     </div>
-  </ng-container>
-  
+  </div>
+</ng-container>

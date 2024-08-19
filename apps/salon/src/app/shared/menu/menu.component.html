@@ -1,9 +1,11 @@
 <div [style.width.px]="!isCollapsed ? 260 : 50" class="h-full">
   <tds-menu
-    class="h-full"
+    class="h-full hover-menu"
     [data]="lstMenu"
     [inlineCollapsed]="isCollapsed"
     [showLogo]="true"
+    (mouseenter)="onMouseEnter()"
+    (mouseleave)="onMouseLeave()"
     (onOpenChange)="onOpenChange($event)"
   >
     <img src="../../assets/img/imgspa.jpg" logo-text class="h-10" />

@@ -6,14 +6,15 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputNumberModule } from 'tds-ui/input-number';
-import { TDSModalModule, TDSModalRef } from 'tds-ui/modal';
+import { TDSModalModule, TDSModalRef, TDSModalService } from 'tds-ui/modal';
 import { TDSDropDownModule } from 'tds-ui/dropdown';
 import { TDSPipesModule } from 'tds-ui/core/pipes';
 import { AuthService } from '../../../shared.service';
 import { TDSNotificationService } from 'tds-ui/notification';
 import * as moment from 'moment';
 import { TDSRadioModule } from 'tds-ui/radio';
-import { catchError, concatMap, tap } from 'rxjs';
+import { catchError, concatMap, filter, tap } from 'rxjs';
+import { InvoiceComponent } from '../../invoice/invoice.component';
 
 @Component({
   selector: 'frontend-bill-modal',
@@ -36,7 +37,7 @@ import { catchError, concatMap, tap } from 'rxjs';
   styleUrls: ['./bill-modal.component.scss'],
 })
 export class BillModalComponent {
-  // private readonly tModalSvc = inject(TDSModalService);
+  private readonly tModalSvc = inject(TDSModalService);
   private readonly modalRef = inject(TDSModalRef);
   // routeSub: Subscription | undefined
   // BillID: any;
@@ -53,12 +54,9 @@ export class BillModalComponent {
   amountResidual = 0
   amountInvoiced = 0
   note = ''
-  // amountInvoicedContinue = 0
-  // amountResidualContinue = 0
   paymentMethod = 'Tiền mặt'
 
   constructor(
-    // private route: ActivatedRoute,
     private shared: AuthService,
     private notification: TDSNotificationService,
   ) { }
@@ -178,10 +176,6 @@ export class BillModalComponent {
     this.totalAmountAfterDiscount()
   }
 
-  // updateAmountResidual() {
-  //   this.amountResidualContinue = this.amountResidual - this.amountInvoicedContinue
-  // }
-
   createPayment$(billID: number) {
 
     return this.shared.createPayment({
@@ -192,6 +186,19 @@ export class BillModalComponent {
     }).pipe(
       tap((val) => {
         this.createNotificationSuccess('');
+        const modal = this.tModalSvc.confirm({
+          title: 'In hóa đơn',
+          content: `<h5 class="text-success-500">Bạn có muốn in hóa đơn không?</h5>`,
+          iconType: 'tdsi-print-fill',
+          okText: 'In hóa đơn',
+          size: 'sm',
+          cancelText: 'Hủy',
+          onOk: () => true
+        });
+        modal.afterClose.asObservable().pipe(
+          filter(condition => condition),
+          tap(() => this.onInvoice(billID))
+        ).subscribe();
         this.modalRef.destroy(val);
       }),
       catchError((res) => {
@@ -200,7 +207,18 @@ export class BillModalComponent {
       })
     )
   }
-
+  onInvoice(billId:any) {
+    const modal = this.tModalSvc.create({
+      title: 'In hóa đơn',
+      content: InvoiceComponent,
+      footer: null,
+      size: 'xl',
+      componentParams: {
+        billId
+      }
+    });
+    modal.afterClose.asObservable().subscribe()
+}
   //
   save() {
     for (const ser of this.service) {
@@ -228,18 +246,15 @@ export class BillModalComponent {
     // console.log(val.billItems)
 
     if (this.amountInvoiced == 0) {
-      // this.shared.UpdateStatus(this.id, 'Chưa thanh toán').subscribe()
       this.shared.createBill(val).subscribe()
       this.modalRef.destroy(val);
     } else {
       if (this.amountResidual == 0) {
-        // this.shared.UpdateStatus(this.id, 'Thanh toán hoàn tất').subscribe()
         this.shared.createBill({ ...val, billStatus: "Thanh toán hoàn tất" }).pipe(
           concatMap(() => this.shared.getAllBillByAppointmentID(this.id)),
           concatMap((data) => this.createPayment$(data.billID))
         ).subscribe()
       } else {
-        // this.shared.UpdateStatus(this.id, 'Thanh toán 1 phần').subscribe()
         this.shared.createBill({ ...val, billStatus: "Thanh toán 1 phần" }).pipe(
           concatMap(() => this.shared.getAllBillByAppointmentID(this.id)),
           concatMap((data) => this.createPayment$(data.billID))

@@ -55,7 +55,13 @@ export class AuthGuardService implements CanActivate {
   }
 
   LogOut() {
-    // ... (your logout logic)
+    localStorage.removeItem('userSession');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('appointmentDetail');
+    localStorage.removeItem('customerID');
+    deleteCookie('userToken')
+    this.router.navigate(['']);
   }
 
   private decodeJWTPayload(base64Payload: string): any {
@@ -90,5 +96,8 @@ export class AuthGuardService implements CanActivate {
     }
     return '';
   }
+}
+function deleteCookie(cookieName: any) {
+  document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 

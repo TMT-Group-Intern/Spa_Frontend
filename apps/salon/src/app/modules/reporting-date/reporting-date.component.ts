@@ -12,7 +12,7 @@ import { differenceInCalendarDays } from 'date-fns';
   templateUrl: './reporting-date.component.html',
   styleUrls: ['./reporting-date.component.scss'],
   standalone: true,
-  imports:[
+  imports: [
     CommonModule,
     TableReportingDateComponent,
     ReactiveFormsModule,
@@ -32,9 +32,9 @@ export class ReportingDateComponent implements OnInit {
   rangeDate = {
 
   }
-  constructor(){
+  constructor() {
     this.branchId,
-    this.date
+      this.date
   }
   ngOnInit(): void {
     if (this.storedUserSession !== null) {
@@ -42,7 +42,7 @@ export class ReportingDateComponent implements OnInit {
       this.branchId = this.userSession.user.branchID;
     }
   }
-  onChange(date: any){
+  onChange(date: any) {
     this.date = date;
   }
   disabledDate = (current: Date): boolean =>

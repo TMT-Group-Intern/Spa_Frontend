@@ -37,8 +37,8 @@ export class LoginComponent implements OnInit {
     errorMessage= '';
   ngOnInit(){
     this.loginForm = this.fb.group({
-      taiKhoan: ['' , Validators.required],
-      matKhau: ['' , Validators.required],
+      userName: ['' , Validators.required],
+      password: ['' , Validators.required],
     });
     const cookie= getCookie('userToken')
         if (cookie) {
@@ -58,8 +58,8 @@ export class LoginComponent implements OnInit {
   }
   
   onLogin(){
-    const userName=this.loginForm.value.taiKhoan;
-    const password = this.loginForm.value.matKhau;
+    const userName=this.loginForm.value.userName;
+    const password = this.loginForm.value.password;
     this.auth.login(userName,password).subscribe((result:any) => {
       if(result.token!= null&&result.flag != false)
         {
@@ -80,8 +80,7 @@ export class LoginComponent implements OnInit {
           }
           else{
             this.router.navigate(['home']);
-          }
-          
+          } 
         }
         else {
           this.errorMessage = result.mess;
@@ -115,4 +114,3 @@ function getCookie(cookieName:any) {
   }
   return "";
 }
-//}

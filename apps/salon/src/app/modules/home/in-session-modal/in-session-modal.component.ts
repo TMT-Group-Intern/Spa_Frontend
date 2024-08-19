@@ -33,15 +33,8 @@ export class InSessionModalComponent implements OnInit {
   @Input() id?: number
   private readonly modalRef = inject(TDSModalRef);
   public spaTherapistOptions: any[] = []
-  // public statusOptions = [
-  //   'Đã khám',
-  //   'Chờ chăm sóc',
-  //   'Đang chăm sóc',
-  //   'Hoàn thành',
-  //   'Không sử dụng dịch vụ',
-  // ]
-  companyId:number|null = null;
-  userSession:any
+  companyId: number | null = null;
+  userSession: any
   createAppointmentForm!: FormGroup;
   form = inject(FormBuilder).nonNullable.group({
     customerID: [],
@@ -75,7 +68,7 @@ export class InSessionModalComponent implements OnInit {
     //   (data: any[]) => {
     //     this.spaTherapistOptions = [...data.map(item => ({
     //       id: item.employeeID,
-    //       name: `${item.firstName} ${item.lastName}`
+    //       name: `${item.lastName} ${item.firstName}`
     //     }))]
     //   })
 
@@ -86,7 +79,6 @@ export class InSessionModalComponent implements OnInit {
           this.form.patchValue({
             name: data.customer.lastName + ' ' + data.customer.firstName,
             customerID: data.customer.customerID,
-            // status: data.status,
           });
           this.assignments = data.assignments
           const foundSpaTherapist = this.assignments.find(item => item.employees.jobTypeID === 3);
@@ -95,7 +87,6 @@ export class InSessionModalComponent implements OnInit {
               spaTherapist: foundSpaTherapist.employees.employeeID
             });
           }
-          // console.log(this.form.get('spaTherapist')?.value)
         }
       )
     }
@@ -142,14 +133,14 @@ export class InSessionModalComponent implements OnInit {
   // Success Notification
   createNotificationSuccess(content: any): void {
     this.notification.success(
-      'Succesfully', content
+      'Thành công', content
     );
   }
 
   // Error Notification
   createNotificationError(content: any): void {
     this.notification.error(
-      'Error', content
+      'Thất bại', content
     );
   }
 

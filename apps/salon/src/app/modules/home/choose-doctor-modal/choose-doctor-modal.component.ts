@@ -74,6 +74,6 @@ export class ChooseDoctorModalComponent implements OnInit {
 
   // Success Notification
   createNotificationSuccess(content: any): void {
-    this.notification.success('Succesfully', content);
+    this.notification.success('Thành công', content);
   }
 }

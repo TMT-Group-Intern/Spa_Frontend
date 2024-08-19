@@ -1,0 +1,46 @@
+<form [formGroup]="createBranch" id="addBranch" autocomplete="off">
+    <tds-label>Tên chi nhánh</tds-label>
+    <tds-form-field class="my-2">
+        <input tdsInput autocomplete="off" placeholder="Nhập tên chi nhánh" formControlName="branchName" type="text"
+            [required]="true" class="appearance-none" />
+        <tds-error>
+            <span *ngIf="
+            createBranch.controls['branchName'].touched &&
+            createBranch.controls['branchName'].hasError('required')
+          ">Vui lòng nhập tên chi nhánh</span>
+        </tds-error>
+    </tds-form-field>
+    <tds-label>Địa chỉ</tds-label>
+    <tds-form-field class="my-2">
+        <input [required]="true" tdsInput autocomplete="off" placeholder="Nhập địa chỉ" formControlName="branchAddress"
+            type="text" />
+        <tds-error>
+            <span *ngIf="
+                createBranch.controls['branchAddress'].touched &&
+                createBranch.controls['branchAddress'].hasError('required')
+              ">Vui lòng nhập địa chỉ của chi nhánh</span>
+        </tds-error>
+    </tds-form-field>
+    <tds-label>Số điện thoại chi nhánh</tds-label>
+    <tds-form-field class="mt-2">
+        <input [required]="true" tdsInput autocomplete="off" placeholder="Số điện thoại chi nhánh"
+            formControlName="branchPhone" type="text" />
+        <tds-error>
+            <span *ngIf="createBranch.controls['branchPhone'].hasError('required')">Vui lòng nhập số điện thoại</span>
+            <span *ngIf="createBranch.controls['branchPhone'].hasError('pattern')">Số điện thoại phải có đủ 10 số và bắt
+                đầu
+                bằng 0</span>
+        </tds-error>
+    </tds-form-field>
+</form>
+
+<ng-container *tdsModalFooter>
+    <div class="p-4">
+        <div class="w-full flex flex-col justify-center">
+            <button class="w-full" size="lg" tds-button type="submit" (click)="submit()" form="addBranch"
+                style="background-color: #1b7c20">
+                Xác nhận
+            </button>
+        </div>
+    </div>
+</ng-container>

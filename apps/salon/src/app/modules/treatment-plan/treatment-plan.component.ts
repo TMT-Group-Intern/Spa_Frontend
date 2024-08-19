@@ -17,14 +17,13 @@ export class TreatmentPlanComponent implements OnChanges {
   treatment: any[] = []
   expandSet = new Set<number>();
 
-  constructor (
+  constructor(
     private shared: AuthService
   ) {}
 
-
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['customerId']?.currentValue){
-       this.getTreatmentByCustomerId(this.customerId as number);
+    if (changes['customerId']?.currentValue) {
+      this.getTreatmentByCustomerId(this.customerId as number);
     }
   }
 
@@ -32,7 +31,6 @@ export class TreatmentPlanComponent implements OnChanges {
   getTreatmentByCustomerId(customerId: number) {
     console.log(customerId);
     if(customerId) {
-
       this.shared.getTreatmentOfCustomer(customerId).subscribe(
         (data) => {
           this.listOfData = [...data]
@@ -49,35 +47,35 @@ export class TreatmentPlanComponent implements OnChanges {
     ).subscribe();
   }
   // Sử dụng modal
-  modalCreateTreatmentPlan():void{
+  modalCreateTreatmentPlan(): void {
     const modal = this.modalSvc.create({
-      title:'Tạo lộ trình điều trị',
-      content:ModalTreatmentPlanComponent,
+      title: 'Tạo lộ trình điều trị',
+      content: ModalTreatmentPlanComponent,
       footer: null,
-      size:'lg',
-      componentParams:{
+      size: 'lg',
+      componentParams: {
         customerId: this.customerId
       }
     })
-    modal.afterClose.asObservable().subscribe((res)=>{
-      if(res){
+    modal.afterClose.asObservable().subscribe((res) => {
+      if (res) {
         this.getTreatmentByCustomerId(this.customerId as number)
       }
     })
   }
-  modalEditTreatmentPlan(id:number):void{
+  modalEditTreatmentPlan(id: number): void {
     const modal = this.modalSvc.create({
-      title:'Sửa lộ trình điều trị',
-      content:ModalTreatmentPlanComponent,
+      title: 'Sửa lộ trình điều trị',
+      content: ModalTreatmentPlanComponent,
       footer: null,
-      size:'xl',
-      componentParams:{
+      size: 'xl',
+      componentParams: {
         customerId: this.customerId,
-        treatmentId:id
+        treatmentId: id
       }
     })
-    modal.afterClose.asObservable().subscribe((res)=>{
-      if(res){
+    modal.afterClose.asObservable().subscribe((res) => {
+      if (res) {
         this.getTreatmentByCustomerId(this.customerId as number)
       }
     })

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Subscription, switchMap } from 'rxjs';
+import { Subscription, switchMap, tap } from 'rxjs';
 import { TDSBreadCrumbModule } from 'tds-ui/breadcrumb';
 import { AuthService } from '../../../shared.service';
 import { TDSListModule } from 'tds-ui/list';
@@ -19,6 +19,9 @@ import { BillModalComponent } from '../../home/bill-modal/bill-modal.component';
 import { TDSModalService } from 'tds-ui/modal';
 import { CustomerDetailPaymenthistoryTableComponent } from "./customer-detail-paymenthistory-table/customer-detail-paymenthistory-table.component";
 import { PaymentModalComponent } from '../../home/payment-modal/payment-modal.component';
+import { InvoiceComponent } from '../../invoice/invoice.component';
+import { TDSToolTipModule } from 'tds-ui/tooltip';
+import { TDSButtonModule } from 'tds-ui/button';
 
 @Component({
   selector: 'frontend-customer-detail',
@@ -40,7 +43,9 @@ import { PaymentModalComponent } from '../../home/payment-modal/payment-modal.co
     TDSFormFieldModule,
     TDSTableModule,
     TDSTagModule,
-    CustomerDetailPaymenthistoryTableComponent
+    TDSButtonModule,
+    CustomerDetailPaymenthistoryTableComponent,
+    TDSToolTipModule,
 ],
 })
 export class CustomerDetailComponent implements OnInit {
@@ -86,6 +91,19 @@ export class CustomerDetailComponent implements OnInit {
     }
   }
   
+  onInvoice(billId:any) {
+    const modal = this.modalSvc.create({
+      title: 'In hóa đơn',
+      content: InvoiceComponent,
+      footer: null,
+      size: 'xl',
+      componentParams: {
+        billId
+      }
+    });
+    modal.afterClose.asObservable().subscribe()
+}
+
   billHistory(){
     if(this.id){
       this.shared.getBillHistory(this.id).subscribe((data: any)=>{

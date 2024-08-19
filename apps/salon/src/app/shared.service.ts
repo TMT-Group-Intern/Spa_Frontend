@@ -75,6 +75,10 @@ export class AuthService {
     return this.http.get<any[]>(this.baseUrl + 'Services/' + id);
   }
 
+  getBranchById(branchID: number): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + 'Branch/getBranchByID?id=' + branchID);
+  }
+
   // Render list of service
   renderListService(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + 'Services');
@@ -187,6 +191,10 @@ export class AuthService {
     );
   }
 
+  getPaymentsById(id: any): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Bill/GetBillByPayment?id=' + id);
+  }
+
   // Search Customer
   searchCustomer(val: any): Observable<{ customers: any[] }> {
     return this.http.get<any>(
@@ -233,72 +241,72 @@ export class AuthService {
   pageCustomers(pageNumber: number, pageSize: number) {
     return this.http.get(
       this.baseUrl +
-        'Customers/Page?pageNumber=' +
-        pageNumber +
-        '&pageSize=' +
-        pageSize
+      'Customers/Page?pageNumber=' +
+      pageNumber +
+      '&pageSize=' +
+      pageSize
     );
   }
 
   pageUsers(pageNumber: number, pageSize: number) {
     return this.http.get(
       this.baseUrl +
-        'User/AllUserPage?pageNumber=' +
-        pageNumber +
-        '&pageSize=' +
-        pageSize
+      'User/AllUserPage?pageNumber=' +
+      pageNumber +
+      '&pageSize=' +
+      pageSize
     );
   }
 
   pageAdminByPages(pageNumber: number, pageSize: number) {
     return this.http.get(
       this.baseUrl +
-        'User/AllAdminPage?pageNumber=' +
-        pageNumber +
-        '&pageSize=' +
-        pageSize
+      'User/AllAdminPage?pageNumber=' +
+      pageNumber +
+      '&pageSize=' +
+      pageSize
     );
   }
 
   pageAccountByPages(pageNumber: number, pageSize: number) {
     return this.http.get(
       this.baseUrl +
-        'User/AllAccountPage?pageNumber=' +
-        pageNumber +
-        '&pageSize=' +
-        pageSize
+      'User/AllAccountPage?pageNumber=' +
+      pageNumber +
+      '&pageSize=' +
+      pageSize
     );
   }
 
   pageActiveAccountByPages(pageNumber: number, pageSize: number) {
     return this.http.get(
       this.baseUrl +
-        'User/AllAccountActivePage?pageNumber=' +
-        pageNumber +
-        '&pageSize=' +
-        pageSize
+      'User/AllAccountActivePage?pageNumber=' +
+      pageNumber +
+      '&pageSize=' +
+      pageSize
     );
   }
 
   pageNotActiveAccountByPages(pageNumber: number, pageSize: number) {
     return this.http.get(
       this.baseUrl +
-        'User/AllAccountNotActivePage?pageNumber=' +
-        pageNumber +
-        '&pageSize=' +
-        pageSize
+      'User/AllAccountNotActivePage?pageNumber=' +
+      pageNumber +
+      '&pageSize=' +
+      pageSize
     );
   }
 
   pageEmpByPages(jobtypeID: number, pageNumber: number, pageSize: number) {
     return this.http.get(
       this.baseUrl +
-        'User/AllEmpPage?jobTypeId=' +
-        jobtypeID +
-        '&pageNumber=' +
-        pageNumber +
-        '&pageSize=' +
-        pageSize
+      'User/AllEmpPage?jobTypeId=' +
+      jobtypeID +
+      '&pageNumber=' +
+      pageNumber +
+      '&pageSize=' +
+      pageSize
     );
   }
 
@@ -316,7 +324,9 @@ export class AuthService {
   appointmentList(id: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Appointment?idBrand=' + id);
   }
-
+  appointmentListToday(id: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Appointment/GetAllByBranchAndToday?idBrand=' + id);
+  }
   // Create a new Appointment
   createAppointment(val: any) {
     return this.http.post(this.baseUrl + 'Appointment', val);
@@ -357,20 +367,20 @@ export class AuthService {
   ) {
     return this.http.get<any>(
       this.baseUrl +
-        'Appointment/searchAppointment?fromDate=' +
-        fromDay +
-        '&toDate=' +
-        toDay +
-        '&branchID=' +
-        branchId +
-        '&searchItem=' +
-        search +
-        '&limit=' +
-        limit +
-        '&offset=' +
-        offset +
-        '&status=' +
-        status
+      'Appointment/searchAppointment?fromDate=' +
+      fromDay +
+      '&toDate=' +
+      toDay +
+      '&branchID=' +
+      branchId +
+      '&searchItem=' +
+      search +
+      '&limit=' +
+      limit +
+      '&offset=' +
+      offset +
+      '&status=' +
+      status
     );
   }
   // lấy danh sách lịch hẹn theo thời gian
@@ -383,16 +393,16 @@ export class AuthService {
   ) {
     return this.http.get<any>(
       this.baseUrl +
-        'Appointment/getbyday?branchID=' +
-        branchId +
-        '&fromDate=' +
-        fromDay +
-        '&toDate=' +
-        toDay +
-        '&pageNumber=' +
-        pageNumber +
-        '&pageSize=' +
-        pageSize
+      'Appointment/getbyday?branchID=' +
+      branchId +
+      '&fromDate=' +
+      fromDay +
+      '&toDate=' +
+      toDay +
+      '&pageNumber=' +
+      pageNumber +
+      '&pageSize=' +
+      pageSize
     );
   }
   // lấy danh sách lịch hẹn theo thời gian với trạng thái lịch hẹn
@@ -406,18 +416,18 @@ export class AuthService {
   ) {
     return this.http.get<any>(
       this.baseUrl +
-        'Appointment/GetByStatusWithPaging?branchID=' +
-        branchId +
-        '&fromDate=' +
-        fromDay +
-        '&toDate=' +
-        toDay +
-        '&pageNumber=' +
-        pageNumber +
-        '&pageSize=' +
-        pageSize +
-        '&status=' +
-        status
+      'Appointment/GetByStatusWithPaging?branchID=' +
+      branchId +
+      '&fromDate=' +
+      fromDay +
+      '&toDate=' +
+      toDay +
+      '&pageNumber=' +
+      pageNumber +
+      '&pageSize=' +
+      pageSize +
+      '&status=' +
+      status
     );
   }
   //
@@ -502,10 +512,10 @@ export class AuthService {
   updateDiscount(id: any, discount: any, val: any) {
     return this.http.put(
       this.baseUrl +
-        'Appointment/UpdateDiscount?id=' +
-        id +
-        '&perDiscount=' +
-        discount,
+      'Appointment/UpdateDiscount?id=' +
+      id +
+      '&perDiscount=' +
+      discount,
       val
     );
   }
@@ -516,9 +526,9 @@ export class AuthService {
   ): Observable<any[]> {
     return this.http.get<any[]>(
       'https://localhost:44305/GetAppointmentByStatus?idBrand=' +
-        branchID +
-        '&status=' +
-        status
+      branchID +
+      '&status=' +
+      status
     );
   }
 
@@ -526,10 +536,10 @@ export class AuthService {
   assignSpaTherapist(appointment: any, empID: any, val: any) {
     return this.http.put(
       this.baseUrl +
-        'Appointment/assigntechnicalstaff?idApp=' +
-        appointment +
-        '&idEmploy=' +
-        empID,
+      'Appointment/assigntechnicalstaff?idApp=' +
+      appointment +
+      '&idEmploy=' +
+      empID,
       val
     );
   }
@@ -548,10 +558,10 @@ export class AuthService {
   getEmployee(branch: number, job: number): Observable<any[]> {
     return this.http.get<any>(
       this.baseUrl +
-        'User/EmployeeByBranchAndJob?branchID=' +
-        branch +
-        '&jobTypeID=' +
-        job
+      'User/EmployeeByBranchAndJob?branchID=' +
+      branch +
+      '&jobTypeID=' +
+      job
     );
   }
   getAllEmployee(): Observable<any[]> {
@@ -573,6 +583,35 @@ export class AuthService {
   // Get Branch
   getBranch(): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Branch/allBranches');
+  }
+
+  pageBranchByPages(pageNumber: number, pageSize: number): Observable<any[]> {
+    return this.http.get<any>(this.baseUrl + 'Branch/AllBranchPage?pageNumber=' + pageNumber + '&pageSize=' + pageSize);
+  }
+  createBranch(branchName:string,branchAddress:string,branchPhone:string) {
+    return this.http.post<{id:object}>(this.baseUrl + 'Branch/createBranch', {
+      branchName:branchName,
+      branchAddress:branchAddress,
+      branchPhone:branchPhone
+    });
+  }
+  // Update Appointment
+  editBranch(id: number, val: any) {
+    return this.http.put(this.baseUrl + 'Branch/updateBranch?id=' + id, val);
+  }
+  changeStatusBranch(id: number) {
+    return this.http.post(`${this.baseUrl}Branch/changeStatusBranch?id=${id}`, {});
+  }
+  pageActiveBranchByPages(pageNumber: number, pageSize: number) {
+    return this.http.get(this.baseUrl + 'Branch/AllBranchActivePage?pageNumber=' + pageNumber + '&pageSize=' + pageSize);
+  }
+
+  pageNotActiveBranchByPages(pageNumber: number, pageSize: number) {
+    return this.http.get(this.baseUrl + 'Branch/AllBranchNotActivePage?pageNumber=' + pageNumber + '&pageSize=' + pageSize);
+  }
+
+  deleteBranch(id: any) {
+    return this.http.delete(this.baseUrl + 'Branch/deleteBranch?id=' + id);
   }
 
   // Get Job Type
@@ -640,12 +679,12 @@ export class AuthService {
   getByDays(branchId: number, fromDay: string, toDay: string) {
     return this.http.get(
       this.baseUrl +
-        'Report/getbyday?idBrand=' +
-        branchId +
-        '&fromDate=' +
-        fromDay +
-        '&toDate=' +
-        toDay
+      'Report/getbyday?idBrand=' +
+      branchId +
+      '&fromDate=' +
+      fromDay +
+      '&toDate=' +
+      toDay
     );
   }
 
@@ -653,12 +692,12 @@ export class AuthService {
   getDetails(branchId: number, fromDay: string, toDay: string) {
     return this.http.get(
       this.baseUrl +
-        'Report/getdetail?idBrand=' +
-        branchId +
-        '&fromDate=' +
-        fromDay +
-        '&toDate=' +
-        toDay
+      'Report/getdetail?idBrand=' +
+      branchId +
+      '&fromDate=' +
+      fromDay +
+      '&toDate=' +
+      toDay
     );
   }
 
@@ -695,7 +734,15 @@ export class AuthService {
     return this.http.put(this.baseUrl + 'Treatment/' + treatmentId, body);
   }
 
-  //Xóa treatment detail
+  getFinance() {
+    return this.http.get(this.baseUrl + "Report/finance")
+  }
+
+  getAllThuChi() {
+    return this.http.get(this.baseUrl + "Report/PhieuThuChi")
+    //Xóa treatment detail
+  }
+
   deleteTreatmentDetail(treatmentDetailId: number) {
     return this.http.delete(
       this.baseUrl + 'Treatment?treatmentDetailID=' + treatmentDetailId
@@ -706,11 +753,13 @@ export class AuthService {
   updateStatusTreatment(idTreatment: number, status: string) {
     return this.http.put(
       this.baseUrl +
-        'Treatment/UpdateStatusTreatmentCard?treatmentCardId=' +
-        idTreatment +
-        '&status=' +
-        status,
+      'Treatment/UpdateStatusTreatmentCard?treatmentCardId=' +
+      idTreatment +
+      '&status=' +
+      status,
       status
     );
   }
+
+
 }

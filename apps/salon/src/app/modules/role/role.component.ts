@@ -12,6 +12,7 @@ import {
   TDSTreeNodeOptions,
 } from 'tds-ui/tree';
 import { TDSSafeAny } from 'tds-ui/shared/utility';
+import { PermissionNames } from '@core/enums/role-permission';
 
 @Component({
   selector: 'frontend-role',
@@ -36,8 +37,9 @@ export class RoleComponent implements OnInit {
   permissions: any[] = [];
   permissionName: any;
   rolePermissions: any;
+  permissionVietNam:any;
 
-  constructor(private shared: AuthService) {}
+  constructor(private shared: AuthService) { }
 
   ngOnInit(): void {
     this.shared.getJobTypeForPermission().subscribe((data) => {
@@ -53,14 +55,26 @@ export class RoleComponent implements OnInit {
     this.getRolePermissions(this.jobTypeID);
   }
 
+  // getAllPermissions() {
+  //   this.shared.getAllPermissions().subscribe((permission) => {
+  //     this.permissions = permission.map((item) => ({
+  //       title: item.permissionName,
+  //       key: item.permissionID.toString(),
+  //       permissionID: item.permissionID,
+  //       checked: false,
+  //     }));
+  //   });
+  // }
   getAllPermissions() {
     this.shared.getAllPermissions().subscribe((permission) => {
-      this.permissions = permission.map((item) => ({
-        title: item.permissionName,
-        key: item.permissionID.toString(),
-        permissionID: item.permissionID,
-        checked: false,
-      }));
+      this.permissions = permission
+        .filter(item => Object.keys(PermissionNames).includes(item.permissionName))
+        .map((item) => ({
+          title: PermissionNames[item.permissionName as keyof typeof PermissionNames], // Lấy title từ enum
+          key: item.permissionID.toString(),
+          permissionID: item.permissionID,
+          checked: false,
+        }));
     });
   }
 

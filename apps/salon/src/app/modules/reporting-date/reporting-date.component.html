@@ -8,7 +8,8 @@
         </tds-tabset>
       </div>
       <div class="pl-4 flex flex-col gap-3">
-        <tds-date-picker [format]="'dd-MM-yyyy'" [(ngModel)]="date" (ngModelChange)="onChange($event)" [disabledDate]="disabledDate"></tds-date-picker>
+        <tds-date-picker [format]="'dd-MM-yyyy'" [(ngModel)]="date" (ngModelChange)="onChange($event)"
+          [disabledDate]="disabledDate"></tds-date-picker>
       </div>
     </div>
     <frontend-table-reporting-date [branchId]="branchId" [date]="date"></frontend-table-reporting-date>

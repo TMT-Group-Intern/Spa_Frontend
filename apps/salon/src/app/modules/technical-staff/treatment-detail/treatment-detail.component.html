@@ -1,11 +1,8 @@
 <div class="flex flex-row">
   <!-- Left section with image -->
   <div class="w-1/4">
-    <img
-      src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/d07bca98931623.5ee79b6a8fa55.jpg"
-      alt="Customer Image"
-      class="w-full rounded-lg"
-    />
+    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/d07bca98931623.5ee79b6a8fa55.jpg"
+      alt="Customer Image" class="w-full rounded-lg" />
   </div>
 
   <!-- Right section with customer details -->
@@ -25,15 +22,8 @@
       <!-- Left side with file upload and upload button -->
       <div class="w-full">
         <div class="flex flex-row items-center">
-          <input
-            type="file"
-            (change)="onFileSelected($event)"
-            class="mr-2 mb-5"
-          />
-          <button
-            class="rounded-full bg-green-300 py-1 px-2"
-            (click)="uploadImage()"
-          >
+          <input type="file" (change)="onFileSelected($event)" class="mr-2 mb-5" />
+          <button class="rounded-full bg-green-300 py-1 px-2" (click)="uploadImage()">
             Upload Photo
           </button>
         </div>
@@ -42,10 +32,7 @@
 
     <!-- Right side with history button -->
     <div class="w-1/2">
-      <button
-        (click)="callModalHistory()"
-        class="rounded-full bg-green-300 py-1 px-2"
-      >
+      <button (click)="callModalHistory()" class="rounded-full bg-green-300 py-1 px-2">
         History Customer
       </button>
     </div>
@@ -66,12 +53,8 @@
         {{ service.ServiceName }}
       </td>
       <td class="border border-gray-400 px-4 py-2 text-center">
-        <input
-          type="checkbox"
-          [checked]="checkboxStates[service.ServiceID]"
-          (change)="toggleCheckbox(service.ServiceID)"
-          class="form-checkbox h-5 w-5 text-green-500"
-        />
+        <input type="checkbox" [checked]="checkboxStates[service.ServiceID]"
+          (change)="toggleCheckbox(service.ServiceID)" class="form-checkbox h-5 w-5 text-green-500" />
       </td>
     </tr>
   </tbody>
@@ -79,15 +62,10 @@
 
 <!-- Footer buttons -->
 <div class="flex gap-4 justify-center mt-4">
-  <button
-    class="rounded-full bg-blue-500 text-white py-2 px-4 hover:bg-blue-600"
-    (click)="onSave()"
-  >
+  <button class="rounded-full bg-blue-500 text-white py-2 px-4 hover:bg-blue-600" (click)="onSave()">
     Lưu
   </button>
-  <button
-    class="rounded-full bg-gray-300 text-gray-800 py-2 px-4 hover:bg-gray-400"
-  >
+  <button class="rounded-full bg-gray-300 text-gray-800 py-2 px-4 hover:bg-gray-400">
     Hủy
   </button>
 </div>

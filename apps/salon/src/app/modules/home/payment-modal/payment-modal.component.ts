@@ -9,7 +9,7 @@ import { TDSFormFieldModule } from 'tds-ui/form-field';
 import { TDSInputModule } from 'tds-ui/tds-input';
 import { TDSButtonModule } from 'tds-ui/button';
 import { TDSInputNumberModule } from 'tds-ui/input-number';
-import { TDSModalModule, TDSModalRef } from 'tds-ui/modal';
+import { TDSModalModule, TDSModalRef, TDSModalService } from 'tds-ui/modal';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { InvoiceComponent } from '../../invoice/invoice.component';
 import { TDSDropDownModule } from 'tds-ui/dropdown';
@@ -17,6 +17,7 @@ import { TDSPipesModule } from 'tds-ui/core/pipes';
 import { TDSRadioModule } from 'tds-ui/radio';
 import { catchError, concatMap, tap } from 'rxjs';
 import { TDSTagModule } from 'tds-ui/tag';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'frontend-payment-modal',
@@ -40,12 +41,13 @@ import { TDSTagModule } from 'tds-ui/tag';
   styleUrls: ['./payment-modal.component.scss'],
 })
 export class PaymentModalComponent implements OnInit {
-  // private readonly tModalSvc = inject(TDSModalService);
+  private readonly tModalSvc = inject(TDSModalService);
   private readonly modalRef = inject(TDSModalRef);
   // routeSub: Subscription | undefined
   // BillID: any;
   @Input() id?: any;
   @Input() billID?: any;
+  @Input() paymentID?: any;
   // inforCus: any;
   infoAppoint: any;
   service: any[] = [];
@@ -62,11 +64,12 @@ export class PaymentModalComponent implements OnInit {
   amountResidualContinue = 0
   paymentMethod = 'Tiền mặt'
   paymentByBill: any
+  billCode: any
 
   constructor(
-    // private route: ActivatedRoute,
     private shared: AuthService,
     private notification: TDSNotificationService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -77,6 +80,7 @@ export class PaymentModalComponent implements OnInit {
       concatMap(() => this.shared.getAllBillByAppointmentID(this.id).pipe(
         tap((dataBill: any) => {
           // this.billID = dataBill.billID
+          this.billCode = dataBill.billCode
           this.billStatus = dataBill.billStatus
           this.totalAmount = dataBill.totalAmount
           this.amountInvoiced = dataBill.amountInvoiced
@@ -121,7 +125,6 @@ export class PaymentModalComponent implements OnInit {
     for (const num of this.service) {
       this.total += num.totalPrice;
     }
-    // this.totalAmountAfterDiscount()
   }
 
   //
@@ -164,7 +167,7 @@ export class PaymentModalComponent implements OnInit {
     const val = {
       customerID: this.infoAppoint.customerID,
       appointmentID: this.id,
-      date: this.infoAppoint.appointmentDate,
+      date: new Date(),
       billStatus: "Thanh toán 1 phần",
       doctor: this.infoAppoint.doctor,
       technicalStaff: this.infoAppoint.teachnicalStaff,
@@ -182,32 +185,42 @@ export class PaymentModalComponent implements OnInit {
     } else {
       if (this.amountResidualContinue == 0) {
         console.log(this.billID, 1)
-        // this.shared.UpdateStatus(this.id, 'Thanh toán hoàn tất').subscribe()
         this.shared.updateBill(this.billID, { ...val, billStatus: "Thanh toán hoàn tất" }).pipe(
           concatMap(() => this.createPayment$(this.billID))
         ).subscribe()
       } else {
         console.log(this.billID, 2)
-        // this.shared.UpdateStatus(this.id, 'Thanh toán 1 phần').subscribe()
         this.shared.updateBill(this.billID, { ...val, billStatus: "Thanh toán 1 phần" }).pipe(
           concatMap(() => this.createPayment$(this.billID))
         ).subscribe()
       }
-      // this.createPayment$(this.billID).subscribe()
     }
+  }
+
+  onInvoice(paymentID:any) {
+      const modal = this.tModalSvc.create({
+        title: 'In hóa đơn',
+        content: InvoiceComponent,
+        footer: null,
+        size: 'xl',
+        componentParams: {
+          paymentID
+        }
+      });
+      modal.afterClose.asObservable().pipe(tap(() => console.log((paymentID)))).subscribe()
   }
 
   // Success Notification
   createNotificationSuccess(content: any): void {
     this.notification.success(
-      'Succesfully', content
+      'Thành công', content
     );
   }
 
   // Error Notification
   createNotificationError(content: any): void {
     this.notification.error(
-      'Error', content
+      'Thất bại', content
     );
   }
 }

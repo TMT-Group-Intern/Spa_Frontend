@@ -44,18 +44,18 @@ import { TDSInputModule } from 'tds-ui/tds-input';
 })
 export class CustomerListComponent implements OnInit {
   _change$ = new BehaviorSubject<string>('');
-  private readonly tModalSvc =inject(TDSModalService)
-  CustomerList:any[] = [];
+  private readonly tModalSvc = inject(TDSModalService)
+  CustomerList: any[] = [];
   customerOfPage: any
   pageNumber: any = 1
   pageSize: any = 10
   totalItemsCustomers: any
-  searchText='';
+  searchText = '';
   filteredCustomers: any;
-  fullName=''
+  fullName = ''
 
   constructor(
-    private auth : AuthService,
+    private auth: AuthService,
     private router: Router,
   ) {
   }
@@ -68,9 +68,9 @@ export class CustomerListComponent implements OnInit {
         return search ? this.auth.searchCustomer(search) : of(null)
       })
     ).subscribe((data) => {
-      if (data?.customers !== undefined){
+      if (data?.customers !== undefined) {
         this.customerOfPage = data.customers;
-      }else{
+      } else {
         this.customerOfPage = this.filteredCustomers
       }
     })
@@ -78,7 +78,7 @@ export class CustomerListComponent implements OnInit {
 
   /* get the list of customers by pageNumber and pageSize */
   renderPageCustomers(): void {
-      this.auth.pageCustomers(this.pageNumber, this.pageSize).subscribe((data:any) => {
+    this.auth.pageCustomers(this.pageNumber, this.pageSize).subscribe((data: any) => {
       this.customerOfPage = data.item;
       this.totalItemsCustomers = data.totalItems;
       this.filteredCustomers = this.customerOfPage;
@@ -102,53 +102,53 @@ export class CustomerListComponent implements OnInit {
   }
 
   //
-  createCustomer(){
+  createCustomer() {
     const modal = this.tModalSvc.create({
-      title:'Thêm khách hàng',
+      title: 'Thêm khách hàng',
       content: CustomerModalComponent,
-      footer:null,
-      size:'lg'
+      footer: null,
+      size: 'lg'
     });
-    modal.afterClose.asObservable().subscribe(res=>{
-      if(res){
+    modal.afterClose.asObservable().subscribe(res => {
+      if (res) {
         this.renderPageCustomers();
       }
     })
   }
 
   //
-  onEditCustomer(id:number){
+  onEditCustomer(id: number) {
     const modal = this.tModalSvc.create({
-      title:'Edit Customer',
+      title: 'Edit Customer',
       content: CustomerModalComponent,
-      footer:null,
-      size:'lg',
-      componentParams:{
+      footer: null,
+      size: 'lg',
+      componentParams: {
         id
       }
     });
-    modal.afterClose.asObservable().subscribe(res=>{
-      if(res){
+    modal.afterClose.asObservable().subscribe(res => {
+      if (res) {
         this.renderPageCustomers();
       }
     })
   }
 
   //
-  deleteCustomer(id:number){
+  deleteCustomer(id: number) {
     const modal = this.tModalSvc.error({
-      title:'Delete Customer',
+      title: 'Delete Customer',
       content: `<h5 class="text-error-500">Your action cannot return after deleted!</h5>`,
-      iconType:'tdsi-trash-line',
-      okText:'Delete',
+      iconType: 'tdsi-trash-line',
+      okText: 'Delete',
       size: 'md',
-      cancelText:'Hủy',
-      onOk:()=> true
+      cancelText: 'Hủy',
+      onOk: () => true
     });
     modal.afterClose.asObservable().pipe(
       filter(condition => condition),
-      concatMap(_=> this.auth.deleteCustomer(id)),
-      tap(()=> { this.renderPageCustomers()})
+      concatMap(_ => this.auth.deleteCustomer(id)),
+      tap(() => { this.renderPageCustomers() })
     ).subscribe()
   }
 
