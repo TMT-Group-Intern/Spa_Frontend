@@ -588,11 +588,11 @@ export class AuthService {
   pageBranchByPages(pageNumber: number, pageSize: number): Observable<any[]> {
     return this.http.get<any>(this.baseUrl + 'Branch/AllBranchPage?pageNumber=' + pageNumber + '&pageSize=' + pageSize);
   }
-  createBranch(branchName:string,branchAddress:string,branchPhone:string) {
-    return this.http.post<{id:object}>(this.baseUrl + 'Branch/createBranch', {
-      branchName:branchName,
-      branchAddress:branchAddress,
-      branchPhone:branchPhone
+  createBranch(branchName: string, branchAddress: string, branchPhone: string) {
+    return this.http.post<{ id: object }>(this.baseUrl + 'Branch/createBranch', {
+      branchName: branchName,
+      branchAddress: branchAddress,
+      branchPhone: branchPhone
     });
   }
   // Update Appointment
@@ -761,5 +761,7 @@ export class AuthService {
     );
   }
 
-
+  taoPhieuThuChi(val: any) {
+    return this.http.post(this.baseUrl + 'IncomeExpenses', val)
+  }
 }
