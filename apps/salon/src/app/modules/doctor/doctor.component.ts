@@ -298,7 +298,7 @@ export class DoctorComponent implements OnInit {
     const currentService = this.form.value.service ?? [];
     this.chooseTreatment = this.chooseTreatment.filter((item1: any) => currentService.some(item2 => item1.serviceID === item2))
     const currentTreatment = (this.chooseTreatment as any[]).map(item => ({
-      appointmentID: this.dataAppointmentbyid.appointmentID,
+      appointmentID: this.dataAppointmentById.appointmentID,
       treatmentDetailID: item.treatmentDetailID,
       qualityChooses: item.quantity
     }))
