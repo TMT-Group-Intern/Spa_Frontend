@@ -18,12 +18,12 @@
             <!-- Display error -->
             <tds-error>
               <span *ngIf="form.controls['phone'].hasError('required')"><strong>SĐT</strong> không được để trống!</span>
-              <span *ngIf="form.controls['phone'].hasError('pattern')"><strong>SĐT</strong> phải bắt đầu bằng số 0 và có 10 chữ số!</span>
+              <span *ngIf="form.controls['phone'].hasError('pattern')"><strong>SĐT</strong> phải bắt đầu bằng số 0 và có
+                10 chữ số!</span>
             </tds-error>
           </tds-form-field>
           <!-- New Customer -->
-          <button tds-button-icon color="success" (click)="createCustomer()"
-            tds-tooltip="Thêm khách hàng">
+          <button tds-button-icon color="success" (click)="createCustomer()" tds-tooltip="Thêm khách hàng">
             <i class="tdsi-plus-fill"></i>
           </button>
         </div>
@@ -48,7 +48,7 @@
       <div class="grid grid-cols-3 gap-1 my-2">
         <tds-label>Chi nhánh</tds-label>
         <tds-form-field class="col-span-2">
-          <input tdsInput  autocomplete="off" formControlName="branch" class="appearance-none w-full" type="text" />
+          <input tdsInput autocomplete="off" formControlName="branch" class="appearance-none w-full" type="text" />
         </tds-form-field>
       </div>
     </div>

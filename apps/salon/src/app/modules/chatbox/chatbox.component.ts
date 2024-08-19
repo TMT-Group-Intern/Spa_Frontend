@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../shared.service';
 import { FormsModule } from '@angular/forms';
@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './chatbox.component.html',
   styleUrls: ['./chatbox.component.scss'],
 })
-export class ChatboxComponent {
+export class ChatboxComponent implements OnInit {
 
   user = '';
   message = '';
@@ -32,7 +32,7 @@ export class ChatboxComponent {
     }
     this.auth.getChat().subscribe((messages) => {
       this.messageChats = messages.map(m => {
-        const messageTime = new Date(m.messageTime).toLocaleTimeString('en-US', {hour12: false, hour: 'numeric', minute: 'numeric' });
+        const messageTime = new Date(m.messageTime).toLocaleTimeString('en-US', { hour12: false, hour: 'numeric', minute: 'numeric' });
         return {
           user: m.userName,
           message: m.content,

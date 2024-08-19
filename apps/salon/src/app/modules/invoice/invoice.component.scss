@@ -1,0 +1,21 @@
+@media print {
+    /* Ẩn tất cả các phần tử không cần in */
+    body * {
+      visibility: hidden;
+    }
+    
+    /* Chỉ hiển thị phần tử có class 'print-only' khi in */
+    .print-only, .print-only * {
+      visibility: visible;
+    }
+  
+    /* Đảm bảo phần tử 'print-only' chiếm toàn bộ trang in */
+    .print-only {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  }

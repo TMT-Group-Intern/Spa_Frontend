@@ -30,12 +30,12 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z
   templateUrl: './change-pass.component.html',
   styleUrls: ['./change-pass.component.scss'],
 })
-export class ChangePassComponent implements OnInit{
-  private readonly tModalSvc =inject(TDSModalService)
+export class ChangePassComponent implements OnInit {
+  private readonly tModalSvc = inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
   checkDislay?: boolean = true
   userSession: any;
-  userName:any;
+  userName: any;
   changePassword = inject(FormBuilder).nonNullable.group({
     oldPassword: [
       '',
@@ -52,16 +52,16 @@ export class ChangePassComponent implements OnInit{
       ])
     ],
     confirmPassword: [''],
- });
- mustMatch = true
+  });
+  mustMatch = true
 
   constructor(
     private shared: AuthService,
     private notification: TDSNotificationService,
-  ) {}
+  ) { }
 
   matchValidator() {
-    if(this.changePassword.value.password == this.changePassword.value.confirmPassword) {
+    if (this.changePassword.value.password == this.changePassword.value.confirmPassword) {
       this.mustMatch = true
     } else {
       this.mustMatch = false
@@ -102,7 +102,7 @@ export class ChangePassComponent implements OnInit{
     if (this.changePassword.invalid) return;
 
     this.matchValidator()
-    if(!this.mustMatch) return;
+    if (!this.mustMatch) return;
 
     const val = {
       ...this.changePassword.value,
@@ -122,37 +122,37 @@ export class ChangePassComponent implements OnInit{
     const password = this.changePassword.value.password as string;
     const confirmPassword = this.changePassword.value.confirmPassword as string;
 
-    this.shared.changePassword(userName, oldPassword, password,confirmPassword)
-       .subscribe((result) => {
-      if (result.flag == true) {
-         const modal = this.tModalSvc.success({
-          title:'Thành công',
-          content: `<h5 class="text-success-500">Đổi mật khẩu thành công!</h5>`,
-          footer:null,
-          size:'md',
-          okText:'Xác nhận',
-          onOk:()=> true
-        });
-        modal.afterClose.asObservable().subscribe(() =>this.modalRef.close());
-      }
-      else{
-         const modal = this.tModalSvc.error({
-          title:'Thất bại',
-          content: `<h5 class="text-error-500">${result.message}</h5>`,
-          footer:null,
-          size:'md',
-          okText:'Xác nhận',
-          onOk:()=> true
-        });
-        modal.afterClose.asObservable()
-        .subscribe
-        (res=>{
-          if(res){
-            this.changePassword;
-          }
-        });
-      }
-    });
+    this.shared.changePassword(userName, oldPassword, password, confirmPassword)
+      .subscribe((result) => {
+        if (result.flag == true) {
+          const modal = this.tModalSvc.success({
+            title: 'Thành công',
+            content: `<h5 class="text-success-500">Đổi mật khẩu thành công!</h5>`,
+            footer: null,
+            size: 'md',
+            okText: 'Xác nhận',
+            onOk: () => true
+          });
+          modal.afterClose.asObservable().subscribe(() => this.modalRef.close());
+        }
+        else {
+          const modal = this.tModalSvc.error({
+            title: 'Thất bại',
+            content: `<h5 class="text-error-500">${result.message}</h5>`,
+            footer: null,
+            size: 'md',
+            okText: 'Xác nhận',
+            onOk: () => true
+          });
+          modal.afterClose.asObservable()
+            .subscribe
+            (res => {
+              if (res) {
+                this.changePassword;
+              }
+            });
+        }
+      });
   }
   markFormGroupTouched(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(key => {

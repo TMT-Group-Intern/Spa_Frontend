@@ -1,28 +1,11 @@
 <div class="grid grid-cols-3 gap-x-2 bg-gray-200 h-full">
   <div class="bg-white overflow-y-auto rounded-lg h-full">
-    <tds-data-table
-      class="p-2"
-      [tdsRounded]="true"
-      [tdsShowPagination]="false"
-      [tdsFrontPagination]="false"
-      [tdsData]="jobType"
-      [tdsShowSizeChanger]="true"
-      [tdsPageSize]="50"
-      (tdsClickRow)="getJob($event)"
-    >
-      <tds-data-table-column
-        [tdsField]="'jobTypeName'"
-        [tdsTitle]="'Tên'"
-        tdsWidth="80%"
-        [tdsDataType]="'text'"
-      >
+    <tds-data-table class="p-2" [tdsRounded]="true" [tdsShowPagination]="false" [tdsFrontPagination]="false"
+      [tdsData]="jobType" [tdsShowSizeChanger]="true" [tdsPageSize]="50" (tdsClickRow)="getJob($event)">
+      <tds-data-table-column [tdsField]="'jobTypeName'" [tdsTitle]="'Tên'" tdsWidth="80%" [tdsDataType]="'text'">
       </tds-data-table-column>
 
-      <tds-data-table-column
-        tdsWidth="20%"
-        [tdsContent]="commandTpl"
-        [tdsColumnType]="'command'"
-      >
+      <tds-data-table-column tdsWidth="20%" [tdsContent]="commandTpl" [tdsColumnType]="'command'">
         <ng-template #commandTpl let-dataRow>
         </ng-template>
       </tds-data-table-column>
@@ -36,16 +19,15 @@
     <div *ngIf="isClick" class="bg-white rounded-lg overflow-y-auto h-full p-7">
       <p class="py-3 font-bold text-lg">{{ jobName }}</p>
 
-      <tds-tree
-        #tdsTreeComponent
-        [data]="permissions"
-        checkable
-        (onClick)="onClick($event)"
-        (contextMenu)="onClick($event)"
-        (onCheckBoxChange)="onCheck($event)"
-        (onExpandChange)="onCheck($event)"
-      >
+      <tds-tree #tdsTreeComponent [data]="permissions" checkable
+        (contextMenu)="onClick($event)" (onCheckBoxChange)="onCheck($event)" (onExpandChange)="onCheck($event)">
       </tds-tree>
+    </div>
+    <div class="w-full flex flex-col justify-center">
+      <button class="w-full" size="lg" tds-button type="submit"
+        style="background-color: #1b7c20">
+        Lưu
+      </button>
     </div>
   </div>
 </div>

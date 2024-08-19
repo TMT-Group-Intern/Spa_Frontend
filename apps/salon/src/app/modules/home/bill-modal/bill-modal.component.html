@@ -1,8 +1,3 @@
-<!-- <tds-breadcrumb class="bg-white p-4 rounded-lg mb-2">
-    <tds-breadcrumb-item><a [routerLink]="['/home']">Trang Tiếp Tân</a></tds-breadcrumb-item>
-    <tds-breadcrumb-item>Bill {{BillID}}</tds-breadcrumb-item>
-  </tds-breadcrumb> -->
-
 <div class="px-4">
   <p class="mb-2 grid grid-cols-9 gap-4">
     <strong>Khách hàng:</strong>
@@ -23,90 +18,165 @@
   </p>
 
   <div class="rounded-lg h-fit">
-    <tds-table #basicTable [listData]="service" [showPagination]="false">
+    <tds-table [showPagination]="false" templateMode>
       <thead>
         <tr>
-          <th width="25%">Tên</th>
-          <th width="7%">Số lượng</th>
-          <th width="13%">Đơn giá</th>
+          <th width="22%">Tên</th>
+          <th width="9%">Số lượng</th>
+          <th width="7%">Lộ trình</th>
+          <th width="11%">Đơn giá</th>
           <th width="15%">Giảm giá</th>
-          <th width="10%">Thành tiền</th>
-          <th width="30%">Ghi chú</th>
+          <th width="11%">Thành tiền</th>
+          <th width="25%">Ghi chú</th>
         </tr>
       </thead>
 
       <tbody>
-        <ng-template ngFor let-data [ngForOf]="basicTable.data">
-          <tr>
-            <td>{{ data.serviceName }}</td>
-            <td>
-              <div>
-                <tds-input-number class="pr-2" [tdsTextAlign]="'center'" [hiddenIcon]="true" [min]="1"
-                  [(ngModel)]="data.quantity" (ngModelChange)="totalPrice(data.serviceID)">
-                </tds-input-number>
-              </div>
-            </td>
-            <td>
-              <div>
-                <tds-input-number class="pr-2" [hiddenIcon]="true" [tdsTextAlign]="'right'" [min]="1"
-                  [(ngModel)]="data.unitPrice" (ngModelChange)="totalPrice(data.serviceID)">
-                </tds-input-number>
-              </div>
-            </td>
-            <td>
-              <div>
-                <button class="border-none" color="secondary" tds-dropdown trigger="click" [tdsDropdownMenu]="menu">
-                  <p class="flex items-center">
-                    <i class="tdsi-cash-payment-fill text-success-400 text-2xl pr-1"></i>
-                    <span *ngIf="data.kindofDiscount === '%'">{{ data.amountDiscount }}%</span>
-                    <span *ngIf="data.kindofDiscount === 'VND'">{{ data.amountDiscount | tdsFormatNumber }} VND</span>
-                  </p>
-                </button>
-                <tds-dropdown-menu #menu="tdsDropdownMenu">
-                  <div class="p-4">
-                    <p class="pb-2"><strong>Giảm giá:</strong></p>
-                    <div class="flex">
-                      <tds-form-field class="mr-2 w-36">
-                        <tds-input-number *ngIf="data.kindofDiscount === '%'" class="pr-2" [tdsTextAlign]="'right'"
-                          [hiddenIcon]="true" [min]="0" [max]="100" [step]="1" [(ngModel)]="data.amountDiscount"
-                          (ngModelChange)="priceAfterDiscount(data.serviceID)">
-                        </tds-input-number>
-                        <tds-input-number *ngIf="data.kindofDiscount === 'VND'" class="pr-2" [tdsTextAlign]="'right'"
-                          [hiddenIcon]="true" [min]="0" [max]="data.tempPrice" [step]="1"
-                          [(ngModel)]="data.amountDiscount" (ngModelChange)="priceAfterDiscount(data.serviceID)">
-                        </tds-input-number>
-                      </tds-form-field>
-                      <tds-button-group>
-                        <button *ngIf="data.kindofDiscount === '%'" tds-button color="success" size="sm">
-                          <span>%</span>
-                        </button>
-                        <button *ngIf="data.kindofDiscount !== '%'" tds-button-outline color="success" size="sm"
-                          (tdsBtnClick)="activeDiscountPercentagePrice(data.serviceID)">
-                          <span>%</span>
-                        </button>
-                        <button *ngIf="data.kindofDiscount === 'VND'" tds-button color="success" size="sm">
-                          <span>VND</span>
-                        </button>
-                        <button *ngIf="data.kindofDiscount !== 'VND'" tds-button-outline color="success" size="sm"
-                          (tdsBtnClick)="activeDiscountVNDPrice(data.serviceID)">
-                          <span>VND</span>
-                        </button>
-                      </tds-button-group>
-                    </div>
+        <!-- <ng-template > -->
+        <tr *ngFor="let data of service">
+          <td>{{ data.serviceName }}</td>
+          <td>
+            <div>
+              <tds-input-number class="pr-2" [tdsTextAlign]="'center'" [hiddenIcon]="true" [min]="1"
+                [(ngModel)]="data.quantity" (ngModelChange)="totalPrice(data.serviceID)">
+              </tds-input-number>
+            </div>
+          </td>
+          <td></td>
+          <td>
+            <div>
+              <tds-input-number class="pr-2" [hiddenIcon]="true" [tdsTextAlign]="'right'" [min]="1"
+                [(ngModel)]="data.unitPrice" (ngModelChange)="totalPrice(data.serviceID)">
+              </tds-input-number>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button class="border-none" color="secondary" tds-dropdown trigger="click" [tdsDropdownMenu]="menu">
+                <p class="flex items-center">
+                  <i class="tdsi-cash-payment-fill text-success-400 text-2xl pr-1"></i>
+                  <span *ngIf="data.kindofDiscount === '%'">{{ data.amountDiscount }}%</span>
+                  <span *ngIf="data.kindofDiscount === 'VND'">{{ data.amountDiscount | tdsFormatNumber }} VND</span>
+                </p>
+              </button>
+              <tds-dropdown-menu #menu="tdsDropdownMenu">
+                <div class="p-4">
+                  <p class="pb-2"><strong>Giảm giá:</strong></p>
+                  <div class="flex">
+                    <tds-form-field class="mr-2 w-36">
+                      <tds-input-number *ngIf="data.kindofDiscount === '%'" class="pr-2" [tdsTextAlign]="'right'"
+                        [hiddenIcon]="true" [min]="0" [max]="100" [step]="1" [(ngModel)]="data.amountDiscount"
+                        (ngModelChange)="priceAfterDiscount(data.serviceID)">
+                      </tds-input-number>
+                      <tds-input-number *ngIf="data.kindofDiscount === 'VND'" class="pr-2" [tdsTextAlign]="'right'"
+                        [hiddenIcon]="true" [min]="0" [max]="data.tempPrice" [step]="1"
+                        [(ngModel)]="data.amountDiscount" (ngModelChange)="priceAfterDiscount(data.serviceID)">
+                      </tds-input-number>
+                    </tds-form-field>
+                    <tds-button-group>
+                      <button *ngIf="data.kindofDiscount === '%'" tds-button color="success" size="sm">
+                        <span>%</span>
+                      </button>
+                      <button *ngIf="data.kindofDiscount !== '%'" tds-button-outline color="success" size="sm"
+                        (tdsBtnClick)="activeDiscountPercentagePrice(data.serviceID)">
+                        <span>%</span>
+                      </button>
+                      <button *ngIf="data.kindofDiscount === 'VND'" tds-button color="success" size="sm">
+                        <span>VND</span>
+                      </button>
+                      <button *ngIf="data.kindofDiscount !== 'VND'" tds-button-outline color="success" size="sm"
+                        (tdsBtnClick)="activeDiscountVNDPrice(data.serviceID)">
+                        <span>VND</span>
+                      </button>
+                    </tds-button-group>
                   </div>
-                </tds-dropdown-menu>
-              </div>
-            </td>
-            <td [align]="'right'">{{ data.totalPrice | tdsFormatNumber }}</td>
-            <td>
-              <div>
-                <tds-form-field>
-                  <input tdsInput autocomplete="off" [(ngModel)]="data.note" />
-                </tds-form-field>
-              </div>
-            </td>
-          </tr>
-        </ng-template>
+                </div>
+              </tds-dropdown-menu>
+            </div>
+          </td>
+          <td [align]="'right'">{{ data.totalPrice | tdsFormatNumber }}</td>
+          <td>
+            <div>
+              <tds-form-field>
+                <input tdsInput autocomplete="off" [(ngModel)]="data.note" />
+              </tds-form-field>
+            </div>
+          </td>
+        </tr>
+        <!-- </ng-template> -->
+        <!-- <ng-template > -->
+        <tr *ngFor="let data of treatment">
+          <td>
+            {{ data.serviceName }}
+          </td>
+          <td [align]="'center'">
+            <div>
+              <tds-input-number class="pr-2" [tdsTextAlign]="'center'" [(ngModel)]="data.quantity" [disabled]="true">
+              </tds-input-number>
+            </div>
+          </td>
+          <td [align]="'center'">x</td>
+          <td [align]="'right'">
+            <div>
+              <tds-input-number class="pr-2" [hiddenIcon]="true" [tdsTextAlign]="'right'" [min]="1"
+                [(ngModel)]="data.unitPrice" (ngModelChange)="totalPrice(data.serviceID)">
+              </tds-input-number>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button class="border-none" color="secondary" tds-dropdown trigger="click" [tdsDropdownMenu]="menu">
+                <p class="flex items-center">
+                  <i class="tdsi-cash-payment-fill text-success-400 text-2xl pr-1"></i>
+                  <span *ngIf="data.kindofDiscount === '%'">{{ data.amountDiscount }}%</span>
+                  <span *ngIf="data.kindofDiscount === 'VND'">{{ data.amountDiscount | tdsFormatNumber }} VND</span>
+                </p>
+              </button>
+              <tds-dropdown-menu #menu="tdsDropdownMenu">
+                <div class="p-4">
+                  <p class="pb-2"><strong>Giảm giá:</strong></p>
+                  <div class="flex">
+                    <tds-form-field class="mr-2 w-36">
+                      <tds-input-number *ngIf="data.kindofDiscount === '%'" class="pr-2" [tdsTextAlign]="'right'"
+                        [hiddenIcon]="true" [min]="0" [max]="100" [step]="1" [(ngModel)]="data.amountDiscount"
+                        (ngModelChange)="priceAfterDiscount(data.serviceID)">
+                      </tds-input-number>
+                      <tds-input-number *ngIf="data.kindofDiscount === 'VND'" class="pr-2" [tdsTextAlign]="'right'"
+                        [hiddenIcon]="true" [min]="0" [max]="data.tempPrice" [step]="1"
+                        [(ngModel)]="data.amountDiscount" (ngModelChange)="priceAfterDiscount(data.serviceID)">
+                      </tds-input-number>
+                    </tds-form-field>
+                    <tds-button-group>
+                      <button *ngIf="data.kindofDiscount === '%'" tds-button color="success" size="sm">
+                        <span>%</span>
+                      </button>
+                      <button *ngIf="data.kindofDiscount !== '%'" tds-button-outline color="success" size="sm"
+                        (tdsBtnClick)="activeDiscountPercentagePrice(data.serviceID)">
+                        <span>%</span>
+                      </button>
+                      <button *ngIf="data.kindofDiscount === 'VND'" tds-button color="success" size="sm">
+                        <span>VND</span>
+                      </button>
+                      <button *ngIf="data.kindofDiscount !== 'VND'" tds-button-outline color="success" size="sm"
+                        (tdsBtnClick)="activeDiscountVNDPrice(data.serviceID)">
+                        <span>VND</span>
+                      </button>
+                    </tds-button-group>
+                  </div>
+                </div>
+              </tds-dropdown-menu>
+            </div>
+          </td>
+          <td [align]="'right'">{{ data.totalPrice | tdsFormatNumber }}</td>
+          <td>
+            <div>
+              <tds-form-field>
+                <input tdsInput autocomplete="off" [(ngModel)]="data.note" />
+              </tds-form-field>
+            </div>
+          </td>
+        </tr>
+        <!-- </ng-template> -->
       </tbody>
     </tds-table>
 
@@ -190,40 +260,9 @@
       </div>
 
       <div>
-        <div class="flex">
-          <img *ngIf="paymentMethod === 'Chuyển khoản'"
-            src="../../../../assets/img/1721276662570.png" alt="QR Code" width="225px">
+        <div class="flex" *ngIf="paymentMethod === 'Chuyển khoản'">
+          <img src="../../../../assets/img/1721276662570.png" alt="QR Code" width="225px">
         </div>
-
-        <!-- <div class="grid grid-cols-5 gap-3 py-2"
-          *ngIf="infoAppoint?.status !== 'Hoàn thành' && infoAppoint?.status !== 'Thanh toán hoàn tất'">
-          <p class="col-span-3"><strong>Khách hàng tiếp tục TT:</strong></p>
-          <tds-form-field class="col-span-2">
-            <tds-input-number class="pr-2" [min]="0" [max]="amountResidual" [step]="1" [tdsTextAlign]="'right'"
-              [hiddenIcon]="true" [(ngModel)]="amountInvoicedContinue" (ngModelChange)="updateAmountResidual()">
-            </tds-input-number>
-          </tds-form-field>
-        </div>
-
-        <p class="grid grid-cols-5 gap-3 py-2"
-          *ngIf="infoAppoint?.status !== 'Hoàn thành' && infoAppoint?.status !== 'Thanh toán hoàn tất'">
-          <strong class="col-span-3">Còn lại:</strong>
-          <span class="col-span-2 flex justify-end">{{ amountResidualContinue | tdsFormatNumber }}</span>
-        </p>
-
-        <div class="grid grid-cols-6 gap-3 py-2"
-          *ngIf="infoAppoint?.status !== 'Hoàn thành' && infoAppoint?.status !== 'Thanh toán hoàn tất'">
-          <p class="col-span-3"><strong>Phương thức TT:</strong></p>
-          <tds-radio-group [(ngModel)]="paymentMethod" class="col-span-3 flex justify-between">
-            <label tds-radio value="Tiền mặt">Tiền mặt</label>
-            <label tds-radio value="Chuyển khoản">Chuyển khoản</label>
-          </tds-radio-group>
-        </div>
-
-        <div class="flex justify-center">
-          <img *ngIf="paymentMethod === 'Chuyển khoản' && infoAppoint?.status !== 'Hoàn thành'"
-            src="../../../../assets/img/1721276662570.png" alt="QR Code" width="225px">
-        </div> -->
       </div>
     </div>
   </div>

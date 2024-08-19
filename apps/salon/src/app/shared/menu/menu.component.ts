@@ -90,7 +90,7 @@ export class MenuComponent {
       "link": '/test'
     },
     {
-      "name": "Nhóm quyền",
+      "name": "Thiết lập",
       "icon": "tdsi-id-card-fill",
       "listChild": [
         {
@@ -100,6 +100,14 @@ export class MenuComponent {
         {
           "name": "Nhóm quyền",
           "link": '/role'
+        },
+        {
+          "name": "Chi nhánh",
+          "link": '/branch'
+        },
+        {
+          "name": "Công việc",
+          "link": '/job'
         },
       ]
     },

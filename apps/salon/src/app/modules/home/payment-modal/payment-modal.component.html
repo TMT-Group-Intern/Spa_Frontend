@@ -26,26 +26,12 @@
       </p>
     </div>
     <div class="h-full flex justify-end items-start">
-      <tds-tag
-        *ngIf="billStatus === 'Chưa thanh toán'"
-        class="rounded-full"
-        status="custom"
-        [tdsStyle]="{ background: '#7f2ed1' }"
-        >{{ billStatus }}</tds-tag
-      >
-      <tds-tag
-        *ngIf="billStatus === 'Thanh toán 1 phần'"
-        class="rounded-full"
-        status="primary"
-        >{{ billStatus }}</tds-tag
-      >
-      <img
-        class="mr-32"
-        *ngIf="billStatus === 'Thanh toán hoàn tất'"
-        src="../../../assets/img/paid.png"
-        alt="Paid image"
-        width="130px"
-      />
+      <tds-tag *ngIf="billStatus === 'Chưa thanh toán'" class="rounded-full" status='custom'
+        [tdsStyle]="{background:'#7f2ed1'}">{{ billStatus }}</tds-tag>
+      <tds-tag *ngIf="billStatus === 'Thanh toán 1 phần'" class="rounded-full" status="primary">{{ billStatus
+        }}</tds-tag>
+      <img class="mr-32" *ngIf="billStatus === 'Thanh toán hoàn tất'" src="../../../assets/img/paid.png"
+        alt="Paid image" width="130px">
     </div>
   </div>
 
@@ -57,12 +43,13 @@
   >
     <thead>
       <tr>
-        <th width="25%">Tên</th>
-        <th width="7%">Số lượng</th>
-        <th width="13%">Đơn giá</th>
+        <th width="22%">Tên</th>
+        <th width="9%">Số lượng</th>
+        <th width="7%">Lộ trình</th>
+        <th width="11%">Đơn giá</th>
         <th width="15%">Giảm giá</th>
-        <th width="10%">Thành tiền</th>
-        <th width="30%">Ghi chú</th>
+        <th width="11%">Thành tiền</th>
+        <th width="25%">Ghi chú</th>
       </tr>
     </thead>
 
@@ -72,6 +59,9 @@
           <td>{{ data.serviceName }}</td>
           <td [align]="'center'">
             {{ data.quantity }}
+          </td>
+          <td [align]="'center'">
+            {{ data.isTreatment ? 'x' : '' }}
           </td>
           <td [align]="'right'">
             {{ data.unitPrice | tdsFormatNumber }}
@@ -91,26 +81,25 @@
     </tbody>
   </tds-table>
 
-  <div class="grid grid-cols-3 gap-16 pt-4 mb-5">
-    <div class="col-span-2"></div>
-
-    <div>
+  <div class="grid grid-cols-3 gap-8 pt-4 m-5">
+    <div></div>
+    <div  class="p-4 bg-gray-100 rounded-10">
       <!-- Total -->
       <p class="grid grid-cols-5 gap-3 py-2">
-        <span class="col-span-3">Tổng tiền:</span>
-        <span class="col-span-2 flex justify-end">{{
-          total | tdsFormatNumber
-        }}</span>
-      </p>
-
-      <!-- Discount -->
-      <div class="grid grid-cols-6 gap-3 py-2">
-        <p class="col-span-2 flex items-center"><span>Giảm giá:</span></p>
-        <p class="col-span-4 flex justify-end">
-          {{ amountDiscount | tdsFormatNumber }}
-          <span *ngIf="kindofDiscount === '%'">%</span>
+          <span class="col-span-3">Tổng tiền:</span> <span class="col-span-2 flex justify-end">{{ total |
+            tdsFormatNumber }}</span>
         </p>
-      </div>
+
+        <!-- Discount -->
+        <div class="grid grid-cols-6 gap-3 py-2">
+          <p class="col-span-2 flex items-center"><span>Giảm giá:</span></p>
+          <p class="col-span-4 flex justify-end">
+            {{ amountDiscount | tdsFormatNumber }} <span *ngIf="kindofDiscount === '%'">%</span>
+          </p>
+        </div>
+    </div>
+
+    <div  class="p-4 bg-gray-100 rounded-10">
 
       <!-- Note -->
       <div class="grid grid-cols-4 gap-3 py-2">
@@ -130,8 +119,10 @@
     </div>
   </div>
 
+  <hr *ngIf="billStatus === 'Chưa thanh toán'" class="mb-5"/>
+
   <tds-table
-    *ngIf="(billStatus !== 'Chưa thanh toán') === true; else nodata"
+    *ngIf="billStatus !== 'Chưa thanh toán'; else nodata"
     #paymentTable
     [listData]="paymentByBill"
     [showPagination]="false"
@@ -149,8 +140,8 @@
     <tbody>
       <ng-template ngFor let-data [ngForOf]="paymentTable.data">
         <tr>
-          <td>{{ data.date | date : 'dd/MM/YYYY' }}</td>
-          <td>{{ data.date | date : 'hh:mm' }}</td>
+          <td>{{ data.date | date:'dd/MM/YYYY' }}</td>
+          <td>{{ data.date | date:'HH:mm' }}</td>
           <td>
             {{ data.amount | tdsFormatNumber }}
           </td>
@@ -234,7 +225,7 @@
 
       <div class="flex justify-center">
         <img
-          *ngIf="paymentMethod === 'Chuyển khoản'"
+          *ngIf="paymentMethod === 'Chuyển khoản' && billStatus !== 'Thanh toán hoàn tất'"
           src="../../../../assets/img/1721276662570.png"
           alt="QR Code"
           width="225px"

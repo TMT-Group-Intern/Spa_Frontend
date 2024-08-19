@@ -27,7 +27,7 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z
     TDSInputModule,
     TDSButtonModule,
     TDSSelectModule,
-    TDSRadioModule,FormsModule
+    TDSRadioModule, FormsModule
   ],
   templateUrl: './account-modal.component.html',
   styleUrls: ['./account-modal.component.scss'],
@@ -35,21 +35,19 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z
 
 export class AccountModalComponent implements OnInit {
 
-  private readonly tModalSvc =inject(TDSModalService)
+  private readonly tModalSvc = inject(TDSModalService)
   private readonly modalRef = inject(TDSModalRef);
   @Input() email?: string;
   @Input() role?: string;
   @Input() isActive?: boolean;
-  @Input() userName?:string;
-  @Input() id?:string;
-  @Input() lastName?:string;
-  @Input() firstName?:string;
+  @Input() userName?: string;
+  @Input() id?: string;
+  @Input() lastName?: string;
+  @Input() firstName?: string;
   employeeOptions: any[] = []
   branchId?: number;
   userSession: any;
   storedUserSession = localStorage.getItem('userSession');
-  //checkDislay?: boolean = true
-  //employee:any
   createAccount = inject(FormBuilder).nonNullable.group({
     userName: [
       '',
@@ -75,16 +73,16 @@ export class AccountModalComponent implements OnInit {
     employee: [
       '',
     ],
- });
+  });
 
   constructor(
     private shared: AuthService,
     private notification: TDSNotificationService
-  ) {}
+  ) { }
 
   matchValidator(control: AbstractControl): { [key: string]: boolean } | null {
     if (!this.createAccount) {
-      return {mustMatch:true};
+      return { mustMatch: true };
     }
     const pass = this.createAccount.value.password;
     const retype = control.value;
@@ -107,17 +105,17 @@ export class AccountModalComponent implements OnInit {
           name: `${item.lastName} ${item.firstName}`
         }))]
       })
-      if(this.id) {
-        //this.checkDislay = false
-          this.shared.getUserByUserID(this.id).subscribe(
-            (data: any) => {
-              this.createAccount.patchValue({
-               userName: data.userDTO.userName,
-               employee: data.userDTO.lastName +" "+ data.userDTO.firstName,
-              })    
-            }
-          )
+    if (this.id) {
+      //this.checkDislay = false
+      this.shared.getUserByUserID(this.id).subscribe(
+        (data: any) => {
+          this.createAccount.patchValue({
+            userName: data.userDTO.userName,
+            employee: data.userDTO.lastName + " " + data.userDTO.firstName,
+          })
         }
+      )
+    }
   }
 
   handleOk(): void {
@@ -163,43 +161,37 @@ export class AccountModalComponent implements OnInit {
     const password = this.createAccount.value.password as string;
     const confirmPassword = this.createAccount.value.confirmPassword as string;
 
-    this.shared.createAccount(userName,password,confirmPassword)
-       .subscribe((result) => {
-      if (result.status != null) {
-         const modal = this.tModalSvc.success({
-          title:'Thành công',
-          content: `<h5 class="text-success-500">Tạo tài khoản <strong>${ userName }</strong> thành công!</h5>`,
-          footer:null,
-          size:'sm',
-          okText:'Xác nhận',
-          onOk:()=> true
-        });
-        modal.afterClose.asObservable()
-        //.pipe(tap(()=>this.createAccount.reset({
-          // userName:'',
-          // password:'',
-          // confirmPassword:'',
-        //})))
-        .subscribe(() =>this.modalRef.close());
-      }
-      else{
-         const modal = this.tModalSvc.error({
-          title:'Thất bại',
-          content: `<h5 class="text-error-500">Tạo tài khoản <strong>${ userName }</strong> thất bại! Tài khoản đã tồn tại!</h5>`,
-          footer:null,
-          size:'md',
-          okText:'Xác nhận',
-          onOk:()=> true
-        });
-        modal.afterClose.asObservable()
-        .subscribe
-        (res=>{
-          if(res){
-            this.createAccount;
-          }
-        });
-      }
-    });
+    this.shared.createAccount(userName, password, confirmPassword)
+      .subscribe((result) => {
+        if (result.status != null) {
+          const modal = this.tModalSvc.success({
+            title: 'Thành công',
+            content: `<h5 class="text-success-500">Tạo tài khoản <strong>${userName}</strong> thành công!</h5>`,
+            footer: null,
+            size: 'sm',
+            okText: 'Xác nhận',
+            onOk: () => true
+          });
+          modal.afterClose.asObservable().subscribe(() => this.modalRef.destroy());
+        }
+        else {
+          const modal = this.tModalSvc.error({
+            title: 'Thất bại',
+            content: `<h5 class="text-error-500">Tạo tài khoản <strong>${userName}</strong> thất bại! Tài khoản đã tồn tại!</h5>`,
+            footer: null,
+            size: 'md',
+            okText: 'Xác nhận',
+            onOk: () => true
+          });
+          modal.afterClose.asObservable()
+            .subscribe
+            (res => {
+              if (res) {
+                this.createAccount;
+              }
+            });
+        }
+      });
   }
   markFormGroupTouched(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(key => {

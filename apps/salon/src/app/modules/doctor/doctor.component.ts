@@ -69,7 +69,7 @@ export class DoctorComponent implements OnInit {
   appointmentList: any[] = [];
   serviceHistory: any;
   fallback = './assets/img/default.svg';
-  dataAppointmentbyid: any;
+  dataAppointmentById: any;
   today = startOfToday();
   empID: any[] = [];
   dataSvc: any = [];
@@ -81,7 +81,7 @@ export class DoctorComponent implements OnInit {
   appointments: any[] = [];
   // sessionID: any;
   serviceBefore: any;
-  chooseTreatment: any
+  chooseTreatment: any[] = []
   // isNote = false
 
   form = inject(FormBuilder).nonNullable.group({
@@ -108,7 +108,7 @@ export class DoctorComponent implements OnInit {
     if (storedUserSession !== null) {
       this.userSession = JSON.parse(storedUserSession);
     }
-    this.initAppointmentList();
+    //this.initAppointmentList();
 
     this.companySvc._companyIdCur$
       .pipe(
@@ -127,11 +127,11 @@ export class DoctorComponent implements OnInit {
             (appointment.employeeCode === this.userSession.user.userCode ||
               this.userSession.user.role === 'Admin')
         );
-        const foundExamingAppoint = this.appointmentList.find(
+        const foundExamAppoint = this.appointmentList.find(
           (item) => item.status == 'Đang khám'
         );
-        if (foundExamingAppoint) {
-          this.userFrofile(foundExamingAppoint.appointmentID);
+        if (foundExamAppoint) {
+          this.userProfile(foundExamAppoint.appointmentID);
         }
       });
 
@@ -224,17 +224,17 @@ export class DoctorComponent implements OnInit {
     });
   }
 
-  userFrofile(id: number) {
+  userProfile(id: number) {
     this.sharedService
       .getAppointment(id)
       .pipe(
         tap((data: any) => {
-          this.dataAppointmentbyid = data;
+          this.dataAppointmentById = data;
           this.active = true;
           this.CustomerID = data.customerID;
           this.form.patchValue({
             phone: data.customer.phone,
-            name: `${data.customer.firstName} ${data.customer.lastName}`,
+            name: `${data.customer.lastName} ${data.customer.firstName}`,
             appointmentDate: this.formatDate(data.appointmentDate, 'HH:mm'),
             customerID: data.customer.customerID,
             // status: data.status,
@@ -298,14 +298,14 @@ export class DoctorComponent implements OnInit {
     const currentService = this.form.value.service ?? [];
     this.chooseTreatment = this.chooseTreatment.filter((item1: any) => currentService.some(item2 => item1.serviceID === item2))
     const currentTreatment = (this.chooseTreatment as any[]).map(item => ({
-      appointmentID: this.dataAppointmentbyid.appointmentID,
+      appointmentID: this.dataAppointmentById.appointmentID,
       treatmentDetailID: item.treatmentDetailID,
-      qualityChooses: item.quantity
+      qualityChooses: 1
     }))
     // console.log(this.chooseTreatment)
     // console.log(currentTreatment)
 
-    const chooseService = currentService.filter(item1 => this.chooseTreatment.some((item2: any) => item1 !== item2.serviceID))
+    const chooseService = currentService.filter(item1 => !this.chooseTreatment.some((item2: any) => item1 === item2.serviceID))
     // console.log(chooseService)
 
     const val = {

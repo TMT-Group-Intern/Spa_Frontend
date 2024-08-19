@@ -128,7 +128,7 @@ export class RevenueStatisticsComponent implements OnInit {
         this.endOfMonthDate as unknown as string
       )
       .subscribe((data: any) => {
-        this.listOfData = data.sort((a: any, b: any) =>a.date > b.date? -1: 1);
+        this.listOfData = data.sort((a: any, b: any) => a.date > b.date ? -1 : 1);
         this.valueArray = [
           ...data.map((item: any) => ({
             day: new Date(item.date).getDate(),

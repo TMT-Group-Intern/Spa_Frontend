@@ -51,9 +51,9 @@ export class AppointmentListComponent implements OnInit, OnChanges {
     'Chờ chăm sóc',
     'Đang chăm sóc',
     'Hoàn thành',
-    'Chưa thanh toán',
-    'Thanh toán 1 phần',
-    'Thanh toán hoàn tất',
+    //'Chưa thanh toán',
+    // 'Thanh toán 1 phần',
+    // 'Thanh toán hoàn tất',
   ];
   selectedIndex = 0;
   search = '';
@@ -81,13 +81,7 @@ export class AppointmentListComponent implements OnInit, OnChanges {
   startDate = format(this.thisTime[0], DATE_CONFIG.DATE_BASE_FROM);
   endDate = format(this.thisTime[1], DATE_CONFIG.DATE_BASE_TO);
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if(changes['_startDate']?.currentValue || changes['_endDate'].currentValue){
-      this.startDate = this._startDate;
-      this.endDate = this._endDate;
-      this.thisTime = [this.startDate as unknown as Date, this.endDate as unknown as Date]
-    }
-  }
+
   ngOnInit() {
     if (this.storedUserSession !== null) {
       this.userSession = JSON.parse(this.storedUserSession);
@@ -102,9 +96,17 @@ export class AppointmentListComponent implements OnInit, OnChanges {
       .subscribe((data) => (this.branchId = data));
 
     this.company._check_create$.pipe(
-    ).subscribe(data =>{
-        this.boolean$ = data
+    ).subscribe(data => {
+      this.boolean$ = data
     })
+  }
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['_startDate']?.currentValue || changes['_endDate'].currentValue) {
+      this.startDate = this._startDate;
+      this.endDate = this._endDate;
+      this.thisTime = [this.startDate as unknown as Date, this.endDate as unknown as Date]
+    }
   }
 
   onInput(event: Event): void {

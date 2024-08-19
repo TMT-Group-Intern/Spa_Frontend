@@ -2,7 +2,8 @@
 <form [formGroup]="modalServiceForm" id="formService" autocomplete="off">
   <tds-label [tdsRequired]="true" class="pt-4">Tên dịch vụ</tds-label>
   <tds-form-field class="w-full mt-2">
-    <input tdsInput autocomplete="off" placeholder="Nhập tên dịch vụ" formControlName="serviceName" class="appearance-none" />
+    <input tdsInput autocomplete="off" placeholder="Nhập tên dịch vụ" formControlName="serviceName"
+      class="appearance-none" />
     <tds-error>
       <span><strong>Tên dịch vụ</strong> không được để trống!</span>
     </tds-error>
@@ -18,10 +19,11 @@
 
   <tds-label tdsRequired="true" class="pt-4">Giá</tds-label>
   <tds-form-field class="w-full mt-2">
-    <input tdsInput autocomplete="off" placeholder="0" formControlName="price"
-      type="number" class="appearance-none" min="0">
+    <input tdsInput autocomplete="off" placeholder="0" formControlName="price" type="number" class="appearance-none"
+      min="0">
     <tds-error>
-      <span *ngIf=" modalServiceForm.controls['price'].hasError('required')"><strong>Giá dịch vụ</strong> không được để trống!</span>
+      <span *ngIf=" modalServiceForm.controls['price'].hasError('required')"><strong>Giá dịch vụ</strong> không được để
+        trống!</span>
       <span *ngIf="modalServiceForm.controls['price'].hasError('min')"><strong>Giá dịch vụ</strong> không hợp lệ!</span>
     </tds-error>
   </tds-form-field>

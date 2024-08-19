@@ -11,10 +11,10 @@ import { CompanyService } from '../../../core/services/company.service';
 export class TableTreatmentPlanComponent implements OnChanges {
   private readonly shared = inject(AuthService);
   private readonly company = inject(CompanyService)
-  @Input() id?:number;
+  @Input() id?: number;
   treatment: any;
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['id']?.currentValue){
+    if (changes['id']?.currentValue) {
       this.treatmentDetail(this.id as number);
     }
   }

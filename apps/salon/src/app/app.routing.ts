@@ -16,6 +16,9 @@ import { AppointmentListModule } from './modules/appointment-list/appointment-li
 import { ChatboxComponent } from './modules/chatbox/chatbox.component';
 import { RoleComponent } from './modules/role/role.component';
 import { AccountComponent } from './modules/account/account.component';
+import { InvoiceComponent } from './modules/invoice/invoice.component';
+import { BranchComponent } from './modules/branch/branch.component';
+import { JobComponent } from './modules/job/job.component';
 import { TreasuryComponent } from './modules/treasury/treasury.component';
 
 const routes: Routes = [
@@ -50,6 +53,7 @@ const routes: Routes = [
         ],
       },
       { path: 'doctor', loadComponent: () => DoctorComponent },
+      { path: 'invoice', loadComponent: () => InvoiceComponent },
       { path: 'report', loadChildren: () => import("./modules/revenue-statistics/revenue-statistics.module").then(m => m.RevenueStaticsModule) },
       {
         path: 'report/report-day',
@@ -63,6 +67,8 @@ const routes: Routes = [
       { path: 'role', loadComponent: () => RoleComponent },
       { path: 'account', loadComponent: () => AccountComponent },
       { path: 'chatbox', loadComponent: () => ChatboxComponent },
+      { path: 'branch', loadComponent: () => BranchComponent },
+      { path: 'job', loadComponent: () => JobComponent },
       { path: 'treasury', loadComponent: () => TreasuryComponent },
       { path: '', loadChildren: () => import("./modules/treatment-plan/treatment-plan.module").then(m => m.TreatmentPlanModule) },
 

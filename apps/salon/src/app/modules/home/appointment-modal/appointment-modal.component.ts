@@ -63,9 +63,7 @@ export class AppointmentModalComponent implements OnInit {
     doctor: [],
     appointmentDate: [new Date()],
     status: ['Đã hẹn'],
-    // customer: [null]
   });
-  // isExist = false;
   // Hide search Phone Number
   isHide1 = false;
   // Hide Display Phone Number
@@ -241,7 +239,6 @@ export class AppointmentModalComponent implements OnInit {
             });
           }
         )
-        // this.isExist = false
       }
     });
   }
@@ -259,9 +256,6 @@ export class AppointmentModalComponent implements OnInit {
     );
   }
 
-  // getBranch(branchID:number):any{
-  //   return ;
-  // }
   // Success Notification
   createNotificationSuccess(content: any): void {
     this.notification.success('Succesfully', content);

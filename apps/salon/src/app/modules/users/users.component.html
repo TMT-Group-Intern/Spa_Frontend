@@ -2,11 +2,7 @@
   <div class="flex justify-start items-center mt-2">
     <span class="p-4 font-bold text-heading-5">Danh sách nhân viên</span>
     <div class="flex w-1/6 mr-4 flex-col gap-2 pl-4">
-      <tds-cascader
-        [tdsOptions]="tdsOptions"
-        [(ngModel)]="values"
-        (ngModelChange)="onChanges($event)"
-      ></tds-cascader>
+      <tds-cascader [tdsOptions]="tdsOptions" [(ngModel)]="values" (ngModelChange)="onChanges($event)"></tds-cascader>
     </div>
     <button tds-button-icon (click)="createUser()" class="rounded-full mr-8 bg-green-1" color="success" tds-tooltip
       tooltipTitle="Thêm nhân viên">
@@ -15,57 +11,36 @@
       </span>
     </button>
   </div>
-  <tds-data-table 
-  class="p-2"
-  [tdsRounded]="true"
-  [tdsShowPagination]="false"
-  [tdsFrontPagination]="false"
-  [tdsData]="UserList"
-  [tdsShowSizeChanger]="true"
-  [tdsPageSize]="20"
-  [tdsBordered]="true">
+  <tds-data-table class="p-2" [tdsRounded]="true" [tdsShowPagination]="false" [tdsFrontPagination]="false"
+    [tdsData]="UserList" [tdsShowSizeChanger]="true" [tdsPageSize]="20" [tdsBordered]="true">
     <tds-data-table-column [tdsField]="'userCode'" [tdsTitle]="'Mã tài khoản'" tdsWidth="4%"
       [tdsDataType]="'text'"></tds-data-table-column>
 
-    <tds-data-table-column
-      [tdsField]="'name'"
-      [tdsTitle]="'Họ tên'"
-      tdsWidth="15%"
-      [tdsDataType]="'text'"
-    ></tds-data-table-column>
+    <tds-data-table-column [tdsField]="'name'" [tdsTitle]="'Họ tên'" tdsWidth="15%"
+      [tdsDataType]="'text'"></tds-data-table-column>
 
     <tds-data-table-column [tdsField]="'email'" [tdsTitle]="'Email'" tdsWidth="12%"
       [tdsDataType]="'text'"></tds-data-table-column>
 
-    <tds-data-table-column
-      [tdsField]="'phone'"
-      [tdsTitle]="'Số điện thoại'"
-      tdsWidth="6%"
-      [tdsDataType]="'text'"
-    ></tds-data-table-column>
+    <tds-data-table-column [tdsField]="'phone'" [tdsTitle]="'Số điện thoại'" tdsWidth="6%"
+      [tdsDataType]="'text'"></tds-data-table-column>
 
     <tds-data-table-column [tdsField]="'gender'" [tdsTitle]="'Giới tính'" tdsWidth="5%"
       [tdsDataType]="'text'"></tds-data-table-column>
-    <tds-data-table-column [tdsField]="'dateOfBirth'" [tdsTitle]="'Ngày sinh'" tdsWidth="6%"
-      [tdsDataType]="'date'" [tdsFormat]="'dd/MM/YYYY'"></tds-data-table-column>
+    <tds-data-table-column [tdsField]="'dateOfBirth'" [tdsTitle]="'Ngày sinh'" tdsWidth="6%" [tdsDataType]="'date'"
+      [tdsFormat]="'dd/MM/YYYY'"></tds-data-table-column>
     <tds-data-table-column [tdsField]="'role'" [tdsTitle]="'Công việc'" tdsWidth="12%"
       [tdsDataType]="'text'"></tds-data-table-column>
-      <tds-data-table-column [tdsField]="'status'" [tdsTitle]="'Trạng thái'" tdsWidth="9%"
+    <tds-data-table-column [tdsField]="'status'" [tdsTitle]="'Trạng thái'" tdsWidth="9%"
       [tdsDataType]="'text'"></tds-data-table-column>
 
     <tds-data-table-column [tdsContent]="commandTpl" [tdsTitle]="'Tùy chọn'" tdsWidth="8%" [tdsColumnType]="'command'"
       tdsClass="flex justify-around">
       <ng-template #commandTpl let-dataRow>
         <span class="px-4" *ngIf="dataRow.haveAccount === true"></span>
-        <button
-          tds-button-flat-icon
-          color="custom"
-          class="text-slate-500 hover:text-green-500"
-          tds-tooltip
-          tooltipTitle="Tạo tài khoản cho nhân viên"
-          (click)="createAccountForEmployee(dataRow.email)"
-          *ngIf="dataRow.haveAccount === false"
-        >
+        <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-green-500" tds-tooltip
+          tooltipTitle="Tạo tài khoản cho nhân viên" (click)="createAccountForEmployee(dataRow.email)"
+          *ngIf="dataRow.haveAccount === false">
           <i class="tdsi-plus-fill"></i>
         </button>
         <button tds-button-flat-icon color="custom" class="text-slate-500 hover:text-secondary-1" tds-tooltip
@@ -73,26 +48,17 @@
           <i class="tdsi-edit-fill"></i>
         </button>
         <button tds-button-flat-icon color="custom" [disabled]="this.userSession.user.email ===dataRow.email"
-          class="text-slate-500 hover:text-red-500 tdsi-sync-line" tds-tooltip tooltipTitle="Thay đổi trạng thái nhân viên"
-          (click)="deleteUser(dataRow.email,dataRow.name)">
+          class="text-slate-500 hover:text-red-500 tdsi-sync-line" tds-tooltip
+          tooltipTitle="Thay đổi trạng thái nhân viên" (click)="deleteUser(dataRow.email,dataRow.name)">
         </button>
       </ng-template>
     </tds-data-table-column>
   </tds-data-table>
   <div class="w-full flex items-center p-2">
-    <tds-pagination
-      class="w-full"
-      [pageSize]="pageSize"
-      [pageIndex]="pageNumber"
-      [total]="totalItemsUsers"
-      [pageSizeOptions]="[10, 20, 30, 40]"
-      [showTotal]="rangeTemplate"
-      showSizeChanger
-      [showRefresh]="true"
-      (pageIndexChange)="changeNumberPage($event)"
-      (pageSizeChange)="changeSizePage($event)"
-      (clickRefresh)="onRefresh($event)"
-      [bordered]="true">
+    <tds-pagination class="w-full" [pageSize]="pageSize" [pageIndex]="pageNumber" [total]="totalItemsUsers"
+      [pageSizeOptions]="[10, 20, 30, 40]" [showTotal]="rangeTemplate" showSizeChanger [showRefresh]="true"
+      (pageIndexChange)="changeNumberPage($event)" (pageSizeChange)="changeSizePage($event)"
+      (clickRefresh)="onRefresh($event)" [bordered]="true">
     </tds-pagination>
     <ng-template #rangeTemplate let-range="range" let-total>
       {{ range[0] }}-{{ range[1] }} of {{ total }}
