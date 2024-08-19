@@ -47,7 +47,7 @@
                           </tds-tag>
                           <tds-badge
                             *ngIf="
-                              !event.data.billStatus
+                              event.data.status.name === 'Hoàn thành' && !event.data.billStatus
                             "
                             status="error"
                             tds-tooltip
