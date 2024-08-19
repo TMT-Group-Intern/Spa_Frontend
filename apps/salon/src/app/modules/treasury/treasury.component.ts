@@ -1,14 +1,14 @@
 import { Component, inject, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../shared.service';
-import { DOCUMENT } from '@angular/common';
 import { PhieuthuchiComponent } from './phieuthuchi/phieuthuchi.component';
 import { TDSModalService } from 'tds-ui/modal';
+import { TDSTableModule } from "tds-ui/table";
 
 @Component({
   selector: 'frontend-treasury',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TDSTableModule],
   templateUrl: './treasury.component.html',
   styleUrls: ['./treasury.component.scss'],
 })
@@ -24,7 +24,7 @@ export class TreasuryComponent implements OnInit {
     this.GetThuChi()
   }
 
-  constructor(private shareApi: AuthService, @Inject(DOCUMENT) private document: Document) {
+  constructor(private shareApi: AuthService) {
 
   }
 

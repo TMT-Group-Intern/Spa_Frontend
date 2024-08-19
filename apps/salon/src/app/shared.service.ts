@@ -721,4 +721,8 @@ export class AuthService {
       status
     );
   }
+
+  taoPhieuThuChi(val: any) {
+    return this.http.post(this.baseUrl + 'IncomeExpenses', val)
+  }
 }

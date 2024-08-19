@@ -6,7 +6,7 @@
         >Mô Tả</label
       >
       <input
-        formControlName="decription"
+        formControlName="Description"
         type="text"
         id="description"
         name="description"
@@ -19,7 +19,7 @@
         >Số Tiền</label
       >
       <input
-        formControlName="price"
+        formControlName="Amount"
         type="number"
         id="amount"
         name="amount"
@@ -31,14 +31,15 @@
       <label for="type" class="block text-sm font-medium text-gray-700"
         >Loại</label
       >
-      <select id="type" formControlName="type">
-        <option value="thu">Thu</option>
-        <option value="chi">Chi</option>
+      <select id="type" formControlName="TypeOfIncome">
+        <option value="Thu">Thu</option>
+        <option value="Chi">Chi</option>
       </select>
     </div>
     <button
       type="submit"
       class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+      (click)="onSubmit()"
     >
       Thêm
     </button>
