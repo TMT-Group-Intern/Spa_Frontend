@@ -95,6 +95,7 @@ export class PaymentModalComponent implements OnInit {
             amountDiscount: item.amountDiscount,
             kindofDiscount: item.kindofDiscount,
             note: item.note,
+            isTreatment: item.isTreatment
           }))]
 
           // Calculate total of payment

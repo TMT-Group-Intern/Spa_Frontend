@@ -44,6 +44,7 @@ export class BillModalComponent {
   // inforCus: any;
   infoAppoint: any;
   service: any[] = [];
+  treatment: any[] = [];
   billID = null
   kindofDiscount = '%'
   amountDiscount = 0
@@ -67,6 +68,8 @@ export class BillModalComponent {
       (data: any) => {
         this.infoAppoint = data
 
+        console.log(this.infoAppoint)
+
         this.service = [...(data.chooseServices as any[]).map(item => ({
           serviceID: item.serviceID,
           serviceName: item.service.serviceName,
@@ -77,6 +80,19 @@ export class BillModalComponent {
           amountDiscount: 0,
           kindofDiscount: '%',
           note: '',
+          isTreatment: false
+        }))]
+
+        this.treatment = [...(data.chooseServiceTreatments as any[]).map(item => ({
+          serviceID: item.treatmentDetail.serviceID,
+          serviceName: item.treatmentDetail.service.serviceName,
+          quantity: item.qualityChooses,
+          unitPrice: item.treatmentDetail.price / item.treatmentDetail.quantity,
+          totalPrice: item.treatmentDetail.price / item.treatmentDetail.quantity,
+          amountDiscount: 0,
+          kindofDiscount: '%',
+          note: '',
+          isTreatment: true
         }))]
 
         // Calculate total of payment
@@ -95,6 +111,9 @@ export class BillModalComponent {
   resetTotal() {
     this.total = 0
     for (const num of this.service) {
+      this.total += num.totalPrice;
+    }
+    for (const num of this.treatment) {
       this.total += num.totalPrice;
     }
     this.totalAmountAfterDiscount()
@@ -203,8 +222,10 @@ export class BillModalComponent {
       amountDiscount: this.amountDiscount,
       kindofDiscount: (this.kindofDiscount === 'VND' && this.amountDiscount === 0) ? '%' : this.kindofDiscount,
       note: this.note,
-      billItems: this.service
+      billItems: [...this.service, ...this.treatment],
     }
+
+    // console.log(val.billItems)
 
     if (this.amountInvoiced == 0) {
       // this.shared.UpdateStatus(this.id, 'Chưa thanh toán').subscribe()

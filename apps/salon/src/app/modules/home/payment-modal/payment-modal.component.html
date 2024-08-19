@@ -31,12 +31,13 @@
   <tds-table #appointmentTable [listData]="service" [showPagination]="false" [title]="'Hóa đơn'">
     <thead>
       <tr>
-        <th width="25%">Tên</th>
+        <th width="22%">Tên</th>
         <th width="7%">Số lượng</th>
+        <th width="7%">Lộ trình</th>
         <th width="13%">Đơn giá</th>
         <th width="15%">Giảm giá</th>
         <th width="10%">Thành tiền</th>
-        <th width="30%">Ghi chú</th>
+        <th width="26%">Ghi chú</th>
       </tr>
     </thead>
 
@@ -46,6 +47,9 @@
           <td>{{ data.serviceName }}</td>
           <td [align]="'center'">
             {{ data.quantity }}
+          </td>
+          <td [align]="'center'">
+            {{ data.isTreatment ? 'x' : '' }}
           </td>
           <td [align]="'right'">
             {{ data.unitPrice | tdsFormatNumber }}
