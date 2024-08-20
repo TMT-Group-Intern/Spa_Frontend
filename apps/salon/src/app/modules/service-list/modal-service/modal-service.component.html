@@ -19,8 +19,7 @@
 
   <tds-label tdsRequired="true" class="pt-4">Giá</tds-label>
   <tds-form-field class="w-full mt-2">
-    <input tdsInput autocomplete="off" placeholder="0" formControlName="price" type="number" class="appearance-none"
-      min="0">
+    <tds-input-number formControlName="price" [min]="0"></tds-input-number>
     <tds-error>
       <span *ngIf=" modalServiceForm.controls['price'].hasError('required')"><strong>Giá dịch vụ</strong> không được để
         trống!</span>

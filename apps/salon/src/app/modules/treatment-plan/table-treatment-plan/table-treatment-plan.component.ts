@@ -27,10 +27,10 @@ export class TableTreatmentPlanComponent implements OnChanges {
 
   //chọn hàng của dịch vụ đó
   onClickRow(event: any){
-    const valueFilter = event.filter((c: any)=> c.isDone == false);
+    const valueFilter = event.filter((c: any)=> c.isDone === false);
     const val = valueFilter.map((v:any) => v.serviceID )
     this.company._change_service$.next(val);
-    this.company._change_session_status$.next(event);
+    this.company._change_session_status$.next(valueFilter);
   }
 
   // lấy dữ liệu treatmentDetails
