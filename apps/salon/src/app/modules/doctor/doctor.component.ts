@@ -82,6 +82,7 @@ export class DoctorComponent implements OnInit {
   // sessionID: any;
   serviceBefore: any;
   chooseTreatment: any[] = []
+  newChooseTreatment: any[] = []
   // isNote = false
 
   form = inject(FormBuilder).nonNullable.group({
@@ -295,14 +296,26 @@ export class DoctorComponent implements OnInit {
     if (this.form.invalid) return;
 
     if (this.chooseTreatment.length != 0) {
+      console.log(this.chooseTreatment)
+      console.log(this.form.value.service)
       const currentService = this.form.value.service ?? [];
+      const chooseService = currentService.filter(item1 => !this.chooseTreatment.some((item2: any) => item1 === item2.serviceID))
+
       this.chooseTreatment = this.chooseTreatment.filter((item1: any) => currentService.some(item2 => item1.serviceID === item2))
-      const currentTreatment = (this.chooseTreatment as any[]).map(item => ({
+      const treatment = currentService.filter(item1 => this.chooseTreatment.some((item2: any) => item1 === item2.serviceID))
+      for(const ser of treatment) {
+        const tempTreatment = this.chooseTreatment.filter((item1: any) =>  item1.serviceID === ser && item1.price !== 0)
+        console.log(tempTreatment)
+        const temp = tempTreatment.sort((a, b) => b.quantity - a.quantity).slice(0, 1);
+        this.newChooseTreatment = this.newChooseTreatment.concat(temp)
+      }
+      const currentTreatment = this.newChooseTreatment.map(item => ({
         appointmentID: this.dataAppointmentById.appointmentID,
         treatmentDetailID: item.treatmentDetailID,
         qualityChooses: 1
       }))
-      const chooseService = currentService.filter(item1 => !this.chooseTreatment.some((item2: any) => item1 === item2.serviceID))
+
+
       const val = {
         ...this.form.value,
         service: chooseService,
