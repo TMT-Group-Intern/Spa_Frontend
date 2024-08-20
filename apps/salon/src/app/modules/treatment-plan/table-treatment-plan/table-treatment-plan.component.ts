@@ -38,7 +38,6 @@ export class TableTreatmentPlanComponent implements OnChanges {
       this.shared.getTreatmentDetail(id).subscribe(
         (data: any) => {
           this.treatment = data.treatmentDetails
-          console.log(this.treatment)
         }
       )
   }
