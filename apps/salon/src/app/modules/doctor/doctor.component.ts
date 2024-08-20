@@ -314,9 +314,7 @@ export class DoctorComponent implements OnInit {
         treatmentDetailID: item.treatmentDetailID,
         qualityChooses: 1
       }))
-      console.log(this.newChooseTreatment)
-
-
+      
       const val = {
         ...this.form.value,
         service: chooseService,
@@ -330,10 +328,6 @@ export class DoctorComponent implements OnInit {
       };
       this.updateServiceAppointment(id, val.status, val.service, val.note, val.chooseTreatment);
     }
-
-
-
-
   }
 
   // Update service Appointment
