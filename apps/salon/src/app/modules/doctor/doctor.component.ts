@@ -304,7 +304,7 @@ export class DoctorComponent implements OnInit {
       this.chooseTreatment = this.chooseTreatment.filter((item1: any) => currentService.some(item2 => item1.serviceID === item2))
       const treatment = currentService.filter(item1 => this.chooseTreatment.some((item2: any) => item1 === item2.serviceID))
       for(const ser of treatment) {
-        const tempTreatment = this.chooseTreatment.filter((item1: any) =>  item1.serviceID === ser && item1.price !== 0)
+        const tempTreatment = this.chooseTreatment.filter((item1: any) =>  item1.serviceID === ser)
         console.log(tempTreatment)
         const temp = tempTreatment.sort((a, b) => b.quantity - a.quantity).slice(0, 1);
         this.newChooseTreatment = this.newChooseTreatment.concat(temp)
@@ -314,6 +314,7 @@ export class DoctorComponent implements OnInit {
         treatmentDetailID: item.treatmentDetailID,
         qualityChooses: 1
       }))
+      console.log(this.newChooseTreatment)
 
 
       const val = {
