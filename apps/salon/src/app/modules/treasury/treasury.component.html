@@ -1,86 +1,85 @@
-<button (click)="TaoPhieuThuChi()">Tạo Phiếu Thu/Chi</button>
-<div class="bg-gray-50 p-4 rounded-md mb-6">
-  <h2 class="text-xl font-semibold mb-2">Tổng Sổ Quỹ</h2>
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    <div class="bg-white p-4 rounded-md shadow-md">
-      <h3 class="text-lg font-medium">Tổng Quỹ Tiền Mặt</h3>
-      <p class="text-2xl font-bold text-green-600" id="total-cash">
-        {{ cash }}
-      </p>
-    </div>
-    <div class="bg-white p-4 rounded-md shadow-md">
-      <h3 class="text-lg font-medium">Tổng Quỹ Ngân Hàng</h3>
-      <p class="text-2xl font-bold text-blue-600" id="total-bank">{{ bank }}</p>
-    </div>
-  </div>
-</div>
-<div class="container mx-auto p-6">
-  <div class="bg-white shadow-md rounded-lg p-6">
-    <h1 class="text-2xl font-bold mb-4">Quản Lý Thu Chi</h1>
-
-    <!-- Form thêm chi tiêu -->
-
-    <!-- Danh sách thu chi -->
-    <div>
-      <h2 class="text-xl font-semibold mb-2">Danh Sách Thu Chi</h2>
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              Mã Thu Chi
-            </th>
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              Ngày tạo phiếu
-            </th>
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              Loại
-            </th>
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              Đối tác
-            </th>
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              Phương thức trả
-            </th>
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              Số tiền
-            </th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          <!-- Dữ liệu mẫu -->
-          <tr *ngFor="let item of listThuChi">
-            <td class="px-6 py-4 whitespace-nowrap">
-              {{ item.incomeExpensesCode }}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              {{ item.date | date : 'dd/MM/YYYY hh:mm' }}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ item.typeOfIncome }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ item.partnerName }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ item.payMethod }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              {{
-                item.amount.toLocaleString('vi', {
-                  style: 'currency',
-                  currency: 'VND'
-                })
-              }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+<div class="grid grid-rows-5 h-full">
+  <div class="bg-gray-50 p-4 rounded-md row-span-2">
+    <button (click)="TaoPhieuThuChi()">Tạo Phiếu Thu/Chi</button>
+    <h2 class="text-xl font-semibold mb-2">Tổng Sổ Quỹ</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="bg-white p-4 rounded-md shadow-md">
+        <h3 class="text-lg font-medium">Tổng Quỹ Tiền Mặt</h3>
+        <p class="text-2xl font-bold text-green-600" id="total-cash">
+          {{ cash }}
+        </p>
+      </div>
+      <div class="bg-white p-4 rounded-md shadow-md">
+        <h3 class="text-lg font-medium">Tổng Quỹ Ngân Hàng</h3>
+        <p class="text-2xl font-bold text-blue-600" id="total-bank">
+          {{ bank }}
+        </p>
+      </div>
     </div>
   </div>
+  <tds-table #basicTable [listData]="listThuChi" class="row-span-3 h-full">
+    <thead>
+      <tr>
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          Mã Thu Chi
+        </th>
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          Ngày tạo phiếu
+        </th>
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          Nội dung
+        </th>
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          Loại
+        </th>
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          Đối tác
+        </th>
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          Phương thức trả
+        </th>
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          Số tiền
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-template ngFor let-data [ngForOf]="basicTable.data">
+        <tr>
+          <td class="px-6 py-4 whitespace-nowrap">
+            {{ data.incomeExpensesCode }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            {{ data.date | date : 'dd/MM/YYYY hh:mm' }}
+          </td>
+          <td>{{ data.description }}</td>
+          <td>{{ data.typeOfIncome }}</td>
+          <td>{{ data.partnerName }}</td>
+          <td>{{ data.payMethod }}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            {{
+              data.amount.toLocaleString('vi', {
+                style: 'currency',
+                currency: 'VND'
+              })
+            }}
+          </td>
+        </tr>
+      </ng-template>
+    </tbody>
+  </tds-table>
 </div>
