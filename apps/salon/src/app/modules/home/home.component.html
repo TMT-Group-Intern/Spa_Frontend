@@ -8,8 +8,9 @@
       Thêm khách hàng
     </button>
   </tds-calendar-header>
-  <frontend-spinner *ngIf="isLoading"></frontend-spinner>
-  <tds-tabset *ngIf="!isLoading" [tdsHideBar]="false" [tdsSize]="'small'" [tdsType]="'pill'" [clsTab]="'pl-2 flex-1'">
+  <!-- <frontend-spinner *ngIf="isLoading"></frontend-spinner> -->
+  <!-- *ngIf="!isLoading" -->
+  <tds-tabset [tdsHideBar]="false" [tdsSize]="'small'" [tdsType]="'pill'" [clsTab]="'pl-2 flex-1'">
     <tds-tab (tabClick)="renderDataTabBook()" [title]="titleCustomer" [clsContent]="'pl-2 flex flex-col'">
       <ng-template #titleCustomer let-active="active">
         <div class="flex items-center justify-center font-semibold cursor-pointer text-body-2 relative group">

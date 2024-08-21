@@ -1,4 +1,4 @@
-<form class="py-2" id="idform" [formGroup]="form" autocomplete="off">
+<form class="py-2" id="appointForm" [formGroup]="appointForm" autocomplete="off">
   <div class="grid grid-cols-2 gap-12">
     <div class="col-span-1">
       <!-- Phone -->
@@ -17,8 +17,8 @@
             </tds-select>
             <!-- Display error -->
             <tds-error>
-              <span *ngIf="form.controls['phone'].hasError('required')"><strong>SĐT</strong> không được để trống!</span>
-              <span *ngIf="form.controls['phone'].hasError('pattern')"><strong>SĐT</strong> phải bắt đầu bằng số 0 và có
+              <span *ngIf="appointForm.controls['phone'].hasError('required')"><strong>SĐT</strong> không được để trống!</span>
+              <span *ngIf="appointForm.controls['phone'].hasError('pattern')"><strong>SĐT</strong> phải bắt đầu bằng số 0 và có
                 10 chữ số!</span>
             </tds-error>
           </tds-form-field>
@@ -90,7 +90,7 @@
 
 <ng-container *tdsModalFooter>
   <div class="p-4 flex flex-row-reverse">
-    <button tds-button form="idform" (click)="submit()" color="success" class="w-[100px] rounded">
+    <button tds-button form="appointForm" (click)="submit()" color="success" class="w-[100px] rounded">
       Chấp Nhận
     </button>
   </div>
