@@ -18,6 +18,7 @@ import { AppointmentModalComponent } from '../home/appointment-modal/appointment
 import { TDSToolTipModule } from 'tds-ui/tooltip';
 import { TDSPaginationModule } from 'tds-ui/pagination';
 import { TDSTypographyModule } from 'tds-ui/typography';
+import { SpinnerComponent } from "../../shared/spinner/spinner.component";
 
 const routes: Routes = [{ path: '', component: AppointmentListComponent }];
 @NgModule({
@@ -40,7 +41,8 @@ const routes: Routes = [{ path: '', component: AppointmentListComponent }];
     TDSPaginationModule,
     AppointmentModalComponent,
     TDSTypographyModule,
-  ],
+    SpinnerComponent
+],
   exports: [AppointmentListComponent],
 })
 export class AppointmentListModule { }

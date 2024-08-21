@@ -1,10 +1,8 @@
-import { Component, ElementRef, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
-  Validators,
 } from '@angular/forms';
 import { format } from 'date-fns';
 import { DATE_CONFIG } from '../../../core/enums/date-format.enum';
@@ -12,50 +10,31 @@ import { AuthService } from '../../../shared.service';
 import { TDSNotificationService } from 'tds-ui/notification';
 import { TDSModalRef } from 'tds-ui/modal';
 import { TDSSafeAny } from 'tds-ui/shared/utility';
-import { catchError, EMPTY, iif, tap } from 'rxjs';
-import { TDSFormField } from 'tds-ui/form-field';
+import {  catchError, EMPTY, iif, tap } from 'rxjs';
 
 @Component({
   selector: 'frontend-modal-treatment-plan',
   templateUrl: './modal-treatment-plan.component.html',
   styleUrls: ['./modal-treatment-plan.component.scss'],
+
 })
 export class ModalTreatmentPlanComponent implements OnInit {
   private readonly modalRef = inject(TDSModalRef);
-
   @Input() customerId?: number;
   @Input() treatmentId?: number;
 
-  // treatmentForm: FormGroup;
-
   inputValue?: string;
-  selectSessionOptions = 1;
   listSearch: any[] = [];
   byName = '';
-  number = 1;
-  totalService = 0;
-  numberValue = 1;
-  totalDiscount = 0;
   total = 0;
 
-  isCheck?: boolean = false;
-  isIndex?: number;
-
-  sessionChosen: number[] = [];
   listService: TDSSafeAny;
-  listOfData: any[] = [];
-  quantity?: number;
 
   userSession: any;
   storedUserSession = localStorage.getItem('userSession');
 
   sessionFormGroup: any;
-  options: TDSSafeAny;
 
-  customerID: any;
-  startDate: any;
-  createBy: any;
-  notes: any;
   treatmentForm: FormGroup;
 
   constructor(
@@ -82,7 +61,9 @@ export class ModalTreatmentPlanComponent implements OnInit {
     // gọi hàm lấy danh sách dịch vụ
     this.initService();
     this.initTreatmentById();
+
   }
+
 
   // api và patchValue dữ liệu nếu có id
   initTreatmentById() {
@@ -105,6 +86,8 @@ export class ModalTreatmentPlanComponent implements OnInit {
     }
   }
 
+
+
   // lấy treatmentDetailDTOs
   get treatmentDetailDTOs(): FormArray {
     return this.treatmentForm.get('treatmentDetailDTOs') as FormArray;
@@ -123,6 +106,7 @@ export class ModalTreatmentPlanComponent implements OnInit {
       quantityDone: [value.quantityDone],
       tempPrice: [value.service.price],
       price: [value.price],
+      isDone: [value.isDone],
       amountDiscount: [value.amountDiscount ? value.amountDiscount : 0],
       kindofDiscount: [value.kindofDiscount ? value.kindofDiscount : '%'],
     });
@@ -200,6 +184,11 @@ export class ModalTreatmentPlanComponent implements OnInit {
       kindofDiscount: type,
     });
     this.resetTotal();
+  }
+
+  //Đóng modal
+  handleCancel(){
+    this.modalRef.destroy(this.treatmentId? true: undefined);
   }
 
   // Xóa 1 item dịch vụ

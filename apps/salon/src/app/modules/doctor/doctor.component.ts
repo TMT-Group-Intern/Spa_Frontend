@@ -81,7 +81,8 @@ export class DoctorComponent implements OnInit {
   appointments: any[] = [];
   // sessionID: any;
   serviceBefore: any;
-  chooseTreatment: any[] = []
+  chooseTreatment: any[] = [];
+  newChooseTreatment: any[] = [];
   // isNote = false
 
   form = inject(FormBuilder).nonNullable.group({
@@ -97,7 +98,7 @@ export class DoctorComponent implements OnInit {
     service: [[], Validators.required],
     note: [''],
   });
-  constructor(private companySvc: CompanyService) { }
+  constructor(private companySvc: CompanyService) {}
 
   ngOnInit(): void {
     this.sharedService.DataListenerDoctorChagneStatus(
@@ -135,7 +136,6 @@ export class DoctorComponent implements OnInit {
         }
       });
 
-
     // theo dõi thay đổi serviceId
     this.companySvc._change_service$.subscribe((data) => {
       if (this.form.value.status != 'Không sử dụng dịch vụ') {
@@ -143,20 +143,24 @@ export class DoctorComponent implements OnInit {
         const currentService = this.form.value.service ?? [];
 
         // Chuyển đổi các mảng hiện tại và mới thành Set để loại bỏ các giá trị trùng lặp
-        const updatedServiceSet = new Set([...currentService, ...(Array.isArray(data) ? data : [data])]);
+        const updatedServiceSet = new Set([
+          ...currentService,
+          ...(Array.isArray(data) ? data : [data]),
+        ]);
 
         // Chuyển đổi Set thành mảng để cập nhật lại giá trị của service
         const updatedService = Array.from(updatedServiceSet);
 
         // Cập nhật lại giá trị của service bằng patchValue
         this.form.patchValue({
-          service: updatedService as unknown as undefined
+          service: updatedService as unknown as undefined,
         });
         this.serviceBefore = data;
       }
     });
     this.companySvc._change_session_status$.subscribe((data) => {
-      if (this.form.value.status != 'Không sử dụng dịch vụ') this.chooseTreatment = (Array.isArray(data) ? data : []);
+      if (this.form.value.status != 'Không sử dụng dịch vụ')
+        this.chooseTreatment = Array.isArray(data) ? data : [];
     });
   }
 
@@ -295,31 +299,60 @@ export class DoctorComponent implements OnInit {
     if (this.form.invalid) return;
 
     if (this.chooseTreatment.length != 0) {
+      console.log(this.chooseTreatment)
+      console.log(this.form.value.service)
+
+      //Choose service
       const currentService = this.form.value.service ?? [];
+      const chooseService = currentService.filter(
+        (item1) =>
+          !this.chooseTreatment.some((item2: any) => item1 === item2.serviceID)
+      );
+
+      //Choose treatment
+      //Check lại choose Treatment còn đủ các service như lúc mới chọn không
       this.chooseTreatment = this.chooseTreatment.filter((item1: any) => currentService.some(item2 => item1.serviceID === item2))
-      const currentTreatment = (this.chooseTreatment as any[]).map(item => ({
+      //Lấy các service ID không trùng lặp trong choose Treatment
+      const treatment = currentService.filter(item1 => this.chooseTreatment.some((item2: any) => item1 === item2.serviceID))
+      for(const ser of treatment) {
+        //Chọn ra các service có id trùng nhau trong Choose Treatment
+        const tempTreatment = this.chooseTreatment.filter((item1: any) =>  item1.serviceID === ser)
+        //Lấy service có số lượng lớn nhất
+        const temp = tempTreatment.sort((a, b) => b.quantity - a.quantity).slice(0, 1);
+        this.newChooseTreatment = this.newChooseTreatment.concat(temp)
+      }
+      //Format lại cấu trúc choose Treatment trước khi gửi đi
+      const currentTreatment = this.newChooseTreatment.map(item => ({
         appointmentID: this.dataAppointmentById.appointmentID,
         treatmentDetailID: item.treatmentDetailID,
         qualityChooses: 1
       }))
-      const chooseService = currentService.filter(item1 => !this.chooseTreatment.some((item2: any) => item1 === item2.serviceID))
+
       const val = {
         ...this.form.value,
         service: chooseService,
-        chooseTreatment: currentTreatment
+        chooseTreatment: currentTreatment,
       };
-      this.updateServiceAppointment(id, val.status, val.service, val.note, val.chooseTreatment);
+      this.updateServiceAppointment(
+        id,
+        val.status,
+        val.service,
+        val.note,
+        val.chooseTreatment
+      );
     } else {
       const val = {
         ...this.form.value,
-        chooseTreatment: this.chooseTreatment
+        chooseTreatment: this.chooseTreatment,
       };
-      this.updateServiceAppointment(id, val.status, val.service, val.note, val.chooseTreatment);
+      this.updateServiceAppointment(
+        id,
+        val.status,
+        val.service,
+        val.note,
+        val.chooseTreatment
+      );
     }
-
-
-
-
   }
 
   // Update service Appointment
@@ -333,7 +366,12 @@ export class DoctorComponent implements OnInit {
     console.log(listServiceID, chooseServiceTreatmentDTO);
 
     this.sharedService
-      .updateAppointmentWithService(id, { listServiceID, status, notes, chooseServiceTreatmentDTO })
+      .updateAppointmentWithService(id, {
+        listServiceID,
+        status,
+        notes,
+        chooseServiceTreatmentDTO,
+      })
       .subscribe({
         next: () => {
           this.createNotificationSuccess('');

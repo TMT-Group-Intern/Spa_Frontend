@@ -33,6 +33,7 @@ export class AppointmentTableListComponent implements OnChanges {
   pageNumber = 1;
   pageSize = 10;
   totalItemsCustomers: any;
+  isLoading=false;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
@@ -76,6 +77,7 @@ export class AppointmentTableListComponent implements OnChanges {
   }
   // lấy danh sách tất cả theo thời gian
   initAppointmentByDays(fromDate: string, toDate: string): void {
+    this.isLoading=true;
     this.shareApi
       .getAppointmentByDays(
         this.branchId as number,
@@ -89,6 +91,10 @@ export class AppointmentTableListComponent implements OnChanges {
         this.listOfData = data.items.sort((a: any, b: any) =>
           a.appointmentDate > b.appointmentDate ? -1 : 1
         );
+      },error => {
+        console.log('Error!')
+      }, () => {
+        this.isLoading = false; // Kết thúc loading
       });
   }
   // cập nhật trạng thái
@@ -123,6 +129,7 @@ export class AppointmentTableListComponent implements OnChanges {
   }
   // lấy danh sách với trạng thái
   initAppointmentByDaysWithStatus(): void {
+    this.isLoading=true
     this.shareApi
       .getAppointmentByDaysWithStatus(
         this.branchId as number,
@@ -137,6 +144,10 @@ export class AppointmentTableListComponent implements OnChanges {
         this.listOfData = data.items.sort((a: any, b: any) =>
           a.appointmentDate > b.appointmentDate ? -1 : 1
         );
+      },error => {
+        console.log('Error!')
+      }, () => {
+        this.isLoading = false; // Kết thúc loading
       });
   }
   // call modal

@@ -1,5 +1,6 @@
 <div class="flex rounded-10 h-full w-full">
-  <tds-table showSizeChanger [pageSize]="pageSize" (pageIndexChange)="changeNumberPage($event)"
+  <frontend-spinner *ngIf="isLoading"></frontend-spinner>
+  <tds-table *ngIf="!isLoading" [pageSize]="pageSize" (pageIndexChange)="changeNumberPage($event)"
     (pageSizeChange)="changeSizePage($event)" [total]="totalItemsCustomers" [showTotal]="rangeTemplate"
     [frontPagination]="false" [pageIndex]="pageNumber" (clickRefresh)="onRefresh($event)"
     [scroll]="{y:'400px', x:'auto'}" #table [listData]="listOfData" tableLayout="fixed">

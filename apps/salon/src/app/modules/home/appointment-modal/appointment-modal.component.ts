@@ -54,7 +54,7 @@ export class AppointmentModalComponent implements OnInit {
   @Input() id?: number;
   @Input() formatTime?: Date;
 
-  form = inject(FormBuilder).nonNullable.group({
+  appointForm = inject(FormBuilder).nonNullable.group({
     customerID: [],
     name: [''],
     branch: [''],
@@ -85,28 +85,28 @@ export class AppointmentModalComponent implements OnInit {
     if (storedUserSession !== null) {
       this.userSession = JSON.parse(storedUserSession);
     }
-    this.form.get('name')?.disable();
-    this.form.get('branch')?.disable();
+    this.appointForm.get('name')?.disable();
+    this.appointForm.get('branch')?.disable();
 
     this.isHide1 = false;
     this.isHide2 = true;
 
     this.shared.getBranchName(this.userSession.user.branchID).subscribe(
       (res: any) => {
-        this.form.patchValue({
+        this.appointForm.patchValue({
           branch: res.getBranchNameByID
         });
       }
     )
 
     if (this.formatTime && this.formatTime >= new Date()) {
-      this.form.patchValue({
+      this.appointForm.patchValue({
         appointmentDate: this.formatTime
       });
     }
 
     if (this.id) {
-      this.form.get('phone')?.disable()
+      this.appointForm.get('phone')?.disable()
       this.isHide1 = true;
       this.isHide2 = false;
       this.shared.getAppointment(this.id).subscribe(
@@ -114,12 +114,12 @@ export class AppointmentModalComponent implements OnInit {
 
           this.shared.getBranchName(data.branchID).subscribe(
             (res: any) => {
-              this.form.patchValue({
+              this.appointForm.patchValue({
                 branch: res.getBranchNameByID
               });
             }
           )
-          this.form.patchValue({
+          this.appointForm.patchValue({
             phone: data.customer.phone,
             name: data.customer.lastName + ' ' + data.customer.firstName,
             appointmentDate: data.appointmentDate,
@@ -129,7 +129,7 @@ export class AppointmentModalComponent implements OnInit {
 
           const foundDoctor = (data.assignments as any[]).find(item => item.employees.jobTypeID === 2);
           if (foundDoctor) {
-            this.form.patchValue({
+            this.appointForm.patchValue({
               doctor: foundDoctor.employees.employeeID
             });
           }
@@ -160,9 +160,9 @@ export class AppointmentModalComponent implements OnInit {
 
   // Submit button
   submit() {
-    if (this.form.invalid) return;
+    if (this.appointForm.invalid) return;
 
-    const { doctor, appointmentDate, ...req } = this.form.value;
+    const { doctor, appointmentDate, ...req } = this.appointForm.value;
 
     if (doctor != null) {
       // Add employee to the array
@@ -199,8 +199,8 @@ export class AppointmentModalComponent implements OnInit {
         this.dataCustomer = data.customers;
     })
 
-    this.form.get('phone')?.valueChanges.subscribe((data: any) => {
-      this.form.patchValue({
+    this.appointForm.get('phone')?.valueChanges.subscribe((data: any) => {
+      this.appointForm.patchValue({
         ...data as any,
         name: data.lastName + ' ' + data.firstName
       })
@@ -233,7 +233,8 @@ export class AppointmentModalComponent implements OnInit {
       if (res) {
         this.shared.searchCustomer(res.phone).subscribe(
           (_res: any) => {
-            this.form.patchValue({
+            this.appointForm.patchValue({
+              phone: res.phone,
               name: res.firstName + ' ' + res.lastName,
               customerID: _res.customers[0].customerID,
             });
