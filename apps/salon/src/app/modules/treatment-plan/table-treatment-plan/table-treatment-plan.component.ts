@@ -1,11 +1,5 @@
 import { filter } from 'rxjs';
-import {
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { AuthService } from '../../../shared.service';
 import { CompanyService } from '../../../core/services/company.service';
 
@@ -32,18 +26,20 @@ export class TableTreatmentPlanComponent implements OnChanges {
   }
 
   //chọn hàng của dịch vụ đó
-  onClickRow(event: any) {
-    const valueFilter = event.filter((c: any) => c.isDone === false);
-    const val = valueFilter.map((v: any) => v.serviceID);
+  onClickRow(event: any){
+    const valueFilter = event.filter((c: any)=> c.isDone === false);
+    const val = valueFilter.map((v:any) => v.serviceID )
     this.company._change_service$.next(val);
     this.company._change_session_status$.next(valueFilter);
   }
 
   // lấy dữ liệu treatmentDetails
   treatmentDetail(id: number) {
-    this.shared.getTreatmentDetail(id).subscribe((data: any) => {
-      this.treatment = data.treatmentDetails;
-      console.log(this.treatment);
-    });
+      this.shared.getTreatmentDetail(id).subscribe(
+        (data: any) => {
+          this.treatment = data.treatmentDetails
+          console.log(this.treatment)
+        }
+      )
   }
 }

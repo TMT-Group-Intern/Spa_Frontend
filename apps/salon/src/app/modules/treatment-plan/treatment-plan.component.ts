@@ -2,8 +2,7 @@ import { Component, inject, Input, OnChanges, OnInit, SimpleChanges, TemplateRef
 import { TDSModalService } from 'tds-ui/modal';
 import { ModalTreatmentPlanComponent } from './modal-treatment-plan/modal-treatment-plan.component';
 import { AuthService } from '../../shared.service';
-import { ta } from 'date-fns/locale';
-import { filter, tap } from 'rxjs';
+import {filter, tap } from 'rxjs';
 
 @Component({
   selector: 'frontend-treatment-plan',
@@ -27,7 +26,6 @@ export class TreatmentPlanComponent implements OnChanges {
     }
   }
 
-  //
   getTreatmentByCustomerId(customerId: number) {
     console.log(customerId);
     if(customerId) {

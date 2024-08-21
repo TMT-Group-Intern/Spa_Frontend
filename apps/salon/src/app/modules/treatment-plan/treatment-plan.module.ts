@@ -50,5 +50,6 @@ const routes = [{ path: 'test', component: TreatmentPlanComponent }];
     TDSAutocompleteModule,
   ],
   exports: [TreatmentPlanComponent],
+  providers:[TreatmentPlanComponent]
 })
 export class TreatmentPlanModule {}
