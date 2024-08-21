@@ -1,5 +1,10 @@
-import { filter } from 'rxjs';
-import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { AuthService } from '../../../shared.service';
 import { CompanyService } from '../../../core/services/company.service';
 
@@ -10,7 +15,7 @@ import { CompanyService } from '../../../core/services/company.service';
 })
 export class TableTreatmentPlanComponent implements OnChanges {
   private readonly shared = inject(AuthService);
-  private readonly company = inject(CompanyService)
+  private readonly company = inject(CompanyService);
   @Input() id?: number;
   treatment: any;
   ngOnChanges(changes: SimpleChanges): void {
@@ -20,25 +25,24 @@ export class TableTreatmentPlanComponent implements OnChanges {
   }
 
   //Chọn dịch vụ cần thực hiện
-  onClickService(idService: any, event: any){
+  onClickService(idService: any, event: any) {
     this.company._change_service$.next(idService);
     this.company._change_session_status$.next(event);
   }
 
   //chọn hàng của dịch vụ đó
-  onClickRow(event: any){
-    const valueFilter = event.filter((c: any)=> c.isDone === false);
-    const val = valueFilter.map((v:any) => v.serviceID )
+  onClickRow(event: any) {
+    const valueFilter = event.filter((c: any) => c.isDone === false);
+    const val = valueFilter.map((v: any) => v.serviceID);
+
     this.company._change_service$.next(val);
     this.company._change_session_status$.next(valueFilter);
   }
 
   // lấy dữ liệu treatmentDetails
   treatmentDetail(id: number) {
-      this.shared.getTreatmentDetail(id).subscribe(
-        (data: any) => {
-          this.treatment = data.treatmentDetails
-        }
-      )
+    this.shared.getTreatmentDetail(id).subscribe((data: any) => {
+      this.treatment = data.treatmentDetails;
+    });
   }
 }
