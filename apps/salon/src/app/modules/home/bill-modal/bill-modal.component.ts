@@ -213,7 +213,7 @@ export class BillModalComponent {
       paymentMethod: this.paymentMethod
     }).pipe(
       tap((val) => {
-        this.createNotificationSuccess('');
+        
         const modal = this.tModalSvc.confirm({
           title: 'In hóa đơn',
           content: `<h5 class="text-success-500">Bạn có muốn in hóa đơn không?</h5>`,
@@ -246,6 +246,7 @@ export class BillModalComponent {
       }
     });
     modal.afterClose.asObservable().subscribe()
+    
   }
   //
   save() {
