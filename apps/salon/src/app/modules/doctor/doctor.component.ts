@@ -299,23 +299,30 @@ export class DoctorComponent implements OnInit {
     if (this.form.invalid) return;
 
     if (this.chooseTreatment.length != 0) {
-      console.log(this.chooseTreatment);
-      console.log(this.form.value.service);
+      console.log(this.chooseTreatment)
+      console.log(this.form.value.service)
+
+      //Choose service
       const currentService = this.form.value.service ?? [];
       const chooseService = currentService.filter(
         (item1) =>
           !this.chooseTreatment.some((item2: any) => item1 === item2.serviceID)
       );
 
+      //Choose treatment
+      //Check lại choose Treatment còn đủ các service như lúc mới chọn không
       this.chooseTreatment = this.chooseTreatment.filter((item1: any) => currentService.some(item2 => item1.serviceID === item2))
+      //Lấy các service ID không trùng lặp trong choose Treatment
       const treatment = currentService.filter(item1 => this.chooseTreatment.some((item2: any) => item1 === item2.serviceID))
       for(const ser of treatment) {
+        //Chọn ra các service có id trùng nhau trong Choose Treatment
         const tempTreatment = this.chooseTreatment.filter((item1: any) =>  item1.serviceID === ser)
-        console.log(tempTreatment)
+        //Lấy service có số lượng lớn nhất
         const temp = tempTreatment.sort((a, b) => b.quantity - a.quantity).slice(0, 1);
         this.newChooseTreatment = this.newChooseTreatment.concat(temp)
       }
-      const currentTreatment = this.newChooseTreatment.map((item) => ({
+      //Format lại cấu trúc choose Treatment trước khi gửi đi
+      const currentTreatment = this.newChooseTreatment.map(item => ({
         appointmentID: this.dataAppointmentById.appointmentID,
         treatmentDetailID: item.treatmentDetailID,
         qualityChooses: 1

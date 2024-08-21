@@ -80,6 +80,7 @@ export class TreatmentPlanComponent implements OnChanges {
   }
 
   onExpandChange(id: number, checked: boolean): void {
+    console.log(checked)
     if (checked) {
       this.expandSet.add(id);
     } else {
