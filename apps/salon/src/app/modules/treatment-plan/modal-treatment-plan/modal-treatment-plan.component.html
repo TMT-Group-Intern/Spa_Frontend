@@ -43,8 +43,9 @@
           <td>{{lessonForm.value.serviceName}}</td>
           <td>
             <tds-form-field class="w-full">
-              <tds-input-number (disabled)="lessonForm.value.quantity === lessonForm.value.quantityDone" formControlName="quantity" [decimal]="'never'" [step]="1" [min]="lessonForm.value.quantityDone"
-                [placeholder]="'never'" (ngModelChange)="price(i)"></tds-input-number >
+              <tds-input-number (disabled)="lessonForm.value.quantity === lessonForm.value.quantityDone"
+                formControlName="quantity" [decimal]="'never'" [step]="1" [min]="lessonForm.value.quantityDone"
+                [placeholder]="'never'" (ngModelChange)="price(i)"></tds-input-number>
             </tds-form-field>
           </td>
           <td *ngIf="treatmentId">{{lessonForm.value.quantityDone}}</td>
@@ -53,31 +54,31 @@
           </td>
           <td>
             <div class="w-full">
-              <button tds-button color="secondary" [disabled]="lessonForm.value.quantityDone > 0" class="border-none"  tds-dropdown trigger="click" [tdsDropdownMenu]="menu">
+              <button tds-button color="secondary" [disabled]="lessonForm.value.quantityDone > 0" class="border-none"
+                tds-dropdown trigger="click" [tdsDropdownMenu]="menu">
                 <p class="flex items-center">
                   <i class="tdsi-cash-payment-fill text-success-400 text-2xl pr-1"></i>
                   <span *ngIf="lessonForm.value.kindofDiscount === '%'">{{ lessonForm.value.amountDiscount }}%</span>
-                  <span *ngIf="lessonForm.value.kindofDiscount === 'VND'">{{ lessonForm.value.amountDiscount | tdsFormatNumber }} VND</span>
+                  <span *ngIf="lessonForm.value.kindofDiscount === 'VND'">{{ lessonForm.value.amountDiscount |
+                    tdsFormatNumber }} VND</span>
                 </p>
               </button>
-              <tds-dropdown-menu  #menu="tdsDropdownMenu">
+              <tds-dropdown-menu #menu="tdsDropdownMenu">
                 <div class="p-4">
                   <p class="pb-2"><strong>Giảm giá:</strong></p>
                   <div class="flex">
                     <tds-form-field class="mr-2 w-36">
                       <tds-input-number *ngIf="lessonForm.value.kindofDiscount  === '%'" class="pr-2"
                         [tdsTextAlign]="'right'" [hiddenIcon]="true" [min]="0" [max]="100" [step]="1"
-                        formControlName="amountDiscount"
-                        (ngModelChange)="priceAfterDiscount(i)">
+                        formControlName="amountDiscount" (ngModelChange)="priceAfterDiscount(i)">
                       </tds-input-number>
                       <tds-input-number *ngIf="lessonForm.value.kindofDiscount  === 'VND'" class="pr-2"
-                        [tdsTextAlign]="'right'" [hiddenIcon]="true" [min]="0" [max]="lessonForm.value.tempPrice" [step]="1"
-                        formControlName="amountDiscount"
-                        (ngModelChange)="priceAfterDiscount(i)">
+                        [tdsTextAlign]="'right'" [hiddenIcon]="true" [min]="0" [max]="lessonForm.value.tempPrice"
+                        [step]="1" formControlName="amountDiscount" (ngModelChange)="priceAfterDiscount(i)">
                       </tds-input-number>
                     </tds-form-field>
-                    <tds-button-group >
-                      <button  *ngIf="lessonForm.value.kindofDiscount === '%'" tds-button color="success" size="sm">
+                    <tds-button-group>
+                      <button *ngIf="lessonForm.value.kindofDiscount === '%'" tds-button color="success" size="sm">
                         <span>%</span>
                       </button>
                       <button tds-button-outline *ngIf="lessonForm.value.kindofDiscount  !== '%'" color="success"
@@ -87,8 +88,8 @@
                       <button *ngIf="lessonForm.value.kindofDiscount === 'VND'" tds-button color="success" size="sm">
                         <span>VND</span>
                       </button>
-                      <button tds-button-outline *ngIf="lessonForm.value.kindofDiscount !== 'VND'" color="success" size="sm"
-                        (tdsBtnClick)="updateTypeDiscount(i, 'VND')">
+                      <button tds-button-outline *ngIf="lessonForm.value.kindofDiscount !== 'VND'" color="success"
+                        size="sm" (tdsBtnClick)="updateTypeDiscount(i, 'VND')">
                         <span>VND</span>
                       </button>
                     </tds-button-group>
@@ -97,13 +98,15 @@
               </tds-dropdown-menu>
             </div>
           </td>
-          <td>{{lessonForm.value.price}}</td>
+          <td>{{lessonForm.value.price | tdsFormatNumber}}</td>
           <td class="flex">
-            <div >
-              <button *ngIf="!treatmentId" tds-button-icon [tds-tooltip]="'Sửa'" class="tdsi-trash-fill" [color]="'error'" (click)="removeItem(i)"></button>
-              <button *ngIf="treatmentId" tds-button-icon [tds-tooltip]="'Xóa'" class="tdsi-trash-fill ml-2" [color]="'error'" (click)="deleteDetailTreatment(i)"></button>
+            <div>
+              <button *ngIf="treatmentId" tds-button-icon [tds-tooltip]="'Xóa'" class="tdsi-trash-fill ml-2"
+                [color]="'warning'" (click)="deleteDetailTreatment(i)"></button>
+              <button *ngIf="!treatmentId" tds-button-icon [tds-tooltip]="'Xóa'" class="tdsi-trash-fill ml-2"
+                [color]="'warning'" (click)="removeItem(i)"></button>
             </div>
-           </td>
+          </td>
         </tr>
       </ng-container>
     </tbody>
@@ -117,9 +120,12 @@
 </form>
 
 <ng-container *tdsModalFooter>
-  <div class="flex flex-row-reverse p-4">
-    <button tds-button form="treatmentForm" color="success" class="w-[100px] px-4 py-2 text-white rounded"
-      (click)="enter()">
+  <div class="flex flex-row-reverse p-4" form="treatmentForm">
+    <button tds-button [color]="'secondary'" class="w-[100px] ml-2 px-4 py-2 text-black rounded border-solid"
+      (click)="handleCancel()">
+      Đóng
+    </button>
+    <button tds-button color="success" class="w-[100px] px-4 py-2 text-white rounded" (click)="enter()">
       Lưu
     </button>
   </div>
