@@ -124,7 +124,7 @@ export class HomeComponent implements OnInit {
 
   // call get list of appoiment
   initAppointment() {
-    this.isLoading = true;
+    //this.isLoading = true;
     this.companySvc._companyIdCur$
       .pipe(
         filter((branchID) => !!branchID),
@@ -135,11 +135,13 @@ export class HomeComponent implements OnInit {
       )
       .subscribe((data: any) => {
         this.dataAppointment(data);
-      },error => {
-        console.log('Error!')
-      }, () => {
-        this.isLoading = false; // Kết thúc loading
-      });
+      }
+      // ,error => {
+      //   console.log('Error!')
+      // }, () => {
+      //   this.isLoading = false; // Kết thúc loading
+      // }
+    );
   }
 
   //
