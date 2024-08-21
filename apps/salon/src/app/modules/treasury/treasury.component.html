@@ -1,7 +1,9 @@
 <div class="grid grid-rows-5 h-full">
   <div class="bg-gray-50 p-4 rounded-md row-span-2">
-    <button (click)="TaoPhieuThuChi()">Tạo Phiếu Thu/Chi</button>
-    <h2 class="text-xl font-semibold mb-2">Tổng Sổ Quỹ</h2>
+    <div class="flex justify-between">
+      <h2 class="text-xl font-semibold mb-2">Tổng Sổ Quỹ</h2>
+      <button (click)="TaoPhieuThuChi()">Tạo Phiếu Thu/Chi</button>
+    </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div class="bg-white p-4 rounded-md shadow-md">
         <h3 class="text-lg font-medium">Tổng Quỹ Tiền Mặt</h3>
@@ -17,7 +19,13 @@
       </div>
     </div>
   </div>
-  <tds-table #basicTable [listData]="listThuChi" class="row-span-3 h-full">
+  <tds-table
+    #basicTable
+    [listData]="listThuChi"
+    class="row-span-3 h-full"
+    [scroll]="{ y: '300px' }"
+    [total]="total"
+  >
     <thead>
       <tr>
         <th
@@ -71,12 +79,7 @@
           <td>{{ data.partnerName }}</td>
           <td>{{ data.payMethod }}</td>
           <td class="px-6 py-4 whitespace-nowrap">
-            {{
-              data.amount.toLocaleString('vi', {
-                style: 'currency',
-                currency: 'VND'
-              })
-            }}
+            {{ formatCurrency(data.amount) }}
           </td>
         </tr>
       </ng-template>

@@ -735,7 +735,7 @@ export class AuthService {
   }
 
   getFinance() {
-    return this.http.get(this.baseUrl + "Report/finance")
+    return this.http.get(this.baseUrl + "IncomeExpenses/AllCashAndBank")
   }
 
   getAllThuChi() {

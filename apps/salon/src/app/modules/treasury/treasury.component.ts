@@ -5,6 +5,7 @@ import { PhieuthuchiComponent } from './phieuthuchi/phieuthuchi.component';
 import { TDSModalService } from 'tds-ui/modal';
 import { TDSTableModule } from "tds-ui/table";
 
+
 @Component({
   selector: 'frontend-treasury',
   standalone: true,
@@ -18,6 +19,7 @@ export class TreasuryComponent implements OnInit {
   cash: any;
   bank: any;
   listThuChi: any;
+  total: any;
 
   ngOnInit(): void {
     this.GetFinance()
@@ -31,9 +33,8 @@ export class TreasuryComponent implements OnInit {
   GetFinance() {
     this.shareApi.getFinance().subscribe(
       (data: any) => {
-        console.log(data);
-        this.cash = data.cash.toLocaleString('vi', { style: 'currency', currency: 'VND' });
-        this.bank = data.bank.toLocaleString('vi', { style: 'currency', currency: 'VND' });
+        this.cash = data.respone.totalCash.toLocaleString('vi', { style: 'currency', currency: 'VND' });
+        this.bank = data.respone.totalBank.toLocaleString('vi', { style: 'currency', currency: 'VND' });
       }
     )
   }
@@ -41,22 +42,33 @@ export class TreasuryComponent implements OnInit {
   GetThuChi() {
     this.shareApi.getAllThuChi().subscribe(
       (data: any) => {
-        console.log(data);
-        this.listThuChi = [...data]
+        this.listThuChi = [...data.items]
+        this.total = data.total
       }
     )
   }
 
+  formatCurrency(amount: number): string {
+    const isNegative = amount < 0;
+    const absoluteAmount = Math.abs(amount);
+    const formattedAmount = absoluteAmount.toLocaleString('vi', {
+      style: 'currency',
+      currency: 'VND'
+    });
+    return isNegative ? `-${formattedAmount}` : formattedAmount;
+  }
+
   TaoPhieuThuChi() {
     const modal = this.modalSvc.create({
-      title: 'Chuyển tiếp chăm sóc',
+      title: 'Tạo Phiếu Thu/Chi',
       content: PhieuthuchiComponent,
       footer: null,
       size: 'lg',
     });
-    // modal.afterClose.asObservable().subscribe(() => {
-
-    // });
+    modal.afterClose.asObservable().subscribe(() => {
+      this.GetFinance()
+      this.GetThuChi()
+    });
   }
 
 }
